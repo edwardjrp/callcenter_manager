@@ -26,6 +26,16 @@
                 %li= link_to "Cerrar Sesión", nil, :method=>:delete, :id=>'end_session'
               -else
                 %li= link_to "Iniciar sesión", login_path
+    .subnav.subnav-fixed
+      %ul.nav.nav-pills
+        %li.active
+          %a{:href => "#components"} 1. Choose components
+        %li
+          %a{:href => "#plugins"} 2. Select jQuery plugins
+        %li
+          %a{:href => "#variables"} 3. Customize variables
+        %li
+          %a{:href => "#download"} 4. Download    
     .container.bottom-margin-1
       .row
         .span12

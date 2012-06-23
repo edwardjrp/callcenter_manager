@@ -11,7 +11,24 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120623190847) do
+ActiveRecord::Schema.define(:version => 20120623223210) do
+
+  create_table "clients", :force => true do |t|
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "email"
+    t.string   "idnumber"
+    t.integer  "target_address_id"
+    t.integer  "target_phone_id"
+    t.integer  "phones_count"
+    t.integer  "addresses_count"
+    t.boolean  "active"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
+
+  add_index "clients", ["email"], :name => "index_clients_on_email", :unique => true
+  add_index "clients", ["idnumber"], :name => "index_clients_on_idnumber", :unique => true
 
   create_table "users", :force => true do |t|
     t.string   "username"

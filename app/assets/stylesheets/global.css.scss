@@ -64,3 +64,96 @@
 .clear{
 	clear:both;	
 }
+
+.panel {
+  background: #f4f4f4;
+  @include border-radius(4px);
+	@include box-shadow(inset 0 1px 4px #dddddd);
+  margin-bottom: 20px;
+	.content{
+		padding:15px;
+	}
+	h3 {
+	  background: #f8f8ff;
+	  @include gradient-vertical(#f8f8ff, #dcdcdc);
+	  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.37);
+		@include box-shadow(inset 0 1px 4px 0 1px 2px rgba(0, 0, 0, 0.37));
+	  text-shadow: white 0 1px 0;
+	  border-bottom: 1px solid #ededed;
+	  padding: 5px 10px 3px 10px;
+	  font-size: 1.0em;
+	  font-weight: bold;
+	  line-height: 140%;
+	  margin-bottom: 0.5em;
+	  color: #6495ed;
+	}
+}
+
+.subnav {
+  width: 100%;
+  height: 36px;
+  background-color: #eeeeee; /* Old browsers */
+  background-repeat: repeat-x; /* Repeat the gradient */
+	@include gradient-vertical(#f5f5f5, #eeeeee);
+  border: 1px solid #e5e5e5;
+  @include border-radius(4px);
+	.nav {
+	  margin-bottom: 0;
+		li > a {
+		  margin: 0;
+		  padding-top:    11px;
+		  padding-bottom: 11px;
+		  border-left: 1px solid #f5f5f5;
+		  border-right: 1px solid #e5e5e5;
+		  @include border-radius(4px);
+		}
+	}
+}
+.subnav .nav > .active > a,
+.subnav .nav > .active > a:hover {
+  padding-left: 13px;
+  color: #777;
+  background-color: #e9e9e9;
+  border-right-color: #ddd;
+  border-left: 0;
+	@include box-shadow(inset 0 3px 5px rgba(0,0,0,.05));
+}
+.subnav .nav > .active > a .caret,
+.subnav .nav > .active > a:hover .caret {
+  border-top-color: #777;
+}
+.subnav .nav > li:first-child > a,
+.subnav .nav > li:first-child > a:hover {
+  border-left: 0;
+  padding-left: 12px;
+	@include border-radius( 4px 0 0 4px);
+}
+.subnav .nav > li:last-child > a {
+  border-right: 0;
+}
+.subnav .dropdown-menu {
+	@include border-radius(0 0 4px 4px);
+}
+
+
+.subnav-fixed {
+  position: fixed;
+  top: 40px;
+  left: 0;
+  right: 0;
+  z-index: 1020; /* 10 less than .navbar-fixed to prevent any overlap */
+  border-color: #d5d5d5;
+  border-width: 0 0 1px; /* drop the border on the fixed edges */
+	@include border-radius(0);
+	@include box-shadow(inset 0 1px 0 #fff 0 1px 5px rgba(0,0,0,.1));
+	.nav {
+	  width: 938px;
+	  margin: 0 auto;
+	  padding: 0 1px;
+		.nav > li:first-child > a,
+		.nav > li:first-child > a:hover {
+		 	@include border-radius(0);
+		}
+	}
+}
+/* line 26, /Users/radhamesbrito/proyects/contact_center/kapiqua/app/assets/stylesheets/mixins/_sections.css.scss */

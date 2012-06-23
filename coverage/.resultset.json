@@ -1,6 +1,11 @@
 {
   "RSpec": {
     "coverage": {
+      "/Users/radhamesbrito/proyects/contact_center/kapiqua25/app/models/client.rb": [
+        1,
+        1,
+        null
+      ],
       "/Users/radhamesbrito/proyects/contact_center/kapiqua25/app/models/user.rb": [
         null,
         null,
@@ -101,6 +106,6 @@
         null
       ]
     },
-    "timestamp": 1340488824
+    "timestamp": 1340492053
   }
 }

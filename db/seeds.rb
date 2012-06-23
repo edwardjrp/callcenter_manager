@@ -5,3 +5,7 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+FactoryGirl.create :user, :password=>'please', :password_confirmation=>'please', :username=>'test'
+100.times do
+  FactoryGirl.create :client
+end
