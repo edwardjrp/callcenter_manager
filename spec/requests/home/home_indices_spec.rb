@@ -17,8 +17,7 @@ describe "Home::Indices" do
       it "should redirect_to the login" do
         visit root_path
         page.should have_content('Debe iniciar sesión para continuar')
-        page.should have_content('username')
-        page.should have_content('password')
+        page.should have_css('#sessions')
       end
     end
   end
