@@ -14,4 +14,8 @@ class SessionsController < ApplicationController
       render :action=>:new
     end
   end
+  
+  private
+    def authenticate
+    end
 end

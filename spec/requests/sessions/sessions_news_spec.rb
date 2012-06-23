@@ -10,7 +10,7 @@ describe "Sessions::News" do
       visit login_path
       fill_in "username", with: 'testname'
       fill_in "password", with: 'please'
-      click_button "Login"
+      click_button "Enviar"
       page.should have_content('Sesión iniciada')
     end
   end

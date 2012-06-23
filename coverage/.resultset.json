@@ -1,6 +1,70 @@
 {
   "RSpec": {
     "coverage": {
+      "/Users/radhamesbrito/proyects/contact_center/kapiqua25/app/controllers/application_controller.rb": [
+        null,
+        1,
+        1,
+        1,
+        null,
+        1,
+        1,
+        4,
+        1,
+        1,
+        null,
+        null,
+        null,
+        1,
+        4,
+        4,
+        null,
+        1,
+        null,
+        null
+      ],
+      "/Users/radhamesbrito/proyects/contact_center/kapiqua25/app/helpers/application_helper.rb": [
+        1,
+        null
+      ],
+      "/Users/radhamesbrito/proyects/contact_center/kapiqua25/app/helpers/home_helper.rb": [
+        1,
+        null
+      ],
+      "/Users/radhamesbrito/proyects/contact_center/kapiqua25/app/helpers/sessions_helper.rb": [
+        1,
+        null
+      ],
+      "/Users/radhamesbrito/proyects/contact_center/kapiqua25/app/controllers/home_controller.rb": [
+        null,
+        1,
+        1,
+        null,
+        null
+      ],
+      "/Users/radhamesbrito/proyects/contact_center/kapiqua25/app/controllers/sessions_controller.rb": [
+        null,
+        1,
+        1,
+        null,
+        null,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2,
+        null,
+        0,
+        0,
+        null,
+        null,
+        null,
+        1,
+        1,
+        null,
+        null
+      ],
       "/Users/radhamesbrito/proyects/contact_center/kapiqua25/app/models/user.rb": [
         null,
         null,
@@ -32,15 +96,15 @@
         1,
         null,
         1,
-        0,
+        2,
         null,
         null,
         1,
-        23,
+        25,
         null,
         null
       ]
     },
-    "timestamp": 1340481059
+    "timestamp": 1340482798
   }
 }
