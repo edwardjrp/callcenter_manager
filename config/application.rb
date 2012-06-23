@@ -25,6 +25,14 @@ module Kapiqua25
     # Activate observers that should always be running.
     # config.active_record.observers = :cacher, :garbage_collector, :forum_observer
 
+    config.generators do |g|
+       g.integration_tool :rspec
+       g.test_framework :rspec, :view_specs => false, :helper_specs => false, :controller_specs => false, :routing_specs => true, :fixture => true
+       g.template_engine :haml
+       g.form_builder :simple_form
+       g.fixture_replacement :factory_girl, :dir => 'spec/factories'
+     end
+
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
     # config.time_zone = 'Central Time (US & Canada)'

@@ -70,7 +70,7 @@ end
 
 
 group :development, :test do
-  gem 'ruby-debug19', :require => 'ruby-debug'
+  # gem 'ruby-debug19', :require => 'ruby-debug'
   gem 'growl'
   gem 'vcr', '~> 2.0.0'
 	gem 'webmock', '~> 1.8.3'
