@@ -38,10 +38,16 @@ gem 'jquery-rails'
 
 # To use debugger
 # gem 'debugger'
-
+gem 'savon'
+gem "cancan"
+gem "simple-navigation"
+gem "transitions", :require => ["transitions", "active_record/transitions"]
+gem 'exception_notification'
+gem 'settler'
+gem 'delayed_job_active_record'
+gem 'acts_as_list'
 gem 'simple_form'
 gem "formtastic"
-gem 'annotate', :git => 'git://github.com/ctran/annotate_models.git',:group => :development
 gem 'nokogiri'
 gem 'yard' 
 gem "haml-rails"
@@ -55,10 +61,19 @@ gem 'bcrypt-ruby', '~> 3.0.0'
 
 # To use debugger
 # gem 'ruby-debug19', :require => 'ruby-debug'
+group :development do
+  gem 'letter_opener'
+  gem 'hirb'
+  gem 'awesome_print'
+  gem 'annotate', :git => 'git://github.com/ctran/annotate_models.git',:group => :development
+end
+
 
 group :development, :test do
   gem 'ruby-debug19', :require => 'ruby-debug'
   gem 'growl'
+  gem 'vcr', '~> 2.0.0'
+	gem 'webmock', '~> 1.8.3'
   gem 'guard-rspec'
   gem 'faker'
   gem 'capybara'

@@ -1,3 +1,10 @@
+GIT
+  remote: git://github.com/ctran/annotate_models.git
+  revision: bef0c494956e516540b7a9e72fa03be6576031dd
+  specs:
+    annotate (2.5.0.pre1)
+      rake
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -28,8 +35,34 @@ GEM
     activesupport (3.2.5)
       i18n (~> 0.6)
       multi_json (~> 1.0)
+    acts_as_list (0.1.6)
+    addressable (2.2.8)
+    akami (1.1.0)
+      gyoku (>= 0.4.0)
+      nokogiri (>= 1.5.2)
+    archive-tar-minitar (0.5.2)
     arel (3.0.2)
+    awesome_print (1.0.2)
+    bcrypt-ruby (3.0.1)
+    bootstrap-sass (2.0.3.1)
+    bootstrap-will_paginate (0.0.7)
+      will_paginate
     builder (3.0.0)
+    cancan (1.6.7)
+    capybara (1.1.2)
+      mime-types (>= 1.16)
+      nokogiri (>= 1.3.3)
+      rack (>= 1.0.0)
+      rack-test (>= 0.5.4)
+      selenium-webdriver (~> 2.0)
+      xpath (~> 0.1.4)
+    carrierwave (0.6.2)
+      activemodel (>= 3.2.0)
+      activesupport (>= 3.2.0)
+    childprocess (0.3.2)
+      ffi (~> 1.0.6)
+    chromedriver-helper (0.0.3)
+      nokogiri
     coffee-rails (3.2.2)
       coffee-script (>= 2.2.0)
       railties (~> 3.2.0)
@@ -37,22 +70,96 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.3.3)
+    columnize (0.3.6)
+    crack (0.3.1)
+    database_cleaner (0.8.0)
+    delayed_job (3.0.3)
+      activesupport (~> 3.0)
+    delayed_job_active_record (0.3.2)
+      activerecord (> 2.1.0)
+      delayed_job (~> 3.0.0)
+    diff-lcs (1.1.3)
+    em-websocket (0.3.6)
+      addressable (>= 2.1.1)
+      eventmachine (>= 0.12.9)
     erubis (2.7.0)
+    eventmachine (0.12.10)
+    exception_notification (2.6.1)
+      actionmailer (>= 3.0.4)
     execjs (1.4.0)
       multi_json (~> 1.0)
+    factory_girl (3.5.0)
+      activesupport (>= 3.0.0)
+    factory_girl_rails (3.5.0)
+      factory_girl (~> 3.5.0)
+      railties (>= 3.0.0)
+    faker (1.0.1)
+      i18n (~> 0.4)
+    faye-websocket (0.4.5)
+      eventmachine (>= 0.12.0)
+    ffi (1.0.11)
+    formtastic (2.2.1)
+      actionpack (>= 3.0)
+    growl (1.0.3)
+    guard (1.2.1)
+      listen (>= 0.4.2)
+      thor (>= 0.14.6)
+    guard-livereload (1.0.0)
+      em-websocket (>= 0.2.0)
+      guard (>= 1.1.0)
+      multi_json (~> 1.0)
+    guard-rspec (1.1.0)
+      guard (>= 1.1)
+    guard-spork (1.1.0)
+      guard (>= 1.1)
+      spork (>= 0.8.4)
+    gyoku (0.4.5)
+      builder (>= 2.1.2)
+    haml (3.1.6)
+    haml-rails (0.3.4)
+      actionpack (~> 3.0)
+      activesupport (~> 3.0)
+      haml (~> 3.0)
+      railties (~> 3.0)
     hike (1.2.1)
+    hirb (0.6.2)
+    http_parser.rb (0.5.3)
+    httpi (1.0.0)
+      rack
     i18n (0.6.0)
     journey (1.0.4)
     jquery-rails (2.0.2)
       railties (>= 3.2.0, < 5.0)
       thor (~> 0.14)
     json (1.7.3)
+    kgio (2.7.4)
+    launchy (2.1.0)
+      addressable (~> 2.2.6)
+    letter_opener (0.0.2)
+      launchy
+    libwebsocket (0.1.3)
+      addressable
+    linecache19 (0.5.12)
+      ruby_core_source (>= 0.1.4)
+    listen (0.4.6)
+      rb-fchange (~> 0.0.5)
+      rb-fsevent (~> 0.9.1)
+      rb-inotify (~> 0.8.8)
     mail (2.4.4)
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.19)
     multi_json (1.3.6)
+    nokogiri (1.5.4)
+    nori (1.1.0)
+    pg (0.13.2)
+    poltergeist (0.6.0)
+      capybara (~> 1.0)
+      childprocess (~> 0.3)
+      faye-websocket (~> 0.4, >= 0.4.4)
+      http_parser.rb (~> 0.5.3)
+      multi_json (~> 1.0)
     polyglot (0.3.3)
     rack (1.4.1)
     rack-cache (1.2)
@@ -76,21 +183,78 @@ GEM
       rake (>= 0.8.7)
       rdoc (~> 3.4)
       thor (>= 0.14.6, < 2.0)
+    raindrops (0.10.0)
     rake (0.9.2.2)
+    rb-fchange (0.0.5)
+      ffi
+    rb-fsevent (0.9.1)
+    rb-inotify (0.8.8)
+      ffi (>= 0.5.0)
     rdoc (3.12)
       json (~> 1.4)
+    rspec (2.10.0)
+      rspec-core (~> 2.10.0)
+      rspec-expectations (~> 2.10.0)
+      rspec-mocks (~> 2.10.0)
+    rspec-core (2.10.1)
+    rspec-expectations (2.10.0)
+      diff-lcs (~> 1.1.3)
+    rspec-mocks (2.10.1)
+    rspec-rails (2.10.1)
+      actionpack (>= 3.0)
+      activesupport (>= 3.0)
+      railties (>= 3.0)
+      rspec (~> 2.10.0)
+    ruby-debug-base19 (0.11.25)
+      columnize (>= 0.3.1)
+      linecache19 (>= 0.5.11)
+      ruby_core_source (>= 0.1.4)
+    ruby-debug19 (0.11.6)
+      columnize (>= 0.3.1)
+      linecache19 (>= 0.5.11)
+      ruby-debug-base19 (>= 0.11.19)
+    ruby_core_source (0.1.5)
+      archive-tar-minitar (>= 0.5.2)
+    rubyzip (0.9.9)
     sass (3.1.19)
     sass-rails (3.2.5)
       railties (~> 3.2.0)
       sass (>= 3.1.10)
       tilt (~> 1.3)
+    savon (1.0.0)
+      akami (~> 1.1)
+      builder (>= 2.1.2)
+      gyoku (>= 0.4.0)
+      httpi (~> 1.0)
+      nokogiri (>= 1.4.0)
+      nori (~> 1.1)
+      wasabi (~> 2.2)
+    selenium-webdriver (2.24.0)
+      childprocess (>= 0.2.5)
+      libwebsocket (~> 0.1.3)
+      multi_json (~> 1.0)
+      rubyzip
+    settler (1.2.3)
+      rails
+    shoulda-matchers (1.2.0)
+      activesupport (>= 3.0.0)
+    simple-navigation (3.7.0)
+      activesupport (>= 2.3.2)
+    simple_form (2.0.2)
+      actionpack (~> 3.0)
+      activemodel (~> 3.0)
+    simplecov (0.6.4)
+      multi_json (~> 1.0)
+      simplecov-html (~> 0.5.3)
+    simplecov-html (0.5.3)
+    spork (0.9.2)
     sprockets (2.1.3)
       hike (~> 1.2)
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
-    sqlite3 (1.3.6)
     thor (0.15.3)
     tilt (1.3.3)
+    transitions (0.1.0)
     treetop (1.4.10)
       polyglot
       polyglot (>= 0.3.1)
@@ -98,14 +262,71 @@ GEM
     uglifier (1.2.5)
       execjs (>= 0.3.0)
       multi_json (~> 1.3)
+    unicorn (4.3.1)
+      kgio (~> 2.6)
+      rack
+      raindrops (~> 0.7)
+    vcr (2.0.1)
+    wasabi (2.4.1)
+      httpi (~> 1.0)
+      nokogiri (>= 1.4.0)
+    webmock (1.8.7)
+      addressable (>= 2.2.7)
+      crack (>= 0.1.7)
+    will_paginate (3.0.3)
+    xpath (0.1.4)
+      nokogiri (~> 1.3)
+    yard (0.8.2.1)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  acts_as_list
+  annotate!
+  awesome_print
+  bcrypt-ruby (~> 3.0.0)
+  bootstrap-sass (~> 2.0.2)
+  bootstrap-will_paginate
+  cancan
+  capybara
+  carrierwave
+  chromedriver-helper
   coffee-rails (~> 3.2.1)
+  database_cleaner
+  delayed_job_active_record
+  exception_notification
+  factory_girl_rails
+  faker
+  formtastic
+  growl
+  guard-livereload
+  guard-rspec
+  guard-spork
+  haml-rails
+  hirb
   jquery-rails
+  launchy
+  letter_opener
+  nokogiri
+  pg
+  poltergeist
   rails (= 3.2.5)
+  rspec-rails
+  ruby-debug19
   sass-rails (~> 3.2.3)
-  sqlite3
+  savon
+  selenium-webdriver (>= 2.5.0)
+  settler
+  shoulda-matchers
+  simple-navigation
+  simple_form
+  simplecov
+  spork
+  transitions
   uglifier (>= 1.0.3)
+  unicorn
+  vcr (~> 2.0.0)
+  webmock (~> 1.8.3)
+  will_paginate
+  yard
