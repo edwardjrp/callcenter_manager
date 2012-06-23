@@ -1,5 +1,6 @@
 # A sample Guardfile
 # More info at https://github.com/guard/guard#readme
+notification :growl
 
 guard 'livereload' do
   watch(%r{app/views/.+\.(erb|haml|slim)})
@@ -10,36 +11,26 @@ guard 'livereload' do
   watch(%r{(app|vendor)/assets/\w+/(.+\.(css|js|html)).*})  { |m| "/assets/#{m[2]}" }
 end
 
-guard 'rspec', :version => 2 do
-  watch(%r{^spec/.+_spec\.rb$})
-  watch(%r{^lib/(.+)\.rb$})     { |m| "spec/lib/#{m[1]}_spec.rb" }
-  watch('spec/spec_helper.rb')  { "spec" }
 
-  # Rails example
-  watch(%r{^app/(.+)\.rb$})                           { |m| "spec/#{m[1]}_spec.rb" }
-  watch(%r{^app/(.*)(\.erb|\.haml)$})                 { |m| "spec/#{m[1]}#{m[2]}_spec.rb" }
-  watch(%r{^app/controllers/(.+)_(controller)\.rb$})  { |m| ["spec/routing/#{m[1]}_routing_spec.rb", "spec/#{m[2]}s/#{m[1]}_#{m[2]}_spec.rb", "spec/acceptance/#{m[1]}_spec.rb"] }
-  watch(%r{^spec/support/(.+)\.rb$})                  { "spec" }
-  watch('config/routes.rb')                           { "spec/routing" }
-  watch('app/controllers/application_controller.rb')  { "spec/controllers" }
-  
-  # Capybara request specs
-  watch(%r{^app/views/(.+)/.*\.(erb|haml)$})          { |m| "spec/requests/#{m[1]}_spec.rb" }
-  
-  # Turnip features and steps
-  watch(%r{^spec/acceptance/(.+)\.feature$})
-  watch(%r{^spec/acceptance/steps/(.+)_steps\.rb$})   { |m| Dir[File.join("**/#{m[1]}.feature")][0] || 'spec/acceptance' }
+guard 'rspec', :version => 2, :cli => "--drb --format documentation",:all_after_pass => false, :run_all => { :cli => "--format progress" }do
+  watch(%r{^spec/.+_spec\.rb$})
+  watch(%r{^app/controllers/admin/(.+)_(controller)\.rb$})  { |m| "spec/requests/admin/#{m[1]}" }
+  watch(%r{^app/views/admin/(.+)/.*\.(erb|haml)$})          { |m| "spec/requests/admin/#{m[1]}" }
+  watch(%r{^app/controllers/(.+)_(controller)\.rb$})  { |m| "spec/requests/#{m[1]}" }
+  watch(%r{^app/views/layout/(.+)/.*\.(erb|haml)$})          {"spec/requests" }
+  watch(%r{^app/views/(.+)/.*\.(erb|haml)$})          { |m| "spec/requests/#{m[1]}" }
+  watch(%r{^spec/support/factories/(.+)\.rb$})                  { "spec/models" }
+  watch(%r{^app/models/(.+)\.rb$})                  { |m| "spec/models/#{m[1]}_spec.rb" }
+  watch('spec/spec_helper.rb')                        { ["spec/requests","spec/models"] }
+  watch('app/controllers/application_controller.rb')  { ["spec/requests","spec/models"] }
 end
 
-
-guard 'spork', :cucumber_env => { 'RAILS_ENV' => 'test' }, :rspec_env => { 'RAILS_ENV' => 'test' } do
+guard 'spork', :cucumber => false, :test_unit => false, :rspec_env => { 'RAILS_ENV' => 'test' } do
   watch('config/application.rb')
   watch('config/environment.rb')
-  watch('config/environments/test.rb')
+  watch(%r{^config/environments/.+\.rb$})
   watch(%r{^config/initializers/.+\.rb$})
   watch('Gemfile')
   watch('Gemfile.lock')
   watch('spec/spec_helper.rb') { :rspec }
-  watch('test/test_helper.rb') { :test_unit }
-  watch(%r{features/support/}) { :cucumber }
 end
