@@ -1,8 +1,8 @@
 Kapiqua25::Application.routes.draw do
   
-  get "home/index"
-
-    root :to => 'home#index'
+  get 'login', to: "sessions#new", as: :login
+  post 'sessions', to: "sessions#create"
+  root to: 'home#index'
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

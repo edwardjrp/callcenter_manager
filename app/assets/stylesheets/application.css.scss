@@ -1,5 +1,20 @@
 @import "bootstrap";
 
+.navbar 
+{
+	.brand{
+		text-shadow:black 0 1px 0;
+		color:white;
+	}
+	ul {
+		color:white;
+		text-shadow:black 0 1px 0;
+	}
+	.navbar-inner{
+		@include gradient-vertical(#7BA5F0, #447FE9);
+	}
+}
 body { padding-top: 60px; }
+
 
 @import "bootstrap-responsive";

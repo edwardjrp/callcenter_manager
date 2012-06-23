@@ -1,27 +1,46 @@
 {
   "RSpec": {
     "coverage": {
-      "/Users/radhamesbrito/proyects/contact_center/kapiqua25/app/controllers/application_controller.rb": [
-        1,
-        1,
-        null
-      ],
-      "/Users/radhamesbrito/proyects/contact_center/kapiqua25/app/helpers/application_helper.rb": [
-        1,
-        null
-      ],
-      "/Users/radhamesbrito/proyects/contact_center/kapiqua25/app/helpers/home_helper.rb": [
-        1,
-        null
-      ],
-      "/Users/radhamesbrito/proyects/contact_center/kapiqua25/app/controllers/home_controller.rb": [
+      "/Users/radhamesbrito/proyects/contact_center/kapiqua25/app/models/user.rb": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
         null,
         1,
         1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        null,
+        1,
+        0,
+        null,
+        null,
+        1,
+        23,
         null,
         null
       ]
     },
-    "timestamp": 1340468406
+    "timestamp": 1340481059
   }
 }
