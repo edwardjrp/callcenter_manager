@@ -19,6 +19,13 @@
           .brand Domino's
           .nav-collapse
             placeholder
+            %ul.nav.pull-right
+              -if user_signed_in?
+                %li= link_to current_user.full_name, '#'
+                %li.divider-vertical
+                %li= link_to "Cerrar Sesión", nil, :method=>:delete, :id=>'end_session'
+              -else
+                %li= link_to "Iniciar sesión", login_path
     .container.bottom-margin-1
       .row
         .span12

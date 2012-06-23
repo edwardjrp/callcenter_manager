@@ -13,5 +13,10 @@ describe "Sessions::News" do
       click_button "Enviar"
       page.should have_content('Sesión iniciada')
     end
+    
+    it "should render the login link" do
+      visit root_path
+      within('ul.pull-right'){page.should have_content('Iniciar sesión')}
+    end
   end
 end

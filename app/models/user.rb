@@ -31,6 +31,10 @@ class User < ActiveRecord::Base
       find_by_username(username).try(:authenticate, password)
   end
   
+  def full_name
+    "#{first_name} #{last_name}"
+  end
+  
   def generate_auth_token
     self.auth_token = SecureRandom.hex(10)
   end

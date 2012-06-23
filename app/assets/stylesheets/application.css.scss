@@ -2,14 +2,26 @@
 
 .navbar 
 {
+	
+	.divider-vertical {
+		background-color: #7BA5F0;
+		border-right: 1px solid #447FE9;	
+	}
 	.brand{
 		text-shadow:black 0 1px 0;
 		color:white;
 	}
-	ul {
-		color:white;
-		text-shadow:black 0 1px 0;
-	}
+		ul.nav {
+			li a {
+				color:#eee;
+				text-shadow:black 0 1px 0;
+				&:hover{
+					color:white;
+				}
+			}
+//			color:white;
+			text-shadow:black 0 1px 0;
+		}
 	.navbar-inner{
 		@include gradient-vertical(#7BA5F0, #447FE9);
 	}
