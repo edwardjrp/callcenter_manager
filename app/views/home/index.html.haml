@@ -1,6 +1,18 @@
 .row
-  .span4
+  .span5
     .panel
       %h3 Clientes
       .content
-        Hello
+        =form_tag root_path, class: "form-horizontal", id: "client_search" do
+          %fieldset
+            .control-group
+              =label_tag :telefono,nil, class: 'control-label'
+              .controls
+                =text_field_tag :telephono, nil, class: 'input-medium', id:"client_search_phone", name:"client[phone]"
+                =text_field_tag :ext, nil, class: 'input-mini', id:"client_search_ext", name:"client[ext]"
+            .control-group
+              =label_tag :nombre,nil, class: 'control-label'
+              .controls=text_field_tag :nombre, nil, class: 'input-xlarge', id:"client_search_phone", name:"client[first_name]"
+            .control-group
+              =label_tag :apellido,nil, class: 'control-label'
+              .controls=text_field_tag :apellido, nil, class: 'input-xlarge', id:"client_search_phone", name:"client[last_name]"
