@@ -26,7 +26,7 @@ class Client < ActiveRecord::Base
   
   def self.find_clients(client)
     clients = self.scoped
-    clients = clients.merge(self.joins(:phones).where('phones.number like ?', "#{client[:phone]}%")) if client.present? && client[:phone].present?
+    # clients = clients.merge(self.joins(:phones).where('phones.number like ?', "#{client[:phone]}%")) if client.present? && client[:phone].present?
     clients = [] if clients.count == self.count
     return clients
   end

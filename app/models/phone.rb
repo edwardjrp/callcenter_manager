@@ -17,6 +17,15 @@ class Phone < ActiveRecord::Base
   attr_accessible :ext, :number
   before_validation :clear_number
   
+  def self.find_phones(client)
+    phones = self.scoped
+    phones = phones.merge(self.where('number like ?', "#{client[:phone]}%")) if client.present? && client[:phone].present?
+    phones = phones.merge(self.where('ext like ?', "#{client[:ext]}%")) if client.present? && client[:ext].present?
+    phones = [] if phones.count == self.count
+    return phones.limit(10)
+  end
+  
+  
   private
     def clear_number
       self.number = self.number.gsub(/[^\d]/,'') if self.number.present?

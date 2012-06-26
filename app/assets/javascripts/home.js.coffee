@@ -6,15 +6,15 @@ jQuery ->
     minLength: 2
     source: (request, response)->
       $.ajax
-        url: '/'
+        url: '/phones'
         datatype: 'json'
         data: $("#client_search").serialize()
         beforeSend: (xhr) ->
           xhr.setRequestHeader("Accept", "application/json")
         success: (data)->
-          console.log(data)
-          # response($.map(data, (client)->
-          #   {label: client.first_name, value: last_name}  
-          # ))
+          # console.log(data)
+          response($.map(data, (phone)->
+            {label: 'No.'+phone.number+' Ext.'+phone.ext, value: phone.number}  
+          ))
        
            
