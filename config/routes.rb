@@ -2,6 +2,11 @@ Kapiqua25::Application.routes.draw do
   
   get 'login', to: "sessions#new", as: :login
   post 'sessions', to: "sessions#create"
+  resources :clients do 
+    collection do 
+      get 'phone'
+    end
+  end
   resources :phones
   root to: 'home#index'
   # The priority is based upon order of creation:
