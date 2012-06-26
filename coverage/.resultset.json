@@ -35,6 +35,10 @@
         1,
         null
       ],
+      "/Users/radhamesbrito/proyects/contact_center/kapiqua25/app/helpers/phones_helper.rb": [
+        1,
+        null
+      ],
       "/Users/radhamesbrito/proyects/contact_center/kapiqua25/app/helpers/sessions_helper.rb": [
         1,
         null
@@ -48,6 +52,52 @@
         7,
         7,
         null,
+        null,
+        null
+      ],
+      "/Users/radhamesbrito/proyects/contact_center/kapiqua25/app/controllers/phones_controller.rb": [
+        null,
+        1,
+        1,
+        0,
+        0,
+        0,
+        null,
+        null,
+        null
+      ],
+      "/Users/radhamesbrito/proyects/contact_center/kapiqua25/app/models/phone.rb": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        null,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        null,
+        null,
+        null,
+        1,
+        1,
+        10,
         null,
         null
       ],
@@ -103,35 +153,9 @@
         null,
         1,
         7,
+        null,
         7,
         7,
-        7,
-        null,
-        null
-      ],
-      "/Users/radhamesbrito/proyects/contact_center/kapiqua25/app/models/phone.rb": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        null,
-        1,
-        1,
-        10,
         null,
         null
       ],
@@ -179,6 +203,6 @@
         null
       ]
     },
-    "timestamp": 1340671573
+    "timestamp": 1340721530
   }
 }

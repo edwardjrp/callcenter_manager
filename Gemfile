@@ -34,7 +34,8 @@ gem 'jbuilder'
 
 # Deploy with Capistrano
 # gem 'capistrano'
-
+gem 'jasmine', :group => [:development, :test]
+gem "jasminerice", :group => [:development, :test]
 # To use debugger
 # gem 'debugger'
 gem 'savon'

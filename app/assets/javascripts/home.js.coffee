@@ -14,7 +14,7 @@ jQuery ->
         success: (data)->
           # console.log(data)
           response($.map(data, (phone)->
-            {label: 'No.'+phone.number+' Ext.'+phone.ext, value: phone.number}  
+            {label: 'No.'+@NumberFormatter.to_phone(phone.number)+' Ext.'+phone.ext, value: phone.number}  
           ))
        
            
