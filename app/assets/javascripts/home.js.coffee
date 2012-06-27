@@ -22,7 +22,7 @@ jQuery ->
         ui.item.value = window.NumberFormatter.to_phone(ui.item.value)
         $('#client_search_ext').val(ui.item.label.match(/Ext.\s+(.+)/)[1]) if ui.item.label.match(/Ext.\s+(.+)/)?
         $.ajax
-          url: '/clients/phone'
+          url: 'phones/clients'
           datatype: 'json'
           data: $("#client_search").serialize()
           beforeSend: (xhr) ->

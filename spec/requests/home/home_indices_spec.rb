@@ -7,7 +7,7 @@ describe "Home::Indices" do
       before(:each) do
         login(FactoryGirl.create(:user))
         @client = FactoryGirl.create(:client, first_name: 'tester')
-        @phone = FactoryGirl.create :phone, client: @client, number: '8095551234', ext: nil
+        @phone = FactoryGirl.create :phone, client: @client, number: '8095551234', ext: '99'
         # 10.times{FactoryGirl.create(:client)}
         visit root_path 
       end
@@ -26,7 +26,7 @@ describe "Home::Indices" do
          Capybara.current_driver = :selenium_chrome
          login(FactoryGirl.create(:user))
          @client = FactoryGirl.create(:client, first_name: 'tester')
-         @phone = FactoryGirl.create :phone, client: @client, number: '8095551234', ext: '99'
+         @phone = FactoryGirl.create :phone, client: @client, number: '8095551234', ext: nil
          # 10.times{FactoryGirl.create(:client)}
          visit root_path
        end
@@ -35,12 +35,11 @@ describe "Home::Indices" do
          Capybara.use_default_driver
        end
        it "should find the users in the list", js: true do
-         selector = '.ui-menu-item a:first'
+         selector = '.ui-menu-item  a:first'
          fill_in "client_search_phone", with: '8095551234'
-         sleep(3)
-         page.has_content? selector
+         sleep(1)
          page.execute_script " $('#{selector}').trigger(\"mouseenter\").click();"
-         within('#client_search_first_name'){page.should have_content('tester')}
+         find_field('client_search_first_name').value.should == 'tester'
        end
      end
     
