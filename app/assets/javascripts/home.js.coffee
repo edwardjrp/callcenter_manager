@@ -2,6 +2,7 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 jQuery ->
+  $("#client_search_phone").restric 'alpha'
   $("#client_search_phone").focus().autocomplete
     minLength: 2
     source: (request, response)->
@@ -28,13 +29,13 @@ jQuery ->
           beforeSend: (xhr) ->
             xhr.setRequestHeader("Accept", "application/json")
           success: (data)->
-	          if data?
+            if data?
               $('#client_search_first_name').val(data.first_name)
               $('#client_search_last_name').val(data.last_name)
             
 
     open: ->
         $('#client_search_ext').val('')
-       	$('#client_search_first_name').val('')
+        $('#client_search_first_name').val('')
         $('#client_search_last_name').val('')
            
