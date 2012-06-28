@@ -12,65 +12,34 @@ jQuery ->
     )
   $('#client_search_ext').keyup (event) ->
     if $("#client_search_phone").val() != ''
-      $.ajax
-        url: '/phones'
-        datatype: 'json'
-        data: $("#client_search").serialize()
-        beforeSend: (xhr) ->
-          xhr.setRequestHeader("Accept", "application/json")
-        success: (data) ->
-          console.log data
-          if data.length > 0
-            $.ajax
-              url: 'phones/clients'
-              datatype: 'json'
-              data: $("#client_search").serialize()
-              beforeSend: (xhr) ->
-                xhr.setRequestHeader("Accept", "application/json")
-              success: (data)->
-                if data?
-                  $('#client_search_first_name').val(data.first_name)
-                  $('#client_search_last_name').val(data.last_name)
-          else
-            $('#client_search_first_name').val('')
-            $('#client_search_last_name').val('')
-            $('#client_search').append(button_template_no_user) if $('#user_not_found_buttons').length == 0
+      query_phone $("#client_search"), (data) ->
+        if data.length > 0
+          query_user $("#client_search")
+        else
+          $('#client_search_first_name').val('')
+          $('#client_search_last_name').val('')
+          $('#client_search').append(button_template_no_user) if $('#user_not_found_buttons').length == 0
 
   $("#client_search_phone").focus().autocomplete
     minLength: 2
     source: (request, response)->
-      $.ajax
-        url: '/phones'
-        datatype: 'json'
-        data: $("#client_search").serialize()
-        beforeSend: (xhr) ->
-          xhr.setRequestHeader("Accept", "application/json")
-        success: (data)->
-          if data.length > 0
-            response($.map(data, (phone) ->
-               phone_label = "No. #{@NumberFormatter.to_phone(phone.number)}"
-               phone_label =  phone_label + " Ext. #{phone.ext}" if phone.ext?
-               {label: phone_label, value: phone.number}  
-            ))
-            $('#user_not_found_buttons').remove() if $('#user_not_found_buttons').length > 0
-          else
-            $('.ui-autocomplete:visible').hide()
-            $('#client_search_first_name').val('')
-            $('#client_search_last_name').val('')
-            $('#client_search').append(button_template_no_user) if $('#user_not_found_buttons').length == 0
+      query_phone $("#client_search"), (data) ->
+        if data.length > 0
+          response($.map(data, (phone) ->
+             phone_label = "No. #{@NumberFormatter.to_phone(phone.number)}"
+             phone_label =  phone_label + " Ext. #{phone.ext}" if phone.ext?
+             {label: phone_label, value: phone.number}  
+          ))
+          $('#user_not_found_buttons').remove() if $('#user_not_found_buttons').length > 0
+        else
+          $('.ui-autocomplete:visible').hide()
+          $('#client_search_first_name').val('')
+          $('#client_search_last_name').val('')
+          $('#client_search').append(button_template_no_user) if $('#user_not_found_buttons').length == 0
     select: (event, ui) ->
         ui.item.value = window.NumberFormatter.to_phone(ui.item.value)
         $('#client_search_ext').val(ui.item.label.match(/Ext.\s+(.+)/)[1]) if ui.item.label.match(/Ext.\s+(.+)/)?
-        $.ajax
-          url: 'phones/clients'
-          datatype: 'json'
-          data: $("#client_search").serialize()
-          beforeSend: (xhr) ->
-            xhr.setRequestHeader("Accept", "application/json")
-          success: (data)->
-            if data?
-              $('#client_search_first_name').val(data.first_name)
-              $('#client_search_last_name').val(data.last_name)
+        query_user $("#client_search")
 
     open: ->
         $('#client_search_ext').val('')
@@ -78,3 +47,25 @@ jQuery ->
         $('#client_search_last_name').val('')
 
 button_template_no_user  = $('<div class="form-actions" id="user_not_found_buttons"><button type="submit" class="btn btn-primary"  id="add_user_button">Agregar usuario</button><button class="btn remote_parent left-margin-1" >Cancelar</button></div>')
+
+query_phone = (form, cb) ->
+  $.ajax
+    url: '/phones'
+    datatype: 'json'
+    data: form.serialize()
+    beforeSend: (xhr) ->
+      xhr.setRequestHeader("Accept", "application/json")
+    success: (data) ->
+      cb(data).apply
+    
+query_user = (form) ->
+  $.ajax
+    url: 'phones/clients'
+    datatype: 'json'
+    data: form.serialize()
+    beforeSend: (xhr) ->
+      xhr.setRequestHeader("Accept", "application/json")
+    success: (data)->
+      if data?
+        $('#client_search_first_name').val(data.first_name)
+        $('#client_search_last_name').val(data.last_name)
