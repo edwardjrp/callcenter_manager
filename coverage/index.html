@@ -23,7 +23,7 @@
       <img src="./assets/0.5.3/loading.gif" alt="loading"/>
     </div>
     <div id="wrapper" style="display:none;">
-      <div class="timestamp">Generated <abbr class="timeago" title="2012-06-28T10:53:58-04:00">2012-06-28T10:53:58-04:00</abbr></div>
+      <div class="timestamp">Generated <abbr class="timeago" title="2012-06-28T16:38:36-04:00">2012-06-28T16:38:36-04:00</abbr></div>
       <ul class="group_tabs"></ul>
 
       <div id="content">
@@ -34,7 +34,7 @@
      covered at
      <span class="covered_strength">
        <span class="green">
-         2.46
+         3.44
        </span>
     </span> hits/line)
   </h2>
@@ -66,7 +66,7 @@
         <td>15</td>
         <td>15</td>
         <td>0</td>
-        <td>7.9</td>
+        <td>10.6</td>
       </tr>
       
       <tr>
@@ -86,7 +86,7 @@
         <td>11</td>
         <td>11</td>
         <td>0</td>
-        <td>1.2</td>
+        <td>1.5</td>
       </tr>
       
       <tr>
@@ -96,7 +96,7 @@
         <td>12</td>
         <td>10</td>
         <td>2</td>
-        <td>2.5</td>
+        <td>3.3</td>
       </tr>
       
       <tr>
@@ -116,7 +116,7 @@
         <td>17</td>
         <td>17</td>
         <td>0</td>
-        <td>1.6</td>
+        <td>2.5</td>
       </tr>
       
       <tr>
@@ -126,7 +126,7 @@
         <td>14</td>
         <td>14</td>
         <td>0</td>
-        <td>2.2</td>
+        <td>4.4</td>
       </tr>
       
     </tbody>
@@ -142,7 +142,7 @@
      covered at
      <span class="covered_strength">
        <span class="green">
-         3.15
+         4.1
        </span>
     </span> hits/line)
   </h2>
@@ -174,7 +174,7 @@
         <td>15</td>
         <td>15</td>
         <td>0</td>
-        <td>7.9</td>
+        <td>10.6</td>
       </tr>
       
       <tr>
@@ -194,7 +194,7 @@
         <td>11</td>
         <td>11</td>
         <td>0</td>
-        <td>1.2</td>
+        <td>1.5</td>
       </tr>
       
       <tr>
@@ -204,7 +204,7 @@
         <td>12</td>
         <td>10</td>
         <td>2</td>
-        <td>2.5</td>
+        <td>3.3</td>
       </tr>
       
     </tbody>
@@ -219,7 +219,7 @@
      covered at
      <span class="covered_strength">
        <span class="green">
-         1.53
+         2.57
        </span>
     </span> hits/line)
   </h2>
@@ -261,7 +261,7 @@
         <td>17</td>
         <td>17</td>
         <td>0</td>
-        <td>1.6</td>
+        <td>2.5</td>
       </tr>
       
       <tr>
@@ -271,7 +271,7 @@
         <td>14</td>
         <td>14</td>
         <td>0</td>
-        <td>2.2</td>
+        <td>4.4</td>
       </tr>
       
     </tbody>
@@ -493,20 +493,20 @@
           <code class="ruby">   def authenticate</code>
         </li>
       
-        <li class="covered" data-hits="13" data-linenumber="8">
-          <span class="hits">13</span>
+        <li class="covered" data-hits="18" data-linenumber="8">
+          <span class="hits">18</span>
           
           <code class="ruby">     if current_user.nil?</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="9">
-          <span class="hits">1</span>
+        <li class="covered" data-hits="2" data-linenumber="9">
+          <span class="hits">2</span>
           
           <code class="ruby">       flash[:alert]='Debe iniciar sesión para continuar'</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="10">
-          <span class="hits">1</span>
+        <li class="covered" data-hits="2" data-linenumber="10">
+          <span class="hits">2</span>
           
           <code class="ruby">       redirect_to login_path</code>
         </li>
@@ -535,14 +535,14 @@
           <code class="ruby">   def current_user</code>
         </li>
       
-        <li class="covered" data-hits="39" data-linenumber="15">
-          <span class="hits">39</span>
+        <li class="covered" data-hits="53" data-linenumber="15">
+          <span class="hits">53</span>
           
           <code class="ruby">     return nil unless session[:user_token] || !User.exists?(auth_token: session[:user_token])</code>
         </li>
       
-        <li class="covered" data-hits="39" data-linenumber="16">
-          <span class="hits">39</span>
+        <li class="covered" data-hits="53" data-linenumber="16">
+          <span class="hits">53</span>
           
           <code class="ruby">     return User.find_by_auth_token(session[:user_token]) </code>
         </li>
@@ -571,8 +571,8 @@
           <code class="ruby">   def user_signed_in?</code>
         </li>
       
-        <li class="covered" data-hits="16" data-linenumber="21">
-          <span class="hits">16</span>
+        <li class="covered" data-hits="22" data-linenumber="21">
+          <span class="hits">22</span>
           
           <code class="ruby">     !!current_user.present?</code>
         </li>
@@ -679,20 +679,20 @@
           <code class="ruby">  def index</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="4">
-          <span class="hits">1</span>
+        <li class="covered" data-hits="2" data-linenumber="4">
+          <span class="hits">2</span>
           
           <code class="ruby">    @phones = Phone.find_phones(params[:client])</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="5">
-          <span class="hits">1</span>
+        <li class="covered" data-hits="2" data-linenumber="5">
+          <span class="hits">2</span>
           
           <code class="ruby">    respond_to do |format|</code>
         </li>
       
-        <li class="covered" data-hits="2" data-linenumber="6">
-          <span class="hits">2</span>
+        <li class="covered" data-hits="4" data-linenumber="6">
+          <span class="hits">4</span>
           
           <code class="ruby">      format.json{render :json =&gt; @phones}</code>
         </li>
@@ -823,32 +823,32 @@
           <code class="ruby">  def create</code>
         </li>
       
-        <li class="covered" data-hits="5" data-linenumber="7">
-          <span class="hits">5</span>
+        <li class="covered" data-hits="7" data-linenumber="7">
+          <span class="hits">7</span>
           
           <code class="ruby">    user = User.authenticate(params[:username], params[:password])</code>
         </li>
       
-        <li class="covered" data-hits="5" data-linenumber="8">
-          <span class="hits">5</span>
+        <li class="covered" data-hits="7" data-linenumber="8">
+          <span class="hits">7</span>
           
           <code class="ruby">    if user.present?</code>
         </li>
       
-        <li class="covered" data-hits="5" data-linenumber="9">
-          <span class="hits">5</span>
+        <li class="covered" data-hits="7" data-linenumber="9">
+          <span class="hits">7</span>
           
           <code class="ruby">      session[:user_token]=user.auth_token</code>
         </li>
       
-        <li class="covered" data-hits="5" data-linenumber="10">
-          <span class="hits">5</span>
+        <li class="covered" data-hits="7" data-linenumber="10">
+          <span class="hits">7</span>
           
           <code class="ruby">      flash[:success]=&quot;Sesión iniciada&quot;</code>
         </li>
       
-        <li class="covered" data-hits="5" data-linenumber="11">
-          <span class="hits">5</span>
+        <li class="covered" data-hits="7" data-linenumber="11">
+          <span class="hits">7</span>
           
           <code class="ruby">      redirect_to root_path</code>
         </li>
@@ -1267,38 +1267,38 @@
           <code class="ruby">  def self.find_phones(client)</code>
         </li>
       
-        <li class="covered" data-hits="2" data-linenumber="21">
-          <span class="hits">2</span>
+        <li class="covered" data-hits="3" data-linenumber="21">
+          <span class="hits">3</span>
           
           <code class="ruby">    phones = self.scoped</code>
         </li>
       
-        <li class="covered" data-hits="2" data-linenumber="22">
-          <span class="hits">2</span>
+        <li class="covered" data-hits="3" data-linenumber="22">
+          <span class="hits">3</span>
           
           <code class="ruby">    phones = phones.merge(self.where('number like ?', &quot;#{client[:phone].gsub(/[-. ]/,'')}%&quot;)) if client.present? &amp;&amp; client[:phone].present?</code>
         </li>
       
-        <li class="covered" data-hits="2" data-linenumber="23">
-          <span class="hits">2</span>
+        <li class="covered" data-hits="3" data-linenumber="23">
+          <span class="hits">3</span>
           
           <code class="ruby">    phones = phones.merge(self.where('ext like ?', &quot;#{client[:ext]}%&quot;)) if client.present? &amp;&amp; !client[:ext].blank?</code>
         </li>
       
-        <li class="covered" data-hits="2" data-linenumber="24">
-          <span class="hits">2</span>
+        <li class="covered" data-hits="3" data-linenumber="24">
+          <span class="hits">3</span>
           
           <code class="ruby">    Rails.logger.debug phones.to_sql.inspect</code>
         </li>
       
-        <li class="covered" data-hits="2" data-linenumber="25">
-          <span class="hits">2</span>
+        <li class="covered" data-hits="3" data-linenumber="25">
+          <span class="hits">3</span>
           
           <code class="ruby">    Rails.logger.debug client[:phone].inspect</code>
         </li>
       
-        <li class="covered" data-hits="2" data-linenumber="26">
-          <span class="hits">2</span>
+        <li class="covered" data-hits="3" data-linenumber="26">
+          <span class="hits">3</span>
           
           <code class="ruby">    Rails.logger.debug client[:ext].inspect</code>
         </li>
@@ -1327,8 +1327,8 @@
           <code class="ruby">    </code>
         </li>
       
-        <li class="covered" data-hits="2" data-linenumber="31">
-          <span class="hits">2</span>
+        <li class="covered" data-hits="3" data-linenumber="31">
+          <span class="hits">3</span>
           
           <code class="ruby">    return phones.limit(10)</code>
         </li>
@@ -1363,8 +1363,8 @@
           <code class="ruby">    def clear_number</code>
         </li>
       
-        <li class="covered" data-hits="5" data-linenumber="37">
-          <span class="hits">5</span>
+        <li class="covered" data-hits="13" data-linenumber="37">
+          <span class="hits">13</span>
           
           <code class="ruby">      self.number = self.number.gsub(/[^\d]/,'') if self.number.present?</code>
         </li>
@@ -1579,8 +1579,8 @@
           <code class="ruby">  def self.authenticate(username, password)</code>
         </li>
       
-        <li class="covered" data-hits="5" data-linenumber="31">
-          <span class="hits">5</span>
+        <li class="covered" data-hits="7" data-linenumber="31">
+          <span class="hits">7</span>
           
           <code class="ruby">      find_by_username(username).try(:authenticate, password)</code>
         </li>
@@ -1603,8 +1603,8 @@
           <code class="ruby">  def full_name</code>
         </li>
       
-        <li class="covered" data-hits="10" data-linenumber="35">
-          <span class="hits">10</span>
+        <li class="covered" data-hits="13" data-linenumber="35">
+          <span class="hits">13</span>
           
           <code class="ruby">    &quot;#{first_name} #{last_name}&quot;</code>
         </li>
@@ -1627,8 +1627,8 @@
           <code class="ruby">  def generate_auth_token</code>
         </li>
       
-        <li class="covered" data-hits="5" data-linenumber="39">
-          <span class="hits">5</span>
+        <li class="covered" data-hits="31" data-linenumber="39">
+          <span class="hits">31</span>
           
           <code class="ruby">    self.auth_token = SecureRandom.hex(10)</code>
         </li>

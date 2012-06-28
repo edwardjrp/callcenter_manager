@@ -43,15 +43,20 @@ describe "Home::Indices" do
        end
        
        
-       it "forbid letters on the phone search field", js: true do
+       it "should forbid letters on the phone search field", js: true do
           fill_in "client_search_phone", with: 'asd'
           find_field('client_search_phone').value.should == ''
         end
         
-        it "forbid spaces on the phone search field", js: true do
-            fill_in "client_search_phone", with: ' '
-            find_field('client_search_phone').value.should == ''
-          end
+        it "should forbid spaces on the phone search field", js: true do
+          fill_in "client_search_phone", with: ' '
+          find_field('client_search_phone').value.should == ''
+        end
+        
+        it "should show the add user buttons", js: true do
+          fill_in "client_search_phone", with: '8095551235'
+          page.should have_css('#add_user_button')
+        end
      end
     
     context 'when user is not logged' do
