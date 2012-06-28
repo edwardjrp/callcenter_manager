@@ -2,7 +2,7 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 jQuery ->
-  $("#client_search_phone").restric 'alpha'
+  $("#client_search_phone").restric('alpha').restric('spaces')
   $("#client_search_phone").focus().autocomplete
     minLength: 2
     source: (request, response)->

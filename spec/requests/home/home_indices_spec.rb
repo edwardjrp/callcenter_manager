@@ -41,6 +41,17 @@ describe "Home::Indices" do
          page.execute_script " $('#{selector}').trigger(\"mouseenter\").click();"
          find_field('client_search_first_name').value.should == 'tester'
        end
+       
+       
+       it "forbid letters on the phone search field", js: true do
+          fill_in "client_search_phone", with: 'asd'
+          find_field('client_search_phone').value.should == ''
+        end
+        
+        it "forbid spaces on the phone search field", js: true do
+            fill_in "client_search_phone", with: ' '
+            find_field('client_search_phone').value.should == ''
+          end
      end
     
     context 'when user is not logged' do

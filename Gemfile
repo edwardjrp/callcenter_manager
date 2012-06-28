@@ -34,8 +34,7 @@ gem 'jbuilder'
 
 # Deploy with Capistrano
 # gem 'capistrano'
-gem 'jasmine', :group => [:development, :test]
-gem "jasminerice", :group => [:development, :test]
+
 # To use debugger
 # gem 'debugger'
 gem 'savon'
@@ -71,6 +70,8 @@ end
 
 group :development, :test do
   # gem 'ruby-debug19', :require => 'ruby-debug'
+  gem 'jasminerice'
+  gem 'guard-jasmine'
   gem 'growl'
   gem 'vcr', '~> 2.0.0'
 	gem 'webmock', '~> 1.8.3'
