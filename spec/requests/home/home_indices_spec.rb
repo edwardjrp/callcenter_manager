@@ -26,7 +26,9 @@ describe "Home::Indices" do
          Capybara.current_driver = :selenium_chrome
          login(FactoryGirl.create(:user))
          @client = FactoryGirl.create(:client, first_name: 'tester')
+         @client2 = FactoryGirl.create(:client, first_name: 'another')
          @phone = FactoryGirl.create :phone, client: @client, number: '8095551234', ext: nil
+         @phone = FactoryGirl.create :phone, client: @client2, number: '8095551234', ext: '2'
          # 10.times{FactoryGirl.create(:client)}
          visit root_path
        end
@@ -65,6 +67,15 @@ describe "Home::Indices" do
           page.execute_script " $('#{selector}').trigger(\"mouseenter\").click();"
           fill_in "client_search_ext", with: '1'
           find_field('client_search_first_name').value.should == ''
+        end
+        
+        it "should switch back if the user exits with the same number and another extention", js: true do
+          selector = '.ui-menu-item  a:first'
+          fill_in "client_search_phone", with: '8095551234'
+          sleep(1)
+          page.execute_script " $('#{selector}').trigger(\"mouseenter\").click();"
+          fill_in "client_search_ext", with: '2'
+          find_field('client_search_first_name').value.should == 'another'
         end
      end
     

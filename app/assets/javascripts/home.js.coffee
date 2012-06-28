@@ -20,7 +20,18 @@ jQuery ->
           xhr.setRequestHeader("Accept", "application/json")
         success: (data) ->
           console.log data
-          if data.length == 0
+          if data.length > 0
+            $.ajax
+              url: 'phones/clients'
+              datatype: 'json'
+              data: $("#client_search").serialize()
+              beforeSend: (xhr) ->
+                xhr.setRequestHeader("Accept", "application/json")
+              success: (data)->
+                if data?
+                  $('#client_search_first_name').val(data.first_name)
+                  $('#client_search_last_name').val(data.last_name)
+          else
             $('#client_search_first_name').val('')
             $('#client_search_last_name').val('')
             $('#client_search').append(button_template_no_user) if $('#user_not_found_buttons').length == 0
