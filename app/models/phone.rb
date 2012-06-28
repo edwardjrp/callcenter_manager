@@ -21,13 +21,6 @@ class Phone < ActiveRecord::Base
     phones = self.scoped
     phones = phones.merge(self.where('number like ?', "#{client[:phone].gsub(/[-. ]/,'')}%")) if client.present? && client[:phone].present?
     phones = phones.merge(self.where('ext like ?', "#{client[:ext]}%")) if client.present? && !client[:ext].blank?
-    Rails.logger.debug phones.to_sql.inspect
-    Rails.logger.debug client[:phone].inspect
-    Rails.logger.debug client[:ext].inspect
-    
-    # phones = [] if phones.count == self.count
-    # Rails.logger.debug phones.inspect
-    
     return phones.limit(10)
   end
   

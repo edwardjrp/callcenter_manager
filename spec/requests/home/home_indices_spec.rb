@@ -57,6 +57,15 @@ describe "Home::Indices" do
           fill_in "client_search_phone", with: '8095551235'
           page.should have_css('#add_user_button')
         end
+        
+        it "should clear the user info if i start typing the extension", js: true do
+          selector = '.ui-menu-item  a:first'
+          fill_in "client_search_phone", with: '8095551234'
+          sleep(1)
+          page.execute_script " $('#{selector}').trigger(\"mouseenter\").click();"
+          fill_in "client_search_ext", with: '1'
+          find_field('client_search_first_name').value.should == ''
+        end
      end
     
     context 'when user is not logged' do

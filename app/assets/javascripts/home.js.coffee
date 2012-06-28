@@ -10,6 +10,21 @@ jQuery ->
     if $(this).val().length < 10
       $('#user_not_found_buttons').remove() if $('#user_not_found_buttons').length > 0 and ($('.ui-autocomplete').is(':visible')  or event.which == 8 )
     )
+  $('#client_search_ext').keyup (event) ->
+    if $("#client_search_phone").val() != ''
+      $.ajax
+        url: '/phones'
+        datatype: 'json'
+        data: $("#client_search").serialize()
+        beforeSend: (xhr) ->
+          xhr.setRequestHeader("Accept", "application/json")
+        success: (data) ->
+          console.log data
+          if data.length == 0
+            $('#client_search_first_name').val('')
+            $('#client_search_last_name').val('')
+            $('#client_search').append(button_template_no_user) if $('#user_not_found_buttons').length == 0
+
   $("#client_search_phone").focus().autocomplete
     minLength: 2
     source: (request, response)->
@@ -20,14 +35,13 @@ jQuery ->
         beforeSend: (xhr) ->
           xhr.setRequestHeader("Accept", "application/json")
         success: (data)->
-          console.log(data.length)
           if data.length > 0
-          	response($.map(data, (phone) ->
-	             phone_label = "No. #{@NumberFormatter.to_phone(phone.number)}"
-	             phone_label =  phone_label + " Ext. #{phone.ext}" if phone.ext?
-	             {label: phone_label, value: phone.number}  
-	          ))
-	          $('#user_not_found_buttons').remove() if $('#user_not_found_buttons').length > 0
+            response($.map(data, (phone) ->
+               phone_label = "No. #{@NumberFormatter.to_phone(phone.number)}"
+               phone_label =  phone_label + " Ext. #{phone.ext}" if phone.ext?
+               {label: phone_label, value: phone.number}  
+            ))
+            $('#user_not_found_buttons').remove() if $('#user_not_found_buttons').length > 0
           else
             $('.ui-autocomplete:visible').hide()
             $('#client_search_first_name').val('')
