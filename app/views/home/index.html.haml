@@ -9,7 +9,7 @@
               =label_tag :telefono,nil, class: 'control-label'
               .controls
                 =text_field_tag :telephono, nil, class: 'input-medium', id:"client_search_phone", name:"client[phone]"
-                =text_field_tag :ext, nil, class: 'input-mini', id:"client_search_ext", name:"client[ext]"
+                =text_field_tag :ext, nil, class: 'input-mini', id:"client_search_ext", name:"client[ext]", placeholder: 'Ext'
             .control-group
               =label_tag :nombre,nil, class: 'control-label'
               .controls=text_field_tag :nombre, nil, class: 'input-xlarge', id:"client_search_first_name", name:"client[first_name]"
