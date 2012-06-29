@@ -30,4 +30,14 @@ describe Client do
     it{should validate_uniqueness_of :email}  
     it{should have_many :phones}
   end
+  
+  describe "instance methods" do
+    before(:each) do
+      @client = FactoryGirl.create :client
+    end
+    
+    it " full_name: should return the concatenation of first_name and last_name" do
+      @client.full_name.should == "#{@client.first_name} #{@client.last_name}"  
+    end
+  end
 end

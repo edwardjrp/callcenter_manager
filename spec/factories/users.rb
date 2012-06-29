@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :user do
-    sequence(:username) {|u| "#{Faker::Internet.email}_#{u}"}
+    sequence(:username) {|u| "a#{u}_#{Faker::Internet.email}"}
     first_name {Faker::Name.first_name}
     last_name {Faker::Name.last_name}
     role_mask {rand(99)}

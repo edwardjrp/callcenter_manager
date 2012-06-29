@@ -93,13 +93,23 @@ describe "Home::Indices" do
           Capybara.use_default_driver
        end
        
-       it "should present the current client name in the sub nav bar", js: true do
+       it "should show the found client message", js: true do
          selector = '.ui-menu-item  a:first'
          fill_in "client_search_phone", with: '8095551234'
          sleep(1)
          page.execute_script " $('#{selector}').trigger(\"mouseenter\").click();"
          page.should have_content('Cliente encontrado')
        end
+       
+       it "should present the current client name in the sub nav bar", js: true do
+         selector = '.ui-menu-item  a:first'
+         fill_in "client_search_phone", with: '8095551234'
+         sleep(1)
+         page.execute_script " $('#{selector}').trigger(\"mouseenter\").click();"
+         page.execute_script '$("#client_search_phone").trigger("$.Event(\"keydown\", { which: 13 })")'
+         within('.subnav-fixed'){page.should have_content(@client.full_name)}
+       end
+       
      end
     
     context 'when user is not logged' do
