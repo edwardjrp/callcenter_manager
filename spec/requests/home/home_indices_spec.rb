@@ -37,7 +37,7 @@ describe "Home::Indices" do
          Capybara.use_default_driver
        end
        it "should find the users in the list", js: true do
-         selector = '.ui-menu-item  a:first'
+         selector = '.ui-menu-item a:first'
          fill_in "client_search_phone", with: '8095551234'
          sleep(1)
          page.execute_script " $('#{selector}').trigger(\"mouseenter\").click();"
@@ -45,7 +45,7 @@ describe "Home::Indices" do
        end
        
        
-       it "should forbid letters on the phone search field", js: true do
+        it "should forbid letters on the phone search field", js: true do
           fill_in "client_search_phone", with: 'asd'
           find_field('client_search_phone').value.should == ''
         end
@@ -78,6 +78,28 @@ describe "Home::Indices" do
           fill_in "client_search_ext", with: '2'
           find_field('client_search_first_name').value.should == 'another'
         end
+     end
+     
+     context "when assigning a client" do
+       before(:each) do
+         Capybara.current_driver = :selenium_chrome
+         login(FactoryGirl.create(:user))
+         @client = FactoryGirl.create(:client, first_name: 'tester')
+         @phone = FactoryGirl.create :phone, client: @client, number: '8095551234', ext: '99'
+         visit root_path 
+       end
+       
+       after(:each)do
+          Capybara.use_default_driver
+       end
+       
+       it "should present the current client name in the sub nav bar", js: true do
+         selector = '.ui-menu-item  a:first'
+         fill_in "client_search_phone", with: '8095551234'
+         sleep(1)
+         page.execute_script " $('#{selector}').trigger(\"mouseenter\").click();"
+         page.should have_content('Cliente encontrado')
+       end
      end
     
     context 'when user is not logged' do

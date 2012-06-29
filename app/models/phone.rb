@@ -21,7 +21,7 @@ class Phone < ActiveRecord::Base
     phones = self.scoped
     phones = phones.merge(self.where('number like ?', "#{client[:phone].gsub(/[-. ]/,'')}%")) if client.present? && client[:phone].present?
     phones = phones.merge(self.where('ext like ?', "#{client[:ext]}%")) if client.present? && !client[:ext].blank?
-    return phones.limit(10)
+    return phones.limit(10).order(:id)
   end
   
   

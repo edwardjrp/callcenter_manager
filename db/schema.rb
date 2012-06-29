@@ -11,7 +11,45 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120625221754) do
+ActiveRecord::Schema.define(:version => 20120629135023) do
+
+  create_table "carts", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "client_id"
+    t.boolean  "communication_failed",      :default => false
+    t.string   "status_text"
+    t.integer  "store_id"
+    t.string   "store_order_id"
+    t.string   "service_method"
+    t.datetime "business_date"
+    t.datetime "advance_order_time"
+    t.decimal  "net_amount"
+    t.decimal  "tax_amount"
+    t.decimal  "tax1_amount"
+    t.decimal  "tax2_amount"
+    t.decimal  "payment_amount"
+    t.string   "message"
+    t.string   "order_text"
+    t.string   "order_progress"
+    t.boolean  "can_place_order"
+    t.text     "delivery_instructions"
+    t.string   "payment_type"
+    t.string   "credit_cart_approval_name"
+    t.string   "fiscal_number"
+    t.string   "fiscal_type"
+    t.string   "company_name"
+    t.decimal  "discount"
+    t.integer  "discount_auth_id"
+    t.boolean  "completed"
+    t.datetime "created_at",                                   :null => false
+    t.datetime "updated_at",                                   :null => false
+  end
+
+  add_index "carts", ["client_id"], :name => "index_carts_on_client_id"
+  add_index "carts", ["discount_auth_id"], :name => "index_carts_on_discount_auth_id"
+  add_index "carts", ["store_id"], :name => "index_carts_on_store_id"
+  add_index "carts", ["store_order_id"], :name => "index_carts_on_store_order_id"
+  add_index "carts", ["user_id"], :name => "index_carts_on_user_id"
 
   create_table "clients", :force => true do |t|
     t.string   "first_name"
