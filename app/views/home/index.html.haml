@@ -4,6 +4,7 @@
       %h3 Clientes
       .content
         =form_tag root_path, class: "form-horizontal", id: "client_search" do
+          =hidden_field_tag 'client[id]'
           %fieldset
             .control-group
               =label_tag :telefono,nil, class: 'control-label'

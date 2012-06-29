@@ -3,6 +3,7 @@ Kapiqua25::Application.routes.draw do
   get 'login', to: "sessions#new", as: :login
   post 'sessions', to: "sessions#create"
   resources :clients
+  resources :carts
   resources :phones do 
     collection do 
       get 'clients'
