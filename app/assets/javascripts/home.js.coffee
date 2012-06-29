@@ -34,7 +34,7 @@ jQuery ->
           ))
           clear_extra_data()
         else
-          if $("#client_search_phone").length >= 10
+          if $("#client_search_phone").val().length >= 10
             $('.ui-autocomplete:visible').hide()
             $('#client_search_first_name').val('')
             $('#client_search_last_name').val('')
@@ -72,7 +72,7 @@ query_phone = (form, cb) ->
     beforeSend: (xhr) ->
       xhr.setRequestHeader("Accept", "application/json")
     success: (phones) ->
-      cb( phones)
+      cb(phones)
     
 query_client = (form) ->
   $.ajax
