@@ -23,7 +23,7 @@
       <img src="./assets/0.5.3/loading.gif" alt="loading"/>
     </div>
     <div id="wrapper" style="display:none;">
-      <div class="timestamp">Generated <abbr class="timeago" title="2012-06-28T17:29:39-04:00">2012-06-28T17:29:39-04:00</abbr></div>
+      <div class="timestamp">Generated <abbr class="timeago" title="2012-06-29T09:34:07-04:00">2012-06-29T09:34:07-04:00</abbr></div>
       <ul class="group_tabs"></ul>
 
       <div id="content">
@@ -34,7 +34,7 @@
      covered at
      <span class="covered_strength">
        <span class="green">
-         4.44
+         4.3
        </span>
     </span> hits/line)
   </h2>
@@ -66,7 +66,7 @@
         <td>15</td>
         <td>15</td>
         <td>0</td>
-        <td>13.3</td>
+        <td>13.1</td>
       </tr>
       
       <tr>
@@ -86,7 +86,7 @@
         <td>11</td>
         <td>11</td>
         <td>0</td>
-        <td>4.6</td>
+        <td>4.1</td>
       </tr>
       
       <tr>
@@ -116,7 +116,7 @@
         <td>14</td>
         <td>14</td>
         <td>0</td>
-        <td>4.5</td>
+        <td>4.2</td>
       </tr>
       
       <tr>
@@ -142,7 +142,7 @@
      covered at
      <span class="covered_strength">
        <span class="green">
-         5.68
+         5.5
        </span>
     </span> hits/line)
   </h2>
@@ -174,7 +174,7 @@
         <td>15</td>
         <td>15</td>
         <td>0</td>
-        <td>13.3</td>
+        <td>13.1</td>
       </tr>
       
       <tr>
@@ -194,7 +194,7 @@
         <td>11</td>
         <td>11</td>
         <td>0</td>
-        <td>4.6</td>
+        <td>4.1</td>
       </tr>
       
       <tr>
@@ -219,7 +219,7 @@
      covered at
      <span class="covered_strength">
        <span class="green">
-         2.8
+         2.7
        </span>
     </span> hits/line)
   </h2>
@@ -261,7 +261,7 @@
         <td>14</td>
         <td>14</td>
         <td>0</td>
-        <td>4.5</td>
+        <td>4.2</td>
       </tr>
       
       <tr>
@@ -493,8 +493,8 @@
           <code class="ruby">   def authenticate</code>
         </li>
       
-        <li class="covered" data-hits="27" data-linenumber="8">
-          <span class="hits">27</span>
+        <li class="covered" data-hits="26" data-linenumber="8">
+          <span class="hits">26</span>
           
           <code class="ruby">     if current_user.nil?</code>
         </li>
@@ -535,14 +535,14 @@
           <code class="ruby">   def current_user</code>
         </li>
       
-        <li class="covered" data-hits="68" data-linenumber="15">
-          <span class="hits">68</span>
+        <li class="covered" data-hits="67" data-linenumber="15">
+          <span class="hits">67</span>
           
           <code class="ruby">     return nil unless session[:user_token] || !User.exists?(auth_token: session[:user_token])</code>
         </li>
       
-        <li class="covered" data-hits="68" data-linenumber="16">
-          <span class="hits">68</span>
+        <li class="covered" data-hits="67" data-linenumber="16">
+          <span class="hits">67</span>
           
           <code class="ruby">     return User.find_by_auth_token(session[:user_token]) </code>
         </li>
@@ -721,32 +721,32 @@
           <code class="ruby">  def clients</code>
         </li>
       
-        <li class="covered" data-hits="4" data-linenumber="11">
-          <span class="hits">4</span>
+        <li class="covered" data-hits="3" data-linenumber="11">
+          <span class="hits">3</span>
           
           <code class="ruby">    @phone = Phone.find_phones(params[:client]).first</code>
         </li>
       
-        <li class="covered" data-hits="4" data-linenumber="12">
-          <span class="hits">4</span>
+        <li class="covered" data-hits="3" data-linenumber="12">
+          <span class="hits">3</span>
           
           <code class="ruby">    @client = @phone.client</code>
         </li>
       
-        <li class="covered" data-hits="4" data-linenumber="13">
-          <span class="hits">4</span>
+        <li class="covered" data-hits="3" data-linenumber="13">
+          <span class="hits">3</span>
           
           <code class="ruby">    respond_to do |format|</code>
         </li>
       
-        <li class="covered" data-hits="8" data-linenumber="14">
-          <span class="hits">8</span>
+        <li class="covered" data-hits="6" data-linenumber="14">
+          <span class="hits">6</span>
           
           <code class="ruby">      format.json{render json: @client}</code>
         </li>
       
-        <li class="covered" data-hits="4" data-linenumber="15">
-          <span class="hits">4</span>
+        <li class="covered" data-hits="3" data-linenumber="15">
+          <span class="hits">3</span>
           
           <code class="ruby">      format.html</code>
         </li>
@@ -1267,26 +1267,26 @@
           <code class="ruby">  def self.find_phones(client)</code>
         </li>
       
-        <li class="covered" data-hits="10" data-linenumber="21">
-          <span class="hits">10</span>
+        <li class="covered" data-hits="9" data-linenumber="21">
+          <span class="hits">9</span>
           
           <code class="ruby">    phones = self.scoped</code>
         </li>
       
-        <li class="covered" data-hits="10" data-linenumber="22">
-          <span class="hits">10</span>
+        <li class="covered" data-hits="9" data-linenumber="22">
+          <span class="hits">9</span>
           
           <code class="ruby">    phones = phones.merge(self.where('number like ?', &quot;#{client[:phone].gsub(/[-. ]/,'')}%&quot;)) if client.present? &amp;&amp; client[:phone].present?</code>
         </li>
       
-        <li class="covered" data-hits="10" data-linenumber="23">
-          <span class="hits">10</span>
+        <li class="covered" data-hits="9" data-linenumber="23">
+          <span class="hits">9</span>
           
           <code class="ruby">    phones = phones.merge(self.where('ext like ?', &quot;#{client[:ext]}%&quot;)) if client.present? &amp;&amp; !client[:ext].blank?</code>
         </li>
       
-        <li class="covered" data-hits="10" data-linenumber="24">
-          <span class="hits">10</span>
+        <li class="covered" data-hits="9" data-linenumber="24">
+          <span class="hits">9</span>
           
           <code class="ruby">    return phones.limit(10)</code>
         </li>

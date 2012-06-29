@@ -9,18 +9,20 @@ jQuery ->
       event.preventDefault()
     if $(this).val().length < 10
       if $('.ui-autocomplete').is(':visible')  or event.which == 8
-        clear_extra_data() 
+        clear_extra_data()
+        $('#client_search_panel').popover('hide') if $('.popover').length > 0
     )
   $('#client_search_ext').keyup (event) ->
     if $("#client_search_phone").val() != ''
-      query_phone $("#client_search"), (data) ->
-        if data.length > 0
-          query_user $("#client_search")
+      query_phone $("#client_search"), (phones) ->
+        if phones.length > 0
+          query_client $("#client_search")
         else
           $('#client_search_first_name').val('')
           $('#client_search_last_name').val('')
           $('#client_search').find('fieldset').append(email_input_field_template) if $('#client_search_email').length == 0
           $('#client_search').append(button_template_no_user) if $('#user_not_found_buttons').length == 0
+          $('#client_search_panel').popover('hide') if $('.popover').length > 0
 
   $("#client_search_phone").focus().autocomplete
     minLength: 2
@@ -48,14 +50,18 @@ jQuery ->
 
     open: ->
         $('#client_search_ext').val('')
-        $('#client_search_first_name').val('')
-        $('#client_search_last_name').val('')
+        reset_form()
 
 
 email_input_field_template = $('<div class="control-group" id="client_search_email_controls"><label class="control-label" for="email">Email</label><div class="controls"><input class="input-xlarge" id="client_search_email" name="client[email]" type="text"></div></div>')
 button_template_no_user  = $('<div class="form-actions" id="user_not_found_buttons"><button type="submit" class="btn btn-primary"  id="add_user_button">Agregar usuario</button><button class="btn remote_parent left-margin-1" >Cancelar</button></div>')
 
 
+show_pop_over = ->
+  client_found_popover_options = {animation:false, placement: "bottom", trigger:"manual", title: "Cliente encontrado", content: 'Presione ENTER para asignar este cliente a la orden actual'}
+  $('#client_search_panel').popover(client_found_popover_options)
+  $('#client_search_panel').popover('show')
+  
 reset_form = () ->
   $('#client_search_first_name').val('')
   $('#client_search_last_name').val('')
@@ -85,4 +91,5 @@ query_client = (form) ->
       if client?
         $('#client_search_first_name').val(client.first_name)
         $('#client_search_last_name').val(client.last_name)
+        show_pop_over()
         clear_extra_data()
