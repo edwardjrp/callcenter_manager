@@ -18,7 +18,8 @@
             %span.icon-bar
           .brand Domino's
           .nav-collapse
-            placeholder
+            -if user_signed_in?
+              =render_navigation :expand_all => true, :renderer => :bootstrap
             %ul.nav.pull-right
               -if user_signed_in?
                 %li= link_to current_user.full_name, '#'

@@ -40,6 +40,7 @@ gem 'jbuilder'
 gem 'savon'
 gem "cancan"
 gem "simple-navigation"
+gem 'simple-navigation-bootstrap'
 gem "transitions", :require => ["transitions", "active_record/transitions"]
 gem 'exception_notification'
 gem 'settler'

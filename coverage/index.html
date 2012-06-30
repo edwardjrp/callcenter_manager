@@ -23,7 +23,7 @@
       <img src="./assets/0.5.3/loading.gif" alt="loading"/>
     </div>
     <div id="wrapper" style="display:none;">
-      <div class="timestamp">Generated <abbr class="timeago" title="2012-06-30T11:18:14-04:00">2012-06-30T11:18:14-04:00</abbr></div>
+      <div class="timestamp">Generated <abbr class="timeago" title="2012-06-30T12:13:23-04:00">2012-06-30T12:13:23-04:00</abbr></div>
       <ul class="group_tabs"></ul>
 
       <div id="content">
@@ -34,7 +34,7 @@
      covered at
      <span class="covered_strength">
        <span class="green">
-         6.81
+         7.39
        </span>
     </span> hits/line)
   </h2>
@@ -66,7 +66,7 @@
         <td>23</td>
         <td>23</td>
         <td>0</td>
-        <td>32.5</td>
+        <td>37.7</td>
       </tr>
       
       <tr>
@@ -162,7 +162,7 @@
      covered at
      <span class="covered_strength">
        <span class="green">
-         9.46
+         10.5
        </span>
     </span> hits/line)
   </h2>
@@ -194,7 +194,7 @@
         <td>23</td>
         <td>23</td>
         <td>0</td>
-        <td>32.5</td>
+        <td>37.7</td>
       </tr>
       
       <tr>
@@ -653,14 +653,14 @@
           <code class="ruby">   def current_user</code>
         </li>
       
-        <li class="covered" data-hits="223" data-linenumber="28">
-          <span class="hits">223</span>
+        <li class="covered" data-hits="263" data-linenumber="28">
+          <span class="hits">263</span>
           
           <code class="ruby">     return nil unless session[:user_token] || !User.exists?(auth_token: session[:user_token])</code>
         </li>
       
-        <li class="covered" data-hits="223" data-linenumber="29">
-          <span class="hits">223</span>
+        <li class="covered" data-hits="263" data-linenumber="29">
+          <span class="hits">263</span>
           
           <code class="ruby">     return User.find_by_auth_token(session[:user_token]) </code>
         </li>
@@ -689,8 +689,8 @@
           <code class="ruby">   def user_signed_in?</code>
         </li>
       
-        <li class="covered" data-hits="110" data-linenumber="34">
-          <span class="hits">110</span>
+        <li class="covered" data-hits="150" data-linenumber="34">
+          <span class="hits">150</span>
           
           <code class="ruby">     !!current_user.present?</code>
         </li>
