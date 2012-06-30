@@ -6,7 +6,16 @@
           Cliente:
           %span=current_cart.client.present? ? current_cart.client.full_name : "N/A"
       %li
-        %a{:id => "choose_service_method", :href=>'#'} Modo de servicio: N/A
+        %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#menu1"}
+          Modo de servicio: N/A
+          %b.caret
+        %ul.dropdown-menu
+          %li
+            %a{:href => "#"} Delivery
+          %li
+            %a{:href => "#"} Carry Out
+          %li
+            %a{:href => "#"} Pick up
       %li
         %a{:id => "choose_store", :href=>'#'} Tienda: N/A
       %li
