@@ -40,7 +40,7 @@ ActiveRecord::Schema.define(:version => 20120629135023) do
     t.string   "company_name"
     t.decimal  "discount"
     t.integer  "discount_auth_id"
-    t.boolean  "completed"
+    t.boolean  "completed",                 :default => false
     t.datetime "created_at",                                   :null => false
     t.datetime "updated_at",                                   :null => false
   end

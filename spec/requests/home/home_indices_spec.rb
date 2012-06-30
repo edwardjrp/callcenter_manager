@@ -106,7 +106,7 @@ describe "Home::Indices" do
          fill_in "client_search_phone", with: '8095551234'
          sleep(1)
          page.execute_script " $('#{selector}').trigger(\"mouseenter\").click();"
-         page.execute_script '$("#client_search_phone").trigger("$.Event(\"keydown\", { which: 13 })")'
+         page.find_by_id('client_search_phone').native.send_keys([:return])
          within('.subnav-fixed'){page.should have_content(@client.full_name)}
        end
        

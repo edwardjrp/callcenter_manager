@@ -1,0 +1,13 @@
+-if user_signed_in?
+  .subnav.subnav-fixed
+    %ul.nav.nav-pills
+      %li
+        %a{:id => "choose_client", :href=>'#'}
+          Cliente:
+          %span=current_cart.client.present? ? current_cart.client.full_name : "N/A"
+      %li
+        %a{:id => "choose_service_method", :href=>'#'} Modo de servicio: N/A
+      %li
+        %a{:id => "choose_store", :href=>'#'} Tienda: N/A
+      %li
+        %a{:id => "proceed_to_checkout_out", :href=>'#'} Checkout!

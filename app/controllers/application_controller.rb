@@ -11,6 +11,19 @@ class ApplicationController < ActionController::Base
      end
    end
    
+   def current_cart
+     if user_signed_in?
+       if  session[:current_cart_id] || current_user.carts.exists?(session[:current_cart_id])
+          cart =  current_user.carts.find(session[:current_cart_id])
+       else
+          cart = current_user.carts.create
+          session[:current_cart_id] = cart.id
+       end
+       return cart
+     end
+   end
+   helper_method :current_cart
+   
    def current_user
      return nil unless session[:user_token] || !User.exists?(auth_token: session[:user_token])
      return User.find_by_auth_token(session[:user_token]) 

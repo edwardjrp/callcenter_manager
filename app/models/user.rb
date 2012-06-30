@@ -24,6 +24,7 @@ class User < ActiveRecord::Base
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :idnumber, presence: true, uniqueness: true
+  has_many :carts
   attr_accessible :first_name, :last_name, :idnumber, :username, :password, :password_confirmation
   before_validation :generate_auth_token
   

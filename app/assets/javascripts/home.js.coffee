@@ -2,9 +2,12 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 jQuery ->
-  bind_client_assignment()
+  assign_client_to_current_cart()
   $("#client_search_phone").restric('alpha').restric('spaces')
   $("#client_search_phone").keyup( (event) ->
+    if $(this).val().length == 0
+      $('#client_search_ext').val('')
+      reset_form()
     if $(this).val().length > 12
       $(this).val($(this).val().substr(0,12));
       event.preventDefault()
@@ -58,7 +61,7 @@ email_input_field_template = $('<div class="control-group" id="client_search_ema
 button_template_no_user  = $('<div class="form-actions" id="user_not_found_buttons"><button type="submit" class="btn btn-primary"  id="add_user_button">Agregar usuario</button><button class="btn remote_parent left-margin-1" >Cancelar</button></div>')
 
 
-bind_client_assignment = () ->
+assign_client_to_current_cart = () ->
   $('#client_search input').on 'keypress', (event)->
     if $('#client_id').val()? and $('#client_id').val() > 0
       $.ajax
@@ -68,8 +71,9 @@ bind_client_assignment = () ->
         data: {client_id: $('#client_id').val()}
         beforeSend: (xhr) ->
           xhr.setRequestHeader("Accept", "application/json")
-        success: (response) ->
-          console.log response
+        success: (cart_info) ->
+          $('#choose_client>span').text("#{cart_info.client.first_name} #{cart_info.client.last_name}")
+          
       
 show_pop_over = ->
   client_found_popover_options = {animation:false, placement: "bottom", trigger:"manual", title: "Cliente encontrado", content: 'Presione ENTER para asignar este cliente a la orden actual'}

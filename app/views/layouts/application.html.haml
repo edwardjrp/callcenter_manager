@@ -26,16 +26,7 @@
                 %li= link_to "Cerrar Sesión", nil, :method=>:delete, :id=>'end_session'
               -else
                 %li= link_to "Iniciar sesión", login_path
-    .subnav.subnav-fixed
-      %ul.nav.nav-pills
-        %li.active
-          %a{:href => "#choose_client"} Cliente: N/A
-        %li
-          %a{:href => "#choose_service_method"} Modo de servicio: N/A
-        %li
-          %a{:href => "#choose_store"} Tienda: N/A
-        %li
-          %a{:href => "#checkout_out"} Checkout!
+    = render :partial => 'cart_info'
     .container.bottom-margin-1
       .row
         .span12
@@ -43,4 +34,5 @@
             %div{:class => "alert alert-#{name == :notice ? "success" : name }"}
               %a.close{"data-dismiss" => "alert"} ×
               = msg
+          =current_cart.inspect if Rails.env.development?
           = yield

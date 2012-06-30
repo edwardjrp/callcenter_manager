@@ -22,6 +22,7 @@ class Client < ActiveRecord::Base
   validates :idnumber, uniqueness:  true, allow_nil: true
   validates :email, uniqueness:  true, allow_nil: true
   has_many :phones
+  has_many :carts
   attr_accessible :active, :email, :first_name, :idnumber, :last_name
   
   def self.find_clients(client)

@@ -27,7 +27,7 @@ class CreateCarts < ActiveRecord::Migration
       t.string :company_name
       t.decimal :discount
       t.integer :discount_auth_id
-      t.boolean :completed
+      t.boolean :completed , :default=>false
       t.timestamps
     end
     

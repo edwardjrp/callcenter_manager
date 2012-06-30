@@ -29,11 +29,17 @@
 #  company_name              :string(255)
 #  discount                  :decimal(, )
 #  discount_auth_id          :integer
-#  completed                 :boolean
+#  completed                 :boolean          default(FALSE)
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
 #
 
 class Cart < ActiveRecord::Base
   # attr_accessible :title, :body
+  scope :completed, where(:completed=>true)
+  scope :incomplete, where(:completed=>false)
+  scope :latest, order('created_at DESC')
+  belongs_to :user
+  belongs_to :client
+  validates :user_id, presence: true
 end

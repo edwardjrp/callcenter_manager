@@ -29,7 +29,7 @@
 #  company_name              :string(255)
 #  discount                  :decimal(, )
 #  discount_auth_id          :integer
-#  completed                 :boolean
+#  completed                 :boolean          default(FALSE)
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
 #
@@ -37,5 +37,9 @@
 require 'spec_helper'
 
 describe Cart do
-  pending "add some examples to (or delete) #{__FILE__}"
+  context 'Validation' do
+    it{should validate_presence_of :user_id}
+    it{should belong_to :user}
+    it{should belong_to :client}
+  end
 end
