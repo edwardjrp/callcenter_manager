@@ -15,6 +15,12 @@ class SessionsController < ApplicationController
     end
   end
   
+  def destroy
+    session[:user_token]=nil
+    flash[:success]="Sesión terminada"
+    redirect_to login_path
+  end
+  
   private
     def authenticate
     end
