@@ -4,7 +4,11 @@ Kapiqua25::Application.routes.draw do
   get 'logout', to: "sessions#destroy", as: :logout
   post 'sessions', to: "sessions#create"
   resources :clients
-  resources :carts
+  resources :carts do
+    collection do
+      post 'service_method'
+    end
+  end
   resources :phones do 
     collection do 
       get 'clients'

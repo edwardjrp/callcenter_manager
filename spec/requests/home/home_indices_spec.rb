@@ -111,7 +111,46 @@ describe "Home::Indices" do
        end
        
      end
-    
+     
+     context "when assigning a delivery method" do
+       before(:each) do
+         # Capybara.current_driver = :selenium_chrome
+         login(FactoryGirl.create(:user))
+         visit root_path 
+       end
+
+       # after(:each)do
+       #         Capybara.use_default_driver
+       #      end
+       it "should assign render the delivery method menu" do
+         click_link('choose_service_method')
+         page.should have_css('ul.dropdown-menu:first', :visible=>true)
+       end
+       
+       it "should set delvery as the service method persistenly", js: true do
+         click_link('choose_service_method')
+         click_link('service_method_delivery')
+         visit root_path
+         within('#choose_service_method'){page.should have_content('delivery')}
+       end
+       
+       it "should set pickup as the service method persistenly", js: true do
+          click_link('choose_service_method')
+          click_link('service_method_pickup')
+          visit root_path
+          within('#choose_service_method'){page.should have_content('pickup')}
+        end
+        
+        it "should set carry out as the service method persistenly", js: true do
+           click_link('choose_service_method')
+           click_link('service_method_carry_out')
+           visit root_path
+           within('#choose_service_method'){page.should have_content('carry out')}
+         end
+       
+     end   
+     
+
     context 'when user is not logged' do
       it "should redirect_to the login" do
         visit root_path

@@ -6,16 +6,20 @@
           Cliente:
           %span=current_cart.client.present? ? current_cart.client.full_name : "N/A"
       %li
-        %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#menu1"}
-          Modo de servicio: N/A
+        %a#choose_service_method.dropdown-toggle{"data-toggle" => "dropdown", :href => "#menu1"}
+          Modo de servicio:
+          = current_cart.service_method || " N/A"
           %b.caret
         %ul.dropdown-menu
           %li
-            %a{:href => "#"} Delivery
+            %a#service_method_delivery{:href=> "#" , :data=> { "service-method"=> 'delivery' }}
+              -if current_cart.delivery? 
+                %i.icon-ok
+              Delivery
           %li
-            %a{:href => "#"} Carry Out
+            %a#service_method_carry_out{:href => "#"} Carry Out
           %li
-            %a{:href => "#"} Pick up
+            %a#service_method_pickup{:href => "#"} Pick up
       %li
         %a{:id => "choose_store", :href=>'#'} Tienda: N/A
       %li

@@ -42,4 +42,22 @@ class Cart < ActiveRecord::Base
   belongs_to :user
   belongs_to :client
   validates :user_id, presence: true
+  
+  def self.service_methods
+    %w( delivery pickup carryout )
+  end
+  
+  def delivery?
+    self.service_method == self.class.service_methods[0]
+  end
+  
+  def pickup?
+      self.service_method == self.class.service_methods[1]
+  end
+  
+  def carry_out?
+      self.service_method == self.class.service_methods[2]
+  end
+  
+  
 end

@@ -3,7 +3,22 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 jQuery ->
   assign_client_to_current_cart()
+  
+  $('#service_method_delivery').click (event) ->
+    $('#choose_service_method').text('Modo de servicio: Actualizando')
+    $.ajax
+      type: 'post'
+      url: "/carts/service_method"
+      datatype: 'json'
+      data: {service_method: $('#service_method_delivery').data('service-method')}
+      beforeSend: (xhr) ->
+        xhr.setRequestHeader("Accept", "application/json")
+      success: (response)->
+        $('#choose_service_method').text("Modo de servicio: #{response.service_method}")
+    
+    
   $("#client_search_phone").restric('alpha').restric('spaces')
+  
   $("#client_search_phone").keyup( (event) ->
     if $(this).val().length == 0
       $('#client_search_ext').val('')

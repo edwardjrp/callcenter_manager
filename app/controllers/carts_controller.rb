@@ -15,4 +15,16 @@ class CartsController < ApplicationController
       end
     end
   end
+  
+  def service_method
+    @cart = current_cart
+    @cart.service_method = params[:service_method]
+    respond_to do |format|
+      if @cart.save
+        format.json{render :json => @cart.as_json(only: [:service_method, :store_id])}
+      else
+         format.json{render :nothing =>true, :status => 422}
+      end
+    end
+  end
 end
