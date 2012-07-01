@@ -3,19 +3,10 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 jQuery ->
   assign_client_to_current_cart()
+  assign_service_method($('#service_method_delivery'))
+  assign_service_method($('#service_method_carry_out'))
+  assign_service_method($('#service_method_pickup'))
   
-  $('#service_method_delivery').click (event) ->
-    $('#choose_service_method').text('Modo de servicio: Actualizando')
-    $.ajax
-      type: 'post'
-      url: "/carts/service_method"
-      datatype: 'json'
-      data: {service_method: $('#service_method_delivery').data('service-method')}
-      beforeSend: (xhr) ->
-        xhr.setRequestHeader("Accept", "application/json")
-      success: (response)->
-        $('#choose_service_method').text("Modo de servicio: #{response.service_method}")
-    
     
   $("#client_search_phone").restric('alpha').restric('spaces')
   
@@ -89,6 +80,20 @@ assign_client_to_current_cart = () ->
         success: (cart_info) ->
           $('#choose_client>span').text("#{cart_info.client.first_name} #{cart_info.client.last_name}")
           
+assign_service_method = (target)->
+  target.click (event) ->
+    $('#choose_service_method').text('Modo de servicio: Actualizando')
+    $.ajax
+      type: 'post'
+      url: "/carts/service_method"
+      datatype: 'json'
+      data: {service_method: target.data('service-method')}
+      beforeSend: (xhr) ->
+        xhr.setRequestHeader("Accept", "application/json")
+      success: (response)->
+        $('#choose_service_method').text("Modo de servicio: #{response.service_method}")
+        $('#choose_service_method_dropdown').find('i').remove()
+        target.prepend $('<i class="icon-ok"></i>')
       
 show_pop_over = ->
   client_found_popover_options = {animation:false, placement: "bottom", trigger:"manual", title: "Cliente encontrado", content: 'Presione ENTER para asignar este cliente a la orden actual'}

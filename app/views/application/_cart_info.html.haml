@@ -10,16 +10,22 @@
           Modo de servicio:
           = current_cart.service_method || " N/A"
           %b.caret
-        %ul.dropdown-menu
+        %ul.dropdown-menu#choose_service_method_dropdown
           %li
             %a#service_method_delivery{:href=> "#" , :data=> { "service-method"=> 'delivery' }}
               -if current_cart.delivery? 
                 %i.icon-ok
               Delivery
           %li
-            %a#service_method_carry_out{:href => "#"} Carry Out
+            %a#service_method_carry_out{:href=> "#" , :data=> { "service-method"=> 'carryout' }}
+              -if current_cart.carry_out? 
+                %i.icon-ok
+              Carry Out
           %li
-            %a#service_method_pickup{:href => "#"} Pick up
+            %a#service_method_pickup{:href=> "#" , :data=> { "service-method"=> 'pickup' }}
+              -if current_cart.pickup? 
+                %i.icon-ok
+              Pick up
       %li
         %a{:id => "choose_store", :href=>'#'} Tienda: N/A
       %li
