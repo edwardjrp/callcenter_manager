@@ -145,7 +145,7 @@ describe "Home::Indices" do
            click_link('choose_service_method')
            click_link('service_method_carry_out')
            visit root_path
-           within('#choose_service_method'){page.should have_content('carry out')}
+           within('#choose_service_method'){page.should have_content('carryout')}
          end
        
      end   
