@@ -33,6 +33,27 @@ jQuery ->
           $('#client_search').find('fieldset').append(email_input_field_template) if $('#client_search_email').length == 0
           $('#client_search').append(button_template_no_user) if $('#user_not_found_buttons').length == 0
           $('#client_search_panel').popover('hide') if $('.popover').length > 0
+          $('#add_user_button').click (event) ->
+            event.preventDefault()
+            $.ajax
+              type: 'POST'
+              url: "/clients"
+              datatype: 'json'
+              data: $('#client_search').serialize()
+              beforeSend: (xhr) ->
+                xhr.setRequestHeader("Accept", "application/json")
+              success: (response) ->
+                $('#client_search_first_name').val(response.first_name.toTitleCase())
+                $('#client_search_last_name').val(response.last_name.toTitleCase())
+                $('#client_id').val(response.id)
+                $('.container>.row>.span12').prepend($('<div class="alert alert-success"><button class="close" data-dismiss="alert">×</button>Cliente creado.</div>'))
+                $('#client_search_phone').focus()
+                show_pop_over()
+                clear_extra_data()
+              error: (response) ->
+                console.log response
+              
+              
 
   $("#client_search_phone").focus().autocomplete
     minLength: 2
@@ -69,7 +90,7 @@ button_template_no_user  = $('<div class="form-actions" id="user_not_found_butto
 
 assign_client_to_current_cart = () ->
   $('#client_search input').on 'keypress', (event)->
-    if $('#client_id').val()? and $('#client_id').val() > 0
+    if event.which == 13 and $('#client_id').val()? and $('#client_id').val() > 0
       $.ajax
         type: 'post'
         url: "/carts"

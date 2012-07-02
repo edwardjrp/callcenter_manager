@@ -21,9 +21,10 @@ class Client < ActiveRecord::Base
   validates :last_name, presence:  true
   validates :idnumber, uniqueness:  true, allow_nil: true
   validates :email, uniqueness:  true, allow_nil: true
-  has_many :phones
+  has_many :phones, :inverse_of => :client
   has_many :carts
-  attr_accessible :active, :email, :first_name, :idnumber, :last_name
+  accepts_nested_attributes_for :phones
+  attr_accessible :active, :email, :first_name, :idnumber, :last_name, :phones_attributes
   
   def self.find_clients(client)
     clients = self.scoped

@@ -19,7 +19,7 @@ describe Phone do
     end
     it{should validate_uniqueness_of(:number).scoped_to(:ext) }
     it{should belong_to :client }
-    it{should validate_presence_of :client_id }
+    it{should validate_presence_of :client }
   end
   
   it "should clear phone number" do 
