@@ -25,6 +25,7 @@ jQuery ->
   $('#client_search_ext').keyup (event) ->
     if $("#client_search_phone").val() != ''
       query_phone $("#client_search"), (phones) ->
+        console.log phones
         if phones.length > 0
           query_client $("#client_search")
         else
