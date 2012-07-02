@@ -1,7 +1,7 @@
 #encoding: utf-8
 require 'spec_helper'
 
-describe "Home::Indices" do
+describe "Client::New" do
   describe "when creating a new client" do
       before(:each) do
         Capybara.current_driver = :selenium_chrome

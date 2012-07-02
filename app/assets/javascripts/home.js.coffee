@@ -32,7 +32,7 @@ jQuery ->
           $('#client_search_last_name').val('')
           $('#client_search').find('fieldset').append(email_input_field_template) if $('#client_search_email').length == 0
           $('#client_search').append(button_template_no_user) if $('#user_not_found_buttons').length == 0
-          $('#client_search_panel').popover('hide') if $('.popover').length > 0
+          hide_pop_over()
           $('#add_user_button').click (event) ->
             event.preventDefault()
             $.ajax
@@ -100,6 +100,8 @@ assign_client_to_current_cart = () ->
           xhr.setRequestHeader("Accept", "application/json")
         success: (cart_info) ->
           $('#choose_client>span').text("#{cart_info.client.first_name} #{cart_info.client.last_name}")
+          hide_pop_over()
+          $('.container>.row>.span12').prepend($('<div class="alert alert-success"><button class="close" data-dismiss="alert">×</button>Cliente asignado.</div>'))
           
 assign_service_method = (target)->
   target.click (event) ->
@@ -120,7 +122,9 @@ show_pop_over = ->
   client_found_popover_options = {animation:false, placement: "bottom", trigger:"manual", title: "Cliente encontrado", content: 'Presione ENTER para asignar este cliente a la orden actual'}
   $('#client_search_panel').popover(client_found_popover_options)
   $('#client_search_panel').popover('show')
-  
+
+hide_pop_over = ->
+  $('#client_search_panel').popover('hide') if $('.popover').length > 0  
 reset_form = () ->
   $('#client_search_first_name').val('')
   $('#client_search_last_name').val('')
