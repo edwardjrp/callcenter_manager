@@ -46,12 +46,12 @@ jQuery ->
                 $('#client_search_first_name').val(response.first_name.toTitleCase())
                 $('#client_search_last_name').val(response.last_name.toTitleCase())
                 $('#client_id').val(response.id)
-                $('.container>.row>.span12').prepend($('<div class="alert alert-success"><button class="close" data-dismiss="alert">×</button>Cliente creado.</div>'))
+                send_alert('Cliente creado.', 'success')
                 $('#client_search_phone').focus()
                 show_pop_over()
                 clear_extra_data()
               error: (response) ->
-                console.log response
+                send_alert(response.responseText, 'error')
               
               
 
@@ -101,7 +101,7 @@ assign_client_to_current_cart = () ->
         success: (cart_info) ->
           $('#choose_client>span').text("#{cart_info.client.first_name} #{cart_info.client.last_name}")
           hide_pop_over()
-          $('.container>.row>.span12').prepend($('<div class="alert alert-success"><button class="close" data-dismiss="alert">×</button>Cliente asignado.</div>'))
+          send_alert('Cliente asignado.', 'success')
           
 assign_service_method = (target)->
   target.click (event) ->
@@ -133,6 +133,9 @@ reset_form = () ->
 clear_extra_data = () ->
   $('#client_search_email_controls').remove()  if $('#client_search_email_controls').length > 0
   $('#user_not_found_buttons').remove() if $('#user_not_found_buttons').length > 0
+
+send_alert = (msg, type)->
+  $('.container>.row>.span12').prepend($("<div class=\"alert alert-#{type}\"><button class=\"close\" data-dismiss=\"alert\">×</button>#{msg}</div>"))
 
 query_phone = (form, cb) ->
   $.ajax
