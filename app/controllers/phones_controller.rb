@@ -13,7 +13,7 @@ class PhonesController < ApplicationController
     Rails.logger.debug @phone.client.inspect
     @client = @phone.client
     respond_to do |format|
-      format.json{render json: @client}
+      format.json{render json: (@client || [])}
     end
   end
 end
