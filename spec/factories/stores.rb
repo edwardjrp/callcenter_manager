@@ -5,7 +5,7 @@ FactoryGirl.define do
     name {Faker::Name.first_name}
     address {Faker::Lorem.sentence}
     ip {[rand(255).to_s, rand(255).to_s, rand(255).to_s, rand(255).to_s].join('.')}
-    associaciton :city
+    association :city
     storeid {rand(1500)}
   end
 end
