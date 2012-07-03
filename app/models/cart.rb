@@ -41,6 +41,7 @@ class Cart < ActiveRecord::Base
   scope :latest, order('created_at DESC')
   belongs_to :user
   belongs_to :client
+  belongs_to :store
   validates :user_id, presence: true
   
   def self.service_methods

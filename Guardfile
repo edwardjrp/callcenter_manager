@@ -14,13 +14,13 @@ end
 
 guard 'rspec', :version => 2, :cli => "--drb --format documentation",:all_after_pass => false, :run_all => { :cli => "--format progress" }do
   watch(%r{^spec/.+_spec\.rb$})
+  watch(%r{^spec/(application|layouts)/(.+)\.rb$})                  { "spec/request" }
   watch(%r{^app/controllers/admin/(.+)_(controller)\.rb$})  { |m| "spec/requests/admin/#{m[1]}" }
   watch(%r{^app/views/admin/(.+)/.*\.(erb|haml)$})          { |m| "spec/requests/admin/#{m[1]}" }
   watch(%r{^app/controllers/(.+)_(controller)\.rb$})  { |m| "spec/requests/#{m[1]}" }
   watch(%r{^app/views/layout/(.+)/.*\.(erb|haml)$})          {"spec/requests" }
   watch(%r{^app/views/(.+)/.*\.(erb|haml)$})          { |m| "spec/requests/#{m[1]}" }
   watch(%r{^spec/support/factories/(.+)\.rb$})                  { "spec/models" }
-  watch(%r{^spec/(application|layouts)/(.+)\.rb$})                  { "spec/request" }
   watch(%r{^app/models/(.+)\.rb$})                  { |m| "spec/models/#{m[1]}_spec.rb" }
   watch('spec/spec_helper.rb')                        { ["spec/requests","spec/models"] }
   watch('app/controllers/application_controller.rb')  { ["spec/requests","spec/models"] }
