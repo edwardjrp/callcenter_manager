@@ -60,6 +60,14 @@ describe "Client::New" do
          page.should have_content('Cliente creado')
          page.should_not have_css('#client_search_email')
        end
+       
+       it "should show the address input ", js: true do
+          fill_in "client_search_phone", with: '8095551234'
+          fill_in "client_search_ext", with: '41'
+          page.should have_css('#client_search_address_city')
+          page.should have_css('#client_search_address_area')
+          page.should have_css('#client_search_address_street')
+       end
       
       
       describe "when validating" do

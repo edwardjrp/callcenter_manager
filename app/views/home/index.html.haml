@@ -5,7 +5,7 @@
       .content
         =form_tag root_path, class: "form-horizontal", id: "client_search" do
           =hidden_field_tag 'client[id]'
-          %fieldset
+          %fieldset{data: {cities: City.all.map{|c| [c.id, c.name]}}}
             .control-group
               =label_tag :telefono,nil, class: 'control-label'
               .controls

@@ -60,7 +60,7 @@ jQuery ->
         $('#client_search_ext').val('')
         reset_form()
 
-
+city_select_template = $('<div class="control-group" id="client_search_address_city_controls"><label class="control-label" for="client_search_address_city">Ciudad</label><div class="controls"><select id="client_search_address_city"></select></div></div>')
 email_input_field_template = $('<div class="control-group" id="client_search_email_controls"><label class="control-label" for="email">Email</label><div class="controls"><input class="input-xlarge" id="client_search_email" name="client[email]" type="text"></div></div>')
 button_template_no_user  = $('<div class="form-actions" id="user_not_found_buttons"><button type="submit" class="btn btn-primary"  id="add_client_button">Agregar usuario</button><button class="btn remote_parent left-margin-1" >Cancelar</button></div>')
 
@@ -69,6 +69,9 @@ client_create = (triggerer)->
   $('#client_search_first_name').val('')
   $('#client_search_last_name').val('')
   $('#client_search').find('fieldset').append(email_input_field_template) if $('#client_search_email').length == 0
+  $('#client_search').find('fieldset').append(city_select_template) if $('#client_search_address_city_controls').length == 0
+  fill_option() if $('#client_search_address_city').find('option').length == 0
+  $('#client_search_address_city').select2()
   $('#client_search').append(button_template_no_user) if $('#user_not_found_buttons').length == 0
   unless $('#add_client_button').data("events")? and $('#add_client_button').data("events").click? and $('#add_client_button').data("events").click.length > 0
     triggerer.on 'click', (event) ->
@@ -90,6 +93,10 @@ client_create = (triggerer)->
           clear_extra_data()
         error: (response) ->
           window.show_alert(response.responseText, 'error')
+
+fill_option = ()->
+  $.each $('#client_search').find('fieldset').data('cities'), (index, value) ->
+    $('#client_search_address_city').append($("<option value=#{value[0]}>#{value[1]}</option>"))
 
 assign_client_to_current_cart = () ->
   $('#client_search input').on 'keypress', (event)->
@@ -131,6 +138,8 @@ clear_extra_data = () ->
   $('#client_search_email').val('')
   window.del($('#client_search_email_controls'))
   window.del($('#user_not_found_buttons'))
+  $("#client_search_address_city").select2("destroy")
+  window.del($('#client_search_address_city_controls'))
 
 
 query_phone = (form, cb) ->
