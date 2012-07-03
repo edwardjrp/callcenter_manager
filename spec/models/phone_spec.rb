@@ -30,4 +30,5 @@ describe Phone do
     @phone.valid?
     @phone.number.should == "8095551234"
   end
+  
 end

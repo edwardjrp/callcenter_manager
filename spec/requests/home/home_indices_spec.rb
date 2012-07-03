@@ -58,7 +58,7 @@ describe "Home::Indices" do
         it "should show the add user buttons", js: true do
           fill_in "client_search_phone", with: '8095551235'
           page.should have_css('#client_search_email')
-          page.should have_css('#add_user_button')
+          page.should have_css('#add_client_button')
         end
         
         it "should clear the user info if i start typing the extension", js: true do

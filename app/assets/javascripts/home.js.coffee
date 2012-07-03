@@ -6,53 +6,32 @@ jQuery ->
   assign_service_method($('#service_method_delivery'))
   assign_service_method($('#service_method_carry_out'))
   assign_service_method($('#service_method_pickup'))
-  
-    
+  $("#client_search_phone").blur ->
+    $("#client_search_phone").val window.NumberFormatter.to_phone($("#client_search_phone").val())
+  $("#client_search_phone").focus ->
+    $("#client_search_phone").val window.NumberFormatter.to_clear($("#client_search_phone").val())  
   $("#client_search_phone").restric('alpha').restric('spaces')
   
   $("#client_search_phone").keyup( (event) ->
     if $(this).val().length == 0
       $('#client_search_ext').val('')
       reset_form()
-    if $(this).val().length > 12
-      $(this).val($(this).val().substr(0,12));
+    if $(this).val().length > 10
+      $(this).val($(this).val().substr(0,10));
       event.preventDefault()
     if $(this).val().length < 10
       if $('.ui-autocomplete').is(':visible')  or event.which == 8
         clear_extra_data()
-        $('#client_search_panel').popover('hide') if $('.popover').length > 0
+        window.hide_popover($('#client_search_panel'))
     )
   $('#client_search_ext').keyup (event) ->
     if $("#client_search_phone").val() != ''
       query_phone $("#client_search"), (phones) ->
-        console.log phones
         if phones.length > 0
           query_client $("#client_search")
         else
-          $('#client_search_first_name').val('')
-          $('#client_search_last_name').val('')
-          $('#client_search').find('fieldset').append(email_input_field_template) if $('#client_search_email').length == 0
-          $('#client_search').append(button_template_no_user) if $('#user_not_found_buttons').length == 0
-          hide_pop_over()
-          $('#add_user_button').click (event) ->
-            event.preventDefault()
-            $.ajax
-              type: 'POST'
-              url: "/clients"
-              datatype: 'json'
-              data: $('#client_search').serialize()
-              beforeSend: (xhr) ->
-                xhr.setRequestHeader("Accept", "application/json")
-              success: (response) ->
-                $('#client_search_first_name').val(response.first_name.toTitleCase())
-                $('#client_search_last_name').val(response.last_name.toTitleCase())
-                $('#client_id').val(response.id)
-                send_alert('Cliente creado.', 'success')
-                $('#client_search_phone').focus()
-                show_pop_over()
-                clear_extra_data()
-              error: (response) ->
-                send_alert(response.responseText, 'error')
+          window.hide_popover($('#client_search_panel'))
+          client_create $('#add_client_button')
               
               
 
@@ -70,10 +49,7 @@ jQuery ->
         else
           if $("#client_search_phone").val().length >= 10
             $('.ui-autocomplete:visible').hide()
-            $('#client_search_first_name').val('')
-            $('#client_search_last_name').val('')
-            $('#client_search').find('fieldset').append(email_input_field_template) if $('#client_search_email').length == 0
-            $('#client_search').append(button_template_no_user) if $('#user_not_found_buttons').length == 0
+            client_create $('#add_client_button')
           
     select: (event, ui) ->
         ui.item.value = window.NumberFormatter.to_phone(ui.item.value)
@@ -86,8 +62,34 @@ jQuery ->
 
 
 email_input_field_template = $('<div class="control-group" id="client_search_email_controls"><label class="control-label" for="email">Email</label><div class="controls"><input class="input-xlarge" id="client_search_email" name="client[email]" type="text"></div></div>')
-button_template_no_user  = $('<div class="form-actions" id="user_not_found_buttons"><button type="submit" class="btn btn-primary"  id="add_user_button">Agregar usuario</button><button class="btn remote_parent left-margin-1" >Cancelar</button></div>')
+button_template_no_user  = $('<div class="form-actions" id="user_not_found_buttons"><button type="submit" class="btn btn-primary"  id="add_client_button">Agregar usuario</button><button class="btn remote_parent left-margin-1" >Cancelar</button></div>')
 
+
+client_create = (triggerer)->
+  $('#client_search_first_name').val('')
+  $('#client_search_last_name').val('')
+  $('#client_search').find('fieldset').append(email_input_field_template) if $('#client_search_email').length == 0
+  $('#client_search').append(button_template_no_user) if $('#user_not_found_buttons').length == 0
+  unless $('#add_client_button').data("events")? and $('#add_client_button').data("events").click? and $('#add_client_button').data("events").click.length > 0
+    triggerer.on 'click', (event) ->
+      event.preventDefault()
+      $.ajax
+        type: 'POST'
+        url: "/clients"
+        datatype: 'json'
+        data: $('#client_search').serialize()
+        beforeSend: (xhr) ->
+          xhr.setRequestHeader("Accept", "application/json")
+        success: (response) ->
+          $('#client_search_first_name').val(response.first_name.toTitleCase())
+          $('#client_search_last_name').val(response.last_name.toTitleCase())
+          $('#client_id').val(response.id)
+          window.show_alert('Cliente creado.', 'success')
+          $('#client_search_phone').focus()
+          window.show_popover($('#client_search_panel'), 'Cliente asignado', 'Presione ENTER para asignar el cliente creado a la orden actual.')
+          clear_extra_data()
+        error: (response) ->
+          window.show_alert(response.responseText, 'error')
 
 assign_client_to_current_cart = () ->
   $('#client_search input').on 'keypress', (event)->
@@ -101,8 +103,8 @@ assign_client_to_current_cart = () ->
           xhr.setRequestHeader("Accept", "application/json")
         success: (cart_info) ->
           $('#choose_client>span').text("#{cart_info.client.first_name} #{cart_info.client.last_name}")
-          hide_pop_over()
-          send_alert('Cliente asignado.', 'success')
+          window.hide_popover($('#client_search_panel'))
+          window.show_alert('Cliente asignado.', 'success')
           
 assign_service_method = (target)->
   target.click (event) ->
@@ -116,27 +118,20 @@ assign_service_method = (target)->
         xhr.setRequestHeader("Accept", "application/json")
       success: (response)->
         $('#choose_service_method').text("Modo de servicio: #{response.service_method}")
-        $('#choose_service_method_dropdown').find('i').remove()
+        window.del($('#choose_service_method_dropdown').find('i'))
         target.prepend $('<i class="icon-ok"></i>')
       
-show_pop_over = ->
-  client_found_popover_options = {animation:false, placement: "bottom", trigger:"manual", title: "Cliente encontrado", content: 'Presione ENTER para asignar este cliente a la orden actual'}
-  $('#client_search_panel').popover(client_found_popover_options)
-  $('#client_search_panel').popover('show')
-
-hide_pop_over = ->
-  $('#client_search_panel').popover('hide') if $('.popover').length > 0  
-reset_form = () ->
+reset_form = ->
   $('#client_search_first_name').val('')
   $('#client_search_last_name').val('')
   $('#client_id').val('')
+  window.hide_popover($('#client_search_panel'))
 
 clear_extra_data = () ->
-  $('#client_search_email_controls').remove()  if $('#client_search_email_controls').length > 0
-  $('#user_not_found_buttons').remove() if $('#user_not_found_buttons').length > 0
+  $('#client_search_email').val('')
+  window.del($('#client_search_email_controls'))
+  window.del($('#user_not_found_buttons'))
 
-send_alert = (msg, type)->
-  $('.container>.row>.span12').prepend($("<div class=\"alert alert-#{type}\"><button class=\"close\" data-dismiss=\"alert\">×</button>#{msg}</div>"))
 
 query_phone = (form, cb) ->
   $.ajax
@@ -147,6 +142,9 @@ query_phone = (form, cb) ->
       xhr.setRequestHeader("Accept", "application/json")
     success: (phones) ->
       cb(phones)
+    error: (jqXHR, textStatus, errorThrown) ->
+      console.log(errorThrown)
+      console.log(textStatus)
     
 query_client = (form) ->
   $.ajax
@@ -160,5 +158,10 @@ query_client = (form) ->
         $('#client_search_first_name').val(client.first_name)
         $('#client_search_last_name').val(client.last_name)
         $('#client_id').val(client.id)
-        show_pop_over()
+        window.show_popover($('#client_search_panel'), "Cliente encontrado", 'Presione ENTER para asignar este cliente a la orden actual')
         clear_extra_data()
+    error: (jqXHR, textStatus, errorThrown) ->
+      console.log(errorThrown)
+      console.log(jqXHR.responseText)
+      console.log(jqXHR.statusCode())
+      console.log(textStatus)
