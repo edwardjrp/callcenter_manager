@@ -11,6 +11,9 @@
 #
 
 class Area < ActiveRecord::Base
+  belongs_to :city
+  belongs_to :store
+  has_many :streets
   validates :name, :presence => true, :uniqueness => true
   attr_accessible :city_id, :name
 end
