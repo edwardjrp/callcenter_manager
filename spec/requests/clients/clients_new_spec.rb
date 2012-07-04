@@ -6,6 +6,9 @@ describe "Client::New" do
       before(:each) do
         Capybara.current_driver = :selenium_chrome
         login(FactoryGirl.create(:user))
+        @street = FactoryGirl.create :street
+        @area = @street.area
+        @city = @area.city
         visit root_path 
       end
       
@@ -19,6 +22,13 @@ describe "Client::New" do
          fill_in "client_search_first_name", with: 'Tester'
          fill_in "client_search_last_name", with: 'Last'
          fill_in "client_search_email", with: 'test@mail.com'
+         select  @city.name, from:  'client_search_address_city'
+         page.execute_script "$('#client_search_address_street').val('#{@street.id}')"
+         fill_in 'client_search_address_number', with: '1'
+         select 'Casa', from: 'client_search_address_unit_type'
+         fill_in 'client_search_address_unit_number', with: '1'
+         fill_in 'client_search_address_postal_code', with: '1'
+         fill_in 'client_search_address_delivery_instructions', with: '1'
          click_button 'Agregar usuario'
          page.should have_content('Cliente creado')
          page.should_not have_css('#client_search_email')
@@ -30,6 +40,13 @@ describe "Client::New" do
           fill_in "client_search_first_name", with: 'tester'
           fill_in "client_search_last_name", with: 'Last'
           fill_in "client_search_email", with: 'test2@mail.com'
+          select  @city.name, from:  'client_search_address_city'
+          page.execute_script "$('#client_search_address_street').val('#{@street.id}')"
+          fill_in 'client_search_address_number', with: '1'
+          select 'Casa', from: 'client_search_address_unit_type'
+          fill_in 'client_search_address_unit_number', with: '1'
+          fill_in 'client_search_address_postal_code', with: '1'
+          fill_in 'client_search_address_delivery_instructions', with: '1'
           click_button 'Agregar usuario'
           page.should have_content('Cliente creado')
           page.should_not have_css('#client_search_email')
@@ -42,6 +59,13 @@ describe "Client::New" do
          fill_in "client_search_first_name", with: 'Tester'
          fill_in "client_search_last_name", with: 'Last'
          fill_in "client_search_email", with: 'test1@mail.com'
+         select  @city.name, from:  'client_search_address_city'
+         page.execute_script "$('#client_search_address_street').val('#{@street.id}')"
+         fill_in 'client_search_address_number', with: '1'
+         select 'Casa', from: 'client_search_address_unit_type'
+         fill_in 'client_search_address_unit_number', with: '1'
+         fill_in 'client_search_address_postal_code', with: '1'
+         fill_in 'client_search_address_delivery_instructions', with: '1'
          click_button 'Agregar usuario'
          page.should have_content('Cliente creado')
          fill_in "client_search_phone", with: '8095431234'
@@ -49,6 +73,13 @@ describe "Client::New" do
          fill_in "client_search_first_name", with: 'iester'
          fill_in "client_search_last_name", with: 'Last'
          fill_in "client_search_email", with: 'test2@mail.com'
+         select  @city.name, from:  'client_search_address_city'
+         page.execute_script "$('#client_search_address_street').val('#{@street.id}')"
+         fill_in 'client_search_address_number', with: '1'
+         select 'Casa', from: 'client_search_address_unit_type'
+         fill_in 'client_search_address_unit_number', with: '1'
+         fill_in 'client_search_address_postal_code', with: '1'
+         fill_in 'client_search_address_delivery_instructions', with: '1'
          click_button 'Agregar usuario'
          page.should have_content('Cliente creado')
           fill_in "client_search_phone", with: '8095341234'
@@ -56,6 +87,13 @@ describe "Client::New" do
           fill_in "client_search_first_name", with: 'iester'
           fill_in "client_search_last_name", with: 'Last'
           fill_in "client_search_email", with: 'test3@mail.com'
+          select  @city.name, from:  'client_search_address_city'
+          page.execute_script "$('#client_search_address_street').val('#{@street.id}')"
+          fill_in 'client_search_address_number', with: '1'
+          select 'Casa', from: 'client_search_address_unit_type'
+          fill_in 'client_search_address_unit_number', with: '1'
+          fill_in 'client_search_address_postal_code', with: '1'
+          fill_in 'client_search_address_delivery_instructions', with: '1'
           click_button 'Agregar usuario'
          page.should have_content('Cliente creado')
          page.should_not have_css('#client_search_email')
@@ -87,10 +125,29 @@ describe "Client::New" do
            fill_in "client_search_first_name", with: ''
            fill_in "client_search_last_name", with: 'Last'
            fill_in "client_search_email", with: 'test@mail.com'
+           select  @city.name, from:  'client_search_address_city'
+           page.execute_script "$('#client_search_address_street').val('#{@street.id}')"
+           fill_in 'client_search_address_number', with: '1'
+           select 'Casa', from: 'client_search_address_unit_type'
+           fill_in 'client_search_address_unit_number', with: '1'
+           fill_in 'client_search_address_postal_code', with: '1'
+           fill_in 'client_search_address_delivery_instructions', with: '1'        
            click_button 'Agregar usuario'
            page.should have_content('en blanco')
          end
-                     
+
+         it "should show the validation error for the user", js: true do
+            fill_in "client_search_phone", with: '8095551234'
+            fill_in "client_search_ext", with: '45'
+            fill_in "client_search_first_name", with: 'rad'
+            fill_in "client_search_last_name", with: 'Last'
+            fill_in "client_search_email", with: 'test@mail.com'
+            click_button 'Agregar usuario'
+            page.should have_content('Addresses')
+            page.should have_content('en blanco')
+          end
+           
+           
                
       end
   end
