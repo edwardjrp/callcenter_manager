@@ -18,4 +18,4 @@
 
 - add popover on client create
 
-- test for address presence
+- <del>test for address presence</del>
