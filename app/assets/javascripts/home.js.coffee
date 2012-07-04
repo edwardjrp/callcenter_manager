@@ -157,7 +157,9 @@ clear_extra_data = () ->
   window.del($('#client_search_email_controls'))
   window.del($('#user_not_found_buttons'))
   $("#client_search_address_city").select2("destroy")
+  $('#client_search_address_area').select2("destroy")
   window.del($('#client_search_address_city_controls'))
+  window.del($('#client_search_address_area'))
 
 
 query_phone = (form, cb) ->
