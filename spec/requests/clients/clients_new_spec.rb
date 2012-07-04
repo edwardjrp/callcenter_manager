@@ -67,6 +67,11 @@ describe "Client::New" do
           page.should have_css('#client_search_address_city')
           page.should have_css('#client_search_address_area')
           page.should have_css('#client_search_address_street')
+          page.should have_css('#client_search_address_number')
+          page.should have_css('#client_search_address_unit_type')
+          page.should have_css('#client_search_address_unit_number')
+          page.should have_css('#client_search_address_postal_code')
+          page.should have_css('#client_search_address_delivery_instructions')
        end
       
       

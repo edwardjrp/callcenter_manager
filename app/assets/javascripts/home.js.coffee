@@ -63,7 +63,11 @@ jQuery ->
 city_select_template = $('<div class="control-group" id="client_search_address_city_controls"><label class="control-label" for="client_search_address_city">Ciudad</label><div class="controls"><select id="client_search_address_city"></select></div></div>')
 area_select_template = $('<div class="control-group" id="client_search_address_area_controls"><label class="control-label" for="client_search_address_area">Sector</label><div class="controls"><input type="hidden" id="client_search_address_area" style=" display: none; "></div></div>')
 street_select_template = $('<div class="control-group" id="client_search_address_street_controls"><label class="control-label" for="client_search_address_street">Calle</label><div class="controls"><input type="hidden" id="client_search_address_street" style=" display: none; "></div></div>')
-  
+number_input_template = $('<div class="control-group" id="client_search_address_number_controls"><label class="control-label" for="client_search_address_number">No.</label><div class="controls"><input type="text" id="client_search_address_number"></div></div>')
+unit_type_select_template = $('<div class="control-group" id="client_search_address_unit_type_controls"><label class="control-label" for="client_search_address_unit_type">Tipo.</label><div class="controls"><select id="client_search_address_number"><option value="casa">Casa</option><option value="oficina">Oficina</option><option value="edificio">Edificio</option></select></div></div>')
+unit_number_input_template = $('<div class="control-group" id="client_search_address_unit_number_controls"><label class="control-label" for="client_search_address_unit_number">No. unidad</label><div class="controls"><input type="text" id="client_search_address_unit_number"></div></div>')
+postal_code_input_template = $('<div class="control-group" id="client_search_address_postal_code_controls"><label class="control-label" for="client_search_address_postal_code">Codigo postal</label><div class="controls"><input type="text" id="client_search_address_postal_code"></div></div>')
+delivery_instructions_input_template= $('<div class="control-group" id="client_search_address_delivery_instructions_controls"><label class="control-label" for="client_search_address_delivery_instructions">Instrucciones</label><div class="controls"><textarea id="client_search_address_delivery_instructions" rows=3 class="input-xlarge"></textarea></div></div>')
 email_input_field_template = $('<div class="control-group" id="client_search_email_controls"><label class="control-label" for="email">Email</label><div class="controls"><input class="input-xlarge" id="client_search_email" name="client[email]" type="text"></div></div>')
 button_template_no_user  = $('<div class="form-actions" id="user_not_found_buttons"><button type="submit" class="btn btn-primary"  id="add_client_button">Agregar usuario</button><button class="btn remote_parent left-margin-1" >Cancelar</button></div>')
 
@@ -103,7 +107,11 @@ client_create = (triggerer)->
           results: $.map(streets, (street)->
               {id: street.id, text: street.name}
             )
-            
+  $('#client_search').find('fieldset').append(number_input_template) if $('#client_search_address_number_controls').length == 0   
+  $('#client_search').find('fieldset').append(unit_type_select_template) if $('#client_search_address_unit_type_controls').length == 0   
+  $('#client_search').find('fieldset').append(unit_number_input_template) if $('#client_search_address_unit_number_controls').length == 0      
+  $('#client_search').find('fieldset').append(postal_code_input_template) if $('#client_search_address_postal_code_controls').length == 0                 
+  $('#client_search').find('fieldset').append(delivery_instructions_input_template) if $('#client_search_address_delivery_instructions_controls').length == 0
   $('#client_search').append(button_template_no_user) if $('#user_not_found_buttons').length == 0
   unless $('#add_client_button').data("events")? and $('#add_client_button').data("events").click? and $('#add_client_button').data("events").click.length > 0
     triggerer.on 'click', (event) ->
@@ -177,8 +185,11 @@ clear_extra_data = () ->
   window.del($('#client_search_address_city_controls'))
   window.del($('#client_search_address_area_controls'))
   window.del($('#client_search_address_street_controls'))
-  
-
+  window.del($('#client_search_address_number_controls'))
+  window.del($('#client_search_address_unit_type_controls'))
+  window.del($('#client_search_address_unit_number_controls'))
+  window.del($('#client_search_address_postal_code_controls'))
+  window.del($('#client_search_address_delivery_instructions_controls'))
 
 query_phone = (form, cb) ->
   $.ajax
