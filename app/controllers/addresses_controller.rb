@@ -6,4 +6,11 @@ class AddressesController < ApplicationController
       format.json{ render json: @areas}
     end
   end
+  
+  def streets
+    @streets = Street.find_street(params)
+    respond_to do |format|
+      format.json{ render json: @streets}
+    end
+  end
 end

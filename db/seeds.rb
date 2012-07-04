@@ -61,17 +61,17 @@ if File.exists? addresses_data_file
       unless row.fields.first.match(/(?:.+),(.+),(?:.\d+)/).nil?
         Area.create do |area|
           # puts row.fields.first.match(/(?:.+),(.+),(?:.\d+)/)[1]
-          area.name = row.fields.first.match(/(?:.+),(.+),(?:.\d+)/)[1]
+          area.name = row.fields.first.match(/(?:.+),(.+),(?:.\d+)/)[1].strip
           area.city_id = current_city.id if current_city.present?
           area.store_id = current_store.id if current_store.present?
         end
       end
       unless row.fields.first.match(/(.+),(?:.+),(?:.\d+)/).nil?
-        current_area = Area.find_by_name(row.fields.first.match(/(?:.+),(.+),(?:.\d+)/)[1])
+        current_area = Area.find_by_name(row.fields.first.match(/(?:.+),(.+),(?:.\d+)/)[1].strip)
         # puts current_area.inspect if current_area
         # puts row.fields.first.match(/(?:.+),(.+),(?:.\d+)/)
         Street.create do |street|
-          street.name = row.fields.first.match(/(.+),(?:.+),(?:.\d+)/)[1]
+          street.name = row.fields.first.match(/(.+),(?:.+),(?:.\d+)/)[1].strip
           street.area_id = current_area.id if current_area.present?
         end
       end

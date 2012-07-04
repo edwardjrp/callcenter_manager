@@ -12,6 +12,7 @@ Kapiqua25::Application.routes.draw do
   resources :addresses do
     collection do
       get 'areas'
+      get 'streets'
     end
   end
   resources :phones do 

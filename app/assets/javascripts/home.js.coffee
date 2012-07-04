@@ -62,7 +62,7 @@ jQuery ->
 
 city_select_template = $('<div class="control-group" id="client_search_address_city_controls"><label class="control-label" for="client_search_address_city">Ciudad</label><div class="controls"><select id="client_search_address_city"></select></div></div>')
 area_select_template = $('<div class="control-group" id="client_search_address_area_controls"><label class="control-label" for="client_search_address_area">Sector</label><div class="controls"><input type="hidden" id="client_search_address_area" style=" display: none; "></div></div>')
-# city_select_template = $('<div class="control-group" id="client_search_address_city_controls"><label class="control-label" for="client_search_address_city">Ciudad</label><div class="controls"><select id="client_search_address_city"></select></div></div>')
+street_select_template = $('<div class="control-group" id="client_search_address_street_controls"><label class="control-label" for="client_search_address_street">Calle</label><div class="controls"><input type="hidden" id="client_search_address_street" style=" display: none; "></div></div>')
   
 email_input_field_template = $('<div class="control-group" id="client_search_email_controls"><label class="control-label" for="email">Email</label><div class="controls"><input class="input-xlarge" id="client_search_email" name="client[email]" type="text"></div></div>')
 button_template_no_user  = $('<div class="form-actions" id="user_not_found_buttons"><button type="submit" class="btn btn-primary"  id="add_client_button">Agregar usuario</button><button class="btn remote_parent left-margin-1" >Cancelar</button></div>')
@@ -78,7 +78,7 @@ client_create = (triggerer)->
   $('#client_search').find('fieldset').append(area_select_template) if $('#client_search_address_area_controls').length == 0
   $('#client_search_address_area').select2
       placeholder: { title: "Seleccione un sector", id: "" }
-      minimumInputLength: 3
+      minimumInputLength: 2
       ajax:
         url: '/addresses/areas.json'
         datatype: 'json'
@@ -88,6 +88,20 @@ client_create = (triggerer)->
         results: (areas, page)->
           results: $.map(areas, (area)->
               {id: area.id, text: area.name}
+            )
+  $('#client_search').find('fieldset').append(street_select_template) if $('#client_search_address_street_controls').length == 0
+  $('#client_search_address_street').select2
+      placeholder: { title: "Seleccione una calle", id: "" }
+      minimumInputLength: 1
+      ajax:
+        url: '/addresses/streets.json'
+        datatype: 'json'
+        data: (term, page)->
+          q:term
+          area_id: $('#client_search_address_area').val()
+        results: (streets, page)->
+          results: $.map(streets, (street)->
+              {id: street.id, text: street.name}
             )
             
   $('#client_search').append(button_template_no_user) if $('#user_not_found_buttons').length == 0

@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :street do
-    name {Faker::Address.street}
+    name {Faker::Address.street_name}
     association :area
   end
 end
