@@ -17,7 +17,7 @@ jQuery ->
       $('#client_search_ext').val('')
       reset_form()
     if $(this).val().length > 10
-      $(this).val($(this).val().substr(0,10));
+      $(this).val($(this).val().substr(0,10))  unless event.which == 13
       event.preventDefault()
     if $(this).val().length < 10
       if $('.ui-autocomplete').is(':visible')  or event.which == 8
@@ -77,7 +77,7 @@ client_create = (triggerer)->
   $('#client_search_address_city').select2()
   $('#client_search').find('fieldset').append(area_select_template) if $('#client_search_address_area_controls').length == 0
   $('#client_search_address_area').select2
-      placeholder: { title: "Seleccione un sector", id: "" }
+      placeholder: "Seleccione un sector"
       minimumInputLength: 2
       ajax:
         url: '/addresses/areas.json'
@@ -91,7 +91,7 @@ client_create = (triggerer)->
             )
   $('#client_search').find('fieldset').append(street_select_template) if $('#client_search_address_street_controls').length == 0
   $('#client_search_address_street').select2
-      placeholder: { title: "Seleccione una calle", id: "" }
+      placeholder: "Seleccione una calle"
       minimumInputLength: 1
       ajax:
         url: '/addresses/streets.json'
@@ -142,6 +142,7 @@ assign_client_to_current_cart = () ->
           xhr.setRequestHeader("Accept", "application/json")
         success: (cart_info) ->
           $('#choose_client>span').text("#{cart_info.client.first_name} #{cart_info.client.last_name}")
+          $('#choose_client').effect('highlight')
           window.hide_popover($('#client_search_panel'))
           window.show_alert('Cliente asignado.', 'success')
           
@@ -172,8 +173,11 @@ clear_extra_data = () ->
   window.del($('#user_not_found_buttons'))
   $("#client_search_address_city").select2("destroy")
   $('#client_search_address_area').select2("destroy")
+  $('#client_search_address_street').select2("destroy")
   window.del($('#client_search_address_city_controls'))
-  window.del($('#client_search_address_area'))
+  window.del($('#client_search_address_area_controls'))
+  window.del($('#client_search_address_street_controls'))
+  
 
 
 query_phone = (form, cb) ->
