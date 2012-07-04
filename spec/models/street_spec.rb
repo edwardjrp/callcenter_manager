@@ -19,5 +19,6 @@ describe Street do
     it{should validate_presence_of :name}
     it{should validate_uniqueness_of(:name).scoped_to(:area_id)}
     it{should belong_to :area}
+    it{should have_many :addresses}
   end
 end

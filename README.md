@@ -10,4 +10,8 @@
 
 - Need to add idnumber
 
-- Need to add addresses
+- <del>Need to add addresses</del>
+
+- add functionality to the cancel button
+
+- add clear when address dependencies change

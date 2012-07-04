@@ -31,7 +31,7 @@ jQuery ->
           query_client $("#client_search")
         else
           window.hide_popover($('#client_search_panel'))
-          client_create $('#add_client_button')
+          client_create()
               
               
 
@@ -49,7 +49,7 @@ jQuery ->
         else
           if $("#client_search_phone").val().length >= 10
             $('.ui-autocomplete:visible').hide()
-            client_create $('#add_client_button')
+            client_create()
           
     select: (event, ui) ->
         ui.item.value = window.NumberFormatter.to_phone(ui.item.value)
@@ -60,19 +60,19 @@ jQuery ->
         $('#client_search_ext').val('')
         reset_form()
 
+email_input_field_template = $('<div class="control-group" id="client_search_email_controls"><label class="control-label" for="email">Email</label><div class="controls"><input class="input-xlarge" id="client_search_email" name="client[email]" type="text"></div></div>')
 city_select_template = $('<div class="control-group" id="client_search_address_city_controls"><label class="control-label" for="client_search_address_city">Ciudad</label><div class="controls"><select id="client_search_address_city"></select></div></div>')
 area_select_template = $('<div class="control-group" id="client_search_address_area_controls"><label class="control-label" for="client_search_address_area">Sector</label><div class="controls"><input type="hidden" id="client_search_address_area" style=" display: none; "></div></div>')
-street_select_template = $('<div class="control-group" id="client_search_address_street_controls"><label class="control-label" for="client_search_address_street">Calle</label><div class="controls"><input type="hidden" id="client_search_address_street" style=" display: none; "></div></div>')
-number_input_template = $('<div class="control-group" id="client_search_address_number_controls"><label class="control-label" for="client_search_address_number">No.</label><div class="controls"><input type="text" id="client_search_address_number"></div></div>')
-unit_type_select_template = $('<div class="control-group" id="client_search_address_unit_type_controls"><label class="control-label" for="client_search_address_unit_type">Tipo.</label><div class="controls"><select id="client_search_address_number"><option value="casa">Casa</option><option value="oficina">Oficina</option><option value="edificio">Edificio</option></select></div></div>')
-unit_number_input_template = $('<div class="control-group" id="client_search_address_unit_number_controls"><label class="control-label" for="client_search_address_unit_number">No. unidad</label><div class="controls"><input type="text" id="client_search_address_unit_number"></div></div>')
-postal_code_input_template = $('<div class="control-group" id="client_search_address_postal_code_controls"><label class="control-label" for="client_search_address_postal_code">Codigo postal</label><div class="controls"><input type="text" id="client_search_address_postal_code"></div></div>')
-delivery_instructions_input_template= $('<div class="control-group" id="client_search_address_delivery_instructions_controls"><label class="control-label" for="client_search_address_delivery_instructions">Instrucciones</label><div class="controls"><textarea id="client_search_address_delivery_instructions" rows=3 class="input-xlarge"></textarea></div></div>')
-email_input_field_template = $('<div class="control-group" id="client_search_email_controls"><label class="control-label" for="email">Email</label><div class="controls"><input class="input-xlarge" id="client_search_email" name="client[email]" type="text"></div></div>')
+street_select_template = $('<div class="control-group" id="client_search_address_street_controls"><label class="control-label" for="client_search_address_street">Calle</label><div class="controls"><input type="hidden" id="client_search_address_street" name="client[address][street_id]" style=" display: none; "></div></div>')
+number_input_template = $('<div class="control-group" id="client_search_address_number_controls"><label class="control-label" for="client_search_address_number">No.</label><div class="controls"><input type="text" id="client_search_address_number" name="client[address][number]"></div></div>')
+unit_type_select_template = $('<div class="control-group" id="client_search_address_unit_type_controls"><label class="control-label" for="client_search_address_unit_type">Tipo.</label><div class="controls"><select id="client_search_address_unit_type" name="client[address][unit_type]"><option value="casa">Casa</option><option value="oficina">Oficina</option><option value="edificio">Edificio</option></select></div></div>')
+unit_number_input_template = $('<div class="control-group" id="client_search_address_unit_number_controls"><label class="control-label" for="client_search_address_unit_number">No. unidad</label><div class="controls"><input type="text" id="client_search_address_unit_number" name="client[address][unit_number]"></div></div>')
+postal_code_input_template = $('<div class="control-group" id="client_search_address_postal_code_controls"><label class="control-label" for="client_search_address_postal_code">Codigo postal</label><div class="controls"><input type="text" id="client_search_address_postal_code" name="client[address][postal_code]"></div></div>')
+delivery_instructions_input_template= $('<div class="control-group" id="client_search_address_delivery_instructions_controls"><label class="control-label" for="client_search_address_delivery_instructions">Instrucciones</label><div class="controls"><textarea id="client_search_address_delivery_instructions" rows=3 class="input-xlarge" name="client[address][delivery_instructions]"></textarea></div></div>')
 button_template_no_user  = $('<div class="form-actions" id="user_not_found_buttons"><button type="submit" class="btn btn-primary"  id="add_client_button">Agregar usuario</button><button class="btn remote_parent left-margin-1" >Cancelar</button></div>')
 
 
-client_create = (triggerer)->
+client_create =  ()->
   $('#client_search_first_name').val('')
   $('#client_search_last_name').val('')
   $('#client_search').find('fieldset').append(email_input_field_template) if $('#client_search_email').length == 0
@@ -114,7 +114,7 @@ client_create = (triggerer)->
   $('#client_search').find('fieldset').append(delivery_instructions_input_template) if $('#client_search_address_delivery_instructions_controls').length == 0
   $('#client_search').append(button_template_no_user) if $('#user_not_found_buttons').length == 0
   unless $('#add_client_button').data("events")? and $('#add_client_button').data("events").click? and $('#add_client_button').data("events").click.length > 0
-    triggerer.on 'click', (event) ->
+    $('#add_client_button').on 'click', (event) ->
       event.preventDefault()
       $.ajax
         type: 'POST'
