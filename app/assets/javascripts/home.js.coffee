@@ -61,7 +61,7 @@ jQuery ->
         reset_form()
 
 city_select_template = $('<div class="control-group" id="client_search_address_city_controls"><label class="control-label" for="client_search_address_city">Ciudad</label><div class="controls"><select id="client_search_address_city"></select></div></div>')
-area_select_template = $('<div class="control-group" id="client_search_address_area_controls"><label class="control-label" for="client_search_address_area">Sector</label><div class="controls"><input type="hidden" id="client_search_address_area" style="width: 300px; display: none; "></div></div>')
+area_select_template = $('<div class="control-group" id="client_search_address_area_controls"><label class="control-label" for="client_search_address_area">Sector</label><div class="controls"><input type="hidden" id="client_search_address_area" style=" display: none; "></div></div>')
 # city_select_template = $('<div class="control-group" id="client_search_address_city_controls"><label class="control-label" for="client_search_address_city">Ciudad</label><div class="controls"><select id="client_search_address_city"></select></div></div>')
   
 email_input_field_template = $('<div class="control-group" id="client_search_email_controls"><label class="control-label" for="email">Email</label><div class="controls"><input class="input-xlarge" id="client_search_email" name="client[email]" type="text"></div></div>')
@@ -77,16 +77,19 @@ client_create = (triggerer)->
   $('#client_search_address_city').select2()
   $('#client_search').find('fieldset').append(area_select_template) if $('#client_search_address_area_controls').length == 0
   $('#client_search_address_area').select2
-      placeholder: {title: "Seleccione un sector", id: ""}
+      placeholder: { title: "Seleccione un sector", id: "" }
       minimumInputLength: 3
       ajax:
-        url: '/addresses/areas'
+        url: '/addresses/areas.json'
+        datatype: 'json'
         data: (term, page)->
           q:term
           city_id: $('#client_search_address_city').val()
-        result: (response, page)->
-          console.log response
-          
+        results: (areas, page)->
+          results: $.map(areas, (area)->
+              {id: area.id, text: area.name}
+            )
+            
   $('#client_search').append(button_template_no_user) if $('#user_not_found_buttons').length == 0
   unless $('#add_client_button').data("events")? and $('#add_client_button').data("events").click? and $('#add_client_button').data("events").click.length > 0
     triggerer.on 'click', (event) ->

@@ -16,4 +16,11 @@ class Area < ActiveRecord::Base
   has_many :streets
   validates :name, :presence => true, :uniqueness => true
   attr_accessible :city_id, :name
+  
+  
+  def self.find_area(params)
+    areas = Area.scoped
+    areas = areas.merge(self.where(:city_id=> params[:city_id])) if params[:city_id].present?
+    return areas
+  end
 end

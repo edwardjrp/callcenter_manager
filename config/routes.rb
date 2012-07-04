@@ -9,6 +9,11 @@ Kapiqua25::Application.routes.draw do
       post 'service_method'
     end
   end
+  resources :addresses do
+    collection do
+      get 'areas'
+    end
+  end
   resources :phones do 
     collection do 
       get 'clients'
