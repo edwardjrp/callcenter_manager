@@ -37,6 +37,7 @@ gem 'jbuilder'
 
 # To use debugger
 # gem 'debugger'
+gem 'backbone-on-rails'
 gem 'savon'
 gem "cancan"
 gem "simple-navigation"
