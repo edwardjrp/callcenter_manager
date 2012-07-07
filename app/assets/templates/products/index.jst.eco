@@ -1,0 +1,3 @@
+<%for product in @collection.models:%>
+  <p><%=product.get('productcode')%></p>
+<%end%>

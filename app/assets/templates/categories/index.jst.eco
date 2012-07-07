@@ -4,4 +4,9 @@
       <li><a href="#<%= category.get('name')%>" data-toggle="tab"><%= category.get('name')%></a></li>
     <%end%>
   </ul>
+  <div class="tab-content">
+    <%for category in @collection.models:%>
+      <div class="tab-pane" id="<%=category.get('name')%>"></div>
+    <%end%>
+  </div>
 <%end%>
