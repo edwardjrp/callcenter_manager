@@ -1,1 +1,7 @@
-BUILDER GOES HERE
+<%if @collection.models:%>
+  <ul class="nav nav-tabs">
+    <%for category in @collection.models:%>
+      <li><a href="#home" data-toggle="tab"><%= category.get('name')%></a></li>
+    <%end%>
+  </ul>
+<%end%>

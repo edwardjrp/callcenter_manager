@@ -7,5 +7,5 @@ class Kapiqua25.Routers.Categories extends Backbone.Router
     @categories.fetch()
   
   builder: ->
-    @categories_view = new Kapiqua25.Views.CategoriesIndex(collection: @categories)
-    $('#builder').html(@categories_view.render().el)
+    categories_view = new Kapiqua25.Views.CategoriesIndex(collection: @categories)
+    $('#desk').html(categories_view.render().el)
