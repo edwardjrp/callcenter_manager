@@ -3,7 +3,9 @@ window.Kapiqua25 =
   Collections: {}
   Views: {}
   Routers: {}
-  init: -> alert 'Hello from Backbone!'
+  init: -> 
+    new Kapiqua25.Routers.Categories()
+    Backbone.history.start()
 
 $(document).ready ->
-  Kapiqua25.init()
+  Kapiqua25.init() if $('#builder').length > 0
