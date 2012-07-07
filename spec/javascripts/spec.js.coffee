@@ -1,6 +1,7 @@
 #= require jquery
 #= require underscore
 #= require backbone
+#= require backbone-relational
 #= require kapiqua25
 #= require_tree ../../app/assets/javascripts/models
 #= require number_formatter 
