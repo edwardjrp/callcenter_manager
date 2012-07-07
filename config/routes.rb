@@ -12,6 +12,11 @@ Kapiqua25::Application.routes.draw do
       post 'service_method'
     end
   end
+  resources :categories do
+    member do
+      get 'products'
+    end
+  end
   resources :addresses do
     collection do
       get 'areas'

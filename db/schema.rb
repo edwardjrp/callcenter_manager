@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120704125929) do
+ActiveRecord::Schema.define(:version => 20120707132100) do
 
   create_table "addresses", :force => true do |t|
     t.integer  "client_id"
@@ -71,6 +71,21 @@ ActiveRecord::Schema.define(:version => 20120704125929) do
   add_index "carts", ["store_order_id"], :name => "index_carts_on_store_order_id"
   add_index "carts", ["user_id"], :name => "index_carts_on_user_id"
 
+  create_table "categories", :force => true do |t|
+    t.string   "name"
+    t.boolean  "has_options",     :default => false
+    t.boolean  "type_unit",       :default => false
+    t.boolean  "multi",           :default => false
+    t.boolean  "hidden",          :default => false
+    t.integer  "base_product"
+    t.string   "flavor_code_src"
+    t.string   "flavor_code_dst"
+    t.string   "size_code_src"
+    t.string   "size_code_dst"
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
+  end
+
   create_table "cities", :force => true do |t|
     t.string   "name"
     t.datetime "created_at", :null => false
@@ -104,6 +119,22 @@ ActiveRecord::Schema.define(:version => 20120704125929) do
 
   add_index "phones", ["client_id"], :name => "index_phones_on_client_id"
   add_index "phones", ["number"], :name => "index_phones_on_number"
+
+  create_table "products", :force => true do |t|
+    t.integer  "category_id"
+    t.string   "productcode"
+    t.string   "productname"
+    t.string   "options"
+    t.string   "sizecode"
+    t.string   "flavorcode"
+    t.string   "optionselectiongrouptype"
+    t.string   "productoptionselectiongroup"
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
+  end
+
+  add_index "products", ["options"], :name => "index_products_on_options"
+  add_index "products", ["productcode"], :name => "index_products_on_productcode"
 
   create_table "stores", :force => true do |t|
     t.string   "name"

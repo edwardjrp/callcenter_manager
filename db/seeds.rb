@@ -20,7 +20,7 @@ def save_without_massasignment(model, attributes={})
     return instance
 end
 
-
+puts "adding stores"
 save_without_massasignment(Store,{:name=>"Sarasota",:address=>"Av. Sarasota No. 110, Bella Vista",:ip=>"192.168.65.2",:storeid=>"15875",:city_id =>City.find_or_create_by_name("Santo Domingo").id})
 save_without_massasignment(Store,{:name=>"Venezuela",:address=>"Av. Venezuela Esq. Club de Leones, Ens. Ozama",:ip=>"192.168.68.2",:storeid=>"15879",:city_id =>City.find_or_create_by_name("Santo Domingo").id})
 save_without_massasignment(Store,{:name=>"San Isidro",:address=>"Aut. San Isidro, Plaza Palmeras, Urb. Italia",:ip=>"192.168.69.2",:storeid=>"15892",:city_id =>City.find_or_create_by_name("Santo Domingo").id})
@@ -47,6 +47,7 @@ save_without_massasignment(Store,{:name=>"Mega Centro",:address=>"Megacentro, Av
 save_without_massasignment(Store,{:name=>"Tienda Virtual OLO",:address=>"Dominos cc",:ip=>"192.168.85.4",:storeid=>"99999",:city_id =>City.find_or_create_by_name("Santo Domingo").id})
 save_without_massasignment(Store,{:name=>"La Vega",:address=>"Av. García Godoy esq. Balilo Gómez, Plaza Michelle",:ip=>"192.168.74.2",:storeid=>"15885",:city_id =>City.find_or_create_by_name("La Vega").id})
 
+puts "adding addresses"
 addresses_data_file = Rails.root.join("tmp","direcciones.csv")
 if File.exists? addresses_data_file
   CSV.foreach(addresses_data_file, :quote_char => '"', :col_sep =>'|', :headers =>true) do |row|
@@ -75,6 +76,27 @@ if File.exists? addresses_data_file
           street.area_id = current_area.id if current_area.present?
         end
       end
+    end
+  end
+end
+
+puts "adding categories and products"
+temp_products_file = Rails.root.join("tmp","15871_get_store_products.xml")
+if File.exists?(temp_products_file)
+  product_file_data = File.open(temp_products_file, 'r:utf-8').read
+  doc= Nokogiri::XML(product_file_data)
+  products_table = doc.css('Products').first.inner_text.gsub(/"/,'&quot;')
+  CSV.parse(products_table, {:col_sep=>"\t", :headers=>true}) do |row|
+    Product.create do |product|
+      puts "#{row['CategoryCode']} > #{row['ProductCode']} - #{row['ProductName']}"
+      product.category_id = Category.find_or_create_by_name(row['CategoryCode']).id
+      product.productcode = row['ProductCode']
+      product.productname = row['ProductName']
+      product.options = row['Options']
+      product.sizecode = row['SizeCode']
+      product.flavorcode = row['FlavorCode']
+      product.optionselectiongrouptype = row['OptionSelectionGroupType']
+      product.productoptionselectiongroup = row['ProductOptionSelectionGroup']
     end
   end
 end
