@@ -4,7 +4,7 @@ FactoryGirl.define do
   factory :category do
     name "MyString"
     has_options false
-    unit_type "MyString"
+    type_unit false
     multi false
     hidden false
     base_product 1

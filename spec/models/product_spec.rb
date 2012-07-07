@@ -7,7 +7,6 @@
 #  productcode                 :string(255)
 #  productname                 :string(255)
 #  options                     :string(255)
-#  productgroupsize            :string(255)
 #  sizecode                    :string(255)
 #  flavorcode                  :string(255)
 #  optionselectiongrouptype    :string(255)

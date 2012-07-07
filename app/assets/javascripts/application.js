@@ -18,6 +18,7 @@
 //= require select2
 //= require underscore
 //= require backbone
+//= require backbone-relational
 //= require ./kapiqua25
 //= require_tree ../templates/
 //= require_tree ./models

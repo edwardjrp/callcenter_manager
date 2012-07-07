@@ -20,5 +20,12 @@
 require 'spec_helper'
 
 describe Category do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe "Validation" do
+    before(:each)do
+      FactoryGirl.create :category
+    end
+    it{should validate_presence_of :name}
+    it{should validate_uniqueness_of :name}
+    it{should have_many :products}
+  end
 end

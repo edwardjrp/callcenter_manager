@@ -2,6 +2,9 @@
 class CategoriesController < ApplicationController
   respond_to :json
   def index 
-    respond_with Category.all
+    @categories = Category.all
+    respond_to do |format|
+     format.json{@category}
+    end
   end
 end

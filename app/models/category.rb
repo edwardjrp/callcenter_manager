@@ -18,5 +18,7 @@
 #
 
 class Category < ActiveRecord::Base
+  validates :name, :presence=> true, :uniqueness=> true
+  has_many :products
   attr_accessible :base_product, :flavor_code_dst, :flavor_code_src, :has_options, :hidden, :multi, :name, :size_code_dst, :size_code_src, :unit_type
 end
