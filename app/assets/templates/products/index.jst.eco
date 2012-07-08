@@ -1,7 +1,4 @@
-<%for product in @collection:%>
-  <p><%=product.get('productcode')%></p>
-<%end%>
-OPTIONS BELOW
-<%for side_product in @options.sides:%>
-  <p><%=side_product.get('productcode')%></p>
+<%for matchup in @options.matchups:%>
+  <p>specialty:<%=matchup.name%></p>
+  <p>options:<%=matchup.options%><p>
 <%end%>
