@@ -2,6 +2,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
 
   template: JST['products/index']
   
+  
   render: ->
-    $(@el).html(@template(collection: @collection))
+    $(@el).html(@template(collection: @collection, options:@options))
     this

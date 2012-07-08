@@ -1,3 +1,7 @@
-<%for product in @collection.models:%>
+<%for product in @collection:%>
   <p><%=product.get('productcode')%></p>
+<%end%>
+OPTIONS BELOW
+<%for side_product in @options.sides:%>
+  <p><%=side_product.get('productcode')%></p>
 <%end%>
