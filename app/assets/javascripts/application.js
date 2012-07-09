@@ -14,6 +14,7 @@
 //= require jquery_ujs
 //= require bootstrap
 //= require jquery.ui.autocomplete
+//= require jquery.hoverpulse
 //= require jquery.effects.highlight
 //= require select2
 //= require underscore

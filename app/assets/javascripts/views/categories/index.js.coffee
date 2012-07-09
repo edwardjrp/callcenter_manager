@@ -6,7 +6,7 @@ class Kapiqua25.Views.CategoriesIndex extends Backbone.View
       'click .nav-tabs>li': 'mark_as_selected'
   
   initialize: ->
-    _.bindAll(this, 'mark_as_selected', 'draw_products', 'get_main_products', 'get_option_products', 'group_by_options', 'get_presentation_name', 'get_flavors')
+    _.bindAll(this, 'mark_as_selected', 'draw_products', 'get_main_products', 'get_option_products', 'group_by_options', 'get_presentation_name', 'get_flavors', 'get_sizes')
     @collection.on('reset', @render, this)
   
   render: ->
@@ -21,7 +21,7 @@ class Kapiqua25.Views.CategoriesIndex extends Backbone.View
   draw_products: (category) ->
     main_products = @get_main_products(category.get('products'))
     option_products = @get_option_products(category.get('products'))
-    product_view = new Kapiqua25.Views.ProductsIndex(collection: main_products, sides: option_products, matchups: @create_matchups(main_products), flavors:@get_flavors(main_products) )
+    product_view = new Kapiqua25.Views.ProductsIndex(collection: main_products, sides: option_products, matchups: @create_matchups(main_products), flavors:@get_flavors(main_products), sizes: @get_sizes(main_products) )
     $(@el).find("##{category.get('name')}").html(product_view.render().el)
     this
     
@@ -32,6 +32,10 @@ class Kapiqua25.Views.CategoriesIndex extends Backbone.View
   
   get_flavors: (products)->
     _.uniq(_.map(products, (product)-> product.get('flavorcode')))
+
+  get_sizes: (products)->
+    _.uniq(_.map(products, (product)-> product.get('sizecode')))
+
     
   group_by_options: (products)->
     _.groupBy products, (product) -> product.get('options')
@@ -42,6 +46,6 @@ class Kapiqua25.Views.CategoriesIndex extends Backbone.View
   create_matchups: (products)->
     matchups = []
     _.each @group_by_options(products), (group, key) =>
-        matchup = {name:  @get_presentation_name(group), options: key}
-        matchups.push matchup
+        matchup = {name:  @get_presentation_name(group), options: key} 
+        matchups.push matchup if matchup.name!='' and matchup.options != 'null'
     matchups

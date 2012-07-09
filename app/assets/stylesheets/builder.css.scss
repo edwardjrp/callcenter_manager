@@ -1,3 +1,35 @@
 // Place all the styles related to the builder controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+.tab-content .option_box {
+    display: block;
+    position:absolute;
+    top:0;
+    left:0;
+    width: 80px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    background-color: #f4faff;
+    border: 1px solid #e0eeff;
+    overflow:hidden;
+}
+
+.tab-content .outbox{
+  display:block;
+  position:relative;
+  width: 85px;
+  height: 55px;
+  float:left;
+  z-index:1;
+}
+.tab-content .option_box:hover {
+background-color: white;
+border: 1px solid black;
+}
+    
+.tab-content .options_container{
+  padding:30px;
+  height: 300px;
+  position:relative;
+}

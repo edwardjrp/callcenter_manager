@@ -35,5 +35,5 @@
             %div{:class => "alert alert-#{name == :notice ? "success" : name }"}
               %a.close{"data-dismiss" => "alert"} ×
               = msg
-          =current_cart.inspect if Rails.env.development?
+          / =current_cart.inspect if Rails.env.development?
           = yield

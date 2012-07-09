@@ -1,8 +1,26 @@
-<h3>Especialidades</h3>
-<%for matchup in @options.matchups:%>
-  <a class ='btn bottom-margin-1 specialties' href='#'><%=matchup.name%></a>
+<%if _.any(@options.matchups):%>
+  <h3>Especialidades</h3>
+  <%for matchup in @options.matchups:%>
+    <a class ='btn bottom-margin-1 specialties' href='#'><%=matchup.name%></a>
+  <%end%>
 <%end%>
-<h3>Sabores</h3>
-<%for flavor in @options.flavors:%>
-  <a class ='btn bottom-margin-1 flavors' href='#'><%=flavor%></a>
+<%if _.any(@options.flavors):%>
+  <h3>Sabores</h3>
+  <%for flavor in @options.flavors:%>
+    <a class ='btn bottom-margin-1 flavors' href='#'><%=flavor%></a>
+  <%end%>
+<%end%>
+<%if _.any(@options.sizes):%>
+  <h3>Tamaños</h3>
+  <%for size in @options.sizes:%>
+    <a class ='btn bottom-margin-1 sizes' href='#'><%=size%></a>
+  <%end%>
+<%end%>
+<%if _.any(@options.sides):%>
+  <h3>Opciones</h3>
+  <div class='options_container left-margin-1'>
+    <%for side in @options.sides:%>
+      <div class='outbox'><div class ='option_box bottom-margin-1 sides' ><%=side.get('productname')%></div></div>
+    <%end%>
+  </div>
 <%end%>
