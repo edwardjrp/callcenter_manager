@@ -1,4 +1,8 @@
+<h3>Especialidades</h3>
 <%for matchup in @options.matchups:%>
-  <p>specialty:<%=matchup.name%></p>
-  <p>options:<%=matchup.options%><p>
+  <a class ='btn bottom-margin-1 specialties' href='#'><%=matchup.name%></a>
+<%end%>
+<h3>Sabores</h3>
+<%for flavor in @options.flavors:%>
+  <a class ='btn bottom-margin-1 flavors' href='#'><%=flavor%></a>
 <%end%>
