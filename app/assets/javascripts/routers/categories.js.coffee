@@ -4,7 +4,7 @@ class Kapiqua25.Routers.Categories extends Backbone.Router
   
   initialize: ->
     @categories = new Kapiqua25.Collections.Categories()
-    @categories.fetch()
+    @categories.reset($('#surface').data('categories'))
   
   builder: ->
     categories_view = new Kapiqua25.Views.CategoriesIndex(collection: @categories)
