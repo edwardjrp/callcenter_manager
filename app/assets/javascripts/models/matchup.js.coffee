@@ -1,0 +1,1 @@
+class Kapiqua25.Models.Matchup extends Backbone.Model

@@ -44,8 +44,8 @@ class Kapiqua25.Views.CategoriesIndex extends Backbone.View
     (_.intersection.apply(_, _.map(group_products, (product)-> product.get('productname').split(' ') ))).join(' ')    
     
   create_matchups: (products)->
-    matchups = []
+    matchups = new Kapiqua25.Collections.Matchups()
     _.each @group_by_options(products), (group, key) =>
-        matchup = {name:  @get_presentation_name(group), options: key} 
-        matchups.push matchup if matchup.name!='' and matchup.options != 'null'
+        name = @get_presentation_name(group)
+        matchups.add {name:  name, options: key} if name !='' and key != 'null'
     matchups

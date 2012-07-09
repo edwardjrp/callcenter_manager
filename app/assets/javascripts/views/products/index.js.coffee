@@ -14,8 +14,13 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     
   select_specialty: (event)->
     event.preventDefault()
-    console.log $(event.target)
-  
+    if _.any($(event.target).parent().find('.btn-primary'))
+      target_to_clear = $(event.target).parent().find('.btn-primary')
+      target_to_clear.removeClass('btn-primary')
+      $(event.target).addClass('btn-primary') unless ($(target_to_clear)[0] == $(event.target)[0])
+    else
+      $(event.target).addClass('btn-primary')
+      
   option_scale_up: (event)->
     target_option = $(event.target) 
     target_option.parent().css('z-index', 1000)

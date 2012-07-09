@@ -1,8 +1,10 @@
-<%if _.any(@options.matchups):%>
-  <h3>Especialidades</h3>
-  <%for matchup in @options.matchups:%>
-    <a class ='btn bottom-margin-1 specialties' href='#'><%=matchup.name%></a>
-  <%end%>
+<%if _.any(@options.matchups.models):%>
+  <div class='specialties_container'>
+    <h3>Especialidades</h3>
+    <%for matchup in @options.matchups.models:%>
+      <a id = '<%=matchup.cid%>' class ='btn bottom-margin-1 specialties' href='#'><%=matchup.get('name')%></a>
+    <%end%>
+  </div>
 <%end%>
 <%if _.any(@options.flavors):%>
   <h3>Sabores</h3>
