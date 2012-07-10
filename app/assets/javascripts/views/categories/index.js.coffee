@@ -39,7 +39,6 @@ class Kapiqua25.Views.CategoriesIndex extends Backbone.View
     _.each @group_by_options(products), (group, key) =>
         name = @get_presentation_name(group)
         matchups.add {name:  name, options: key, niffty_options: @niffty_opions(@parse_options(key,options))} if name !='' and key != 'null'
-        console.log matchups
     matchups
     
   parse_options: (recipe, options)->

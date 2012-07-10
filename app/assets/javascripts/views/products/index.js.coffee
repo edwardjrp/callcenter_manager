@@ -4,6 +4,8 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
   
   events: ->
     'click .specialties':'select_specialty'
+    'click .flavors':'select_flavor'
+    'click .sizes':'select_size'
     'mouseenter .specialties': 'show_popover'
     'mouseenter .option_box': 'option_scale_up'
     'mouseleave .option_box': 'option_scale_down'
@@ -14,12 +16,23 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     
   select_specialty: (event)->
     event.preventDefault()
-    if _.any($(event.target).parent().find('.btn-primary'))
-      target_to_clear = $(event.target).parent().find('.btn-primary')
+    @selection_marker($(event.target))
+      
+  select_flavor: (event)->
+    event.preventDefault()
+    @selection_marker($(event.target))
+  
+  select_size: (event)->
+    event.preventDefault()
+    @selection_marker($(event.target))  
+      
+  selection_marker: (target)->
+    if _.any(target.parent().find('.btn-primary'))
+      target_to_clear = target.parent().find('.btn-primary')
       target_to_clear.removeClass('btn-primary')
-      $(event.target).addClass('btn-primary') unless ($(target_to_clear)[0] == $(event.target)[0])
+      target.addClass('btn-primary') unless ($(target_to_clear)[0] == target[0])
     else
-      $(event.target).addClass('btn-primary')
+      target.addClass('btn-primary')
   
   show_popover: (event)->
     target_specialty = $(event.target)

@@ -7,16 +7,20 @@
   </div>
 <%end%>
 <%if _.any(@options.flavors):%>
-  <h3>Sabores</h3>
-  <%for flavor in @options.flavors:%>
-    <a class ='btn bottom-margin-1 flavors' href='#'><%=flavor%></a>
-  <%end%>
+  <div class='flavors_container'>
+    <h3>Sabores</h3>
+    <%for flavor in @options.flavors:%>
+      <a class ='btn bottom-margin-1 flavors' href='#'><%=flavor%></a>
+    <%end%>
+  </div>
 <%end%>
 <%if _.any(@options.sizes):%>
-  <h3>Tamaños</h3>
-  <%for size in @options.sizes:%>
-    <a class ='btn bottom-margin-1 sizes' href='#'><%=size%></a>
-  <%end%>
+  <div class='sizes_container'>
+    <h3>Tamaños</h3>
+    <%for size in @options.sizes:%>
+      <a class ='btn bottom-margin-1 sizes' href='#'><%=size%></a>
+    <%end%>
+  </div>
 <%end%>
 <%if _.any(@options.sides):%>
   <h3>Opciones</h3>
