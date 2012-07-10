@@ -21,5 +21,15 @@
 @del = (el)->
   throw "Missing arguments" if !el?
   el.remove() if el.length > 0
+  
+  
+@strip = (string) ->
+  if _.isString(string)
+    string.replace(/^\s(.+)\s$/,'$1')
+  else 
+    throw 'NO A STRING'
+    
+@to_sentence = (string_array)->
+  (_.flatten([(_.without(string_array, _.last(string_array))).join(', '), _.last(string_array)])).join(' y ')
 
 # end del
