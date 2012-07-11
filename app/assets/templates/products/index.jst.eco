@@ -26,7 +26,11 @@
   <h3>Opciones</h3>
   <div class='options_container left-margin-1'>
     <%for side in @options.sides:%>
-      <div class='outbox'><div class ='option_box bottom-margin-1 options' ><%=side.get('productname')%></div></div>
+      <div class='outbox'>
+         <div class ='option_box bottom-margin-1 options' id="<%=side.get('category').get('name')%>_<%=side.get('productcode')%>" >
+           <div class='option_name'><%=side.get('productname')%></div>
+         </div>
+      </div>
     <%end%>
   </div>
 <%end%>
