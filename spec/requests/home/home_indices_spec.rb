@@ -19,6 +19,11 @@ describe "Home::Indices" do
          page.should have_css('#client_search')
        end
        
+       it 'should not allow access to the admin seccion' do
+         visit admin_root_path
+         page.should have_content('No tiene permitido el acceso esta sección')
+       end
+       
     end
     
     context "When search for a client" do

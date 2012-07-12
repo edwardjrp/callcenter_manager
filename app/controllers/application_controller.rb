@@ -5,11 +5,12 @@ class ApplicationController < ActionController::Base
   
   
   protected 
-    def accesible_by(*roles, fallback_path)
-       raise Exception.new 'Accessibility not set' unless roles.nil? || fallback_path.nil?
-       if (current_user.roles & roles).empty? 
-         flash[:alert] = 'No tiene permitido el acceso esta sección'
-         redirect_to fallback_path 
+    def accessible_by(roles, fallback_path)
+       if user_signed_in?
+         unless current_user.has_role? roles
+           flash[:alert] = 'No tiene permitido el acceso esta sección'
+           redirect_to fallback_path 
+         end
        end
      end
   
