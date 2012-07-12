@@ -76,5 +76,23 @@ jQuery ->
         target.text(category.multi)
       error: (errors)->
         window.show_alert(errors.responseText, 'error')
-  
-  
+        
+  $('.change_state_hidden').click (event)->
+    event.preventDefault()
+    target = $(this)
+    $.ajax
+      type: 'POST'
+      url: "/admin/categories/#{$(this).closest('tr').data('category-id')}/change_hidden"
+      datatype: 'JSON'
+      beforeSend: (xhr) ->
+        xhr.setRequestHeader("Accept", "application/json")
+      success: (category)->
+        if category.hidden == true
+          window.show_alert("#{category.name} NO sera mostrada a los agentes", 'success')
+          window.replaceClass(target, 'btn-inverse', 'btn-primary')
+        else
+          window.show_alert("#{category.name} sera mostrada a los agentes", 'success')
+          window.replaceClass(target, 'btn-primary', 'btn-inverse')
+        target.text(category.hidden)
+      error: (errors)->
+        window.show_alert(errors.responseText, 'error')

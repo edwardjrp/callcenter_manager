@@ -5,6 +5,7 @@
     %th Tiene opciones
     %th Opciones en unidades
     %th Seleccion multiple
+    %th Oculta
     %th Producto base
   %tbody
     -@categories.each do |category|
@@ -16,5 +17,8 @@
           =link_to category.type_unit.to_s, nil,:class=>"btn #{set_state_class category.type_unit?} change_state_unit"
         %th
           =link_to category.multi.to_s, nil,:class=>"btn #{set_state_class category.multi?} change_state_multi"
+        %th
+          =link_to category.multi.to_s, nil,:class=>"btn #{set_state_class category.multi?} change_state_hidden"
+
         %th
           = select_tag "base_product_#{category.id}",options_for_select(category.products.are_main.map{|p| [p.productname,p.id]}, category.base_product), :data=>{'category-id'=> category.id}, :prompt=>'Seleccione un producto'
