@@ -21,4 +21,18 @@ describe 'Categories general' do
     visit admin_categories_path
     within('#categories_list'){page.should have_content('test category')}
   end
+  
+  
+  describe "changing states", js: true do
+    [['change_state_option', 'has_options'], ['change_state_unit','type_unit'],['change_state_multi','multi'], ['change_state_hidden','hidden']].each do |field|
+      it "should change the state of #{field[1]}" do
+        visit admin_categories_path
+        within("#category_#{@category.id}") do
+          page.should have_css(".#{field[0]}:first", :content=>'false')
+          find(".#{field[0]}:first").click
+          page.should have_css(".#{field[0]}:first", :content=>'true')
+        end
+      end
+    end
+  end
 end

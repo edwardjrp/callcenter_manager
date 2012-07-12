@@ -9,7 +9,7 @@
     %th Producto base
   %tbody
     -@categories.each do |category|
-      %tr{:data=>{'category-id'=> category.id}}
+      %tr{:data=>{'category-id'=> category.id}, :id=>dom_id(category)}
         %th= category.name
         %th
           =link_to category.has_options.to_s, nil,:class=>"btn #{set_state_class category.has_options?} change_state_option"
