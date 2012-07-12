@@ -8,6 +8,7 @@ require 'csv'
 # #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 # #   Mayor.create(name: 'Emanuel', city: cities.first)
 FactoryGirl.create :user, :password=>'please', :password_confirmation=>'please', :username=>'test'
+FactoryGirl.create :user, :password=>'please', :password_confirmation=>'please', :username=>'admin', :roles=> [:admin]
 100.times do
   FactoryGirl.create :phone
 end

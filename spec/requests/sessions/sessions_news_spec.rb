@@ -5,7 +5,7 @@ describe "Sessions::News" do
   describe "when login in" do
     before(:each) do
       FactoryGirl.create :user, username: 'testname', :password=> "please"
-      FactoryGirl.create :user, username: 'testadmin', :password=> "please"
+      FactoryGirl.create :user, username: 'testadmin', :password=> "please", :roles => [:admin]
     end
     describe "operator login" do
       it "should render the login form and login" do

@@ -8,7 +8,11 @@ class SessionsController < ApplicationController
     if user.present?
       session[:user_token]=user.auth_token
       flash[:success]="Sesión iniciada"
-      redirect_to root_path
+      if user.is? :admin
+        redirect_to admin_root_path
+      else
+        redirect_to root_path
+      end
     else
       flash[:alert]='Usuario o contraseña incorrectos'
       render :action=>:new

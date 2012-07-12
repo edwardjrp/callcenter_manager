@@ -1,4 +1,4 @@
--if user_signed_in?
+-if user_signed_in? && (!current_user.is? :admin)
   .subnav.subnav-fixed
     %ul.nav.nav-pills
       %li

@@ -1,5 +1,7 @@
 Kapiqua25::Application.routes.draw do
   
+  get "dashboard/index"
+
   get "builder/index"
 
   get 'login', to: "sessions#new", as: :login
@@ -23,6 +25,10 @@ Kapiqua25::Application.routes.draw do
     collection do 
       get 'clients'
     end
+  end
+  
+  namespace 'admin' do
+    root :to => 'dashboard#index'
   end
   root to: 'home#index'
   # The priority is based upon order of creation:
