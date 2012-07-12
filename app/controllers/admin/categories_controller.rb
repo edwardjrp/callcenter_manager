@@ -19,39 +19,29 @@ class Admin::CategoriesController < ApplicationController
   end
   
   def change_options
-    @category = Category.find(params[:id])
-    @category.has_options = !@category.has_options
-    respond_to do |format|
-      if @category.save
-        format.json{ render :json=>@category}
-      else
-        format.json{render json: @category.errors.full_messages.to_sentence , :status => 422}
-      end
-    end
+    change_state(:has_options)
   end
   
   def change_units
-    @category = Category.find(params[:id])
-    @category.type_unit = !@category.type_unit
-    respond_to do |format|
-      if @category.save
-        format.json{ render :json=>@category}
-      else
-        format.json{render json: @category.errors.full_messages.to_sentence , :status => 422}
-      end
-    end
+    change_state(:type_unit)
   end
   
   def change_multi
-    @category = Category.find(params[:id])
-    @category.multi = !@category.multi
-    respond_to do |format|
-      if @category.save
-        format.json{ render :json=>@category}
-      else
-        format.json{render json: @category.errors.full_messages.to_sentence , :status => 422}
+    change_state(:multi)
+  end
+  
+  private
+  
+    def change_state(field)
+      @category = Category.find(params[:id])
+      @category[field] = !@category[field]
+      respond_to do |format|
+        if @category.save
+          format.json{ render :json=>@category}
+        else
+          format.json{render json: @category.errors.full_messages.to_sentence , :status => 422}
+        end
       end
     end
-  end
   
 end
