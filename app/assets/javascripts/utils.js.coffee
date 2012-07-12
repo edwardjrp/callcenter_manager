@@ -13,7 +13,10 @@
 # alert
 @show_alert = (msg, type)->
   throw "Missing arguments" if !msg? or  !type?
-  $('.container>.row>.span12').prepend($("<div class=\"alert alert-#{type}\"><button class=\"close\" data-dismiss=\"alert\">×</button>#{msg}</div>"))
+  if $('.alert').size() > 0
+    $('.alert').replaceWith("<div class=\"alert alert-#{type}\"><button class=\"close\" data-dismiss=\"alert\">×</button>#{msg}</div>")
+  else
+    $('.container>.row>.span12').prepend($("<div class=\"alert alert-#{type}\"><button class=\"close\" data-dismiss=\"alert\">×</button>#{msg}</div>"))
     
 # end alert
 
@@ -33,3 +36,10 @@
   (_.flatten([(_.without(string_array, _.last(string_array))).join(', '), _.last(string_array)])).join(' y ')
 
 # end del
+
+
+# classes
+  
+@replaceClass = (element,old_class, new_class)->
+  element.removeClass(old_class) if element.hasClass(old_class)
+  element.addClass(new_class)

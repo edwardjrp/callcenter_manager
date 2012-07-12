@@ -1,0 +1,20 @@
+%h3 Categorías
+%table.table.table-striped.table-bordered.table-condensed#categories_list
+  %thead
+    %th Nombre
+    %th Tiene opciones
+    %th Opciones en unidades
+    %th Seleccion multiple
+    %th Producto base
+  %tbody
+    -@categories.each do |category|
+      %tr{:data=>{'category-id'=> category.id}}
+        %th= category.name
+        %th
+          =link_to category.has_options.to_s, nil,:class=>"btn #{set_state_class category.has_options?} change_state_option"
+        %th
+          =link_to category.type_unit.to_s, nil,:class=>"btn #{set_state_class category.type_unit?} change_state_unit"
+        %th
+          =link_to category.multi.to_s, nil,:class=>"btn #{set_state_class category.multi?} change_state_multi"
+        %th
+          = select_tag "base_product_#{category.id}",options_for_select(category.products.are_main.map{|p| [p.productname,p.id]}, category.base_product), :data=>{'category-id'=> category.id}, :prompt=>'Seleccione un producto'

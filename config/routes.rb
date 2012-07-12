@@ -1,5 +1,7 @@
 Kapiqua25::Application.routes.draw do
   
+  get "categories/index"
+
   get "dashboard/index"
 
   get "builder/index"
@@ -28,6 +30,14 @@ Kapiqua25::Application.routes.draw do
   end
   
   namespace 'admin' do
+    resources :categories, :only => :index do
+      member do
+        post 'set_base'
+        post 'change_options'
+        post 'change_units'
+        post 'change_multi'
+      end
+    end
     root :to => 'dashboard#index'
   end
   root to: 'home#index'

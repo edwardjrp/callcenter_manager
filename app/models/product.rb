@@ -16,5 +16,8 @@
 #
 
 class Product < ActiveRecord::Base
+  belongs_to :category
+  scope :are_option, where(:options=>'OPTION')
+  scope :are_main, where('options != ?  or options is NULL', 'OPTION')
   # attr_accessible :title, :body
 end

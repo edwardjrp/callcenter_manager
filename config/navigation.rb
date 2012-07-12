@@ -53,6 +53,7 @@ SimpleNavigation::Configuration.run do |navigation|
     primary.item :builder, 'Builder', builder_path, :unless => Proc.new { current_user.is? :admin }
     
     primary.item :dashboard, 'Dashboard', admin_root_path, :if => Proc.new { current_user.is? :admin }
+    primary.item :dashboard, 'Categorías', admin_categories_path, :if => Proc.new { current_user.is? :admin }
     
     
     primary.dom_class = 'nav'
