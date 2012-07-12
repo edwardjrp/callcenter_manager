@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120707132100) do
+ActiveRecord::Schema.define(:version => 20120712002626) do
 
   create_table "addresses", :force => true do |t|
     t.integer  "client_id"
@@ -29,6 +29,16 @@ ActiveRecord::Schema.define(:version => 20120707132100) do
     t.string   "name"
     t.integer  "city_id"
     t.integer  "store_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "cart_products", :force => true do |t|
+    t.integer  "cart_id"
+    t.decimal  "quantity"
+    t.integer  "product_id"
+    t.integer  "bind_id"
+    t.string   "options"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
@@ -73,17 +83,13 @@ ActiveRecord::Schema.define(:version => 20120707132100) do
 
   create_table "categories", :force => true do |t|
     t.string   "name"
-    t.boolean  "has_options",     :default => false
-    t.boolean  "type_unit",       :default => false
-    t.boolean  "multi",           :default => false
-    t.boolean  "hidden",          :default => false
+    t.boolean  "has_options",  :default => false
+    t.boolean  "type_unit",    :default => false
+    t.boolean  "multi",        :default => false
+    t.boolean  "hidden",       :default => false
     t.integer  "base_product"
-    t.string   "flavor_code_src"
-    t.string   "flavor_code_dst"
-    t.string   "size_code_src"
-    t.string   "size_code_dst"
-    t.datetime "created_at",                         :null => false
-    t.datetime "updated_at",                         :null => false
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
   end
 
   create_table "cities", :force => true do |t|

@@ -79,9 +79,9 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
   
   add_markers: (target)->  
     level_holder= $("<div class='option_config'></div>")
-    visual_que= $('<div class= "option_marker_primary"></div>')
-    left_marker= $('<div class= "left"></div>')
-    right_marker= $('<div class= "right"></div>')
+    visual_que= $('<div class= "option_marker"></div>')
+    left_marker= $('<div class= "left_primary"></div>')
+    right_marker= $('<div class= "right_primary"></div>')
     visual_que.append(left_marker)
     visual_que.append(right_marker)
     level_holder.append(visual_que)
