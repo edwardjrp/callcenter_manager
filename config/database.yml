@@ -8,6 +8,7 @@ development:
   encoding: unicode
   database: kapiqua_development
   pool: 5
+  host: 192.168.100.4
   username: radhamesbrito
   password: siriguillo
 
@@ -23,7 +24,9 @@ test:
   password: siriguillo
 
 production:
-  adapter: sqlite3
-  database: db/production.sqlite3
-  pool: 5
-  timeout: 5000
+  adapter: postgresql
+  encoding: unicode
+  database: kapiqua_production
+  pool: 15
+  username: 
+  password: 

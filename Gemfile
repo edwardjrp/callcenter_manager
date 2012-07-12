@@ -4,7 +4,6 @@ gem 'rails', '3.2.5'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
-gem "thin"
 
 gem 'pg'
 
@@ -30,7 +29,7 @@ gem 'jquery-rails'
 gem 'jbuilder'
 
 # Use unicorn as the app server
-# gem 'unicorn'
+gem 'unicorn', :group=> :production
 
 # Deploy with Capistrano
 # gem 'capistrano'
@@ -63,6 +62,8 @@ gem 'bcrypt-ruby', '~> 3.0.0'
 # To use debugger
 # gem 'ruby-debug19', :require => 'ruby-debug'
 group :development do
+  gem "thin"
+  gem 'capistrano'
   gem 'letter_opener'
   gem 'hirb'
   gem 'awesome_print'

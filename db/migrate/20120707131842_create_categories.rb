@@ -7,10 +7,6 @@ class CreateCategories < ActiveRecord::Migration
       t.boolean :multi, :default=>false
       t.boolean :hidden, :default=>false
       t.integer :base_product
-      t.string :flavor_code_src
-      t.string :flavor_code_dst
-      t.string :size_code_src
-      t.string :size_code_dst
 
       t.timestamps
     end
