@@ -19,6 +19,9 @@
 #
 
 class User < ActiveRecord::Base
+  include RoleModel
+  roles_attribute :role_mask
+  roles :admin, :supervisor, :operator
   has_secure_password
   validates :username, presence: true, uniqueness: true
   validates :first_name, presence: true

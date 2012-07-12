@@ -48,4 +48,28 @@ describe User do
       @user.auth_token.should_not be_nil
     end
   end
+  
+  
+  describe "roles behavior" do
+    before(:each) do
+      @user = FactoryGirl.create :user, :username=> 'test2', :password=>'please', :roles=>[:operator]
+      @admin = FactoryGirl.create :user, :username=> 'admin', :password=>'please', :roles=>[:admin]
+    end
+    it "should respond to role" do
+      User.should respond_to(:valid_roles)
+    end
+    
+    it "should respond to role" do
+      @user.should respond_to(:roles)
+    end
+    
+    it "should be an admin" do
+      @admin.roles.should include(:admin)
+    end
+    
+    it "should be an operator" do
+      @user.roles.should include(:operator)
+    end
+    
+  end
 end
