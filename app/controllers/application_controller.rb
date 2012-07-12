@@ -3,6 +3,17 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   before_filter :authenticate
   
+  
+  protected 
+    def accesible_by(*roles, fallback_path)
+       raise Exception.new 'Accessibility not set' unless roles.nil? || fallback_path.nil?
+       if (current_user.roles & roles).empty? 
+         flash[:alert] = 'No tiene permitido el acceso esta sección'
+         redirect_to fallback_path 
+       end
+     end
+  
+  
   private
    def authenticate
      if current_user.nil?
@@ -23,6 +34,8 @@ class ApplicationController < ActionController::Base
      end
    end
    helper_method :current_cart
+   
+   
    
    def current_user
      return nil unless session[:user_token] || !User.exists?(auth_token: session[:user_token])

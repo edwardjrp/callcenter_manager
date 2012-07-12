@@ -16,7 +16,7 @@ describe 'Dashboarn general' do
     end
     it 'should not allow access to the general seccion' do
       visit root_path
-      page.should have_content('Acceso no permito')
+      page.should have_content('No tiene permitido el acceso esta sección')
     end
     
   end
