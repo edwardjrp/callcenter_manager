@@ -21,9 +21,10 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
   select_specialty: (event)->
     event.preventDefault()
     @selection_marker($(event.target))
-    primary_matchup = @options.matchups.getByCid($($(event.target).parent().find('.btn-primary')).attr('id'))
-    secondary_matchup = @options.matchups.getByCid($($(event.target).parent().find('.btn-danger')).attr('id')) if @options.category.get('multi') == true
-    @mark_matchup(@options.category,primary_matchup, secondary_matchup, $(event.target))
+    unless @options.category.get('type_unit') == true
+      primary_matchup = @options.matchups.getByCid($($(event.target).parent().find('.btn-primary')).attr('id'))
+      secondary_matchup = @options.matchups.getByCid($($(event.target).parent().find('.btn-danger')).attr('id')) if @options.category.get('multi') == true
+      @mark_matchup(@options.category,primary_matchup, secondary_matchup, $(event.target)) 
   
   select_flavor: (event)->
     event.preventDefault()

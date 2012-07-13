@@ -8,7 +8,7 @@
     left:0;
     width: 80px;
     height: 50px;
-    line-height: 50px;
+//    line-height: 50px;
     text-align: center;
     background-color: #f4faff;
     border: 1px solid #e0eeff;
@@ -26,6 +26,10 @@
       height: 20px;
       overflow:hidden;
       background-color: #f4faff;
+    }
+    input.unit_option_setter{
+      width:30px;
+      margin:0px;
     }
     table.option_table{
       border-collapse:separate;
