@@ -30,11 +30,13 @@
     table.option_table{
       border-collapse:separate;
       border-spacing: 1px;
+      border-style:none;
       border-color:black;
       margin:0 auto;
       tr{
         height: 5px;
         td{
+          border-style:solid;
           width: 35px;
         }
       }

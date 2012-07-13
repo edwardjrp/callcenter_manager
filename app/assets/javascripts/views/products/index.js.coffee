@@ -101,7 +101,8 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
       height:"#{(h+2*increase_size)}px"
       width: "#{(w+2*increase_size)}px"
       200
-          
+      ->
+        target_option.find('table.option_table td').css('border-color','black').css('border-width','1px')
     
     
   
@@ -116,4 +117,5 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
       width: "#{w}px"
       200
       ->
-        target_option.parent().css('z-index', 1)  
+        target_option.parent().css('z-index', 1)
+        target_option.find('table.option_table td').css('border-color','none').css('border-width','0px')
