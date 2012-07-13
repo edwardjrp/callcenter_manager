@@ -54,30 +54,30 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
   
   
   mark_matchup: (category, primary_matchup,secondary_matchup , sender)->
-    $('table.option_table td').css('background-color','transparent')
-    option_map = {'0.75': 1, '1': 2, '1.5': 3, '2':4}
+    $('table.option_table td').css('background-color','transparent').removeClass('primary_selected').removeClass('secondary_selected')
+    option_map = {'0.75': 1, '1': 2, '1.5': 3, '2':4, '3': 5}
     if primary_matchup?
       _.each primary_matchup.get('parsed_options'), (parsed_option) =>
         target = $("##{category.get('name')}_#{parsed_option.product.get('productcode')}")
         for i in [0..(option_map[parsed_option.quantity]-1)]
-          $(target.find('td.options_left')[i]).css('background-color', '#0073CC') if i <= option_map[parsed_option.quantity]
+          $(target.find('td.options_left')[i]).css('background-color', '#0073CC').addClass('primary_selected') if i <= option_map[parsed_option.quantity]
     unless secondary_matchup?
       if primary_matchup?
         _.each primary_matchup.get('parsed_options'), (parsed_option) =>
           target = $("##{category.get('name')}_#{parsed_option.product.get('productcode')}")
           for i in [0..(option_map[parsed_option.quantity]-1)]
-            $(target.find('td.options_rigth')[i]).css('background-color', '#0073CC') if i <= option_map[parsed_option.quantity]
+            $(target.find('td.options_rigth')[i]).css('background-color', '#0073CC').addClass('primary_selected') if i <= option_map[parsed_option.quantity]
     if secondary_matchup?
       _.each secondary_matchup.get('parsed_options'), (parsed_option) =>
         target = $("##{category.get('name')}_#{parsed_option.product.get('productcode')}")
         for i in [0..(option_map[parsed_option.quantity]-1)]
-          $(target.find('td.options_rigth')[i]).css('background-color', '#DA4E49') if i <= option_map[parsed_option.quantity]
+          $(target.find('td.options_rigth')[i]).css('background-color', '#DA4E49').addClass('secondary_selected') if i <= option_map[parsed_option.quantity]
     unless  primary_matchup?
       if secondary_matchup?
         _.each secondary_matchup.get('parsed_options'), (parsed_option) =>
           target = $("##{category.get('name')}_#{parsed_option.product.get('productcode')}")
           for i in [0..(option_map[parsed_option.quantity]-1)]
-            $(target.find('td.options_left')[i]).css('background-color', '#DA4E49') if i <= option_map[parsed_option.quantity]
+            $(target.find('td.options_left')[i]).css('background-color', '#DA4E49').addClass('secondary_selected') if i <= option_map[parsed_option.quantity]
           
  
              
