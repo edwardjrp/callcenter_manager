@@ -1,3 +1,6 @@
+<div class='adder'>
+  <input class="btn btn-success" type="button" value="Agregar">
+</div>
 <%if _.any(@options.matchups.models):%>
   <div class='specialties_container'>
     <h3>Especialidades</h3>

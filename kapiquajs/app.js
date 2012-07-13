@@ -31,9 +31,19 @@ app.configure('production', function(){
 pg.connect(app.set('pg_connection'),function(err, client){
   app.get('/carts/:cart_id/cart_products', function(req, res){
     console.log(req.param("cart_id"))
-    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.contentType('application/json');
     client.query('SELECT * FROM users LIMIT 1', function(err, result){
+      res.send(_.first(result["rows"]));
+    });
+    console.log('this happends after');
+  });
+  
+  app.post('/carts/:cart_id/cart_products', function(req, res){
+    console.log(req.body)
+    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.contentType('application/json');
+    client.query('SELECT * FROM carts LIMIT 1', function(err, result){
       res.send(_.first(result["rows"]));
     });
     console.log('this happends after');

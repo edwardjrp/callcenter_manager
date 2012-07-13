@@ -9,6 +9,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     'click .specialties':'select_specialty'
     'click .flavors':'select_flavor'
     'click .sizes':'select_size'
+    'click .btn-success':'send_test'
     "click table.option_table td":'modify_option'
     'mouseenter .specialties': 'show_popover'
     'mouseenter .option_box': 'option_scale_up'
@@ -17,6 +18,17 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
   render: ->
     $(@el).html(@template(collection: @collection, options:@options))
     this
+    
+  send_test: (event)->
+    event.preventDefault()
+    $.ajax
+      type: 'POST'
+      url: 'http://localhost:3030/carts/43/cart_products'
+      data: {test: 'Hello'}
+      beforeSend: (xhr)->
+        xhr.setRequestHeader("Accept", "application/json")
+      success: (res)->
+        console.log res
     
   select_specialty: (event)->
     event.preventDefault()
