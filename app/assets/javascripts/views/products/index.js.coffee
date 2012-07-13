@@ -24,7 +24,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     @selection_marker($(event.target))
     current_matchup = @options.matchups.getByCid($($(event.target).parent().find('.btn-primary')).attr('id'))
     @mark_matchup(_.first(@collection).get('category'),current_matchup) if current_matchup?
-      
+  
   select_flavor: (event)->
     event.preventDefault()
     @selection_marker($(event.target))

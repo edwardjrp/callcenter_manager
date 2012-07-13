@@ -7,14 +7,21 @@ class Kapiqua25.Views.CategoriesIndex extends Backbone.View
     @product_views = {}
     _.each @collection.models, (category) =>
       main_products = @get_main_products(category.get('products'))
-      option_products = @get_option_products(category.get('products'))
+      option_products = @get_option_products(category.get('products')) if category.get('has_options')
       @product_views["#{category.get('name')}"] = new Kapiqua25.Views.ProductsIndex(collection: main_products, sides: option_products, matchups: @create_matchups(main_products, option_products), flavors:@get_flavors(main_products), sizes: @get_sizes(main_products) )
+  
+  events: ->
+    'click .nav-tabs a': 'mark_base'
   
   render: ->
     $(@el).html(@template(collection: @collection))
     _.each _.keys(@product_views), (key)=>
       $(@el).find("##{key}").html(@product_views[key].render().el)
     this
+        
+  mark_base: (event)->
+    target= $(event.currentTarget).attr('href').replace(/#/,'')
+    $("##{target}").find("[data-bproduct='true']").trigger('click') if $("##{target}").find("[data-bproduct='true']").size() > 0
         
   get_main_products: (main_products)->
     man_products = _.filter main_products.models, (product)-> product.get('options') != 'OPTION'
@@ -38,8 +45,14 @@ class Kapiqua25.Views.CategoriesIndex extends Backbone.View
     matchups = new Kapiqua25.Collections.Matchups()
     _.each @group_by_options(products), (group, key) =>
         name = @get_presentation_name(group)
-        matchups.add {name:  name, options: key, niffty_options: @niffty_opions(@parse_options(key,options)), parsed_options:@parse_options(key,options)} if name !='' and key != 'null'
+        matchups.add {name:  name, options: key, niffty_options: @niffty_opions(@parse_options(key,options)), parsed_options:@parse_options(key,options), is_base: @get_base_matchup(group)?} if name !='' and key != 'null'
     matchups
+    
+  get_base_matchup: (products)->
+    base_product_id = _.first(products).get('category').get('base_product')
+    if base_product_id?
+      _.find products, (product)-> product.id == base_product_id
+    
     
   parse_options: (recipe, options)->
     product_options = []

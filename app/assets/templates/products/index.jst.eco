@@ -2,7 +2,7 @@
   <div class='specialties_container'>
     <h3>Especialidades</h3>
     <%for matchup in @options.matchups.models:%>
-      <a id = '<%=matchup.cid%>' class ='btn bottom-margin-1 specialties' data-options="<%=matchup.get('niffty_options')%>" href='#'><%=matchup.get('name')%></a>
+      <a id = '<%=matchup.cid%>' class ='btn bottom-margin-1 specialties' data-options="<%=matchup.get('niffty_options')%>" data-bproduct="<%=matchup.get('is_base')%>"  href='#'><%=matchup.get('name')%></a>
     <%end%>
   </div>
 <%end%>
