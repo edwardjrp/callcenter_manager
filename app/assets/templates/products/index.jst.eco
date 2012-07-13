@@ -29,6 +29,15 @@
       <div class='outbox'>
          <div class ='option_box bottom-margin-1 options' id="<%=side.get('category').get('name')%>_<%=side.get('productcode')%>" >
            <div class='option_name'><%=side.get('productname')%></div>
+             <table class='option_table'>
+               <tbody>
+                <tr><td class='options_left'></td><td class='options_rigth'></td></tr>
+                <tr><td class='options_left'></td><td class='options_rigth'></td></tr>
+                <tr><td class='options_left'></td><td class='options_rigth'></td></tr>
+                <tr><td class='options_left'></td><td class='options_rigth'></td></tr>
+                <tr><td class='options_left'></td><td class='options_rigth'></td></tr>        
+               </tbody>
+             </table>
          </div>
       </div>
     <%end%>

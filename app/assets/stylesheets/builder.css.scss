@@ -27,43 +27,16 @@
       overflow:hidden;
       background-color: #f4faff;
     }
-    .option_config{
+    table.option_table{
+      border-collapse:separate;
+      border-spacing: 1px;
+      border-color:black;
       margin:0 auto;
-      margin-top:1px;
-      line-height: 50px;
-      text-align: center;
-      max-width: 110px;
-//      height: 50px;
-      overflow:hidden;
-
-        .left_primary{
-          background-color:#0073CC;
-          float:left;
-          height: 5px;
+      tr{
+        height: 5px;
+        td{
           width: 35px;
         }
-        .right_primary{
-          background-color:#0073CC;
-          float:right;
-          height: 5px;
-          width: 35px;
-        }
-        
-        .left_secondary{
-          background-color:#DA4E49;
-          float:left;
-          height: 5px;
-          width: 35px;
-        }
-        .right_secondary{
-          background-color:#DA4E49;
-          float:right;
-          height: 5px;
-          width: 35px;
-        }
-        
-      .option_marker_secondary{
-        background-color:#0073CC;
       }
     }
 }

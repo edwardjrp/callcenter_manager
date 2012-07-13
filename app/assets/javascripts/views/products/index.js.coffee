@@ -3,7 +3,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
   template: JST['products/index']
   
   initialize: ->
-    _.bindAll(this, 'mark_matchup', 'add_markers')
+    _.bindAll(this, 'mark_matchup')
   
   events: ->
     'click .specialties':'select_specialty'
@@ -26,8 +26,8 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     @selection_marker($(event.target))
     current_matchup = @options.matchups.getByCid($($(event.target).parent().find('.btn-primary')).attr('id'))
     secondary_matchup = @options.matchups.getByCid($($(event.target).parent().find('.btn-danger')).attr('id')) if @options.category.get('multi') == true
-    @mark_matchup(@options.category,current_matchup) if current_matchup?
-    @mark_matchup(@options.category,secondary_matchup) if secondary_matchup?
+    @mark_matchup(@options.category,current_matchup, $(event.target)) if current_matchup?
+    @mark_matchup(@options.category,secondary_matchup, $(event.target)) if secondary_matchup?
   
   select_flavor: (event)->
     event.preventDefault()
@@ -58,12 +58,15 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     
   
   
-  mark_matchup: (category, matchup)->
+  mark_matchup: (category, matchup, sender)->
     _.each matchup.get('parsed_options'), (parsed_option) =>
       target = $("##{category.get('name')}_#{parsed_option.product.get('productcode')}")
       option_map = {'0.75': 1, '1': 2, '1.5': 3, '2':4}
-      unless _.any(target.find('.option_marker_primary'))
-        @add_markers(target) for i in [0..(option_map[parsed_option.quantity]-1)]
+      for i in [0..(option_map[parsed_option.quantity]-1)]
+        $(target.find('td.options_left')[i]).css('background-color', '#0073CC') if i <= option_map[parsed_option.quantity]
+      for i in [0..(option_map[parsed_option.quantity]-1)]
+        $(target.find('td.options_rigth')[i]).css('background-color', '#0073CC') if i <= option_map[parsed_option.quantity]  
+        
         
   unmark_matchup: (category, matchup)->
     _.each matchup.get('parsed_options'), (parsed_option) =>
@@ -90,20 +93,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
       width: "#{(w+2*increase_size)}px"
       200
           
-  
-  add_markers: (target)->
-    level_holder= $("<div class='option_config'></div>")
-    if _.any($(@el).find('.specialties_container').find('a.btn-primary')) and not _.any($(@el).find('.specialties_container').find('a.btn-danger'))
-      left_marker= $('<div class= "left_primary"></div>')
-      level_holder.append(left_marker)
-      right_marker= $('<div class= "right_primary"></div>')
-      level_holder.append(right_marker)
-    else if not _.any($(@el).find('.specialties_container').find('a.btn-primary')) and _.any($(@el).find('.specialties_container').find('a.btn-danger'))
-      left_marker= $('<div class= "left_secondary"></div>')
-      level_holder.append(left_marker)
-      right_marker= $('<div class= "right_secondary"></div>')
-      level_holder.append(right_marker)
-    target.append(level_holder)
+    
     
   
   option_scale_down: (event)->    
