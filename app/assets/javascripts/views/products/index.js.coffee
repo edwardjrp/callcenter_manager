@@ -20,10 +20,14 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
   select_specialty: (event)->
     event.preventDefault()
     current_matchup = @options.matchups.getByCid($($(event.target).parent().find('.btn-primary')).attr('id'))
+    secondary_matchup = @options.matchups.getByCid($($(event.target).parent().find('.btn-danger')).attr('id')) if @options.category.get('multi') == true
     @unmark_matchup(@options.category,current_matchup) if current_matchup?
+    @unmark_matchup(@options.category,secondary_matchup) if secondary_matchup?
     @selection_marker($(event.target))
     current_matchup = @options.matchups.getByCid($($(event.target).parent().find('.btn-primary')).attr('id'))
+    secondary_matchup = @options.matchups.getByCid($($(event.target).parent().find('.btn-danger')).attr('id')) if @options.category.get('multi') == true
     @mark_matchup(@options.category,current_matchup) if current_matchup?
+    @mark_matchup(@options.category,secondary_matchup) if secondary_matchup?
   
   select_flavor: (event)->
     event.preventDefault()
@@ -87,15 +91,14 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
       200
           
   
-  add_markers: (target)->  
+  add_markers: (target)->
     level_holder= $("<div class='option_config'></div>")
-    visual_que= $('<div class= "option_marker"></div>')
     left_marker= $('<div class= "left_primary"></div>')
     right_marker= $('<div class= "right_primary"></div>')
-    visual_que.append(left_marker)
-    visual_que.append(right_marker)
-    level_holder.append(visual_que)
+    level_holder.append(left_marker)
+    level_holder.append(right_marker)
     target.append(level_holder)
+    console.log target
   
   option_scale_down: (event)->    
     target_option = $(event.currentTarget) 
