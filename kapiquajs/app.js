@@ -17,7 +17,6 @@ app.configure(function(){
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(app.router);
-  app.use(express.static(__dirname + '/public'));
 });
 
 app.configure('development', function(){
@@ -30,11 +29,16 @@ app.configure('production', function(){
 
 // Routes
 pg.connect(app.set('pg_connection'),function(err, client){
-  app.get('/', function(req, res){
+  app.get('/carts/:cart_id/cart_products', function(req, res){
+    console.log(req.param("cart_id"))
+    res.header('Access-Control-Allow-Origin', '*');
+    res.contentType('application/json');
     client.query('SELECT * FROM users LIMIT 1', function(err, result){
       res.send(_.first(result["rows"]));
     });
+    console.log('this happends after');
   });
+  
 });
 
 app.listen(3030, function(){
