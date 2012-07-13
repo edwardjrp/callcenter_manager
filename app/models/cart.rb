@@ -42,6 +42,9 @@ class Cart < ActiveRecord::Base
   belongs_to :user
   belongs_to :client
   belongs_to :store
+  has_many :cart_products
+  has_many :products, :through=> :cart_products
+  
   validates :user_id, presence: true
   
   def self.service_methods

@@ -13,5 +13,11 @@
 #
 
 class CartProduct < ActiveRecord::Base
+  validates :cart_id, :presence=>true
+  validates :product_id, :presence=>true
+  validates :quantity, :presence=>true
+  validates :quantity, :numericality=>true
+  belongs_to :cart
+  belongs_to :product
   attr_accessible :bind_id, :cart_id, :options, :product_id, :quantity
 end

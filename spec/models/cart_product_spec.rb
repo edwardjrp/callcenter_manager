@@ -15,5 +15,12 @@
 require 'spec_helper'
 
 describe CartProduct do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe "Validation" do
+    it{should validate_presence_of :cart_id}
+    it{should validate_presence_of :product_id}
+    it{should validate_presence_of :quantity}
+    it{should validate_numericality_of :quantity}
+    it{should belong_to :cart}
+    it{should belong_to :product}
+  end
 end

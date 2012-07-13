@@ -42,5 +42,7 @@ describe Cart do
     it{should belong_to :user}
     it{should belong_to :client}
     it{should belong_to :store}
+    it{should have_many :cart_products}
+    it{should have_many(:products).through(:cart_products)}
   end
 end

@@ -25,3 +25,5 @@
 - categories with unit types cant have options unset
 
 - categories with multi cant have options unit types
+
+- have to add discontinued to products to allow reimporting
