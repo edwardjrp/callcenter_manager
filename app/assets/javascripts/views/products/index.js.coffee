@@ -93,12 +93,18 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
   
   add_markers: (target)->
     level_holder= $("<div class='option_config'></div>")
-    left_marker= $('<div class= "left_primary"></div>')
-    right_marker= $('<div class= "right_primary"></div>')
-    level_holder.append(left_marker)
-    level_holder.append(right_marker)
+    if _.any($(@el).find('.specialties_container').find('a.btn-primary')) and not _.any($(@el).find('.specialties_container').find('a.btn-danger'))
+      left_marker= $('<div class= "left_primary"></div>')
+      level_holder.append(left_marker)
+      right_marker= $('<div class= "right_primary"></div>')
+      level_holder.append(right_marker)
+    else if not _.any($(@el).find('.specialties_container').find('a.btn-primary')) and _.any($(@el).find('.specialties_container').find('a.btn-danger'))
+      left_marker= $('<div class= "left_secondary"></div>')
+      level_holder.append(left_marker)
+      right_marker= $('<div class= "right_secondary"></div>')
+      level_holder.append(right_marker)
     target.append(level_holder)
-    console.log target
+    
   
   option_scale_down: (event)->    
     target_option = $(event.currentTarget) 
