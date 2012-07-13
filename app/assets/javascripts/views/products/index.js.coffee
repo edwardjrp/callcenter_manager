@@ -9,6 +9,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     'click .specialties':'select_specialty'
     'click .flavors':'select_flavor'
     'click .sizes':'select_size'
+    "click table.option_table td":'modify_option'
     'mouseenter .specialties': 'show_popover'
     'mouseenter .option_box': 'option_scale_up'
     'mouseleave .option_box': 'option_scale_down'
@@ -81,7 +82,18 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
           
  
              
-
+  modify_option: (event)->
+    target = $(event.currentTarget)
+    target.removeClass('primary_selected').css('background-color','transparent') if  target.hasClass('primary_selected')
+    target.removeClass('secondary_selected').css('background-color','transparent') if  target.hasClass('secondary_selected') if @options.category.get('multi') == true
+    primary_prensent = _.any($(@el).find('.specialties_container').find('.btn-primary'))
+    secondary_prensent = _.any($(@el).find('.specialties_container').find('.btn-danger')) if @options.category.get('multi') == true
+    console.log primary_prensent
+    target.css('background-color', '#0073CC').addClass('primary_selected') if target.hasClass('options_left') and primary_prensent? and primary_prensent == true
+    target.css('background-color', '#0073CC').addClass('primary_selected') if target.hasClass('options_rigth') unless secondary_prensent? and secondary_prensent == true
+    if @options.category.get('multi') == true
+      target.css('background-color', '#DA4E49').addClass('secondary_selected') if target.hasClass('options_rigth') and secondary_prensent? and secondary_prensent == true
+      target.css('background-color', '#DA4E49').addClass('secondary_selected') if target.hasClass('options_left') unless primary_prensent? and primary_prensent == true      
       
   show_popover: (event)->
     target_specialty = $(event.target)
