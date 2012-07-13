@@ -18,7 +18,7 @@
         %th
           =link_to category.multi.to_s, nil,:class=>"btn #{set_state_class category.multi?} change_state_multi"
         %th
-          =link_to category.multi.to_s, nil,:class=>"btn #{set_state_class category.multi?} change_state_hidden"
+          =link_to category.hidden.to_s, nil,:class=>"btn #{set_state_class category.hidden?} change_state_hidden"
 
         %th
           = select_tag "base_product_#{category.id}",options_for_select(category.products.are_main.map{|p| [p.productname,p.id]}, category.base_product), :data=>{'category-id'=> category.id}, :prompt=>'Seleccione un producto'

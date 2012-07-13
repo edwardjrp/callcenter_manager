@@ -1,7 +1,9 @@
 <%if @collection.models:%>
   <ul class="nav nav-tabs">
     <%for category in @collection.models:%>
-      <li><a href="#<%= category.get('name')%>" data-toggle="tab"><%= category.get('name')%></a></li>
+      <%unless category.get('hidden') == true:%>
+        <li><a href="#<%= category.get('name')%>" data-toggle="tab"><%= category.get('name')%></a></li>
+      <%end%>
     <%end%>
   </ul>
   <div class="tab-content">

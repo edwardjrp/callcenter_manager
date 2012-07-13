@@ -20,10 +20,10 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
   select_specialty: (event)->
     event.preventDefault()
     current_matchup = @options.matchups.getByCid($($(event.target).parent().find('.btn-primary')).attr('id'))
-    @unmark_matchup(_.first(@collection).get('category'),current_matchup) if current_matchup?
+    @unmark_matchup(@options.category,current_matchup) if current_matchup?
     @selection_marker($(event.target))
     current_matchup = @options.matchups.getByCid($($(event.target).parent().find('.btn-primary')).attr('id'))
-    @mark_matchup(_.first(@collection).get('category'),current_matchup) if current_matchup?
+    @mark_matchup(@options.category,current_matchup) if current_matchup?
   
   select_flavor: (event)->
     event.preventDefault()
@@ -36,11 +36,21 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
       
   selection_marker: (target)->
     if _.any(target.parent().find('.btn-primary'))
-      target_to_clear = target.parent().find('.btn-primary')
-      target_to_clear.removeClass('btn-primary')
-      target.addClass('btn-primary') unless ($(target_to_clear)[0] == target[0])
+      unless @options.category.get('multi') == true
+        target_to_clear = target.parent().find('.btn-primary')
+        target_to_clear.removeClass('btn-primary')
+        target.addClass('btn-primary') unless ($(target_to_clear)[0] == target[0])
+      else
+        unless target.hasClass('btn-primary')
+          target_to_clear = target.parent().find('.btn-danger')
+          target_to_clear.removeClass('btn-danger')
+          target.addClass('btn-danger') unless ($(target_to_clear)[0] == target[0])
+        else
+          target.removeClass('btn-primary')
+          target.removeClass('btn-danger')
     else
-      target.addClass('btn-primary')
+      target.addClass('btn-primary') unless target.hasClass('btn-danger')
+      target.removeClass('btn-danger') if target.hasClass('btn-danger')
     
   
   
