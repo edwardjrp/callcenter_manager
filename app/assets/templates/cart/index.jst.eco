@@ -1,4 +1,12 @@
 <div class='panel'>
   <h3>Orden actual</h3>
-  <div class='content'></div>
+  <div class='content'>
+    <%if _.any(@model.get('cart_products')):%>
+      <%for cart_product in @model.get('cart_products'):%>
+        <%=cart_product.get('product').get('productname')%>
+      <%end%>
+    <%else:%>
+      No hay productos en la orden
+    <%end%>
+  </div>
 </div>
