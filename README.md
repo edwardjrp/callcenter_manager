@@ -19,3 +19,9 @@
 - add popover on client create
 
 - <del>test for address presence</del>
+
+- categories with unit types cant have multi
+
+- categories with unit types cant have options unset
+
+- categories with multi cant have options unit types
