@@ -42,12 +42,13 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
       quantity = reverse_option_map[$(op).find('.primary_selected').length]
       quantity = (quantity/2) unless _.any($(@el).find('.specialties_container').find('.btn-danger'))
       build_options.push("#{quantity}#{productcode}")
-    console.log build_options
-    
+    cart_product = new Kapiqua25.Models.CartProduct()
+    cart_product.set({cart: @model, quantity: '1',product: _.first(product), options: build_options.join(',') })
+    cart_product.save()
     # $.ajax
     #   type: 'POST'
     #   url: 'http://localhost:3030/cart_products'
-    #   data: {cart_product: {cart_id: '1', quantity: '1',product_id:'1', options:'C' }}
+    #   data: cart_product.toJSON()
     #   beforeSend: (xhr)->
     #     xhr.setRequestHeader("Accept", "application/json")
     #   success: (res)->

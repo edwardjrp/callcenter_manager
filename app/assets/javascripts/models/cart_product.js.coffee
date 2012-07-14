@@ -1,6 +1,33 @@
 class Kapiqua25.Models.CartProduct extends Backbone.RelationalModel
   url: ()->
     "http://localhost:3030/cart_products"
+  
+  sync: (method, model, options)->
+    methodMap = {'create': 'POST','update': 'PUT','delete': 'DELETE','read':   'GET'}
+    
+    type = methodMap[method]
+    
+    params = {type: type, dataType: 'json'}
+    
+    params.url = this.url()
+    
+    if ((not options.data?) && model? and (method == 'create' || method == 'update'))
+      params.contentType = 'application/json'
+      params.data = JSON.stringify(model)
+    
+    if ( params.type != 'GET' and !Backbone.emulateJSON)
+      params.processData = false
+      
+    $.ajax
+      type: type
+      url: params.url
+      data: params.data
+      beforeSend: (xhr)->
+        xhr.setRequestHeader("Accept", params.contentType)
+      success: (res)->
+        console.log res
+  
+  
   relations:[
       type: Backbone.HasOne
       key: 'product'
