@@ -30,7 +30,7 @@
   <div class='options_container left-margin-1'>
     <%for side in @options.sides:%>
       <div class='outbox'>
-         <div class ='option_box bottom-margin-1 options' id="<%=side.get('category').get('name')%>_<%=side.get('productcode')%>" >
+         <div class ='option_box bottom-margin-1 options' id="<%=side.get('category').get('name')%>_<%=side.get('productcode')%>" data-productcode="<%=side.get('productcode')%>">
            <div class='option_name'><%=side.get('productname')%></div>
              <%unless @options.category.get('type_unit') == true:%>
                <table class='option_table'>

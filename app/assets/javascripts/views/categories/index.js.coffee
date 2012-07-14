@@ -9,7 +9,7 @@ class Kapiqua25.Views.CategoriesIndex extends Backbone.View
       unless category.get('hidden') == true
         main_products = @get_main_products(category.get('products'))
         option_products = @get_option_products(category.get('products')) if category.get('has_options')
-        @product_views["#{category.get('name')}"] = new Kapiqua25.Views.ProductsIndex(collection: main_products, category: category, sides: option_products, matchups: @create_matchups(main_products, option_products), flavors:@get_flavors(main_products), sizes: @get_sizes(main_products) )
+        @product_views["#{category.get('name')}"] = new Kapiqua25.Views.ProductsIndex(collection: main_products, model: @model, category: category, sides: option_products, matchups: @create_matchups(main_products, option_products), flavors:@get_flavors(main_products), sizes: @get_sizes(main_products) )
   
   events: ->
     'click .nav-tabs a': 'mark_base'

@@ -19,25 +19,43 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     $(@el).html(@template(collection: @collection, options:@options))
     this
   
-    #  cart_id    :integer
-    #  quantity   :decimal(, )
-    #  product_id :integer
-    #  bind_id    :integer
-    #  options    :string(255)  
   send_test: (event)->
     event.preventDefault()
-    $.ajax
-      type: 'POST'
-      url: 'http://localhost:3030/cart_products'
-      data: {cart_product: {cart_id: '1', quantity: '1',product_id:'1', options:'C' }}
-      beforeSend: (xhr)->
-        xhr.setRequestHeader("Accept", "application/json")
-      success: (res)->
-        console.log res
+    #build_primage
+    options = @options.matchups.getByCid($($(@el).find('.specialties_container').find('.btn-primary')).attr('id'))?.get('options') 
+    flavor = $($(@el).find('.flavors_container').find('.btn-primary')).text()
+    size = $($(@el).find('.sizes_container').find('.btn-primary')).text()
+    products = new Kapiqua25.Collections.Products()
+    products.reset(@collection)
+    if (flavor? and size?) and (flavor != '' and size != '')
+      if options?
+        product = products.where({options: options, flavorcode: flavor, sizecode:size})
+      else
+        product = products.where({flavorcode: flavor, sizecode:size})
+    else
+      window.show_alert('La selección no esta completa', 'alert')
+    selected_options = $(@el).find('.options_container').find('.primary_selected').closest('.option_box')
+    build_options = []
+    reverse_option_map = {1:'0.75', 2:'1', 3:'1.5', 4:'2', 5:'3'}
+    _.each selected_options, (op)->
+      productcode = $(op).data('productcode')
+      quantity = reverse_option_map[$(op).find('.primary_selected').length]
+      quantity = (quantity/2) unless _.any($(@el).find('.specialties_container').find('.btn-danger'))
+      build_options.push("#{quantity}#{productcode}")
+    console.log build_options
+    
+    # $.ajax
+    #   type: 'POST'
+    #   url: 'http://localhost:3030/cart_products'
+    #   data: {cart_product: {cart_id: '1', quantity: '1',product_id:'1', options:'C' }}
+    #   beforeSend: (xhr)->
+    #     xhr.setRequestHeader("Accept", "application/json")
+    #   success: (res)->
+    #     console.log res
     
   select_specialty: (event)->
     event.preventDefault()
-    @selection_marker($(event.target))
+    @selection_marker($(event.currentTarget))
     unless @options.category.get('type_unit') == true
       primary_matchup = @options.matchups.getByCid($($(event.target).parent().find('.btn-primary')).attr('id'))
       secondary_matchup = @options.matchups.getByCid($($(event.target).parent().find('.btn-danger')).attr('id')) if @options.category.get('multi') == true
@@ -60,7 +78,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
       
   selection_marker: (target)->
     if _.any(target.parent().find('.btn-primary'))
-      unless @options.category.get('multi') == true
+      unless @options.category.get('multi') == true and (target.parent()[0] == $(@el).find('.specialties_container')[0])
         target_to_clear = target.parent().find('.btn-primary')
         target_to_clear.removeClass('btn-primary')
         target.addClass('btn-primary') unless ($(target_to_clear)[0] == target[0])
@@ -74,7 +92,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
           target.removeClass('btn-danger')
     else
       target.addClass('btn-primary') unless target.hasClass('btn-danger')
-      target.removeClass('btn-danger') if target.hasClass('btn-danger')
+      target.removeClass('btn-danger') if target.hasClass('btn-danger') and (target.parent()[0] == $(@el).find('.specialties_container')[0])
     
   
   

@@ -9,7 +9,7 @@ class Kapiqua25.Routers.Categories extends Backbone.Router
     @cart.set($('#cart').data('cart'))
   
   builder: ->
-    categories_view = new Kapiqua25.Views.CategoriesIndex(collection: @categories)
+    categories_view = new Kapiqua25.Views.CategoriesIndex(collection: @categories, model:@cart)
     cart_view = new Kapiqua25.Views.CartIndex(model:@cart)
     $('#desk').html(categories_view.render().el)
     $('#cart').html(cart_view.render().el)

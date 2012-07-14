@@ -1,4 +1,6 @@
 class Kapiqua25.Models.CartProduct extends Backbone.RelationalModel
+  url: ()->
+    "http://localhost:3030/cart_products"
   relations:[
       type: Backbone.HasOne
       key: 'product'
@@ -8,5 +10,8 @@ class Kapiqua25.Models.CartProduct extends Backbone.RelationalModel
         key: 'cart_products'
         includeInJSON: 'id'
     ]
-    
+    defaults:
+      options: ''
+      updated_at: new Date()
+      
 Kapiqua25.Models.CartProduct.setup()

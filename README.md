@@ -27,3 +27,5 @@
 - categories with multi cant have options unit types
 
 - have to add discontinued to products to allow reimporting
+
+- regex that parses the options is outdated [WLR] is now [W12]
