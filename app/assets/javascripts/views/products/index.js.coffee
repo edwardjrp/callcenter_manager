@@ -18,13 +18,18 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
   render: ->
     $(@el).html(@template(collection: @collection, options:@options))
     this
-    
+  
+    #  cart_id    :integer
+    #  quantity   :decimal(, )
+    #  product_id :integer
+    #  bind_id    :integer
+    #  options    :string(255)  
   send_test: (event)->
     event.preventDefault()
     $.ajax
       type: 'POST'
-      url: 'http://localhost:3030/carts/43/cart_products'
-      data: {test: 'Hello'}
+      url: 'http://localhost:3030/cart_products'
+      data: {cart_product: {cart_id: '1', quantity: '1',product_id:'1', options:'C' }}
       beforeSend: (xhr)->
         xhr.setRequestHeader("Accept", "application/json")
       success: (res)->

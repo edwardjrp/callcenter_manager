@@ -6,6 +6,8 @@
 var express = require('express')
   , _ = require('underscore')
   , pg = require('pg')
+  , Builder= require('./db/query_builder')
+  , qbuilder = new Builder()
   , request = require('request');
 
 var app = module.exports = express.createServer();
@@ -29,24 +31,18 @@ app.configure('production', function(){
 
 // Routes
 pg.connect(app.set('pg_connection'),function(err, client){
-  app.get('/carts/:cart_id/cart_products', function(req, res){
-    console.log(req.param("cart_id"))
+  app.post('/cart_products', function(req, res){
     res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.contentType('application/json');
-    client.query('SELECT * FROM users LIMIT 1', function(err, result){
-      res.send(_.first(result["rows"]));
-    });
-    console.log('this happends after');
-  });
-  
-  app.post('/carts/:cart_id/cart_products', function(req, res){
-    console.log(req.body)
-    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
-    res.contentType('application/json');
+    cart_product = req.body['cart_product']
+    fields = _.keys(cart_product)
+    values = _.values(cart_product)
     client.query('SELECT * FROM carts LIMIT 1', function(err, result){
       res.send(_.first(result["rows"]));
+      console.log(qbuilder.create('cart_products', cart_product));
+      console.log("fields"+ fields);
+      console.log("values"+ values)
     });
-    console.log('this happends after');
   });
   
 });
