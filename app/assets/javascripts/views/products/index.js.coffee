@@ -44,15 +44,8 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
       build_options.push("#{quantity}#{productcode}")
     cart_product = new Kapiqua25.Models.CartProduct()
     cart_product.set({cart: @model, quantity: '1',product: _.first(product), options: build_options.join(',') })
-    cart_product.save()
-    # $.ajax
-    #   type: 'POST'
-    #   url: 'http://localhost:3030/cart_products'
-    #   data: cart_product.toJSON()
-    #   beforeSend: (xhr)->
-    #     xhr.setRequestHeader("Accept", "application/json")
-    #   success: (res)->
-    #     console.log res
+    result = cart_product.save()
+    console.log result
     
   select_specialty: (event)->
     event.preventDefault()

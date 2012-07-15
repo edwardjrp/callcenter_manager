@@ -24,8 +24,10 @@ class Kapiqua25.Models.CartProduct extends Backbone.RelationalModel
       data: params.data
       beforeSend: (xhr)->
         xhr.setRequestHeader("Accept", params.contentType)
-      success: (res)->
-        console.log res
+      success: (response)->
+        response
+      error: (response)->
+        response
   
   
   relations:[
