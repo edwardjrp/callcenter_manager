@@ -45,7 +45,8 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     cart_product = new Kapiqua25.Models.CartProduct()
     cart_product.set({cart: @model, quantity: '1',product: _.first(product), options: build_options.join(',') })
     result = cart_product.save()
-    console.log result
+    @model.set($.parseJSON(result.responseText))
+    console.log @model
     
   select_specialty: (event)->
     event.preventDefault()

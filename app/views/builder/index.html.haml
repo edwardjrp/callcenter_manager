@@ -1,5 +1,5 @@
 #surface.row{data: { categories: Category.all.to_json( include: {products: {} })   }}
   #desk.span9
     Loading assets
-  #cart.span3{data: { cart: current_cart.to_json(include: {cart_products: { include: { products: {}}}})   }}
+  #cart.span3{data: { cart: current_cart.to_json(include: {cart_products: { include: { product: {}}}})   }}
     loading cart
