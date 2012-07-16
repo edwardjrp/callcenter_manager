@@ -26,13 +26,13 @@ Spork.prefork do
   # in spec/support/ and its subdirectories.
   Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
   
-  VCR.configure do |c|
-    c.cassette_library_dir = 'spec/support/cassettes'
-    # c.allow_http_connections_when_no_cassette = true
-    c.hook_into :webmock
-    c.ignore_localhost = true
-    c.configure_rspec_metadata!
-  end
+  # VCR.configure do |c|
+  #   c.cassette_library_dir = 'spec/support/cassettes'
+  #   # c.allow_http_connections_when_no_cassette = true
+  #   c.hook_into :webmock
+  #   c.ignore_localhost = true
+  #   c.configure_rspec_metadata!
+  # end
 
   RSpec.configure do |config|
     

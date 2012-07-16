@@ -5,7 +5,7 @@ describe "Home::Indices" do
   describe "when visiting the index path" do
     context "when the user is logged" do
       before(:each) do
-        login(FactoryGirl.create(:user))
+        login(FactoryGirl.create(:user, :roles=>[:operator]))
         @client = FactoryGirl.create(:client, first_name: 'tester')
         @phone = FactoryGirl.create :phone, client: @client, number: '8095551234', ext: '99'
         # 10.times{FactoryGirl.create(:client)}
@@ -29,7 +29,7 @@ describe "Home::Indices" do
     context "When search for a client" do
        before(:each)do
          Capybara.current_driver = :selenium_chrome
-         login(FactoryGirl.create(:user))
+         login(FactoryGirl.create(:user, :roles=>[:operator]))
          @client = FactoryGirl.create(:client, first_name: 'tester')
          @client2 = FactoryGirl.create(:client, first_name: 'another')
          @phone = FactoryGirl.create :phone, client: @client, number: '8095551234', ext: nil

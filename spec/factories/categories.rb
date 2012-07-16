@@ -2,11 +2,10 @@
 
 FactoryGirl.define do
   factory :category do
-    name "MyString"
+    sequence(:name){|c| "test_category_#{c}"}
     has_options false
     type_unit false
     multi false
     hidden false
-    base_product 1
   end
 end

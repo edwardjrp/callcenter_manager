@@ -7,7 +7,7 @@ require 'csv'
 # #
 # #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 # #   Mayor.create(name: 'Emanuel', city: cities.first)
-FactoryGirl.create :user, :password=>'please', :password_confirmation=>'please', :username=>'test'
+FactoryGirl.create :user, :password=>'please', :password_confirmation=>'please', :username=>'test', :roles=> [:operator]
 FactoryGirl.create :user, :password=>'please', :password_confirmation=>'please', :username=>'admin', :roles=> [:admin]
 100.times do
   FactoryGirl.create :phone
@@ -89,7 +89,7 @@ if File.exists?(temp_products_file)
   products_table = doc.css('Products').first.inner_text.gsub(/"/,'&quot;')
   CSV.parse(products_table, {:col_sep=>"\t", :headers=>true}) do |row|
     Product.create do |product|
-      puts "#{row['CategoryCode']} > #{row['ProductCode']} - #{row['ProductName']}"
+      # puts "#{row['CategoryCode']} > #{row['ProductCode']} - #{row['ProductName']}"
       product.category_id = Category.find_or_create_by_name(row['CategoryCode']).id
       product.productcode = row['ProductCode']
       product.productname = row['ProductName']
