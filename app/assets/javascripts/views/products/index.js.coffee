@@ -9,7 +9,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     'click .specialties':'select_specialty'
     'click .flavors':'select_flavor'
     'click .sizes':'select_size'
-    'click .btn-success':'send_test'
+    'click .btn-success':'add_to_cart'
     "click table.option_table td":'modify_option'
     'mouseenter .specialties': 'show_popover'
     'mouseenter .option_box': 'option_scale_up'
@@ -19,7 +19,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     $(@el).html(@template(collection: @collection, options:@options))
     this
   
-  send_test: (event)->
+  add_to_cart: (event)->
     event.preventDefault()
     #build_primage
     options = @options.matchups.getByCid($($(@el).find('.specialties_container').find('.btn-primary')).attr('id'))?.get('options') 
@@ -36,7 +36,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
       window.show_alert('La selección no esta completa', 'alert')
     selected_options = $(@el).find('.options_container').find('.primary_selected').closest('.option_box')
     build_options = []
-    reverse_option_map = {1:'0.75', 2:'1', 3:'1.5', 4:'2', 5:'3'}
+    reverse_option_map = {1:'0.75', 2:'', 3:'1.5', 4:'2', 5:'3'}
     _.each selected_options, (op)->
       productcode = $(op).data('productcode')
       quantity = reverse_option_map[$(op).find('.primary_selected').length]
