@@ -1,3 +1,47 @@
 // Place all the styles related to the carts controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+$primary-color:#A9C4F5;
+ul#current_carts_items{
+	padding:0;
+	margin:0px;
+	border: #BFD3F8 solid 1px;
+	background:white;
+	@include box-sizing(border-box);
+	list-style:none;
+	li{
+		margin-top:10px;
+		input{
+			width:17px;
+		}
+		a{
+			margin-top:10px;
+			margin-left:2px;
+			margin-bottom:4px;
+		}
+		.item{
+
+			border: #92B4F2 solid 1px;
+			background:#A9C4F5;
+			padding:5px;
+			.remove_and_pricing{
+			 display:table;
+			.item_price{
+				display:inline;
+				margin-right:10px;
+			}	
+			}
+		}
+		p{
+			border: #92B4F2 solid 1px;
+			background:#DFE9FB;
+			display:none;
+			margin-top:10px;
+			padding:5px;
+
+		}
+		.edit_options{
+			display:none;
+		}
+	}
+}

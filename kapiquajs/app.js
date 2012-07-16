@@ -66,11 +66,11 @@ app.post('/cart_products', function(req, res){
       
     })
     get_current_cart.on('error',function(current_cart_error){
-          console.log(current_cart_error);
+          res.send(current_cart_error);
     })
   });
   save_cart_product.on('error', function(cart_product_error) {
-      console.log(JSON.stringify(cart_product_error.message));
+      res.send(JSON.stringify(cart_product_error.message));
   });
 })
 

@@ -2,9 +2,14 @@
   <h3>Orden actual</h3>
   <div class='content'>
     <%if _.any(@model.get('cart_products').models):%>
-      <ul>
+      <ul id="current_carts_items">
         <%for cart_product in @model.get('cart_products').models:%>
-          <li><%=cart_product.get('product').get('productname')%></li>
+          <li>
+            <div class='item'>
+              <input name="quantity" type="text" value="1">
+              <%-cart_product.get('product').get('productname')%>
+            </div>
+          </li>
         <%end%>
       </ul>
     <%else:%>
