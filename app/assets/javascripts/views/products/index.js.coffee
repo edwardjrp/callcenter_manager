@@ -22,7 +22,6 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
   
   add_to_cart: (event)->
     event.preventDefault()
-    #build_primage
     options = @options.matchups.getByCid($($(@el).find('.specialties_container').find('.btn-primary')).attr('id'))?.get('options') 
     flavor = $($(@el).find('.flavors_container').find('.btn-primary')).text()
     size = $($(@el).find('.sizes_container').find('.btn-primary')).text()
@@ -64,7 +63,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     else
       if options?
         window.show_alert('No existe el producto con el flavorcode seleccionado', 'alert') if _.any( products.where({options: options,sizecode:size}))
-        window.show_alert('No existe el producto con el sizecode seleccionado', 'alert') if _.any(products.where({options: options,flavorcode: flavor}))
+        window.show_alert('No existe el producto con el sizecode seleccionado', 'alert') if _.any( products.where({options: options,flavorcode: flavor}))
       else
         window.show_alert('No existe el producto con el flavorcode seleccionado', 'alert') if _.any(products.where({sizecode:size}))
         window.show_alert('No existe el producto con el sizecode seleccionado', 'alert') if _.any(products.where({flavorcode: flavor}))
