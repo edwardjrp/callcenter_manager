@@ -8,7 +8,7 @@ class Kapiqua25.Views.CategoriesIndex extends Backbone.View
     _.each @collection.models, (category) =>
       unless category.get('hidden') == true
         main_products = @get_main_products(category.get('products'))
-        option_products = @get_option_products(category.get('products')) if category.get('has_options')
+        option_products = @get_option_products(category.get('products'))# if category.get('has_options')
         @product_views["#{category.get('name')}"] = new Kapiqua25.Views.ProductsIndex(collection: main_products, model: @model, category: category, sides: option_products, matchups: @create_matchups(main_products, option_products), flavors:@get_flavors(main_products), sizes: @get_sizes(main_products) )
   
   events: ->
@@ -59,7 +59,7 @@ class Kapiqua25.Views.CategoriesIndex extends Backbone.View
     product_options = []
     if _.any(recipe.split(','))
       _.each _.compact(recipe.split(',')), (code) ->
-        core_match = code.match(/^([0-9]{0,2}\.?[0|7|5]{0,2})([A-Z]{1,}[a-z]{0,})(?:\-([LRW]))?/)
+        core_match = code.match(/^([0-9]{0,2}\.?[0|7|5]{0,2})([A-Z]{1,}[a-z]{0,})(?:\-([L12]))?/)
         if core_match?
           core_match[1] = '1' if  core_match[1]? and core_match[1] == ""
           current_quantity = core_match[1]
@@ -68,6 +68,7 @@ class Kapiqua25.Views.CategoriesIndex extends Backbone.View
           product_option = {quantity: current_quantity, product: current_product, part: current_part}
           product_options.push product_option
     product_options
+    
     
   niffty_opions: (parser_option) ->
     presentation = _.map parser_option, (option) ->

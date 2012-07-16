@@ -2,18 +2,18 @@
 
   var methods = {
 	  alpha : function(){
-      $(this).keypress(function(event){
+      $(this).on('keypress', function(event){
 					if(event.which >= 97 && event.which <= 122) event.preventDefault();
 			});
-			$(this).blur(function(){
+			$(this).on('blur', function(){
 				  if($(this).val().match(/[a-z|A-Z]/g)) $(this).val('');
 			});
 	  },
 		spaces : function(){
-      $(this).keypress(function(event){
+      $(this).on('keypress', function(event){
 					if(event.which == 9 || event.which == 32) event.preventDefault();
 			});
-			$(this).blur(function(){
+			$(this).on('blur', function(){
 				  if($(this).val().match(/\s+/g)) $(this).val('');
 			});
 		}

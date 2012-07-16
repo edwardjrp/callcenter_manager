@@ -7,4 +7,5 @@ class Kapiqua25.Views.CartIndex extends Backbone.View
   
   render: ->
     $(@el).html(@template(model: @model))
+    $(@el).find('input').restric('alpha').restric('spaces')
     this

@@ -35,7 +35,7 @@ ActiveRecord::Schema.define(:version => 20120712002626) do
 
   create_table "cart_products", :force => true do |t|
     t.integer  "cart_id"
-    t.decimal  "quantity"
+    t.integer  "quantity"
     t.integer  "product_id"
     t.integer  "bind_id"
     t.string   "options"

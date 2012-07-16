@@ -17,6 +17,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     
   render: ->
     $(@el).html(@template(collection: @collection, options:@options))
+    $(@el).find('input').restric('alpha').restric('spaces')
     this
   
   add_to_cart: (event)->
@@ -35,6 +36,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     else
       window.show_alert('La selección no esta completa', 'alert')
     selected_options = $(@el).find('.options_container').find('.primary_selected').closest('.option_box')
+    selected_quantity= $(@el).find('.cart_product_quantity').val() || 1
     build_options = []
     reverse_option_map = {1:'0.75', 2:'', 3:'1.5', 4:'2', 5:'3'}
     _.each selected_options, (op)->
@@ -43,7 +45,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
       quantity = (quantity/2) unless _.any($(@el).find('.specialties_container').find('.btn-danger'))
       build_options.push("#{quantity}#{productcode}")
     cart_product = new Kapiqua25.Models.CartProduct()
-    cart_product.set({cart: @model, quantity: '1',product: _.first(product), options: build_options.join(',') })
+    cart_product.set({cart: @model, quantity: selected_quantity,product: _.first(product), options: build_options.join(',') })
     result = cart_product.save()
     @model.set($.parseJSON(result.responseText))
     @model.trigger('change')

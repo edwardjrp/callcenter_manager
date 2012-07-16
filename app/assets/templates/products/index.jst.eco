@@ -1,4 +1,5 @@
 <div class='adder'>
+  <input type='text' class='cart_product_quantity left-margin-1' value='1'></input>
   <input class="btn btn-success" type="button" value="Agregar">
 </div>
 <%if _.any(@options.matchups.models):%>

@@ -13,7 +13,7 @@ class Kapiqua25.Models.CartProduct extends Backbone.RelationalModel
     
     if ((not options.data?) && model? and (method == 'create' || method == 'update'))
       params.contentType = 'application/json'
-      params.data = this.toJSON()#JSON.stringify(model)
+      params.data = this.toJSON()
     
     if ( params.type != 'GET' and !Backbone.emulateJSON)
       params.processData = false
@@ -40,6 +40,7 @@ class Kapiqua25.Models.CartProduct extends Backbone.RelationalModel
     ]
   defaults:
     options: ''
+    quantity: 1
     updated_at: new Date()
       
 Kapiqua25.Models.CartProduct.setup()

@@ -29,3 +29,5 @@
 - have to add discontinued to products to allow reimporting
 
 - regex that parses the options is outdated [WLR] is now [W12]
+
+- cartproduct quantity is now decimal and should be integer

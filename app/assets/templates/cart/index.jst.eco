@@ -6,7 +6,7 @@
         <%for cart_product in @model.get('cart_products').models:%>
           <li>
             <div class='item'>
-              <input name="quantity" type="text" value="1">
+              <input name="quantity" type="text" value="<%=cart_product.get('quantity')%>">
               <%-cart_product.get('product').get('productname')%>
             </div>
           </li>
