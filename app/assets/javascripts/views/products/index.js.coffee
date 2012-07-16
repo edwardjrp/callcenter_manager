@@ -35,20 +35,39 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
         product = products.where({flavorcode: flavor, sizecode:size})
     else
       window.show_alert('La selección no esta completa', 'alert')
-    selected_options = $(@el).find('.options_container').find('.primary_selected').closest('.option_box')
     selected_quantity= $(@el).find('.cart_product_quantity').val() || 1
-    build_options = []
-    reverse_option_map = {1:'0.75', 2:'', 3:'1.5', 4:'2', 5:'3'}
-    _.each selected_options, (op)->
-      productcode = $(op).data('productcode')
-      quantity = reverse_option_map[$(op).find('.primary_selected').length]
-      quantity = (quantity/2) unless _.any($(@el).find('.specialties_container').find('.btn-danger'))
-      build_options.push("#{quantity}#{productcode}")
-    cart_product = new Kapiqua25.Models.CartProduct()
-    cart_product.set({cart: @model, quantity: selected_quantity,product: _.first(product), options: build_options.join(',') })
-    result = cart_product.save()
-    @model.set($.parseJSON(result.responseText))
-    @model.trigger('change')
+    #  if type_unit false
+    unless @options.category.get('type_unit') == true
+      # this does not parses the sides yet
+      selected_options = $(@el).find('.options_container').find('.primary_selected').closest('.option_box')
+      build_options = []
+      reverse_option_map = {1:'0.75', 2:'', 3:'1.5', 4:'2', 5:'3'}
+      _.each selected_options, (op)->
+        productcode = $(op).data('productcode')
+        quantity = reverse_option_map[$(op).find('.primary_selected').length]
+        quantity = (quantity/2) unless _.any($(@el).find('.specialties_container').find('.btn-danger'))
+        build_options.push("#{quantity}#{productcode}")
+    else
+      selected_options = $(@el).find('.options_container').find('.unit_option_setter')
+      build_options=[]
+      _.each selected_options, (op)->
+        productcode = $(op).closest('.option_box').data('productcode')
+        quantity = $(op).val()
+        build_options.push("#{quantity}#{productcode}")
+    #  end type_unit false
+    if _.first(product)?
+      cart_product = new Kapiqua25.Models.CartProduct()
+      cart_product.set({cart: @model, quantity: selected_quantity,product: _.first(product), options: build_options.join(',') })
+      result = cart_product.save()
+      @model.set($.parseJSON(result.responseText))
+      @model.trigger('change')
+    else
+      if options?
+        window.show_alert('No existe el producto con el flavorcode seleccionado', 'alert') if _.any( products.where({options: options,sizecode:size}))
+        window.show_alert('No existe el producto con el sizecode seleccionado', 'alert') if _.any(products.where({options: options,flavorcode: flavor}))
+      else
+        window.show_alert('No existe el producto con el flavorcode seleccionado', 'alert') if _.any(products.where({sizecode:size}))
+        window.show_alert('No existe el producto con el sizecode seleccionado', 'alert') if _.any(products.where({flavorcode: flavor}))
     
   select_specialty: (event)->
     event.preventDefault()

@@ -44,7 +44,7 @@
                  </tbody>
                </table>
              <%else:%>
-                <input type='text' class='unit_option_setter'></input>
+                <input type='text' class='unit_option_setter' value='0'></input>
              <%end%>
          </div>
       </div>

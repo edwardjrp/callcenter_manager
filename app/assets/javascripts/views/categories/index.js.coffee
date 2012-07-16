@@ -44,6 +44,7 @@ class Kapiqua25.Views.CategoriesIndex extends Backbone.View
     
   create_matchups: (products, options)->
     matchups = new Kapiqua25.Collections.Matchups()
+    # if there are no options it should group by flavorcode
     _.each @group_by_options(products), (group, key) =>
         name = @get_presentation_name(group)
         matchups.add {name:  name, options: key, niffty_options: @niffty_opions(@parse_options(key,options)), parsed_options:@parse_options(key,options), is_base: @get_base_matchup(group)?} if name !='' and key != 'null'
