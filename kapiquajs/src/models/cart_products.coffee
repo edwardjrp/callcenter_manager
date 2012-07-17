@@ -81,7 +81,9 @@ class CartProduct
     @validate.numericalityOf('product_id')
     @validate.presenceOf('quantity')
     @validate.numericalityOf('quantity')
-    _.isEmpty(@errors)
+    result = _.isEmpty(@errors)
+    @errors = []
+    result
   
   create: (err_cb, cb)->
     return err_cb(@errors) unless @isValid()
@@ -113,6 +115,16 @@ class CartProduct
       CartProduct.findOne(cart_product.id,err_cb, cb)
     updateOne.on 'error', (error)->
       err_cb(error)
+
+  destroy: (err_cb, cb)->
+    throw 'No values given' if _.isEmpty(@attributes)
+    throw 'Object is new' unless @id? and _.isNumber(@id) and @id > 0
+    destroyOne = CartProduct.getConnection().query("DELETE FROM #{CartProduct.getTableName()} WHERE id = $1", [@id])
+    destroyOne.on 'end', (result)=>
+      this.id = null
+      cb(result.rowCount)
+    destroyOne.on 'error', (error)->
+      err_cb(error)
     
       
    
@@ -130,8 +142,6 @@ CartProduct.count(err_handler, success_handler)
 # 
 # cp2.create(err_handler, success_handler)
 
-# CartProduct.findOne 1, err_handler, (cp) ->
-#   cp.options = 'maxxmony'
-#   # console.log cp.isDirty()
-#   cp.update(err_handler, success_handler)
+CartProduct.findOne 13, err_handler, (cp) ->
+  cp.destroy(err_handler, success_handler)
 
