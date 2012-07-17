@@ -3,20 +3,20 @@ pg = require('pg')
 util = require('util')
 Config = require('../config')
 Validate = require('./validator')
-ModelBase = require('./model_base')
 
 class CartProduct
   constructor: (@attributes)->
     throw "Wrong initialization types or null" unless _.isObject(@attributes)
     this['validate'] = new Validate(this)
     this['errors'] = []
-    _.each _.keys(attributes), (key) =>
-      this["#{key}"] = attributes["#{key}"]
+    @setAttributes()
           
   @getConnection = ->
     Config.setup() unless Config.getConnection()?
     Config.getConnection()
 
+  
+  
           
   @setTableName = (name)->
     @tableName = name
@@ -24,14 +24,6 @@ class CartProduct
   @getTableName = ()->
     @tableName
     
-  isValid: ()->
-    @validate.presenceOf('cart_id')
-    @validate.numericalityOf('cart_id')
-    @validate.presenceOf('product_id')
-    @validate.numericalityOf('product_id')
-    @validate.presenceOf('quantity')
-    @validate.numericalityOf('quantity')
-    _.isEmpty(@errors)
   
   @all: (err_cb, cb) =>
     @_ensureDbIsSet(err_cb, cb)
@@ -52,8 +44,27 @@ class CartProduct
     getOne.on 'error', (error) ->
       err_cb(error)
   
+  setAttributes: ()=>
+    _.each _.keys(@attributes), (key) =>
+      this["#{key}"] = @attributes["#{key}"]    
+      
+  isDirty: ()=>
+    dirty = false    
+    _.each _.keys(@attributes), (key) =>
+      dirty = true unless this["#{key}"] == @attributes["#{key}"]
+    dirty
+      
+      
+  isValid: ()->
+    @validate.presenceOf('cart_id')
+    @validate.numericalityOf('cart_id')
+    @validate.presenceOf('product_id')
+    @validate.numericalityOf('product_id')
+    @validate.presenceOf('quantity')
+    @validate.numericalityOf('quantity')
+    _.isEmpty(@errors)
   
-  save: (err_cb, cb)->
+  create: (err_cb, cb)->
     return err_cb(@errors) unless @isValid()
     throw 'No values given' if _.isEmpty(@attributes)
     attribute_list= _.keys(@attributes)
@@ -68,6 +79,25 @@ class CartProduct
       CartProduct.findOne(row.id,err_cb, cb)
     createOne.on 'error', (error)->
       err_cb(error)
+      
+  update: (err_cb, cb)->
+    return err_cb(@errors) unless @isValid()
+    throw 'No values given' if _.isEmpty(@attributes)
+    throw 'Object is new' unless @id? and _.isNumber(@id) and @id > 0
+    attribute_list= _.keys(@attributes)
+    indeces = _.map [1..(attribute_list.length)], (index)-> "$#{index}"
+    attribute_values = _.values(@attributes)
+    @updated_at = new Date()
+    pairs = _.map _.zip(attribute_list, indeces), (pair) -> pair.join('=')
+    updateOne = CartProduct.getConnection().query("UPDATE #{CartProduct.getTableName()} SET #{pairs.join(', ')} WHERE id = #{@id}", attribute_values)
+    updateOne.on 'row', (row)->
+      CartProduct.findOne(row.id,err_cb, cb)
+    updateOne.on 'error', (error)->
+      err_cb(error)
+    
+    
+    
+    
   
   @_ensureDbIsSet: (err_cb, cb)->
     throw "table not specified" if not CartProduct.getTableName()? or CartProduct.getTableName() == ''
@@ -83,6 +113,8 @@ success_handler = (results) ->
   console.log results
 
 CartProduct.setTableName('cart_products')
-cp = new CartProduct({cart_id:1, product_id: 1, quantity: 1})
-cp.save(err_handler, success_handler)
+CartProduct.findOne 1, err_handler, (cp) ->
+  # cp.options = 'momoni'
+  console.log cp.isDirty()
+  # cp.update err_handler, success_handler
 
