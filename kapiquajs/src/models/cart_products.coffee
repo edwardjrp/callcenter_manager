@@ -45,6 +45,22 @@ class CartProduct
     getOne.on 'error', (error) ->
       err_cb(error)
   
+  @count: (err_cb, cb)->
+      getCount = CartProduct.getConnection().query("SELECT COUNT(*) from #{@getTableName()}")
+      results = []
+      getCount.on 'row', (result)->
+        cb(result.count)
+      getCount.on 'error', (error) ->
+        err_cb(error)
+
+
+
+  @_ensureDbIsSet: (err_cb, cb)->
+    throw "table not specified" if not CartProduct.getTableName()? or CartProduct.getTableName() == ''
+    throw "error callback missing" unless err_cb?
+    throw "callback missing" unless cb?
+  
+  
   setAttributes: ()=>
     _.each _.keys(@attributes), (key) =>
       this["#{key}"] = @attributes["#{key}"]    
@@ -98,15 +114,7 @@ class CartProduct
     updateOne.on 'error', (error)->
       err_cb(error)
     
-    
-    
-    
-  
-  @_ensureDbIsSet: (err_cb, cb)->
-    throw "table not specified" if not CartProduct.getTableName()? or CartProduct.getTableName() == ''
-    throw "error callback missing" unless err_cb?
-    throw "callback missing" unless cb?
-    
+      
    
 
 # this section is for testing
@@ -117,12 +125,13 @@ success_handler = (results) ->
   
 CartProduct.setTableName('cart_products')
 
+CartProduct.count(err_handler, success_handler)
 # cp2 = new CartProduct({cart_id:1, product_id:1, quantity:1})
 # 
 # cp2.create(err_handler, success_handler)
 
-CartProduct.findOne 1, err_handler, (cp) ->
-  cp.options = 'maxxmony'
-  # console.log cp.isDirty()
-  cp.update(err_handler, success_handler)
+# CartProduct.findOne 1, err_handler, (cp) ->
+#   cp.options = 'maxxmony'
+#   # console.log cp.isDirty()
+#   cp.update(err_handler, success_handler)
 
