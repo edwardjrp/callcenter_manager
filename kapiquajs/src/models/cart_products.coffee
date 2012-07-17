@@ -47,6 +47,8 @@ class CartProduct
   setAttributes: ()=>
     _.each _.keys(@attributes), (key) =>
       this["#{key}"] = @attributes["#{key}"]    
+  
+  
       
   isDirty: ()=>
     dirty = false    
@@ -86,7 +88,8 @@ class CartProduct
     throw 'Object is new' unless @id? and _.isNumber(@id) and @id > 0
     attribute_list= _.keys(@attributes)
     indeces = _.map [1..(attribute_list.length)], (index)-> "$#{index}"
-    attribute_values = _.values(@attributes)
+    attribute_values = _.map attribute_list, (key)=> this["#{key}"]
+    console.log attribute_values
     @updated_at = new Date()
     pairs = _.map _.zip(attribute_list, indeces), (pair) -> pair.join('=')
     updateOne = CartProduct.getConnection().query("UPDATE #{CartProduct.getTableName()} SET #{pairs.join(', ')} WHERE id = #{@id}", attribute_values)
@@ -114,7 +117,7 @@ success_handler = (results) ->
 
 CartProduct.setTableName('cart_products')
 CartProduct.findOne 1, err_handler, (cp) ->
-  # cp.options = 'momoni'
+  cp.options = 'momoni'
   console.log cp.isDirty()
-  # cp.update err_handler, success_handler
+  cp.update err_handler, success_handler
 
