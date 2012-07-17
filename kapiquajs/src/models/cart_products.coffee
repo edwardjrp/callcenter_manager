@@ -22,6 +22,7 @@ class CartProduct
     @tableName = name
     
   @getTableName = ()->
+    throw 'Table name not set' unless @tableName?
     @tableName
     
   
@@ -89,12 +90,11 @@ class CartProduct
     attribute_list= _.keys(@attributes)
     indeces = _.map [1..(attribute_list.length)], (index)-> "$#{index}"
     attribute_values = _.map attribute_list, (key)=> this["#{key}"]
-    console.log attribute_values
     @updated_at = new Date()
     pairs = _.map _.zip(attribute_list, indeces), (pair) -> pair.join('=')
-    updateOne = CartProduct.getConnection().query("UPDATE #{CartProduct.getTableName()} SET #{pairs.join(', ')} WHERE id = #{@id}", attribute_values)
-    updateOne.on 'row', (row)->
-      CartProduct.findOne(row.id,err_cb, cb)
+    updateOne = CartProduct.getConnection().query("UPDATE #{CartProduct.getTableName()} SET #{pairs.join(', ')} WHERE id = #{@id} RETURNING *", attribute_values)
+    updateOne.on 'row', (cart_product)->
+      CartProduct.findOne(cart_product.id,err_cb, cb)
     updateOne.on 'error', (error)->
       err_cb(error)
     
@@ -109,15 +109,20 @@ class CartProduct
     
    
 
-
+# this section is for testing
 err_handler = (errors)->
   console.log errors
 success_handler = (results) ->
   console.log results
-
+  
 CartProduct.setTableName('cart_products')
+
+# cp2 = new CartProduct({cart_id:1, product_id:1, quantity:1})
+# 
+# cp2.create(err_handler, success_handler)
+
 CartProduct.findOne 1, err_handler, (cp) ->
-  cp.options = 'momoni'
-  console.log cp.isDirty()
-  cp.update err_handler, success_handler
+  cp.options = 'maxxmony'
+  # console.log cp.isDirty()
+  cp.update(err_handler, success_handler)
 
