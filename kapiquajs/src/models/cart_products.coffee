@@ -15,8 +15,6 @@ class CartProduct
     Config.setup() unless Config.getConnection()?
     Config.getConnection()
 
-  
-  
           
   @setTableName = (name)->
     @tableName = name
@@ -126,22 +124,3 @@ class CartProduct
     destroyOne.on 'error', (error)->
       err_cb(error)
     
-      
-   
-
-# this section is for testing
-err_handler = (errors)->
-  console.log errors
-success_handler = (results) ->
-  console.log results
-  
-CartProduct.setTableName('cart_products')
-
-CartProduct.count(err_handler, success_handler)
-# cp2 = new CartProduct({cart_id:1, product_id:1, quantity:1})
-# 
-# cp2.create(err_handler, success_handler)
-
-CartProduct.findOne 13, err_handler, (cp) ->
-  cp.destroy(err_handler, success_handler)
-
