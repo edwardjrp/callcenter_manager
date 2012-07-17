@@ -4,7 +4,7 @@
 #
 #  id         :integer          not null, primary key
 #  cart_id    :integer
-#  quantity   :decimal(, )
+#  quantity   :integer
 #  product_id :integer
 #  bind_id    :integer
 #  options    :string(255)

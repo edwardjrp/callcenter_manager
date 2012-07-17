@@ -22,16 +22,16 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
   
   add_to_cart: (event)->
     event.preventDefault()
-    options = @options.matchups.getByCid($($(@el).find('.specialties_container').find('.btn-primary')).attr('id'))?.get('options') 
+    options = @options.matchups.getByCid($($(@el).find('.specialties_container').find('.btn-primary')).attr('id'))?.get('options') if @options.category.get('has_options') == true
     flavor = $($(@el).find('.flavors_container').find('.btn-primary')).text()
     size = $($(@el).find('.sizes_container').find('.btn-primary')).text()
     products = new Kapiqua25.Collections.Products()
     products.reset(@collection)
     if (flavor? and size?) and (flavor != '' and size != '')
-      if options?
-        product = products.where({options: options, flavorcode: flavor, sizecode:size})
+      if options? and @options.category.get('has_options') == true
+        product = _.first(products.where({options: options, flavorcode: flavor, sizecode:size}))
       else
-        product = products.where({flavorcode: flavor, sizecode:size})
+        product = _.first(products.where({flavorcode: flavor, sizecode:size}))
     else
       window.show_alert('La selección no esta completa', 'alert')
     selected_quantity= $(@el).find('.cart_product_quantity').val() || 1
@@ -54,19 +54,21 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
         quantity = $(op).val()
         build_options.push("#{quantity}#{productcode}")
     #  end type_unit false
-    if _.first(product)?
+
+    if product?
       cart_product = new Kapiqua25.Models.CartProduct()
       cart_product.set({cart: @model, quantity: selected_quantity,product: _.first(product), options: build_options.join(',') })
       result = cart_product.save()
       @model.set($.parseJSON(result.responseText))
       @model.trigger('change')
     else
-      if options?
+      if options? and @options.category.get('has_options') == true
         window.show_alert('No existe el producto con el flavorcode seleccionado', 'alert') if _.any( products.where({options: options,sizecode:size}))
         window.show_alert('No existe el producto con el sizecode seleccionado', 'alert') if _.any( products.where({options: options,flavorcode: flavor}))
       else
         window.show_alert('No existe el producto con el flavorcode seleccionado', 'alert') if _.any(products.where({sizecode:size}))
         window.show_alert('No existe el producto con el sizecode seleccionado', 'alert') if _.any(products.where({flavorcode: flavor}))
+        window.show_alert('No existe el producto con esta selección', 'alert') if _.any(products.where({flavorcode: flavor})) and _.any(products.where({sizecode:size}))
     
   select_specialty: (event)->
     event.preventDefault()
@@ -113,7 +115,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
   
   mark_matchup: (category, primary_matchup,secondary_matchup , sender)->
     $('table.option_table td').css('background-color','transparent').removeClass('primary_selected').removeClass('secondary_selected')
-    option_map = {'0.75': 1, '1': 2, '1.5': 3, '2':4, '3': 5}
+    option_map = {'0.75': 1, '': 2, '1.5': 3, '2':4, '3': 5}
     if primary_matchup?
       _.each primary_matchup.get('parsed_options'), (parsed_option) =>
         target = $("##{category.get('name')}_#{parsed_option.product.get('productcode')}")
@@ -179,9 +181,10 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
       
   show_popover: (event)->
     target_specialty = $(event.target)
-    options = {animate: true, title:'Opciones', content: target_specialty.data('options')}
-    target_specialty.popover(options)
-    target_specialty.popover('show')  
+    unless target_specialty.data('options') == ''
+      options = {animate: true, title:'Opciones', content: target_specialty.data('options')}
+      target_specialty.popover(options)
+      target_specialty.popover('show')  
       
   option_scale_up: (event)->
     target_option = $(event.currentTarget) 

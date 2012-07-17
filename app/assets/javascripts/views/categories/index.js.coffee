@@ -8,8 +8,8 @@ class Kapiqua25.Views.CategoriesIndex extends Backbone.View
     _.each @collection.models, (category) =>
       unless category.get('hidden') == true
         main_products = @get_main_products(category.get('products'))
-        option_products = @get_option_products(category.get('products'))# if category.get('has_options')
-        @product_views["#{category.get('name')}"] = new Kapiqua25.Views.ProductsIndex(collection: main_products, model: @model, category: category, sides: option_products, matchups: @create_matchups(main_products, option_products), flavors:@get_flavors(main_products), sizes: @get_sizes(main_products) )
+        option_products = @get_option_products(category.get('products'))
+        @product_views["#{category.get('name')}"] = new Kapiqua25.Views.ProductsIndex(collection: main_products, model: @model, category: category, sides: option_products, matchups: @create_matchups(main_products, option_products, category), flavors:@get_flavors(main_products), sizes: @get_sizes(main_products) )
   
   events: ->
     'click .nav-tabs a': 'mark_base'
@@ -38,16 +38,29 @@ class Kapiqua25.Views.CategoriesIndex extends Backbone.View
     
   group_by_options: (products)->
     _.groupBy products, (product) -> product.get('options')
+
+  group_by_flavorcode: (products)->
+    _.groupBy products, (product) -> product.get('flavorcode')
+
   
   get_presentation_name: (group_products) ->
     (_.intersection.apply(_, _.map(group_products, (product)-> product.get('productname').split(' ') ))).join(' ')    
     
-  create_matchups: (products, options)->
+  create_matchups: (products, options, category)->
     matchups = new Kapiqua25.Collections.Matchups()
     # if there are no options it should group by flavorcode
-    _.each @group_by_options(products), (group, key) =>
+    if _.any(options) and category.get('has_options') == true
+      _.each @group_by_options(products), (group, key) =>
+          name = @get_presentation_name(group)
+          parsed_options =  @parse_options(key,options)
+          niffty_options =  @niffty_opions(parsed_options)
+          matchups.add {name:  name, options: key, niffty_options: niffty_options, parsed_options:parsed_options, is_base: @get_base_matchup(group)?} if name !='' and key != 'null'
+    else
+      _.each @group_by_flavorcode(products), (group, key) =>
         name = @get_presentation_name(group)
-        matchups.add {name:  name, options: key, niffty_options: @niffty_opions(@parse_options(key,options)), parsed_options:@parse_options(key,options), is_base: @get_base_matchup(group)?} if name !='' and key != 'null'
+        parsed_options = ''
+        niffty_options = ''
+        matchups.add {name:  name, options: '', niffty_options: niffty_options, parsed_options:parsed_options, is_base: @get_base_matchup(group)?} if name !='' and key != 'null'
     matchups
     
   get_base_matchup: (products)->

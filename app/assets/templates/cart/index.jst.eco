@@ -7,7 +7,7 @@
           <li>
             <div class='item'>
               <input name="quantity" type="text" value="<%=cart_product.get('quantity')%>">
-              <%-cart_product.get('product').get('productname')%>
+              <%-cart_product.get('product')?.get('productname')%>
             </div>
           </li>
         <%end%>
