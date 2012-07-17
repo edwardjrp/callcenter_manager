@@ -7,7 +7,7 @@ _ = require('underscore')
 pg = require('pg')
 util = require('util')
 request = require('request')
-config = require('./config')
+Config = require('./config')
 
 app = module.exports = express.createServer()
 # Configuration
@@ -27,8 +27,9 @@ app.configure 'production', ->
   app.use(express.errorHandler())
 
 # Routes
-client = new pg.Client(config.connection_string)
-client.connect()
+Config.setup()
+client = Config.getConnection()
+
 
 app.post '/cart_products', (req, res)->
   res.header('Access-Control-Allow-Origin', 'http://localhost:3000')
