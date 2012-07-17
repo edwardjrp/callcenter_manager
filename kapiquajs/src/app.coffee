@@ -7,12 +7,12 @@ _ = require('underscore')
 pg = require('pg')
 util = require('util')
 request = require('request')
+config = require('./config')
 
 app = module.exports = express.createServer()
 # Configuration
 
 app.configure ->
-  app.set('pg_connection', 'postgres://radhamesbrito:siriguillo@localhost/kapiqua_development')
   app.use(express.logger({ immediate: true, format: 'dev' }))
   app.use(express.bodyParser())
   app.use(express.methodOverride())
@@ -27,7 +27,7 @@ app.configure 'production', ->
   app.use(express.errorHandler())
 
 # Routes
-client = new pg.Client(app.settings.pg_connection)
+client = new pg.Client(config.connection_string)
 client.connect()
 
 app.post '/cart_products', (req, res)->
