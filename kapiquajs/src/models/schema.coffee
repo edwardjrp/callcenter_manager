@@ -15,7 +15,7 @@ Cart = DB.define("Cart",
     type: Boolean
 
   status_text:
-    type: status_text
+    type: String
     length: 255
 
   store_id:
@@ -34,7 +34,7 @@ Cart = DB.define("Cart",
 
 Category = DB.define("Category",
   name:
-    type: status_text
+    type: String
     length: 255
 ,
   table: "categories"
@@ -45,31 +45,31 @@ Product = DB.define("Product",
     type: Number
 
   productcode:
-    type: status_text
+    type: String
     length: 255
 
   productname:
-    type: status_text
+    type: String
     length: 255
 
   options:
-    type: status_text
+    type: String
     length: 255
 
   sizecode:
-    type: status_text
+    type: String
     length: 255
 
   flavorcode:
-    type: status_text
+    type: String
     length: 255
 
   optionselectiongrouptype:
-    type: status_text
+    type: String
     length: 255
 
   productoptionselectiongroup:
-    type: status_text
+    type: String
     length: 255
     
   created_at:
@@ -109,9 +109,9 @@ CartProduct = DB.define("CartProduct",
 ,
   table: "cart_products"
 )
-Cart.has_many(CartProduct, {as: 'cart_products', foreignKey: 'cart_id'})
-Category.has_many(Product, {as: 'products', foreignKey: 'category_id'})
-Product.has_many(CartProduct, {as: 'cart_products', foreignKey: 'product_id'})
+Cart.hasMany(CartProduct, {as: 'cart_products', foreignKey: 'cart_id'})
+Category.hasMany(Product, {as: 'products', foreignKey: 'category_id'})
+Product.hasMany(CartProduct, {as: 'cart_products', foreignKey: 'product_id'})
 CartProduct.belongsTo(Product, {as: 'product', foreignKey: 'product_id'})
 CartProduct.belongsTo(Cart, {as: 'cart', foreignKey: 'cart_id'})
 
