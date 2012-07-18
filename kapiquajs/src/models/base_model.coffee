@@ -6,7 +6,7 @@ Validate = require('./validator')
 
 class BaseModel
   constructor: (@attributes)->
-    throw "Wrong initialization types or null" unless _.isObject(@attributes)
+    throw "Constructor: Wrong initialization types or null" unless _.isObject(@attributes)
     this['validate'] = new Validate(this)
     this['errors'] = []
     @setAttributes()
@@ -20,7 +20,7 @@ class BaseModel
     @tableName = name
     
   @getTableName = ()->
-    throw 'Table name not set' unless @tableName?
+    throw 'GetTableName: Table name not set' unless @tableName?
     @tableName
     
   
