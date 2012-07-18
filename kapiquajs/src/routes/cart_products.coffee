@@ -10,16 +10,12 @@ exports.create = (req, res) ->
   console.log JSON.stringify params
   # CartProduct.all {where: {cart_id: params.cart, product_id: params.product_id, options: params.options }}, (cp_err, found) ->
   #   console.log found
-  cart_product2 = new CartProduct({cart_id: params.cart, product_id: params.product_id, options: params.options, bind_to: params.bind_to, quantity: params.quantity})
-  cart_product2.save (err)->
+  cart_product = new CartProduct({cart_id: params.cart, product_id: params.product.id, options: params.options, bind_id: params.bind_to, quantity: Number(params.quantity)})
+  cart_product.save (err)->
     if (err)
-      console.log cart_product2.errors
-  
-  
-  CartProduct.create {cart_id: params.cart, product_id: params.product_id, options: params.options, bind_to: params.bind_to, quantity: params.quantity}, (cp_err, cart_product) ->
-    if cp_err?
-      console.log cp_err
-      res.send(cp_err)
+      console.log cart_product.errors
+      console.log err
+      res.send cart_product.errors
     else
       Cart.find cart_product.cart_id, (c_err, cart) ->
         cart.cart_products {}, (c_cp_err, cart_products)->

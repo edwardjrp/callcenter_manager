@@ -25,7 +25,7 @@ Cart = DB.define("Cart",
     type: Date
     default: Date.now
 
-  updated:
+  updated_at:
     type: Date
     default: Date.now
 ,
@@ -36,6 +36,14 @@ Category = DB.define("Category",
   name:
     type: String
     length: 255
+    
+  created_at:
+    type: Date
+    default: Date.now
+
+  updated_at:
+    type: Date
+    default: Date.now
 ,
   table: "categories"
 )
@@ -76,7 +84,7 @@ Product = DB.define("Product",
     type: Date
     default: Date.now
 
-  updated:
+  updated_at:
     type: Date
     default: Date.now
 ,
@@ -96,14 +104,14 @@ CartProduct = DB.define("CartProduct",
     type: String
     length: 255
 
-  bind_to:
+  bind_id:
     type: Number
 
   created_at:
     type: Date
     default: Date.now
 
-  updated:
+  updated_at:
     type: Date
     default: Date.now
 ,
