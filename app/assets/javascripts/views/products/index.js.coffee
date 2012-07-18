@@ -57,7 +57,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
 
     if product?
       cart_product = new Kapiqua25.Models.CartProduct()
-      cart_product.set({cart: @model, quantity: selected_quantity,product: _.first(product), options: build_options.join(',') })
+      cart_product.set({cart: @model, quantity: selected_quantity,product: product, options: build_options.join(',') })
       result = cart_product.save()
       @model.set($.parseJSON(result.responseText))
       @model.trigger('change')
