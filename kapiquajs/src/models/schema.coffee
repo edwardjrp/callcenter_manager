@@ -4,34 +4,6 @@ Schema = jugglingdb.Schema
 DB = new Schema('postgres', { 'url': Config.connection_string })
 
 
-CartProduct = DB.define("CartProduct",
-  cart_id:
-    type: Number
-
-  product_id:
-    type: Number
-
-  quantity:
-    type: Number
-
-  options:
-    type: String
-    length: 255
-
-  bind_to:
-    type: Number
-
-  created_at:
-    type: Date
-    default: Date.now
-
-  updated:
-    type: Date
-    default: Date.now
-,
-  table: "cart_products"
-)
-
 Cart = DB.define("Cart",
   user_id:
     type: Number
@@ -110,6 +82,39 @@ Product = DB.define("Product",
 ,
   table: "products"
 )
+CartProduct = DB.define("CartProduct",
+  cart_id:
+    type: Number
+
+  product_id:
+    type: Number
+
+  quantity:
+    type: Number
+
+  options:
+    type: String
+    length: 255
+
+  bind_to:
+    type: Number
+
+  created_at:
+    type: Date
+    default: Date.now
+
+  updated:
+    type: Date
+    default: Date.now
+,
+  table: "cart_products"
+)
+Cart.has_many(CartProduct, {as: 'cart_products', foreignKey: 'cart_id'})
+Category.has_many(Product, {as: 'products', foreignKey: 'category_id'})
+Product.has_many(CartProduct, {as: 'cart_products', foreignKey: 'product_id'})
+CartProduct.belongsTo(Product, {as: 'product', foreignKey: 'product_id'})
+CartProduct.belongsTo(Cart, {as: 'cart', foreignKey: 'cart_id'})
+
 
 exports.CartProduct = CartProduct
 exports.Cart = Cart
