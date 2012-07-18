@@ -58,9 +58,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     if product?
       cart_product = new Kapiqua25.Models.CartProduct()
       cart_product.set({cart: @model, quantity: selected_quantity,product: product, options: build_options.join(',') })
-      result = cart_product.save()
-      @model.set($.parseJSON(result.responseText))
-      @model.trigger('change')
+      cart_product.save()
     else
       if options? and @options.category.get('has_options') == true
         window.show_alert('No existe el producto con el flavorcode seleccionado', 'alert') if _.any( products.where({options: options,sizecode:size}))

@@ -32,10 +32,10 @@ current_cart = (cart_product, req, res)->
     cart.cart_products {}, (c_cp_err, cart_products)->
       get_products = (cp, cb)->
         Product.find cp.product(), (p_err, product)->
-          json_cp = JSON.stringify(cp)
-          json_cp.product = JSON.stringify(product)
+          json_cp = JSON.parse(JSON.stringify(cp))
+          json_cp.product = JSON.parse(JSON.stringify(product))
           cb(null, json_cp)
       async.map cart_products,get_products, (err, results)->
-        json_cart = JSON.stringify(cart)
+        json_cart = JSON.parse(JSON.stringify(cart))
         json_cart.cart_products = results
-        res.send(results)
+        res.send(json_cart)
