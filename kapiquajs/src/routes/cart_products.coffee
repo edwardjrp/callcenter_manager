@@ -7,8 +7,16 @@ _ = require('underscore')
 
 exports.create = (req, res) ->
   params = req.body
-  console.log "request = #{JSON.stringify(req.body)}"
-  CartProduct.create {cart_id: params.cart, product_id: params.product_id, options: params.options, bind_to: params.bind_to}, (cp_err, cart_product) ->
+  console.log JSON.stringify params
+  # CartProduct.all {where: {cart_id: params.cart, product_id: params.product_id, options: params.options }}, (cp_err, found) ->
+  #   console.log found
+  cart_product2 = new CartProduct({cart_id: params.cart, product_id: params.product_id, options: params.options, bind_to: params.bind_to, quantity: params.quantity})
+  cart_product2.save (err)->
+    if (err)
+      console.log cart_product2.errors
+  
+  
+  CartProduct.create {cart_id: params.cart, product_id: params.product_id, options: params.options, bind_to: params.bind_to, quantity: params.quantity}, (cp_err, cart_product) ->
     if cp_err?
       console.log cp_err
       res.send(cp_err)
