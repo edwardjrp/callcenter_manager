@@ -41,7 +41,7 @@ save_item = (cart_product, req, res)->
      console.log err
      res.send(cart_product.errors || err)
    else
-     current_cart(cart_product,cart_id, req, res )           
+     current_cart(cart_product.cart_id, req, res )           
             
 current_cart = (cart_id, req, res)->
   Cart.find cart_id, (c_err, cart) ->

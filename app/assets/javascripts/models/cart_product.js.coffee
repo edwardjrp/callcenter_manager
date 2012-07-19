@@ -2,6 +2,35 @@ class Kapiqua25.Models.CartProduct extends Backbone.RelationalModel
   url: ()->
     "http://localhost:3030/cart_products"
   
+  
+  
+  parsed_options: ()->
+    product_options = []
+    recipe = this.get('product').get('options')
+    options = this.get('product').get('category').get('products').where({options: 'OPTION'})
+    if _.any(recipe.split(','))
+      _.each _.compact(recipe.split(',')), (code) ->
+        core_match = code.match(/^([0-9]{0,2}\.?[0|7|5]{0,2})([A-Z]{1,}[a-z]{0,})(?:\-([L12]))?/)
+        if core_match?
+          core_match[1] = '1' if not core_match[1]? or core_match[1] == ''
+          current_quantity = core_match[1]
+          current_product = _.find(options, (op)-> op.get('productcode') == core_match[2])
+          current_part =  core_match[3] || ''
+          product_option = {quantity: Number(current_quantity), product: current_product, part: current_part}
+          product_options.push product_option
+    product_options
+
+
+  niffty_opions: () ->
+    presentation = _.map @parsed_options(), (option) ->
+      option.quantity = '' if option.quantity == '1' || option.quantity == 1
+      presenter = option.quantity
+      presenter += " #{option.product.get('productname')} "
+      presenter += option.part.replace(/1/,'Izquierada').replace(/2/, 'Derecha').replace(/W/,'Completa')
+      window.strip(presenter)
+    to_sentence presentation
+  
+  
   sync: (method, model, options)=>
     methodMap = {'create': 'POST','update': 'PUT','delete': 'DELETE','read':'GET'}
     type = methodMap[method]
