@@ -4,7 +4,7 @@ require "bundler/capistrano"
 server '192.168.101.50', :web, :app, :db, primary: true
 set :user, 'soporte'
 set :application, "kapiqua25"
-set :repository,  "ssh://soporte@#{server}/home/soporte/#{application}.git"
+set :repository,  "ssh://soporte@192.168.101.50/home/soporte/#{application}.git"
 
 set :deploy_to, "/var/www/#{application}"
 
@@ -38,8 +38,8 @@ namespace :deploy do
   # task :setup_config, roles: :app do
   #   # sudo "ln -nfs #{current_path}/config/nginx.conf /etc/nginx/sites-enabled/#{application}"
   #   # sudo "ln -nfs #{current_path}/config/unicorn_init.sh /etc/init.d/unicorn_#{application}"
-  #   # run "mkdir -p #{shared_path}/config"
-  #   put File.read("database.example.yml"), "#{shared_path}/config/database.yml"
+    run "mkdir -p #{shared_path}/config"
+    put File.read("config/database.example.yml"), "#{shared_path}/config/database.yml"
   #   # puts "Now edit the config files in #{shared_path}."
   # end
   # after "deploy:setup", "deploy:setup_config"
