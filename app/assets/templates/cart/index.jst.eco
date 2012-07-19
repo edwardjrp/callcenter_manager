@@ -5,9 +5,10 @@
       <ul id="current_carts_items">
         <%for cart_product in _.sortBy(@model.get('cart_products').models, (model)-> model.get('id')):%>
           <li>
-            <div class='item'>
+            <div class='item' data-cart-product-id="<%=cart_product.get('id')%>" data-cart-product-cid="<%=cart_product.cid%>">
               <input name="quantity" type="text" value="<%=cart_product.get('quantity')%>">
               <%-cart_product.get('product')?.get('productname')%>
+              <div class='remove_and_pricing'><span><i class="icon-trash icon-white"></i></span></div>
             </div>
           </li>
         <%end%>

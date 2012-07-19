@@ -11,12 +11,22 @@ cartProducts = require('./routes/cart_products')
 
 app = module.exports = express.createServer()
 # Configuration
-
+setCors = (req,res, next) ->
+  res.header('Access-Control-Allow-Origin', 'http://localhost:3000')
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
+  res.contentType('application/json')
+  if ('OPTIONS' == req.method)
+    res.send(200)
+  else
+    next()
+    
 app.configure ->
   app.use(express.logger({ immediate: true, format: 'dev' }))
   app.use(express.bodyParser())
   app.use(express.methodOverride())
+  app.use(setCors)
   app.use(app.router)
+  
 
 
 app.configure 'development', ->
@@ -26,14 +36,12 @@ app.configure 'development', ->
 app.configure 'production', ->
   app.use(express.errorHandler())
 
-setCors = (req,res, next) ->
-  res.header('Access-Control-Allow-Origin', 'http://localhost:3000')
-  res.header('Access-Control-Allow-Methods', '*')
-  res.contentType('application/json')
-  next()
+
 
 # Routes
 app.post '/cart_products',setCors, cartProducts.create
+app.del '/cart_products',setCors, cartProducts.destroy
+
 
 process.on 'uncaughtException', (err)->
     console.log(err)

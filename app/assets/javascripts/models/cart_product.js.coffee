@@ -3,11 +3,12 @@ class Kapiqua25.Models.CartProduct extends Backbone.RelationalModel
     "http://localhost:3030/cart_products"
   
   sync: (method, model, options)=>
-    methodMap = {'create': 'POST','update': 'PUT','delete': 'DELETE','read':   'GET'}
-    
+    methodMap = {'create': 'POST','update': 'PUT','delete': 'DELETE','read':'GET'}
     type = methodMap[method]
     
     params = {type: type, dataType: 'json'}
+    
+    current_cart = this.get('cart')
     
     params.url = this.url()
     
@@ -24,7 +25,7 @@ class Kapiqua25.Models.CartProduct extends Backbone.RelationalModel
       beforeSend: (xhr)->
         xhr.setRequestHeader("Accept", params.contentType)
       success: (response)=>
-        this.get('cart').set(response)
+        current_cart.set(response)
       error: (response)->
         response
   

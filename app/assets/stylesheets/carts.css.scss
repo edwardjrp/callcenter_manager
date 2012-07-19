@@ -26,6 +26,11 @@ ul#current_carts_items{
 			padding:5px;
 			.remove_and_pricing{
 			 display:table;
+			 span{
+			   cursor:pointer;
+			   width:20px;
+			     height:20px;
+			 }
 			.item_price{
 				display:inline;
 				margin-right:10px;
