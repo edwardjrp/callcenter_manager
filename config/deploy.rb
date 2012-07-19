@@ -13,6 +13,7 @@ set :scm, 'git'
 set :branch, 'master'
 set :scm_verbose, true
 set :use_sudo, false
+set :deploy_via, :copy
 
 default_run_options[:pty] = true
 
