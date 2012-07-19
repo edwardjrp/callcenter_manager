@@ -35,13 +35,13 @@ namespace :deploy do
     end
   end
 
-  # task :setup_config, roles: :app do
-  #   # sudo "ln -nfs #{current_path}/config/nginx.conf /etc/nginx/sites-enabled/#{application}"
-  #   # sudo "ln -nfs #{current_path}/config/unicorn_init.sh /etc/init.d/unicorn_#{application}"
-    run "mkdir -p #{shared_path}/config"
-    put File.read("config/database.production.yml"), "#{shared_path}/config/database.yml"
-  #   # puts "Now edit the config files in #{shared_path}."
-  # end
+  task :setup_config, roles: :app do
+   sudo "ln -nfs #{current_path}/deploy_configs/nginx.conf /etc/nginx/sites-enabled/#{application}"
+   sudo "ln -nfs #{current_path}/deploy_configs/kapiqua_unicorn_init.sh /etc/init.d/unicorn_#{application}"
+   run "mkdir -p #{shared_path}/config"
+   put File.read("config/database.production.yml"), "#{shared_path}/config/database.yml"
+   puts "Now edit the config files in #{shared_path}."
+  end
   # after "deploy:setup", "deploy:setup_config"
 
   task :symlink_config, roles: :app do
