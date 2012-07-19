@@ -1,7 +1,7 @@
 require "bundler/capistrano"
 
 
-set :server, '190.8.42.18', :web, :app, :db, primary: true
+server, '190.8.42.18', :web, :app, :db, primary: true
 set :user, 'soporte'
 set :application, "kapiqua25"
 set :repository,  "ssh://soporte@190.8.42.18/home/soporte/#{application}.git"
