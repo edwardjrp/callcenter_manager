@@ -33,6 +33,7 @@
     throw 'NO A STRING'
     
 @to_sentence = (string_array)->
+  return string_array[0] if string_array.length == 1
   (_.flatten([(_.without(string_array, _.last(string_array))).join(', '), _.last(string_array)])).join(' y ')
 
 # end del

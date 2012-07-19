@@ -35,6 +35,8 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     else
       window.show_alert('La selección no esta completa', 'alert')
     selected_quantity= $(@el).find('.cart_product_quantity').val() || 1
+    selected_quantity = 1 if selected_quantity <= 0
+    selected_quantity = 1 unless _.isNumber(selected_quantity)
     #  if type_unit false
     unless @options.category.get('type_unit') == true
       # this does not parses the sides yet
@@ -79,6 +81,9 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     else
       current_matchup = @options.matchups.getByCid($($(event.target).parent().find('.btn-primary')).attr('id'))
       _.each current_matchup.get('parsed_options'), (parsed_option) =>
+        # console.log current_matchup
+        # console.log @options.category.get('name')
+        # console.log parsed_option.product.get('productcode')
         target = $("##{@options.category.get('name')}_#{parsed_option.product.get('productcode')}")
         target.find('input.unit_option_setter').val(parsed_option.quantity)
           
@@ -114,7 +119,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
   
   mark_matchup: (category, primary_matchup,secondary_matchup , sender)->
     $('table.option_table td').css('background-color','transparent').removeClass('primary_selected').removeClass('secondary_selected')
-    option_map = {'0.75': 1, '': 2, '1.5': 3, '2':4, '3': 5}
+    option_map = {0.75: 1, 1: 2, 1.5: 3, 2:4, 3: 5}
     if primary_matchup?
       _.each primary_matchup.get('parsed_options'), (parsed_option) =>
         target = $("##{category.get('name')}_#{parsed_option.product.get('productcode')}")

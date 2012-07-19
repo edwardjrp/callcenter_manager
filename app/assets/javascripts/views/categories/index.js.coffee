@@ -75,11 +75,11 @@ class Kapiqua25.Views.CategoriesIndex extends Backbone.View
       _.each _.compact(recipe.split(',')), (code) ->
         core_match = code.match(/^([0-9]{0,2}\.?[0|7|5]{0,2})([A-Z]{1,}[a-z]{0,})(?:\-([L12]))?/)
         if core_match?
-          core_match[1] = '1' if  core_match[1]? and core_match[1] == ""
+          core_match[1] = '1' if not core_match[1]? or core_match[1] == ''
           current_quantity = core_match[1]
           current_product = _.find(options, (op)-> op.get('productcode') == core_match[2])
           current_part =  core_match[3] || ''
-          product_option = {quantity: current_quantity, product: current_product, part: current_part}
+          product_option = {quantity: Number(current_quantity), product: current_product, part: current_part}
           product_options.push product_option
     product_options
     
@@ -89,7 +89,7 @@ class Kapiqua25.Views.CategoriesIndex extends Backbone.View
       option.quantity = '' if option.quantity == '1'
       presenter = option.quantity
       presenter += " #{option.product.get('productname')} "
-      presenter += option.part.replace(/L/,'Izquierada').replace(/R/, 'Derecha').replace(/W/,'Completa')
+      presenter += option.part.replace(/1/,'Izquierada').replace(/2/, 'Derecha').replace(/W/,'Completa')
       window.strip(presenter)
     to_sentence presentation
       
