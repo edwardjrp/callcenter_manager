@@ -35,51 +35,17 @@ class Kapiqua25.Models.CartProduct extends Backbone.RelationalModel
     
   
   sync: (method, model, options)=>
-    # methodMap = {'create': 'POST','update': 'PUT','delete': 'DELETE','read':'GET'}
-    # type = methodMap[method]
-    
     namespace = _.last(model.url().split('/'))
-    
-    # @socket.on 'news',(data)->
-    #     console.log(data)
-    #     @socket.emit 'my other event', { my: 'data' }
-    # 
-    # @socket.emit 'my other event', { my: 'data' }
-    
-    
-    # params = {type: type, dataType: 'json'}
-    
     current_cart = this.get('cart')
-    
-    # params.url = this.url()
-    
-    # if ((not options.data?) && model? and (method == 'create' || method == 'update'))
-      # params.contentType = 'application/json'
-      # params.data = this.toJSON()
-    # if not params.data and model?
-    #   params.data = model.toJSON() || {}
-
-    # if ( params.type != 'GET' and !Backbone.emulateJSON)
-    #   params.processData = false
-    
-    @socket.emit "#{namespace}:#{method}", this.toJSON(), (data) ->
-      if err?
-        console.log err
-        console.log data
-        options.error(err)
+    console.log method
+    @socket.emit "#{namespace}:#{method}", this.toJSON(), (response) ->
+      if response?
+        if response.type? and response.type == 'success'
+          current_cart.set(response.data)
+        else
+          window.show_alert(response.data, response.type)
       else
-        current_cart.set(response)
-      
-    # $.ajax
-    #   type: type
-    #   url: params.url
-    #   data: this.toJSON()
-    #   beforeSend: (xhr)->
-    #     xhr.setRequestHeader("Accept", params.contentType)
-    #   success: (response)=>
-    #     current_cart.set(response)
-    #   error: (response)->
-    #     response
+        window.show_alert('No hubo respuesta del servidor', 'alert')
   
   
   relations:[

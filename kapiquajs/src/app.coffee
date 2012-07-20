@@ -46,8 +46,8 @@ app.post '/cart_products',setCors, cartProducts.create
 app.del '/cart_products',setCors, cartProducts.destroy
 
 io.sockets.on "connection", (socket) ->
-  socket.on "cart_products:create", (data, cb) ->
-    cb({test: 'sent'})
+  socket.on "cart_products:create", cartProducts.create
+  socket.on "cart_products:delete", cartProducts.destroy
     
 
 
