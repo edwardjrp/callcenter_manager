@@ -63,6 +63,7 @@ gem 'bcrypt-ruby', '~> 3.0.0'
 group :development, :production do
   gem 'hirb', :require => false
   gem 'factory_girl', :require => false
+  gem 'faker', :require => false
 end
 # To use debugger
 # gem 'ruby-debug19', :require => 'ruby-debug'
@@ -83,7 +84,6 @@ group :development, :test do
   #   gem 'vcr', '~> 2.0.0'
   # gem 'webmock', '~> 1.8.3'
   gem 'guard-rspec'
-  gem 'faker'
   gem 'capybara'
   gem "poltergeist"
   gem "shoulda-matchers"
