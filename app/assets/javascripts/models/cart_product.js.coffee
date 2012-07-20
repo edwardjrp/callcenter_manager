@@ -35,6 +35,9 @@ class Kapiqua25.Models.CartProduct extends Backbone.RelationalModel
     methodMap = {'create': 'POST','update': 'PUT','delete': 'DELETE','read':'GET'}
     type = methodMap[method]
     
+    namespace = _.last(model.url().split('/'))
+    console.log "#{namespace}:#{method}"
+    
     params = {type: type, dataType: 'json'}
     
     current_cart = this.get('cart')
