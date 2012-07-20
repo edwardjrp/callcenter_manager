@@ -44,6 +44,13 @@ namespace :deploy do
   end
   before "deploy:restart", "deploy:setup_config"
 
+  task :compile_assets, roles: :app do
+    puts "Compiling assets."
+    run "cd #{current_path} && bundle exec rake assets:precompile"
+    puts "done."
+  end
+  before "deploy:setup_config", "deploy:compile_assets"  
+
   task :symlink_config, roles: :app do
     run "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
   end

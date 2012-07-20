@@ -14,6 +14,13 @@
 
 - add functionality to the cancel button
 
+- need to add store selection
+
+- need to add "add phone"
+
+- need to add "add address"
+
+
 - add clear when address dependencies change
 
 - add popover on client create
@@ -28,6 +35,6 @@
 
 - have to add discontinued to products to allow reimporting
 
-- regex that parses the options is outdated [WLR] is now [W12]
+- <del>regex that parses the options is outdated [WLR] is now [W12]</del>
 
-- cartproduct quantity is now decimal and should be integer
+- <del>cartproduct quantity is now decimal and should be integer</del>
