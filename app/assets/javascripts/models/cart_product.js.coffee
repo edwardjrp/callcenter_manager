@@ -31,35 +31,55 @@ class Kapiqua25.Models.CartProduct extends Backbone.RelationalModel
     to_sentence presentation
   
   
+  socket: io.connect('http://localhost:3030')
+    
+  
   sync: (method, model, options)=>
-    methodMap = {'create': 'POST','update': 'PUT','delete': 'DELETE','read':'GET'}
-    type = methodMap[method]
+    # methodMap = {'create': 'POST','update': 'PUT','delete': 'DELETE','read':'GET'}
+    # type = methodMap[method]
     
     namespace = _.last(model.url().split('/'))
-    console.log "#{namespace}:#{method}"
     
-    params = {type: type, dataType: 'json'}
+    # @socket.on 'news',(data)->
+    #     console.log(data)
+    #     @socket.emit 'my other event', { my: 'data' }
+    # 
+    # @socket.emit 'my other event', { my: 'data' }
+    
+    
+    # params = {type: type, dataType: 'json'}
     
     current_cart = this.get('cart')
     
-    params.url = this.url()
+    # params.url = this.url()
     
-    if ((not options.data?) && model? and (method == 'create' || method == 'update'))
-      params.contentType = 'application/json'
-      params.data = this.toJSON()
+    # if ((not options.data?) && model? and (method == 'create' || method == 'update'))
+      # params.contentType = 'application/json'
+      # params.data = this.toJSON()
+    # if not params.data and model?
+    #   params.data = model.toJSON() || {}
+
+    # if ( params.type != 'GET' and !Backbone.emulateJSON)
+    #   params.processData = false
     
-    if ( params.type != 'GET' and !Backbone.emulateJSON)
-      params.processData = false
-    $.ajax
-      type: type
-      url: params.url
-      data: this.toJSON()
-      beforeSend: (xhr)->
-        xhr.setRequestHeader("Accept", params.contentType)
-      success: (response)=>
+    @socket.emit "#{namespace}:#{method}", this.toJSON(), (data) ->
+      if err?
+        console.log err
+        console.log data
+        options.error(err)
+      else
         current_cart.set(response)
-      error: (response)->
-        response
+      
+    # $.ajax
+    #   type: type
+    #   url: params.url
+    #   data: this.toJSON()
+    #   beforeSend: (xhr)->
+    #     xhr.setRequestHeader("Accept", params.contentType)
+    #   success: (response)=>
+    #     current_cart.set(response)
+    #   error: (response)->
+    #     response
   
   
   relations:[

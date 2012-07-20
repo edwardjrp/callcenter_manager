@@ -46,11 +46,9 @@ app.post '/cart_products',setCors, cartProducts.create
 app.del '/cart_products',setCors, cartProducts.destroy
 
 io.sockets.on "connection", (socket) ->
-  socket.emit "news",
-    hello: "world"
-
-  socket.on "my other event", (data) ->
-    console.log data
+  socket.on "cart_products:create", (data, cb) ->
+    cb({test: 'sent'})
+    
 
 
 process.on 'uncaughtException', (err)->
