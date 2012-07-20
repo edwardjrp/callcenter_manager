@@ -1,3 +1,5 @@
+- content_for :scripts do
+  = javascript_include_tag 'http://localhost:3030/socket.io/socket.io.js'
 #surface.row{data: { categories: Category.all.to_json( include: {products: {} })   }}
   #desk.span9
     Loading assets

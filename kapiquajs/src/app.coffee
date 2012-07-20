@@ -10,6 +10,9 @@ request = require('request')
 cartProducts = require('./routes/cart_products')
 
 app = module.exports = express.createServer()
+
+io = require('socket.io').listen(app)
+
 # Configuration
 setCors = (req,res, next) ->
   res.header('Access-Control-Allow-Origin', 'http://localhost:3000')
@@ -41,6 +44,13 @@ app.configure 'production', ->
 # Routes
 app.post '/cart_products',setCors, cartProducts.create
 app.del '/cart_products',setCors, cartProducts.destroy
+
+io.sockets.on "connection", (socket) ->
+  socket.emit "news",
+    hello: "world"
+
+  socket.on "my other event", (data) ->
+    console.log data
 
 
 process.on 'uncaughtException', (err)->
