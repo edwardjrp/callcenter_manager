@@ -11,8 +11,6 @@ CMD="$APP_ROOT/bin/unicorn -D -c $APP_ROOT/config/unicorn.rb -E production"
 action="$1"
 set -u
 
-test -f "$INIT_CONF" && . $INIT_CONF
-
 old_pid="$PID.oldbin"
 
 cd $APP_ROOT || exit 1
