@@ -60,13 +60,16 @@ gem 'carrierwave'
 # To use ActiveModel has_secure_password
 gem 'bcrypt-ruby', '~> 3.0.0'
 
+group :development, :production do
+  gem 'hirb', :require => false
+  gem 'factory_girl', :require => false
+end
 # To use debugger
 # gem 'ruby-debug19', :require => 'ruby-debug'
 group :development do
   gem "thin"
   gem 'capistrano'
   gem 'letter_opener'
-  gem 'hirb'
   gem 'awesome_print'
   gem 'annotate', :git => 'git://github.com/ctran/annotate_models.git',:group => :development
 end
