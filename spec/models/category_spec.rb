@@ -11,6 +11,7 @@
 #  base_product :integer
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  has_sides    :boolean          default(FALSE)
 #
 
 require 'spec_helper'
