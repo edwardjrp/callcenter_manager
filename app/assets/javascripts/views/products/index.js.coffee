@@ -140,43 +140,42 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
       for i in [0..(option_map[parsed_option.quantity]-1)]
         $(target.find("td.#{side_class}")[i]).css('background-color', color).addClass(selection_class) if i <= option_map[parsed_option.quantity]
              
+             
   modify_option: (event)->
     target = $(event.currentTarget)
-    if  target.hasClass('primary_selected')
-      for target_option in target.closest('table').find(".#{_.without(target.attr('class').split(' '), 'primary_selected')}")
-        if _.indexOf(target.closest('table').find(".#{_.without(target.attr('class').split(' '), 'primary_selected')}"), target_option) >= _.indexOf(target.closest('table').find(".#{_.without(target.attr('class').split(' '), 'primary_selected')}"), target[0])
-          $(target_option).css('background-color', 'transparent').removeClass('primary_selected')        
-      target_to_clear = target
-      
-    if  target.hasClass('secondary_selected') and @options.category.get('multi') == true  
-      for target_option in target.closest('table').find(".#{_.without(target.attr('class').split(' '), 'secondary_selected')}")
-        if _.indexOf(target.closest('table').find(".#{_.without(target.attr('class').split(' '), 'secondary_selected')}"), target_option) >= _.indexOf(target.closest('table').find(".#{_.without(target.attr('class').split(' '), 'secondary_selected')}"), target[0])
-          $(target_option).css('background-color', 'transparent').removeClass('secondary_selected')        
-      target_to_clear = target
+    target_to_clear = @markdown_remove($(event.currentTarget), 'primary_selected')
+    if @options.category.get('multi') == true
+      target_to_clear = @markdown_remove($(event.currentTarget), 'secondary_selected')
       
     primary_prensent = _.any($(@el).find('.specialties_container').find('.btn-primary'))
     secondary_prensent = _.any($(@el).find('.specialties_container').find('.btn-danger')) if @options.category.get('multi') == true
     
     unless target == target_to_clear
-      if target.hasClass('options_left') and primary_prensent? and primary_prensent == true
-        for target_option in target.closest('table').find('.options_left')
-          unless _.indexOf(target.closest('table').find('.options_left'), target_option) > _.indexOf(target.closest('table').find('.options_left'), target[0])
-            $(target_option).css('background-color', '#0073CC').addClass('primary_selected')
-      if target.hasClass('options_rigth') and not (secondary_prensent? and secondary_prensent == true )
-        for target_option in target.closest('table').find('.options_rigth')
-          unless _.indexOf(target.closest('table').find('.options_rigth'), target_option) > _.indexOf(target.closest('table').find('.options_rigth'), target[0])
-            $(target_option).css('background-color', '#0073CC').addClass('primary_selected')
+      @markdown_add(target,'options_left', 'primary_selected', primary_prensent )
+      @markdown_add(target,'options_rigth', 'primary_selected', primary_prensent )
+
       if @options.category.get('multi') == true
-        if target.hasClass('options_rigth') and secondary_prensent? and secondary_prensent == true
-          for target_option in target.closest('table').find('.options_rigth')
-            unless _.indexOf(target.closest('table').find('.options_rigth'), target_option) > _.indexOf(target.closest('table').find('.options_rigth'), target[0])
-              $(target_option).css('background-color', '#DA4E49').addClass('secondary_selected')
-              
+        @markdown_add(target,'options_rigth', 'secondary_selected', secondary_prensent )              
         if target.hasClass('options_left') and not (primary_prensent? and primary_prensent == true)
           for target_option in target.closest('table').find('.options_left')
             unless _.indexOf(target.closest('table').find('.options_left'), target_option) > _.indexOf(target.closest('table').find('.options_left'), target[0])
               $(target_option).css('background-color', '#DA4E49').addClass('secondary_selected')
-          
+
+  markdown_add: (target, target_class, class_to_add, selection_present)->
+    if class_to_add == 'primary_selected' then color = '#0073CC' else color = '#DA4E49'
+    if target.hasClass(target_class) and selection_present? and selection_present == true
+      for target_option in target.closest('table').find(".#{target_class}")
+        unless _.indexOf(target.closest('table').find(".#{target_class}"), target_option) > _.indexOf(target.closest('table').find(".#{target_class}"), target[0])
+          $(target_option).css('background-color', color).addClass(class_to_add)
+  
+  markdown_remove: (target, target_class)->
+    if  target.hasClass(target_class)
+      for target_option in target.closest('table').find(".#{_.without(target.attr('class').split(' '), target_class)}")
+        if _.indexOf(target.closest('table').find(".#{_.without(target.attr('class').split(' '), target_class)}"), target_option) >= _.indexOf(target.closest('table').find(".#{_.without(target.attr('class').split(' '), target_class)}"), target[0])
+          $(target_option).css('background-color', 'transparent').removeClass('primary_selected')        
+      target
+  
+  
       
   show_popover: (event)->
     target_specialty = $(event.target)
