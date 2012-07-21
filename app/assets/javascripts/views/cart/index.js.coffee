@@ -4,11 +4,14 @@ class Kapiqua25.Views.CartIndex extends Backbone.View
   
   initialize: ->
     @model.on('change', @render, this)
+    @model.on('change', @highlight, this)
   
   events: ->
     'click .remove_options_and_pricing>span.item_remove':'remove_cart_product'
     'click .remove_options_and_pricing>span.show_options':'show_options'
     'change .item>input':'update_quantity'
+    'focus .item>input':'colorize'
+    'blur .item>input':'normalize'
     
   
   render: ->
@@ -23,6 +26,17 @@ class Kapiqua25.Views.CartIndex extends Backbone.View
       item_to_remove = @model.get('cart_products').getByCid(item_to_remove_cid)
       item_to_remove.destroy()
       
+  highlight: ->
+    $(@el).find('#current_carts_items, .item').effect('highlight')
+
+    
+  colorize: (event)->
+    target = $(event.currentTarget)
+    target.css('background-color','#F78181')
+
+  normalize: (event)->
+    target = $(event.currentTarget)
+    target.css('background-color','white')
       
       
   show_options: (event)->

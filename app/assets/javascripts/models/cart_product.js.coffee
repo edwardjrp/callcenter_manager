@@ -1,6 +1,6 @@
 class Kapiqua25.Models.CartProduct extends Backbone.RelationalModel
   url: ()->
-    "http://localhost:3030/cart_products"
+    "/cart_products"
   
   
   validate: (attributes)->
