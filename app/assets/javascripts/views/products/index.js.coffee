@@ -23,6 +23,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
   add_to_cart: (event)->
     event.preventDefault()
     options = @options.matchups.getByCid($($(@el).find('.specialties_container').find('.btn-primary')).attr('id'))?.get('options') if @options.category.get('has_options') == true
+    options_secondary = @options.matchups.getByCid($($(@el).find('.specialties_container').find('.btn-danger')).attr('id'))?.get('options') if @options.category.get('has_options') == true and @options.category.get('multi') == true
     flavor = $($(@el).find('.flavors_container').find('.btn-primary')).text()
     size = $($(@el).find('.sizes_container').find('.btn-primary')).text()
     products = new Kapiqua25.Collections.Products()
@@ -30,6 +31,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     if (flavor? and size?) and (flavor != '' and size != '')
       if options? and @options.category.get('has_options') == true
         product = _.first(products.where({options: options, flavorcode: flavor, sizecode:size}))
+        product_secondary = _.first(products.where({options: options_secondary, flavorcode: flavor, sizecode:size})) if options_secondary? and @options.category.get('multi') == true
       else
         product = _.first(products.where({flavorcode: flavor, sizecode:size}))
     else
@@ -41,13 +43,27 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     unless @options.category.get('type_unit') == true
       # this does not parses the sides yet
       selected_options = $(@el).find('.options_container').find('.primary_selected').closest('.option_box')
+      selected_options_secondary = $(@el).find('.options_container').find('.secondary_selected').closest('.option_box') if product_secondary? and @options.category.get('multi') == true
+      
       build_options = []
+      assemble_options = []
       reverse_option_map = {1:'0.75', 2:'', 3:'1.5', 4:'2', 5:'3'}
       _.each selected_options, (op)->
         productcode = $(op).data('productcode')
         quantity = reverse_option_map[$(op).find('.primary_selected').length]
-        quantity = (quantity/2) unless _.any($(@el).find('.specialties_container').find('.btn-danger'))
-        build_options.push("#{quantity}#{productcode}")
+        if ($(op).find('.primary_selected').hasClass('options_whole') or _.isEmpty($(@el).find('.specialties_container').find('.btn-danger'))) then part = '' else part = '1' 
+        assemble_options.push({productcode: productcode, quantity: quantity, part: part })
+
+        
+
+      if _.any(selected_options_secondary)
+        _.each selected_options_secondary, (op)->
+          productcode = $(op).data('productcode')
+          quantity = reverse_option_map[$(op).find('.secondary_selected').length]
+          if ($(op).find('.primary_selected').hasClass('options_whole') or _.isEmpty($(@el).find('.specialties_container').find('.btn-primary'))) then part = '' else part = '2'
+          found_opt = _.filter assemble_options, (asm_opt) -> (asm_opt.productcode ==  productcode and asm_opt.quantity == quantity)
+          if _.any(found_opt) then _.first(found_opt).part = '' else assemble_options.push({productcode: productcode, quantity: quantity, part: part })
+      build_options = _.map assemble_options, (asm_opt)-> if asm_opt.part != '' then "#{asm_opt.quantity}#{asm_opt.productcode}-#{asm_opt.part}" else "#{asm_opt.quantity}#{asm_opt.productcode}"
     else
       selected_options = $(@el).find('.options_container').find('.unit_option_setter')
       build_options=[]
@@ -59,7 +75,8 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
 
     if product?
       cart_product = new Kapiqua25.Models.CartProduct()
-      cart_product.set({cart: @model, quantity: selected_quantity,product: product, options: build_options.join(',') })
+      cart_product.set({cart: @model, quantity: selected_quantity,product: product, options: build_options.join(','), bind_id: product_secondary?.id})
+      console.log @model
       cart_product.save()
       $(@el).find('.cart_product_quantity').val('1')
     else
@@ -81,9 +98,6 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     else
       current_matchup = @options.matchups.getByCid($($(event.target).parent().find('.btn-primary')).attr('id'))
       _.each current_matchup.get('parsed_options'), (parsed_option) =>
-        # console.log current_matchup
-        # console.log @options.category.get('name')
-        # console.log parsed_option.product.get('productcode')
         target = $("##{@options.category.get('name')}_#{parsed_option.product.get('productcode')}")
         target.find('input.unit_option_setter').val(parsed_option.quantity)
           

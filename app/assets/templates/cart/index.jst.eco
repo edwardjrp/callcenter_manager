@@ -8,6 +8,9 @@
             <div class='item' data-cart-product-id="<%=cart_product.get('id')%>" data-cart-product-cid="<%=cart_product.cid%>">
               <input name="quantity" type="text" value="<%=cart_product.get('quantity')%>">
               <%-cart_product.get('product')?.get('productname')%>
+              <%if cart_product.secondary()? and cart_product.secondary() != '':%>
+                <%-"/ #{cart_product.secondary().get('productname')}"%>
+              <%end%>
               <div class='remove_options_and_pricing'>
                 <span class='item_remove'><i class="icon-trash icon-white"></i></span>
                 <span class='show_options'><i class="icon-list icon-white left-margin-1"></i></span>

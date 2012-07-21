@@ -6,10 +6,14 @@ class Kapiqua25.Models.CartProduct extends Backbone.RelationalModel
   validate: (attributes)->
     return 'La catidad debe ser un numero mayo a 1' unless _.isNumber(attributes.quantity)
     
+  secondary: ()->
+    _.first(this.get('product').get('category').get('products').where({id: this.get('bind_id')})) if this.get('bind_id')?
+    
     
   parsed_options: ()->
+    return [] if this.get('product').get('category').get('has_options') == false or this.get('options') == ''
     product_options = []
-    recipe = this.get('product').get('options')
+    recipe = this.get('options') 
     options = this.get('product').get('category').get('products').where({options: 'OPTION'})
     if _.any(recipe.split(','))
       _.each _.compact(recipe.split(',')), (code) ->
@@ -25,6 +29,7 @@ class Kapiqua25.Models.CartProduct extends Backbone.RelationalModel
 
 
   niffty_opions: () ->
+    return '' if this.get('product').get('category').get('has_options') == false
     presentation = _.map @parsed_options(), (option) ->
       option.quantity = '' if option.quantity == '1' || option.quantity == 1
       presenter = option.quantity
