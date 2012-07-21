@@ -33,6 +33,7 @@ jQuery ->
   
   message = (data) ->
     $('#chatdisplay').append($('<p>').append($('<b>').text(data.user), data.msg))
+    $("#chatdisplay").scrollTop($("#chatdisplay")[0].scrollHeight);
   
   me = ()->
     "#{$('#current_username').text()} : "
