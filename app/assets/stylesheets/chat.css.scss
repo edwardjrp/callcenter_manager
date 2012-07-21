@@ -1,0 +1,18 @@
+#utils{
+  position:fixed;
+  bottom:0;
+  border:1px solid #F4F4F4;
+  padding:10px;
+  @include border-radius(4px);
+  z-index:10000;
+  background-color:white;
+  
+  #chatdisplay{
+    border: 1px solid whiteSmoke;
+    height: 300px;
+    padding:10px;
+    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+}

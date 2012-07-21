@@ -38,3 +38,5 @@
 - <del>regex that parses the options is outdated [WLR] is now [W12]</del>
 
 - <del>cartproduct quantity is now decimal and should be integer</del>
+
+- cart is missing item update

@@ -5,9 +5,11 @@
     /[if lt IE 9]
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
     = stylesheet_link_tag    "application", :media => "all"
-    = yield :socket_io
+    = javascript_include_tag 'http://localhost:3030/socket.io/socket.io.js'
     = javascript_include_tag "application"
     = csrf_meta_tags
+    -if user_signed_in?
+      %meta{:content => "#{current_user.auth_token}", :name => "user"}
     %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}
   %body{id: controller_name}
     .navbar.navbar-fixed-top
@@ -23,7 +25,7 @@
               =render_navigation :expand_all => true, :renderer => :bootstrap
             %ul.nav.pull-right
               -if user_signed_in?
-                %li= link_to current_user.full_name, '#'
+                %li#current_username= link_to current_user.full_name, '#'
                 %li.divider-vertical
                 %li= link_to "Cerrar Sesión", logout_path, :id=>'end_session'
               -else
@@ -38,3 +40,21 @@
               = msg
           / =current_cart.inspect if Rails.env.development?
           = yield
+      - if user_signed_in?
+        .row#utils
+          .span12
+            .row#utils_labels
+              %ul.nav.nav-tabs
+                %li
+                  %a{href: 'chat'} Chat
+              .tab-content
+                .tab-pane{id:'chat'}
+                  .row
+                    .span11
+                      .span11#chatdisplay
+                  .row
+                    .span6
+                      %form.well.form-search#chat_send
+                        %input{type:"text", class:"input-large search-query", id:"chat_message"}
+                        %button{type:"submit", class:"btn"} Enviar
+       
