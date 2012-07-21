@@ -3,7 +3,10 @@ class Kapiqua25.Models.CartProduct extends Backbone.RelationalModel
     "http://localhost:3030/cart_products"
   
   
-  
+  validate: (attributes)->
+    return 'La catidad debe ser un numero mayo a 1' unless _.isNumber(attributes.quantity)
+    
+    
   parsed_options: ()->
     product_options = []
     recipe = this.get('product').get('options')

@@ -8,6 +8,7 @@ class Kapiqua25.Views.CartIndex extends Backbone.View
   events: ->
     'click .remove_options_and_pricing>span.item_remove':'remove_cart_product'
     'click .remove_options_and_pricing>span.show_options':'show_options'
+    'change .item>input':'update_quantity'
     
   
   render: ->
@@ -27,4 +28,11 @@ class Kapiqua25.Views.CartIndex extends Backbone.View
   show_options: (event)->
     target = $(event.currentTarget)
     target.parent().parent().next().toggle()
+    
+  update_quantity: (event)->
+    target = $(event.currentTarget)
+    item_to_update_cid = target.closest('.item').data('cart-product-cid')
+    item_to_update = @model.get('cart_products').getByCid(item_to_update_cid)
+    item_to_update.set({quantity: target.val()}, {silent: true})
+    item_to_update.save()
     

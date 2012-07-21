@@ -14,22 +14,31 @@ exports.create = (data, respond) ->
     save_item(cart_product,  data, respond)
 
 
-
-
+exports.update = (data, respond) ->
+  CartProduct.find data.id, (cp_err, cart_product) ->
+    if cp_err?
+      respond( {type:"error", data: 'El articulo no esta presente'})
+    else
+      cart_product.updateAttributes { options: data.options, quantity: Number(data.quantity)}, (err)->
+        if (err?)
+           console.log cart_product.errors
+           console.log err
+           respond( {type:"error", data: (cart_product.errors || err)})
+         else
+           current_cart(cart_product.cart_id, data, respond )
 
 exports.destroy = (data, respond) ->
   current_cart_id = data.cart
   if current_cart_id?
-    CartProduct.all {where: {cart_id: data.cart, product_id: data.product.id, options: data.options }}, (cp_err, cart_products) ->
-      if _.isEmpty(cart_products)
+    CartProduct.find data.id, (cp_err, cart_product) ->
+      if cp_err
         respond( {type:"error", data: 'El articulo no esta presente'})
       else  
-        cart_product_to_delete = _.first(cart_products)
-        cart_product_to_delete.destroy (del_err) ->
+        cart_product.destroy (del_err) ->
           if del_err?
-            console.log cart_product_to_delete.errors
+            console.log cart_product.errors
             console.log del_err
-            respond( {type:"error", data: (cart_product_to_delete.errors || del_err)})
+            respond( {type:"error", data: (cart_product.errors || del_err)})
           else
             current_cart(current_cart_id, data, respond)
           
