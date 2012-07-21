@@ -40,7 +40,6 @@ io.sockets.on "connection", (socket) ->
   socket.on "cart_products:delete", cartProducts.destroy
   
   socket.on 'chat', (data)->
-    console.log data
     io.sockets.emit('chat', data);
     
 
