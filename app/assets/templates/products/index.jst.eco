@@ -36,11 +36,16 @@
              <%unless @options.category.get('type_unit') == true:%>
                <table class='option_table'>
                  <tbody>
-                  <tr><td class='options_left'></td><td class='options_rigth'></td></tr>
-                  <tr><td class='options_left'></td><td class='options_rigth'></td></tr>
-                  <tr><td class='options_left'></td><td class='options_rigth'></td></tr>
-                  <tr><td class='options_left'></td><td class='options_rigth'></td></tr>
-                  <tr><td class='options_left'></td><td class='options_rigth'></td></tr>        
+                  <% for i in [0..4]:%>
+                    <tr>
+                       <% if @options.category.get('has_sides') == true :%>
+                         <td class='options_left'></td>
+                         <td class='options_rigth'></td>
+                      <%else:%>
+                         <td class='options_whole'></td>
+                      <%end%>
+                    </tr>
+                  <%end%>
                  </tbody>
                </table>
              <%else:%>

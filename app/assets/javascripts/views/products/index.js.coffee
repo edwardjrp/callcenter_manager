@@ -77,7 +77,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     unless @options.category.get('type_unit') == true
       primary_matchup = @options.matchups.getByCid($($(event.target).parent().find('.btn-primary')).attr('id'))
       secondary_matchup = @options.matchups.getByCid($($(event.target).parent().find('.btn-danger')).attr('id')) if @options.category.get('multi') == true
-      @mark_matchup(@options.category,primary_matchup, secondary_matchup, $(event.target))
+      @mark_matchup(@options.category,primary_matchup, secondary_matchup)
     else
       current_matchup = @options.matchups.getByCid($($(event.target).parent().find('.btn-primary')).attr('id'))
       _.each current_matchup.get('parsed_options'), (parsed_option) =>
@@ -117,19 +117,21 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     
   
   
-  mark_matchup: (category, primary_matchup,secondary_matchup , sender)->
+  mark_matchup: (category, primary_matchup,secondary_matchup)->
     $('table.option_table td').css('background-color','transparent').removeClass('primary_selected').removeClass('secondary_selected')
     option_map = {0.75: 1, 1: 2, 1.5: 3, 2:4, 3: 5}
     if primary_matchup?
-      @add_selection_class(category, primary_matchup,'primary_selected', 'options_left')
-    unless secondary_matchup?
-      if primary_matchup?
-        @add_selection_class(category, primary_matchup,'primary_selected', 'options_rigth')
-    if secondary_matchup?
-      @add_selection_class(category, secondary_matchup,'secondary_selected', 'options_rigth')
-    unless  primary_matchup?
+      if category.get('has_sides') == true then main_class =  'options_left' else main_class =  'options_whole'
+      @add_selection_class(category, primary_matchup,'primary_selected', main_class)
+    if category.get('has_sides') == true
+      unless secondary_matchup?
+        if primary_matchup?
+          @add_selection_class(category, primary_matchup,'primary_selected', 'options_rigth')
       if secondary_matchup?
-        @add_selection_class(category, secondary_matchup,'secondary_selected', 'options_left')
+        @add_selection_class(category, secondary_matchup,'secondary_selected', 'options_rigth')
+      unless  primary_matchup?
+        if secondary_matchup?
+          @add_selection_class(category, secondary_matchup,'secondary_selected', 'options_left')
           
  
   add_selection_class: (category, primary_matchup, selection_class, side_class) ->
@@ -151,15 +153,17 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     secondary_prensent = _.any($(@el).find('.specialties_container').find('.btn-danger')) if @options.category.get('multi') == true
     
     unless target == target_to_clear
-      @markdown_add(target,'options_left', 'primary_selected', primary_prensent )
-      @markdown_add(target,'options_rigth', 'primary_selected', primary_prensent )
+      if @options.category.get('has_sides') == true then main_class =  'options_left' else main_class =  'options_whole'
+      @markdown_add(target,main_class, 'primary_selected', primary_prensent )
+      if @options.category.get('has_sides') == true
+        @markdown_add(target,'options_rigth', 'primary_selected', primary_prensent )
 
-      if @options.category.get('multi') == true
-        @markdown_add(target,'options_rigth', 'secondary_selected', secondary_prensent )              
-        if target.hasClass('options_left') and not (primary_prensent? and primary_prensent == true)
-          for target_option in target.closest('table').find('.options_left')
-            unless _.indexOf(target.closest('table').find('.options_left'), target_option) > _.indexOf(target.closest('table').find('.options_left'), target[0])
-              $(target_option).css('background-color', '#DA4E49').addClass('secondary_selected')
+        if @options.category.get('multi') == true
+          @markdown_add(target,'options_rigth', 'secondary_selected', secondary_prensent )              
+          if target.hasClass('options_left') and not (primary_prensent? and primary_prensent == true)
+            for target_option in target.closest('table').find('.options_left')
+              unless _.indexOf(target.closest('table').find('.options_left'), target_option) > _.indexOf(target.closest('table').find('.options_left'), target[0])
+                $(target_option).css('background-color', '#DA4E49').addClass('secondary_selected')
 
   markdown_add: (target, target_class, class_to_add, selection_present)->
     if class_to_add == 'primary_selected' then color = '#0073CC' else color = '#DA4E49'
