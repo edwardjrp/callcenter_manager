@@ -5,6 +5,7 @@
     %th Tiene opciones
     %th Opciones en unidades
     %th Seleccion multiple
+    %th Seleccion de lados
     %th Oculta
     %th Producto base
   %tbody
@@ -17,6 +18,8 @@
           =link_to category.type_unit.to_s, nil,:class=>"btn #{set_state_class category.type_unit?} change_state_unit"
         %th
           =link_to category.multi.to_s, nil,:class=>"btn #{set_state_class category.multi?} change_state_multi"
+        %th
+          =link_to category.has_sides.to_s, nil,:class=>"btn #{set_state_class category.has_sides?} change_state_sides"
         %th
           =link_to category.hidden.to_s, nil,:class=>"btn #{set_state_class category.hidden?} change_state_hidden"
 

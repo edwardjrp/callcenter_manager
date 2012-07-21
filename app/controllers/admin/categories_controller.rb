@@ -30,6 +30,10 @@ class Admin::CategoriesController < ApplicationController
     change_state(:multi)
   end
   
+  def change_has_sides
+    change_state(:has_sides)
+  end
+  
   def change_hidden
     change_state(:hidden)
   end

@@ -37,6 +37,7 @@ Kapiqua25::Application.routes.draw do
         post 'change_units'
         post 'change_multi'
         post 'change_hidden'
+        post 'change_has_sides'
       end
     end
     root :to => 'dashboard#index'

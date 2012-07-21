@@ -16,7 +16,7 @@
   if $('.alert').size() > 0
     $('.alert').replaceWith("<div class=\"alert alert-#{type}\"><button class=\"close\" data-dismiss=\"alert\">×</button>#{msg}</div>")
   else
-    $('.container>.row>.span12').prepend($("<div class=\"alert alert-#{type}\"><button class=\"close\" data-dismiss=\"alert\">×</button>#{msg}</div>"))
+    $('.container>.row:first>.span12').prepend($("<div class=\"alert alert-#{type}\"><button class=\"close\" data-dismiss=\"alert\">×</button>#{msg}</div>"))
     
 # end alert
 

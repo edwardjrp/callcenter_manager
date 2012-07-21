@@ -57,6 +57,26 @@ jQuery ->
       error: (errors)->
         window.show_alert(errors.responseText, 'error')
   
+  $('.change_state_sides').click (event)->
+    event.preventDefault()
+    target = $(this)
+    $.ajax
+      type: 'POST'
+      url: "/admin/categories/#{$(this).closest('tr').data('category-id')}/change_has_sides"
+      datatype: 'JSON'
+      beforeSend: (xhr) ->
+        xhr.setRequestHeader("Accept", "application/json")
+      success: (category)->
+        if category.has_sides == true
+          window.show_alert("#{category.name} ahora se pueden seleccionar lados para las opciones", 'success')
+          window.replaceClass(target, 'btn-inverse', 'btn-primary')
+        else
+          window.show_alert("#{category.name} ahora no se pueden seleccionar lados para las opciones", 'success')
+          window.replaceClass(target, 'btn-primary', 'btn-inverse')
+        target.text(category.has_sides)
+      error: (errors)->
+        window.show_alert(errors.responseText, 'error')
+        
   $('.change_state_multi').click (event)->
     event.preventDefault()
     target = $(this)
