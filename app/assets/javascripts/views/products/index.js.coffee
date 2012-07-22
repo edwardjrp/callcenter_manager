@@ -76,7 +76,6 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     if product?
       cart_product = new Kapiqua25.Models.CartProduct()
       cart_product.set({cart: @model, quantity: selected_quantity,product: product, options: build_options.join(','), bind_id: product_secondary?.id})
-      console.log @model
       cart_product.save()
       $(@el).find('.cart_product_quantity').val('1')
     else
