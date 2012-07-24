@@ -34,7 +34,7 @@ class Kapiqua25.Models.CartProduct extends Backbone.RelationalModel
       option.quantity = '' if option.quantity == '1' || option.quantity == 1
       presenter = option.quantity
       presenter += " #{option.product.get('productname')} "
-      presenter += option.part.replace(/1/,'Izquierada').replace(/2/, 'Derecha').replace(/W/,'Completa')
+      presenter += option.part.replace(/1/,'Izquierda').replace(/2/, 'Derecha').replace(/W/,'Completa')
       window.strip(presenter)
     to_sentence presentation
   

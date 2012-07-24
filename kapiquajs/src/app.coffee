@@ -6,8 +6,7 @@ express = require('express')
 _ = require('underscore')
 pg = require('pg')
 util = require('util')
-request = require('request')
-cartProducts = require('./routes/cart_products')
+CartProducts = require('./routes/cart_products')
 
 app = module.exports = express.createServer()
 
@@ -35,9 +34,10 @@ app.configure 'production', ->
 # Routes
 
 io.sockets.on "connection", (socket) ->
-  socket.on "cart_products:create", cartProducts.create
-  socket.on "cart_products:update", cartProducts.update
-  socket.on "cart_products:delete", cartProducts.destroy
+  CartProducts.socket = socket
+  socket.on "cart_products:create", CartProducts.create
+  socket.on "cart_products:update", CartProducts.update
+  socket.on "cart_products:delete", CartProducts.destroy
   
   socket.on 'chat', (data)->
     io.sockets.emit('chat', data);

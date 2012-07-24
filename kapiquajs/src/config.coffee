@@ -1,6 +1,3 @@
-pg = require('pg')
-
-
 class Config
   
   @host: "localhost"
