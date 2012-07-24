@@ -10,10 +10,9 @@ class CartProducts
   this.socket = null
   
   @create: (data, respond) =>
-    @socket.emit 'chat', {user: 'pulse ', msg: 'HELLO BEFORE FETCHING FROM PULSE'} if @socket?
     CartProduct.all {where: {cart_id: data.cart, product_id: data.product.id, options: data.options }}, (cp_err, cart_products) ->
       if _.isEmpty(cart_products)
-        cart_product = new CartProduct({cart_id: data.cart, product_id: data.product.id, options: data.options, bind_id: data.bind_id, quantity: Number(data.quantity)})
+        cart_product = new CartProduct({cart_id: data.cart, product_id: data.product.id, options: data.options, bind_id: data.bind_id, quantity: Number(data.quantity), created_at: new Date()})
       else
         cart_product = _.first(cart_products)
         cart_product.quantity = cart_product.quantity + Number(data.quantity)
@@ -25,7 +24,7 @@ class CartProducts
       if cp_err?
         respond( {type:"error", data: 'El articulo no esta presente'})
       else
-        cart_product.updateAttributes { options: data.options, quantity: Number(data.quantity)}, (err)->
+        cart_product.updateAttributes { options: data.options, quantity: Number(data.quantity), updated_at: new Date()}, (err)->
           if (err?)
              console.log cart_product.errors
              console.log err
@@ -72,9 +71,9 @@ class CartProducts
           else
             json_cart = JSON.parse(JSON.stringify(cart))
             json_cart.cart_products = results
+            respond({type:"success", data: json_cart})
             PulseBridge.send 'TestConnection','<Value>Hello there</Value>', null, (res_data) ->
               CartProducts.socket.emit 'chat', {user: 'pulse ', msg: res_data} if CartProducts.socket?
-            respond({type:"success", data: json_cart})
 
 
 
