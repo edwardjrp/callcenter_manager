@@ -1,6 +1,7 @@
 CartProduct = require('../models/cart_product')
 Cart = require('../models/cart')
 Product = require('../models/product')
+PulseBridge = require('../pulse_bridge/pulse_bridge')
 async = require('async')
 _ = require('underscore')
 
@@ -9,7 +10,7 @@ class CartProducts
   this.socket = null
   
   @create: (data, respond) =>
-    @socket.emit 'chat', {user: 'pulse', msg:'Hello there'} if @socket?
+    @socket.emit 'chat', {user: 'pulse ', msg: 'HELLO BEFORE FETCHING FROM PULSE'} if @socket?
     CartProduct.all {where: {cart_id: data.cart, product_id: data.product.id, options: data.options }}, (cp_err, cart_products) ->
       if _.isEmpty(cart_products)
         cart_product = new CartProduct({cart_id: data.cart, product_id: data.product.id, options: data.options, bind_id: data.bind_id, quantity: Number(data.quantity)})
@@ -71,6 +72,8 @@ class CartProducts
           else
             json_cart = JSON.parse(JSON.stringify(cart))
             json_cart.cart_products = results
+            PulseBridge.send 'TestConnection','<Value>Hello there</Value>', null, (res_data) ->
+              CartProducts.socket.emit 'chat', {user: 'pulse ', msg: res_data} if CartProducts.socket?
             respond({type:"success", data: json_cart})
 
 
