@@ -40,3 +40,5 @@
 - <del>cartproduct quantity is now decimal and should be integer</del>
 
 - cart is missing item update
+
+- aggragating items should check binding id to see if we are adding to a combined element

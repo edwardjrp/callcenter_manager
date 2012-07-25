@@ -9,7 +9,9 @@ class CartProducts
   
   
   @create: (data, respond, socket) =>
-    CartProduct.all {where: {cart_id: data.cart, product_id: data.product.id, options: data.options }}, (cp_err, cart_products) ->
+    search_hash = {cart_id: data.cart, product_id: data.product.id, options: data.options }
+    search_hash['bind_id']= data.bind_id if data.bind_id? and typeof data.bind_id != undefined
+    CartProduct.all {where: search_hash}, (cp_err, cart_products) ->
       if _.isEmpty(cart_products)
         cart_product = new CartProduct({cart_id: data.cart, product_id: data.product.id, options: data.options, bind_id: data.bind_id, quantity: Number(data.quantity), created_at: new Date()})
       else
@@ -18,7 +20,7 @@ class CartProducts
       CartProducts.save_item(cart_product, respond, socket)
 
 
-  @update: (data, respond) ->
+  @update: (data, respond, socket) ->
     CartProduct.find data.id, (cp_err, cart_product) ->
       if cp_err?
         respond( {type:"error", data: 'El articulo no esta presente'})
@@ -29,9 +31,9 @@ class CartProducts
              console.log err
              respond( {type:"error", data: (cart_product.errors || err)})
            else
-             CartProducts.current_cart(cart_product.cart_id, data, respond )
+             CartProducts.current_cart(cart_product.cart_id, respond , socket)
 
-  @destroy: (data, respond) ->
+  @destroy: (data, respond, socket) ->
     current_cart_id = data.cart
     if current_cart_id?
       CartProduct.find data.id, (cp_err, cart_product) ->
@@ -44,7 +46,7 @@ class CartProducts
               console.log del_err
               respond( {type:"error", data: (cart_product.errors || del_err)})
             else
-              CartProducts.current_cart(current_cart_id, data, respond)
+              CartProducts.current_cart(current_cart_id, respond, socket)
           
 
   @save_item: (cart_product, respond, socket)->
