@@ -34,8 +34,8 @@ app.configure 'production', ->
 # Routes
 
 io.sockets.on "connection", (socket) ->
-  CartProducts.socket = socket
-  socket.on "cart_products:create", CartProducts.create
+  socket.on "cart_products:create", (data, responder) ->
+    CartProducts.create(data, responder, socket)
   socket.on "cart_products:update", CartProducts.update
   socket.on "cart_products:delete", CartProducts.destroy
   

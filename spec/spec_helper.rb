@@ -17,6 +17,7 @@ Spork.prefork do
   require 'rspec/rails'
   require 'rspec/autorun'
   require 'shoulda/matchers/integrations/rspec'
+  require 'faker'
   require 'capybara/rspec'
   require 'factory_girl_rails'
   require 'capybara/poltergeist'

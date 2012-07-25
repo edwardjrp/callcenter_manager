@@ -7,16 +7,15 @@ _ = require('underscore')
 
 class CartProducts
   
-  this.socket = null
   
-  @create: (data, respond) =>
+  @create: (data, respond, socket) =>
     CartProduct.all {where: {cart_id: data.cart, product_id: data.product.id, options: data.options }}, (cp_err, cart_products) ->
       if _.isEmpty(cart_products)
         cart_product = new CartProduct({cart_id: data.cart, product_id: data.product.id, options: data.options, bind_id: data.bind_id, quantity: Number(data.quantity), created_at: new Date()})
       else
         cart_product = _.first(cart_products)
         cart_product.quantity = cart_product.quantity + Number(data.quantity)
-      CartProducts.save_item(cart_product,  data, respond)
+      CartProducts.save_item(cart_product, respond, socket)
 
 
   @update: (data, respond) ->
@@ -48,16 +47,16 @@ class CartProducts
               CartProducts.current_cart(current_cart_id, data, respond)
           
 
-  @save_item: (cart_product, data, respond)->
+  @save_item: (cart_product, respond, socket)->
     cart_product.save (err)->
      if (err?)
        console.log cart_product.errors
        console.log err
        respond( {type:"error", data: (cart_product.errors || err)})
      else
-       CartProducts.current_cart(cart_product.cart_id, data, respond )           
+       CartProducts.current_cart(cart_product.cart_id, respond, socket)           
 
-  @current_cart: (cart_id, data, respond)->
+  @current_cart: (cart_id, respond, socket)->
     Cart.find cart_id, (c_err, cart) ->
       cart.cart_products {}, (c_cp_err, cart_products)->
         get_products = (cp, cb)->
@@ -73,7 +72,7 @@ class CartProducts
             json_cart.cart_products = results
             respond({type:"success", data: json_cart})
             PulseBridge.send 'TestConnection','<Value>Hello there</Value>', null, (res_data) ->
-              CartProducts.socket.emit 'chat', {user: 'pulse ', msg: res_data} if CartProducts.socket?
+              socket.emit 'chat', {user: 'pulse ', msg: res_data} if socket?
 
 
 
