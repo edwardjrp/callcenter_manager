@@ -324,7 +324,7 @@ City = DB.define("City",
 
   name:
     type: String
-    length: 255    
+    length: 255   
 
   created_at:
     type: Date
@@ -335,6 +335,81 @@ City = DB.define("City",
     default: Date.now
 ,
   table: "cities"
+)
+
+Area = DB.define("Area",
+
+  name:
+    type: String
+    length: 255    
+
+  city_id:
+    type: Number   
+
+  store_id:
+    type: Number   
+
+  created_at:
+    type: Date
+    default: Date.now
+
+  updated_at:
+    type: Date
+    default: Date.now
+,
+  table: "areas"
+)
+
+Street = DB.define("Street",
+
+  name:
+    type: String
+    length: 255    
+
+  area_id:
+    type: Number   
+
+  created_at:
+    type: Date
+    default: Date.now
+
+  updated_at:
+    type: Date
+    default: Date.now
+,
+  table: "streets"
+)
+
+Address = DB.define("Address",
+
+  client_id:
+    type: Number   
+
+  street_id:
+    type: Number   
+
+  number:
+    type: Number   
+
+  unit_type:
+    type: Number   
+
+  postal_code:
+    type: String
+    length: 255   
+     
+  delivery_instructions:
+    type: Schema.Text
+
+  created_at:
+    type: Date
+    default: Date.now
+
+  updated_at:
+    type: Date
+    default: Date.now
+,
+  table: "addresses"
 )
 
 CartProduct = DB.define("CartProduct",
@@ -365,19 +440,53 @@ CartProduct = DB.define("CartProduct",
   table: "cart_products"
 )
 User.hasMany(Cart, {as: 'carts',foreignKey: 'user_id' })
+
+City.hasMany(Store, {as: 'stores',foreignKey: 'city_id' })
+City.hasMany(Area, {as: 'areas',foreignKey: 'city_id' })
+
+Area.belongsTo(City, {as: 'city', foreignKey: 'city_id'})
+Area.belongsTo(Store, {as: 'store', foreignKey: 'store_id'})
+Area.hasMany(Street, {as: 'street',foreignKey: 'area_id' })
+
+Street.belongsTo(Area, {as: 'area', foreignKey: 'area_id'})
+Street.hasMany(Address, {as: 'addresses',foreignKey: 'street_id' })
+
+
+Address.belongsTo(Client, {as: 'client',foreignKey: 'client_id' })
+Address.belongsTo(Street, {as: 'street',foreignKey: 'street_id' })
+
+
+Store.belongsTo(City, {as: 'city', foreignKey: 'city_id'})
+Store.hasMany(Cart, {as: 'carts',foreignKey: 'store_id' })
+
 Client.hasMany(Cart, {as: 'carts',foreignKey: 'client_id' })
 Client.hasMany(Phone, {as: 'phones',foreignKey: 'client_id' })
+Client.hasMany(Address, {as: 'addresses',foreignKey: 'client_id' })
+
 Phone.belongsTo(Client, {as: 'client', foreignKey: 'client_id'})
+
 Cart.hasMany(CartProduct, {as: 'cart_products', foreignKey: 'cart_id'})
 Cart.belongsTo(Client, {as: 'client', foreignKey: 'client_id'})
 Cart.belongsTo(User, {as: 'user', foreignKey: 'user_id'})
+
 Category.hasMany(Product, {as: 'products', foreignKey: 'category_id'})
+
 Product.hasMany(CartProduct, {as: 'cart_products', foreignKey: 'product_id'})
+Product.belongsTo(Category, {as: 'category', foreignKey: 'category_id'})
+
 CartProduct.belongsTo(Product, {as: 'product', foreignKey: 'product_id'})
 CartProduct.belongsTo(Cart, {as: 'cart', foreignKey: 'cart_id'})
 
 
-exports.CartProduct = CartProduct
 exports.Cart = Cart
+exports.User = User
+exports.City = City
+exports.Area = Area
+exports.Street = Street
+exports.Address = Address
+exports.Store = Store
+exports.Client = Client
+exports.Phone = Phone
 exports.Product = Product
 exports.Category = Category
+exports.CartProduct = CartProduct
