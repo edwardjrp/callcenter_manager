@@ -21,6 +21,80 @@ Cart = DB.define("Cart",
   store_id:
     type: Number
 
+  store_order_id:
+    type: String
+    length: 255
+
+
+  business_date:
+    type: Date
+
+  advance_order_time:
+    type: Date
+
+  net_amount:
+    type: Number
+
+  tax_amount:
+    type: Number
+
+  tax1_amount:
+    type: Number
+
+  tax2_amount:
+    type: Number
+
+  payment_amount:
+    type: Number
+
+  message:
+    type: String
+    length: 255
+
+  order_text:
+    type: String
+    length: 255
+
+  order_progress:
+    type: String
+    length: 255
+
+  can_place_order:
+    type: Boolean
+
+  delivery_instructions:
+    type: Schema.Text
+
+  payment_type:
+    type: String
+    length: 255
+
+  credit_cart_approval_name:
+    type: String
+    length: 255
+
+  fiscal_number:
+    type: String
+    length: 255
+
+  fiscal_type:
+    type: String
+    length: 255
+
+  company_name:
+    type: String
+    length: 255
+
+  discount:
+    type: Number
+
+  discount_auth_id:
+    type: Number
+
+  completed:
+    type: Boolean
+    default: false
+
   created_at:
     type: Date
     default: Date.now
