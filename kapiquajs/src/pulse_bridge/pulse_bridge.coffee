@@ -8,11 +8,7 @@ class PulseBridge
   @headers = {"User-Agent": "kapiqua-node" , "Connection": "close","Accept" : "text/html,application/xhtml+xml,application/xml","Accept-Charset": "utf-8", "Content-Type":"text/xml;charset=UTF-8"}
   
   @make: (action, data) ->
-    
-    "<?xml version=\"1.0\" encoding=\"UTF-8\"?><env:Envelope xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\
-     xmlns:wsdlns=\"http://www.dominos.com/wsdl/\" xmlns:env=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ins0=\"http://www.dominos.com/type\">\
-     <env:Header><Authorization><FromURI>dominos.com</FromURI><User>TestingAndSupport</User><Password>supp0rtivemeasures</Password><TimeStamp></TimeStamp></Authorization></env:Header>\
-     <env:Body><ns1:#{action} xmlns:ns1=\"http://www.dominos.com/message/\" encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">#{data}</ns1:#{action}></env:Body></env:Envelope>"
+    doc = new libxml.Document()    
     
   @send: (action, data, err_cb, cb) ->
     # TestConnection
@@ -31,6 +27,27 @@ class PulseBridge
       else
        cb(res_data)
    
+   
+  @envelope: (doc) =>
+    envelope = new libxml.Element(doc,'env:Envelope').attr
+      'xmlns:xsd':"http://www.w3.org/2001/XMLSchema"
+      'xmlns:xsi':"http://www.w3.org/2001/XMLSchema-instance"
+      'xmlns:wsdlns':"http://www.dominos.com/wsdl/"
+      'xmlns:env':'http://schemas.xmlsoap.org/soap/envelope/'
+      'xmlns:ins0':'http://www.dominos.com/type'
+    envelope.add(@pulse_header(doc))
+    envelope
+     
+   
+  @pulse_header: (doc) =>
+    auth = new libxml.Element(doc,'Authorization')
+    auth.addChild(new libxml.Element(doc,'FromURI', 'dominos.com'))
+    auth.addChild(new libxml.Element(doc,'User', 'TestingAndSupport'))
+    auth.addChild(new libxml.Element(doc,'Password', 'supp0rtivemeasures'))
+    auth.addChild(new libxml.Element(doc,'TimeStamp',''))
+    header = new libxml.Element(doc,'env:Header').addChild(auth)
+    header
+      
    @price_body: () =>
      doc = new libxml.Document()
      envelope = new libxml.Element(doc,'env:Envelope').attr
