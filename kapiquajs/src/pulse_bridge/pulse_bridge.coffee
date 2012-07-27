@@ -3,11 +3,12 @@ request = require('request')
 libxml = require("libxmljs")
 
 class PulseBridge
-  @debut = false
+  @debut = true
   @target = 'http://192.168.85.60:59101/RemotePulseAPI/RemotePulseAPI.WSDL'    
-  @headers = {"User-Agent": "kapiqua-node" , "Connection": "close","Accept" : "text/html,application/xhtml+xml,application/xml","Accept-Charset": "utf-8", "Content-Type":"text/xml;charset=UTF-8", "SOAPAction": "http://www.dominos.com/action/TestConnection"}
+  @headers = {"User-Agent": "kapiqua-node" , "Connection": "close","Accept" : "text/html,application/xhtml+xml,application/xml","Accept-Charset": "utf-8", "Content-Type":"text/xml;charset=UTF-8"}
   
   @make: (action, data) ->
+    
     "<?xml version=\"1.0\" encoding=\"UTF-8\"?><env:Envelope xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\
      xmlns:wsdlns=\"http://www.dominos.com/wsdl/\" xmlns:env=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ins0=\"http://www.dominos.com/type\">\
      <env:Header><Authorization><FromURI>dominos.com</FromURI><User>TestingAndSupport</User><Password>supp0rtivemeasures</Password><TimeStamp></TimeStamp></Authorization></env:Header>\
@@ -16,11 +17,14 @@ class PulseBridge
   @send: (action, data, err_cb, cb) ->
     # TestConnection
     # <Value>Hello there</Value>
-    body = @make(action, data)
+    body = @price_body().replace(/^\s*(.+)\s*$/g,'$1')
+    # console.log body
     @headers["Content-Length"] =  body.length
-    if @debug == true
-      console.log @headers
-      console.log body
+    @headers["SOAPAction"]= "http://www.dominos.com/action/PriceOrder"
+    # if @debug == true
+    console.log @headers
+    console.log body
+    console.log _.isString(body)
     request.post {headers: @headers, uri: @target, body: body }, (err, res, res_data) ->
       if err
         err_cb(err)
@@ -29,8 +33,25 @@ class PulseBridge
    
    @price_body: () =>
      doc = new libxml.Document()
+     envelope = new libxml.Element(doc,'env:Envelope').attr
+       'xmlns:xsd':"http://www.w3.org/2001/XMLSchema"
+       'xmlns:xsi':"http://www.w3.org/2001/XMLSchema-instance"
+       'xmlns:wsdlns':"http://www.dominos.com/wsdl/"
+       'xmlns:env':'http://schemas.xmlsoap.org/soap/envelope/'
+       'xmlns:ins0':'http://www.dominos.com/type'
+     header = new libxml.Element(doc,'env:Header')
+     auth = new libxml.Element(doc,'Authorization')
+     auth.addChild(new libxml.Element(doc,'FromURI', 'dominos.com'))
+     auth.addChild(new libxml.Element(doc,'User', 'TestingAndSupport'))
+     auth.addChild(new libxml.Element(doc,'Password', 'supp0rtivemeasures'))
+     auth.addChild(new libxml.Element(doc,'TimeStamp',''))
+     header.addChild(auth)
+     
+     
+     
+     
      order = new libxml.Element(doc,'Order').attr({orderid:"Order#1317916872", currency:"en-USD", language:"en-USA"})
-     order.addChild(new libxml.Element(doc,'StoreID', '15871'))
+     order.addChild(new libxml.Element(doc,'StoreID', '99998'))
      order.addChild(new libxml.Element(doc,'ServiceMethod', 'Delivery'))
      order.addChild(new libxml.Element(doc,'OrderTakeSeconds', '60'))
      order.addChild(new libxml.Element(doc,'DeliveryInstructions', 'testing kapiqua25'))
@@ -46,14 +67,13 @@ class PulseBridge
      customer_address = new libxml.Element(doc,'CustomerAddress').attr({ 'type':"Address-US"})
      customer_address.addChild(new libxml.Element(doc,'City', 'Santo Domingo'))
      customer_address.addChild(new libxml.Element(doc,'Region', ''))
-     customer_address.addChild(new libxml.Element(doc,'PostalCode', '15871'))
+     customer_address.addChild(new libxml.Element(doc,'PostalCode', '99998'))
      customer_address.addChild(new libxml.Element(doc,'StreetNumber', '47'))
      customer_address.addChild(new libxml.Element(doc,'AddressLine2').attr({'xsi:nil':"true"}))
      customer_address.addChild(new libxml.Element(doc,'AddressLine3').attr({'xsi:nil':"true"}))
      customer_address.addChild(new libxml.Element(doc,'AddressLine4').attr({'xsi:nil':"true"}))
      customer_address.addChild(new libxml.Element(doc,'UnitType', 'Apartment'))
      customer_address.addChild(new libxml.Element(doc,'UnitNumber', '202').attr({"xsi:type":"xsd:string"}))
-     customer_address.addChild(new libxml.Element(doc,'City', 'Santo Domingo').attr({"xsi:type":"xsd:string"}))
      customer.addChild(customer_address)
      
      customer_name = new libxml.Element(doc,'Name').attr({ 'type':"Name-US"})
@@ -91,14 +111,17 @@ class PulseBridge
      order_item.addChild(new libxml.Element(doc,'OverrideAmmount').attr('xsi:nil':"true"))
      order_item.addChild(new libxml.Element(doc,'CookingInstructions').attr('xsi:nil':"true"))
      # modifier loop
-     item_modifiers = new libxml.Element(doc,'OrderItems')
+     item_modifiers = new libxml.Element(doc,'ItemModifiers')
      # innner modifier loop here
-     item_modifier = new libxml.Element(doc,'OrderItem').attr({code:'p'})
+     item_modifier = new libxml.Element(doc,'ItemModifier').attr({code:'p'})
      item_modifier.addChild(new libxml.Element(doc,'ItemModifierName').attr('xsi:nil':"true"))
      item_modifier.addChild(new libxml.Element(doc,'ItemModifierQuantity', '1'))
      item_modifier.addChild(new libxml.Element(doc,'ItemModifierPart', 'w'))
      item_modifiers.addChild(item_modifier)
-     order.addChild(item_modifiers)
+     order_item.addChild(item_modifiers)
+     order_items.addChild(order_item)
+     
+     order.addChild(order_items)
      # end items
      #payment
      payment = new libxml.Element(doc,'Payment')
@@ -108,10 +131,20 @@ class PulseBridge
      order.addChild(payment)
      #end payment
      
-     doc.root(order)
-     doc.toString()    
+     body = new libxml.Element(doc,'env:Body')
+     action = new libxml.Element(doc, "ns1:PriceOrder").attr({ 'xmlns:ns1':"http://www.dominos.com/message/", encodingStyle:"http://schemas.xmlsoap.org/soap/encoding/"})
+     action.addChild(order)
+     body.addChild(action)
+     envelope.addChild(header)
+     envelope.addChild(body) 
+     doc.root(envelope)
+     doc.toString().replace(/\"/g, '\"')
     
-console.log PulseBridge.price_body()
+log = (text) ->
+  console.log text
+  
+  
+PulseBridge.send('', 'data', log, log)
 
 
 module.exports = PulseBridge

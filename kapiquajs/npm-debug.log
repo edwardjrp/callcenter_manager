@@ -1,0 +1,492 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'install', '-d' ]
+2 info using npm@1.1.32
+3 info using node@v0.8.0
+4 verbose config file /Users/radhamesbrito/.npmrc
+5 verbose config file /usr/local/etc/npmrc
+6 verbose config file /usr/local/lib/node_modules/npm/npmrc
+7 verbose read json /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/package.json
+8 verbose readDependencies using package.json deps
+9 verbose install where, deps [ '/Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs',
+9 verbose install   [ 'express',
+9 verbose install     'jade',
+9 verbose install     'request',
+9 verbose install     'pg',
+9 verbose install     'underscore',
+9 verbose install     'jugglingdb',
+9 verbose install     'async',
+9 verbose install     'socket.io',
+9 verbose install     'libxmljs' ] ]
+10 verbose from cache /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/package.json
+11 info preinstall kapiqua@0.0.1
+12 verbose read json /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/async/package.json
+13 verbose read json /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/coffee-script/package.json
+14 verbose read json /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/connect-xcors/package.json
+15 verbose read json /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/express/package.json
+16 verbose read json /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/jade/package.json
+17 verbose read json /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/jugglingdb/package.json
+18 verbose read json /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/pg/package.json
+19 verbose read json /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/request/package.json
+20 verbose read json /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/socket.io/package.json
+21 verbose read json /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/underscore/package.json
+22 verbose from cache /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/package.json
+23 verbose readDependencies using package.json deps
+24 verbose read json /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/.bin/package.json
+25 verbose from cache /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/async/package.json
+26 verbose from cache /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/coffee-script/package.json
+27 verbose from cache /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/connect-xcors/package.json
+28 verbose from cache /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/express/package.json
+29 verbose from cache /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/jade/package.json
+30 verbose from cache /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/jugglingdb/package.json
+31 verbose from cache /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/pg/package.json
+32 verbose from cache /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/request/package.json
+33 verbose from cache /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/socket.io/package.json
+34 verbose from cache /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/underscore/package.json
+35 verbose already installed skipping pg@0.8.1 /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs
+36 verbose already installed skipping underscore@1.3.3 /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs
+37 verbose already installed skipping jugglingdb@0.1.12 /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs
+38 verbose already installed skipping async@0.1.22 /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs
+39 verbose already installed skipping socket.io@0.9.6 /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs
+40 verbose cache add [ 'libxmljs@0.6.0', null ]
+41 silly cache add name=undefined spec="libxmljs@0.6.0" args=["libxmljs@0.6.0",null]
+42 verbose parsed url { pathname: 'libxmljs@0.6.0',
+42 verbose parsed url   path: 'libxmljs@0.6.0',
+42 verbose parsed url   href: 'libxmljs@0.6.0' }
+43 silly cache add name="libxmljs" spec="0.6.0" args=["libxmljs","0.6.0"]
+44 verbose parsed url { pathname: '0.6.0', path: '0.6.0', href: '0.6.0' }
+45 verbose addNamed [ 'libxmljs', '0.6.0' ]
+46 verbose addNamed [ '0.6.0', '0.6.0' ]
+47 verbose already installed skipping express@2.5.10 /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs
+48 verbose already installed skipping request@2.9.203 /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs
+49 verbose already installed skipping jade@>= 0.0.1 /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs
+50 verbose url raw libxmljs/0.6.0
+51 verbose url resolving [ 'https://registry.npmjs.org/', './libxmljs/0.6.0' ]
+52 verbose url resolved https://registry.npmjs.org/libxmljs/0.6.0
+53 http GET https://registry.npmjs.org/libxmljs/0.6.0
+54 http 200 https://registry.npmjs.org/libxmljs/0.6.0
+55 silly registry.get cb [ 200,
+55 silly registry.get   { vary: 'Accept',
+55 silly registry.get     server: 'CouchDB/1.2.0 (Erlang OTP/R15B)',
+55 silly registry.get     etag: '"892J2191A7J6NHF1NPAE78ED5"',
+55 silly registry.get     date: 'Thu, 26 Jul 2012 13:50:45 GMT',
+55 silly registry.get     'content-type': 'application/json',
+55 silly registry.get     'content-length': '3127' } ]
+56 verbose addRemoteTarball [ 'https://registry.npmjs.org/libxmljs/-/libxmljs-0.6.0.tgz',
+56 verbose addRemoteTarball   '015adb4579e6940dbcdb5363cd6ee98354a5af14' ]
+57 verbose fetch to= /var/folders/_x/114y8rfd5fx7l2mvw_w7f6zw0000gn/T/npm-1343310645481/1343310645481-0.6483609494753182/tmp.tgz
+58 http GET https://registry.npmjs.org/libxmljs/-/libxmljs-0.6.0.tgz
+59 silly shasum updated bytes 32351
+60 info shasum 015adb4579e6940dbcdb5363cd6ee98354a5af14
+60 info shasum /var/folders/_x/114y8rfd5fx7l2mvw_w7f6zw0000gn/T/npm-1343310645481/1343310645481-0.6483609494753182/tmp.tgz
+61 verbose tar unpack /var/folders/_x/114y8rfd5fx7l2mvw_w7f6zw0000gn/T/npm-1343310645481/1343310645481-0.6483609494753182/tmp.tgz
+62 silly gunzTarPerm modes [ '755', '644' ]
+63 silly gunzTarPerm extractEntry package.json
+64 silly gunzTarPerm extractEntry .npmignore
+65 silly gunzTarPerm extractEntry README.md
+66 silly gunzTarPerm extractEntry LICENSE
+67 silly gunzTarPerm extractEntry index.js
+68 silly gunzTarPerm extractEntry lib/bindings.js
+69 silly gunzTarPerm extractEntry lib/document.js
+70 silly gunzTarPerm extractEntry lib/element.js
+71 silly gunzTarPerm extractEntry lib/sax_parser.js
+72 silly gunzTarPerm extractEntry .travis.yml
+73 silly gunzTarPerm extractEntry Makefile
+74 silly gunzTarPerm extractEntry docs/_Sidebar.md
+75 silly gunzTarPerm extractEntry docs/api/Attribute.md
+76 silly gunzTarPerm extractEntry docs/api/Element.md
+77 silly gunzTarPerm extractEntry docs/api/HtmlDocument.md
+78 silly gunzTarPerm extractEntry docs/api/Libxmljs.md
+79 silly gunzTarPerm extractEntry docs/api/Namespace.md
+80 silly gunzTarPerm extractEntry docs/api/Parser.md
+81 silly gunzTarPerm extractEntry docs/api/SaxParser.md
+82 silly gunzTarPerm extractEntry docs/api/SaxPushParser.md
+83 silly gunzTarPerm extractEntry docs/api/SyntaxError.md
+84 silly gunzTarPerm extractEntry docs/api/XmlDocument.md
+85 silly gunzTarPerm extractEntry docs/Home.md
+86 silly gunzTarPerm extractEntry binding.gyp
+87 silly gunzTarPerm extractEntry src/xml_namespace.cc
+88 silly gunzTarPerm extractEntry src/html_document.cc
+89 silly gunzTarPerm extractEntry src/libxmljs.cc
+90 silly gunzTarPerm extractEntry src/libxmljs.h
+91 silly gunzTarPerm extractEntry src/xml_attribute.cc
+92 silly gunzTarPerm extractEntry src/xml_attribute.h
+93 silly gunzTarPerm extractEntry src/xml_document.cc
+94 silly gunzTarPerm extractEntry src/xml_document.h
+95 silly gunzTarPerm extractEntry src/xml_element.cc
+96 silly gunzTarPerm extractEntry src/xml_element.h
+97 silly gunzTarPerm extractEntry src/html_document.h
+98 silly gunzTarPerm extractEntry src/xml_namespace.h
+99 silly gunzTarPerm extractEntry src/xml_node.cc
+100 silly gunzTarPerm extractEntry src/xml_node.h
+101 silly gunzTarPerm extractEntry src/xml_sax_parser.cc
+102 silly gunzTarPerm extractEntry src/xml_sax_parser.h
+103 silly gunzTarPerm extractEntry src/xml_syntax_error.cc
+104 silly gunzTarPerm extractEntry src/xml_syntax_error.h
+105 silly gunzTarPerm extractEntry src/xml_xpath_context.cc
+106 silly gunzTarPerm extractEntry src/xml_xpath_context.h
+107 silly gunzTarPerm extractEntry test/attribute.js
+108 silly gunzTarPerm extractEntry test/xml_parser.js
+109 silly gunzTarPerm extractEntry test/html_parser.js
+110 silly gunzTarPerm extractEntry test/main.js
+111 silly gunzTarPerm extractEntry test/element.js
+112 silly gunzTarPerm extractEntry test/document.js
+113 silly gunzTarPerm extractEntry test/ref_integrity.js
+114 silly gunzTarPerm extractEntry test/searching.js
+115 silly gunzTarPerm extractEntry test/text_node.js
+116 silly gunzTarPerm extractEntry test/traversal.js
+117 silly gunzTarPerm extractEntry test/namespace.js
+118 silly gunzTarPerm extractEntry test/xml_sax_parser.js
+119 silly gunzTarPerm extractEntry test/node_attributes.js
+120 silly gunzTarPerm extractEntry test/fixtures/errors/comment.xml
+121 silly gunzTarPerm extractEntry test/fixtures/parser-utf16.xml
+122 silly gunzTarPerm extractEntry test/fixtures/parser.html
+123 silly gunzTarPerm extractEntry test/fixtures/parser.xml
+124 silly gunzTarPerm extractEntry test/fixtures/sax_parser.xml
+125 silly gunzTarPerm extractEntry test/fixtures/warnings/amp.html
+126 silly gunzTarPerm extractEntry test/fixtures/warnings/ent9.xml
+127 silly gunzTarPerm extractEntry wscript
+128 verbose read json /var/folders/_x/114y8rfd5fx7l2mvw_w7f6zw0000gn/T/npm-1343310645481/1343310645481-0.6483609494753182/package/package.json
+129 verbose from cache /var/folders/_x/114y8rfd5fx7l2mvw_w7f6zw0000gn/T/npm-1343310645481/1343310645481-0.6483609494753182/package/package.json
+130 verbose tar pack [ '/Users/radhamesbrito/.npm/libxmljs/0.6.0/package.tgz',
+130 verbose tar pack   '/var/folders/_x/114y8rfd5fx7l2mvw_w7f6zw0000gn/T/npm-1343310645481/1343310645481-0.6483609494753182/package' ]
+131 verbose tarball /Users/radhamesbrito/.npm/libxmljs/0.6.0/package.tgz
+132 verbose folder /var/folders/_x/114y8rfd5fx7l2mvw_w7f6zw0000gn/T/npm-1343310645481/1343310645481-0.6483609494753182/package
+133 verbose tar unpack /Users/radhamesbrito/.npm/libxmljs/0.6.0/package.tgz
+134 silly gunzTarPerm modes [ '755', '644' ]
+135 silly gunzTarPerm extractEntry package.json
+136 silly gunzTarPerm extractEntry .npmignore
+137 silly gunzTarPerm extractEntry README.md
+138 silly gunzTarPerm extractEntry LICENSE
+139 silly gunzTarPerm extractEntry index.js
+140 silly gunzTarPerm extractEntry lib/bindings.js
+141 silly gunzTarPerm extractEntry lib/document.js
+142 silly gunzTarPerm extractEntry lib/element.js
+143 silly gunzTarPerm extractEntry lib/sax_parser.js
+144 silly gunzTarPerm extractEntry .travis.yml
+145 silly gunzTarPerm extractEntry Makefile
+146 silly gunzTarPerm extractEntry docs/_Sidebar.md
+147 silly gunzTarPerm extractEntry docs/api/Attribute.md
+148 silly gunzTarPerm extractEntry docs/api/Element.md
+149 silly gunzTarPerm extractEntry docs/api/HtmlDocument.md
+150 silly gunzTarPerm extractEntry docs/api/Libxmljs.md
+151 silly gunzTarPerm extractEntry docs/api/Namespace.md
+152 silly gunzTarPerm extractEntry docs/api/Parser.md
+153 silly gunzTarPerm extractEntry docs/api/SaxParser.md
+154 silly gunzTarPerm extractEntry docs/api/SaxPushParser.md
+155 silly gunzTarPerm extractEntry docs/api/SyntaxError.md
+156 silly gunzTarPerm extractEntry docs/api/XmlDocument.md
+157 silly gunzTarPerm extractEntry docs/Home.md
+158 silly gunzTarPerm extractEntry binding.gyp
+159 silly gunzTarPerm extractEntry src/xml_namespace.cc
+160 silly gunzTarPerm extractEntry src/html_document.cc
+161 silly gunzTarPerm extractEntry src/libxmljs.cc
+162 silly gunzTarPerm extractEntry src/libxmljs.h
+163 silly gunzTarPerm extractEntry src/xml_attribute.cc
+164 silly gunzTarPerm extractEntry src/xml_attribute.h
+165 silly gunzTarPerm extractEntry src/xml_document.cc
+166 silly gunzTarPerm extractEntry src/xml_document.h
+167 silly gunzTarPerm extractEntry src/xml_element.cc
+168 silly gunzTarPerm extractEntry src/xml_element.h
+169 silly gunzTarPerm extractEntry src/html_document.h
+170 silly gunzTarPerm extractEntry src/xml_namespace.h
+171 silly gunzTarPerm extractEntry src/xml_node.cc
+172 silly gunzTarPerm extractEntry src/xml_node.h
+173 silly gunzTarPerm extractEntry src/xml_sax_parser.cc
+174 silly gunzTarPerm extractEntry src/xml_sax_parser.h
+175 silly gunzTarPerm extractEntry src/xml_syntax_error.cc
+176 silly gunzTarPerm extractEntry src/xml_syntax_error.h
+177 silly gunzTarPerm extractEntry src/xml_xpath_context.cc
+178 silly gunzTarPerm extractEntry src/xml_xpath_context.h
+179 silly gunzTarPerm extractEntry test/attribute.js
+180 silly gunzTarPerm extractEntry test/xml_parser.js
+181 silly gunzTarPerm extractEntry test/html_parser.js
+182 silly gunzTarPerm extractEntry test/main.js
+183 silly gunzTarPerm extractEntry test/element.js
+184 silly gunzTarPerm extractEntry test/document.js
+185 silly gunzTarPerm extractEntry test/ref_integrity.js
+186 silly gunzTarPerm extractEntry test/searching.js
+187 silly gunzTarPerm extractEntry test/text_node.js
+188 silly gunzTarPerm extractEntry test/traversal.js
+189 silly gunzTarPerm extractEntry test/namespace.js
+190 silly gunzTarPerm extractEntry test/xml_sax_parser.js
+191 silly gunzTarPerm extractEntry test/node_attributes.js
+192 silly gunzTarPerm extractEntry test/fixtures/errors/comment.xml
+193 silly gunzTarPerm extractEntry test/fixtures/parser-utf16.xml
+194 silly gunzTarPerm extractEntry test/fixtures/parser.html
+195 silly gunzTarPerm extractEntry test/fixtures/parser.xml
+196 silly gunzTarPerm extractEntry test/fixtures/sax_parser.xml
+197 silly gunzTarPerm extractEntry test/fixtures/warnings/amp.html
+198 silly gunzTarPerm extractEntry test/fixtures/warnings/ent9.xml
+199 silly gunzTarPerm extractEntry wscript
+200 verbose read json /Users/radhamesbrito/.npm/libxmljs/0.6.0/package/package.json
+201 silly shasum updated bytes 32351
+202 info shasum 015adb4579e6940dbcdb5363cd6ee98354a5af14
+202 info shasum /Users/radhamesbrito/.npm/libxmljs/0.6.0/package.tgz
+203 verbose from cache /Users/radhamesbrito/.npm/libxmljs/0.6.0/package/package.json
+204 verbose chmod /Users/radhamesbrito/.npm/libxmljs/0.6.0/package.tgz 644
+205 verbose chown /Users/radhamesbrito/.npm/libxmljs/0.6.0/package.tgz [ 501, 20 ]
+206 silly resolved [ { name: 'libxmljs',
+206 silly resolved     author: { name: 'Marco Rogers - http://github.com/polotek' },
+206 silly resolved     contributors: [ [Object] ],
+206 silly resolved     description: 'libxml bindings for v8 javascript engine',
+206 silly resolved     version: '0.6.0',
+206 silly resolved     scripts:
+206 silly resolved      { test: 'node --expose_gc ./node_modules/nodeunit/bin/nodeunit test',
+206 silly resolved        install: 'node-gyp rebuild' },
+206 silly resolved     repository: { type: 'git', url: 'http://github.com/polotek/libxmljs.git' },
+206 silly resolved     bugs: { mail: '', url: 'http://github.com/polotek/libxmljs/issues' },
+206 silly resolved     main: './index',
+206 silly resolved     engines: { node: '>=0.4.7' },
+206 silly resolved     dependencies: { bindings: '1.0.0' },
+206 silly resolved     devDependencies: { nodeunit: '*' },
+206 silly resolved     gypfile: true,
+206 silly resolved     readme: '# Libxmljs\n[![Build Status](https://secure.travis-ci.org/polotek/libxmljs.png?branch=master)](http://travis-ci.org/polotek/libxmljs)\n\nLibXML bindings for [node.js](http://nodejs.org/)\n\n```javascript\nvar libxmljs = require("libxmljs");\nvar xml =  \'<?xml version="1.0" encoding="UTF-8"?>\' +\n           \'<root>\' +\n               \'<child foo="bar">\' +\n                   \'<grandchild baz="fizbuzz">grandchild content</grandchild>\' +\n               \'</child>\' +\n               \'<sibling>with content!</sibling>\' +\n           \'</root>\';\n\nvar xmlDoc = libxmljs.parseXml(xml);\n\n// xpath queries\nvar gchild = xmlDoc.get(\'//grandchild\');\n\nconsole.log(gchild.text());  // prints "grandchild content"\n\nvar children = xmlDoc.root().childNodes();\nvar child = children[0];\n\nconsole.log(child.attr(\'foo\').value()); // prints "bar"\n```\n\nCDATA Example:\n\n```javascript\nvar libxml = require(\'libxmljs\');\n\nvar doc = libxml.Document();\nvar elem = doc.node(\'name1\');\nvar newChild = libxml.Element(doc, \'new-child\');\nelem.addChild(newChild);\n\nvar child1 = elem.node(\'child1\');\nvar child2 = elem.node(\'child2\', \'second\');\nvar newChild = libxml.Element(doc, \'new-child\');\nvar name2 = elem.node(\'name2\');\nname2.addChild(newChild);\nchild2.cdata(\'<h1>cdata test</h1>\').cdata(\'<p>It\\\'s worked</p>\').cdata(\'<hr/>All done\');\n\nconsole.log(\'Document with CDATA: %s\', doc.toString());\n```\n\n## Basics\n\n* Docs - [http://github.com/polotek/libxmljs/wiki](http://github.com/polotek/libxmljs/wiki)\n* Mailing list - [http://groups.google.com/group/libxmljs](http://groups.google.com/group/libxmljs)\n\n## API and Examples\n\nCheck out the wiki [http://github.com/polotek/libxmljs/wiki](http://github.com/polotek/libxmljs/wiki)\n\n## Requirements\n\n* [libxml2](http://www.xmlsoft.org/)\n\nYou will need have the libxml2 library installed and also the libxml2-devel (libxml2-dev on debian systems)\npackage. This comes with the `xml2-config` utility that is needed for\ncompiling.  **This command must be in your path.**\n\n## Installation\n\n**npm**\n\n    npm install libxmljs\n\n**source**\n\nTo build with node waf:\n\n    node-gyp configure\n    node-gyp build\n\nAlternatively, run `make`.\n\n**tests**\n\n    npm test\n',
+206 silly resolved     _id: 'libxmljs@0.6.0',
+206 silly resolved     dist: { shasum: '015adb4579e6940dbcdb5363cd6ee98354a5af14' },
+206 silly resolved     _from: 'libxmljs@0.6.0' } ]
+207 info install libxmljs@0.6.0 into /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs
+208 info installOne libxmljs@0.6.0
+209 verbose from cache /Users/radhamesbrito/.npm/libxmljs/0.6.0/package/package.json
+210 info /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/libxmljs unbuild
+211 verbose read json /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/libxmljs/package.json
+212 verbose tar unpack /Users/radhamesbrito/.npm/libxmljs/0.6.0/package.tgz
+213 silly gunzTarPerm modes [ '755', '644' ]
+214 silly gunzTarPerm extractEntry package.json
+215 silly gunzTarPerm extractEntry .npmignore
+216 silly gunzTarPerm extractEntry README.md
+217 silly gunzTarPerm extractEntry LICENSE
+218 silly gunzTarPerm extractEntry index.js
+219 silly gunzTarPerm extractEntry lib/bindings.js
+220 silly gunzTarPerm extractEntry lib/document.js
+221 silly gunzTarPerm extractEntry lib/element.js
+222 silly gunzTarPerm extractEntry lib/sax_parser.js
+223 silly gunzTarPerm extractEntry .travis.yml
+224 silly gunzTarPerm extractEntry Makefile
+225 silly gunzTarPerm extractEntry docs/_Sidebar.md
+226 silly gunzTarPerm extractEntry docs/api/Attribute.md
+227 silly gunzTarPerm extractEntry docs/api/Element.md
+228 silly gunzTarPerm extractEntry docs/api/HtmlDocument.md
+229 silly gunzTarPerm extractEntry docs/api/Libxmljs.md
+230 silly gunzTarPerm extractEntry docs/api/Namespace.md
+231 silly gunzTarPerm extractEntry docs/api/Parser.md
+232 silly gunzTarPerm extractEntry docs/api/SaxParser.md
+233 silly gunzTarPerm extractEntry docs/api/SaxPushParser.md
+234 silly gunzTarPerm extractEntry docs/api/SyntaxError.md
+235 silly gunzTarPerm extractEntry docs/api/XmlDocument.md
+236 silly gunzTarPerm extractEntry docs/Home.md
+237 silly gunzTarPerm extractEntry binding.gyp
+238 silly gunzTarPerm extractEntry src/xml_namespace.cc
+239 silly gunzTarPerm extractEntry src/html_document.cc
+240 silly gunzTarPerm extractEntry src/libxmljs.cc
+241 silly gunzTarPerm extractEntry src/libxmljs.h
+242 silly gunzTarPerm extractEntry src/xml_attribute.cc
+243 silly gunzTarPerm extractEntry src/xml_attribute.h
+244 silly gunzTarPerm extractEntry src/xml_document.cc
+245 silly gunzTarPerm extractEntry src/xml_document.h
+246 silly gunzTarPerm extractEntry src/xml_element.cc
+247 silly gunzTarPerm extractEntry src/xml_element.h
+248 silly gunzTarPerm extractEntry src/html_document.h
+249 silly gunzTarPerm extractEntry src/xml_namespace.h
+250 silly gunzTarPerm extractEntry src/xml_node.cc
+251 silly gunzTarPerm extractEntry src/xml_node.h
+252 silly gunzTarPerm extractEntry src/xml_sax_parser.cc
+253 silly gunzTarPerm extractEntry src/xml_sax_parser.h
+254 silly gunzTarPerm extractEntry src/xml_syntax_error.cc
+255 silly gunzTarPerm extractEntry src/xml_syntax_error.h
+256 silly gunzTarPerm extractEntry src/xml_xpath_context.cc
+257 silly gunzTarPerm extractEntry src/xml_xpath_context.h
+258 silly gunzTarPerm extractEntry test/attribute.js
+259 silly gunzTarPerm extractEntry test/xml_parser.js
+260 silly gunzTarPerm extractEntry test/html_parser.js
+261 silly gunzTarPerm extractEntry test/main.js
+262 silly gunzTarPerm extractEntry test/element.js
+263 silly gunzTarPerm extractEntry test/document.js
+264 silly gunzTarPerm extractEntry test/ref_integrity.js
+265 silly gunzTarPerm extractEntry test/searching.js
+266 silly gunzTarPerm extractEntry test/text_node.js
+267 silly gunzTarPerm extractEntry test/traversal.js
+268 silly gunzTarPerm extractEntry test/namespace.js
+269 silly gunzTarPerm extractEntry test/xml_sax_parser.js
+270 silly gunzTarPerm extractEntry test/node_attributes.js
+271 silly gunzTarPerm extractEntry test/fixtures/errors/comment.xml
+272 silly gunzTarPerm extractEntry test/fixtures/parser-utf16.xml
+273 silly gunzTarPerm extractEntry test/fixtures/parser.html
+274 silly gunzTarPerm extractEntry test/fixtures/parser.xml
+275 silly gunzTarPerm extractEntry test/fixtures/sax_parser.xml
+276 silly gunzTarPerm extractEntry test/fixtures/warnings/amp.html
+277 silly gunzTarPerm extractEntry test/fixtures/warnings/ent9.xml
+278 silly gunzTarPerm extractEntry wscript
+279 verbose read json /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/libxmljs/package.json
+280 info preinstall libxmljs@0.6.0
+281 verbose from cache /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/libxmljs/package.json
+282 verbose readDependencies using package.json deps
+283 verbose from cache /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/libxmljs/package.json
+284 verbose readDependencies using package.json deps
+285 verbose cache add [ 'bindings@1.0.0', null ]
+286 silly cache add name=undefined spec="bindings@1.0.0" args=["bindings@1.0.0",null]
+287 verbose parsed url { pathname: 'bindings@1.0.0',
+287 verbose parsed url   path: 'bindings@1.0.0',
+287 verbose parsed url   href: 'bindings@1.0.0' }
+288 silly cache add name="bindings" spec="1.0.0" args=["bindings","1.0.0"]
+289 verbose parsed url { pathname: '1.0.0', path: '1.0.0', href: '1.0.0' }
+290 verbose addNamed [ 'bindings', '1.0.0' ]
+291 verbose addNamed [ '1.0.0', '1.0.0' ]
+292 verbose url raw bindings/1.0.0
+293 verbose url resolving [ 'https://registry.npmjs.org/', './bindings/1.0.0' ]
+294 verbose url resolved https://registry.npmjs.org/bindings/1.0.0
+295 http GET https://registry.npmjs.org/bindings/1.0.0
+296 http 200 https://registry.npmjs.org/bindings/1.0.0
+297 silly registry.get cb [ 200,
+297 silly registry.get   { vary: 'Accept',
+297 silly registry.get     server: 'CouchDB/1.2.0 (Erlang OTP/R15B)',
+297 silly registry.get     etag: '"69QFVSALH71QAII9H16T18L9H"',
+297 silly registry.get     date: 'Thu, 26 Jul 2012 13:50:48 GMT',
+297 silly registry.get     'content-type': 'application/json',
+297 silly registry.get     'content-length': '4132' } ]
+298 verbose addRemoteTarball [ 'https://registry.npmjs.org/bindings/-/bindings-1.0.0.tgz',
+298 verbose addRemoteTarball   'c3ccde60e9de6807c6f1aa4ef4843af29191c828' ]
+299 verbose fetch to= /var/folders/_x/114y8rfd5fx7l2mvw_w7f6zw0000gn/T/npm-1343310645481/1343310648750-0.43807355244643986/tmp.tgz
+300 http GET https://registry.npmjs.org/bindings/-/bindings-1.0.0.tgz
+301 silly shasum updated bytes 3456
+302 info shasum c3ccde60e9de6807c6f1aa4ef4843af29191c828
+302 info shasum /var/folders/_x/114y8rfd5fx7l2mvw_w7f6zw0000gn/T/npm-1343310645481/1343310648750-0.43807355244643986/tmp.tgz
+303 verbose tar unpack /var/folders/_x/114y8rfd5fx7l2mvw_w7f6zw0000gn/T/npm-1343310645481/1343310648750-0.43807355244643986/tmp.tgz
+304 silly gunzTarPerm modes [ '755', '644' ]
+305 silly gunzTarPerm extractEntry package.json
+306 silly gunzTarPerm extractEntry README.md
+307 silly gunzTarPerm extractEntry bindings.js
+308 verbose read json /var/folders/_x/114y8rfd5fx7l2mvw_w7f6zw0000gn/T/npm-1343310645481/1343310648750-0.43807355244643986/package/package.json
+309 verbose from cache /var/folders/_x/114y8rfd5fx7l2mvw_w7f6zw0000gn/T/npm-1343310645481/1343310648750-0.43807355244643986/package/package.json
+310 verbose tar pack [ '/Users/radhamesbrito/.npm/bindings/1.0.0/package.tgz',
+310 verbose tar pack   '/var/folders/_x/114y8rfd5fx7l2mvw_w7f6zw0000gn/T/npm-1343310645481/1343310648750-0.43807355244643986/package' ]
+311 verbose tarball /Users/radhamesbrito/.npm/bindings/1.0.0/package.tgz
+312 verbose folder /var/folders/_x/114y8rfd5fx7l2mvw_w7f6zw0000gn/T/npm-1343310645481/1343310648750-0.43807355244643986/package
+313 verbose tar unpack /Users/radhamesbrito/.npm/bindings/1.0.0/package.tgz
+314 silly gunzTarPerm modes [ '755', '644' ]
+315 silly gunzTarPerm extractEntry package.json
+316 silly gunzTarPerm extractEntry README.md
+317 silly gunzTarPerm extractEntry bindings.js
+318 verbose read json /Users/radhamesbrito/.npm/bindings/1.0.0/package/package.json
+319 silly shasum updated bytes 3456
+320 info shasum c3ccde60e9de6807c6f1aa4ef4843af29191c828
+320 info shasum /Users/radhamesbrito/.npm/bindings/1.0.0/package.tgz
+321 verbose from cache /Users/radhamesbrito/.npm/bindings/1.0.0/package/package.json
+322 verbose chmod /Users/radhamesbrito/.npm/bindings/1.0.0/package.tgz 644
+323 verbose chown /Users/radhamesbrito/.npm/bindings/1.0.0/package.tgz [ 501, 20 ]
+324 silly resolved [ { name: 'bindings',
+324 silly resolved     description: 'Helper module for loading your native module\'s .node file',
+324 silly resolved     keywords: [ 'native', 'addon', 'bindings', 'gyp', 'waf', 'c', 'c++' ],
+324 silly resolved     version: '1.0.0',
+324 silly resolved     author:
+324 silly resolved      { name: 'Nathan Rajlich',
+324 silly resolved        email: 'nathan@tootallnate.net',
+324 silly resolved        url: 'http://tootallnate.net' },
+324 silly resolved     repository:
+324 silly resolved      { type: 'git',
+324 silly resolved        url: 'git://github.com/TooTallNate/node-bindings.git' },
+324 silly resolved     main: './bindings.js',
+324 silly resolved     readme: 'node-bindings\n=============\n### Helper module for loading your native module\'s .node file\n\nThis is a helper module for authors of Node.js native addon modules.\nIt is basically the "swiss army knife" of `require()`ing your native module\'s\n`.node` file.\n\nThroughout the course of Node\'s native addon history, addons have ended up being\ncompiled in a variety of different places, depending on which build tool and which\nversion of node was used. To make matters worse, now the _gyp_ build tool can\nproduce either a _Release_ or _Debug_ build, each being built into different\nlocations.\n\nThis module checks _all_ the possible locations that a native addon would be built\nat, and returns the first one that loads successfully.\n\n\nInstallation\n------------\n\nInstall with `npm`:\n\n``` bash\n$ npm install bindings\n```\n\nOr add it to the `"dependencies"` section of your _package.json_ file.\n\n\nExample\n-------\n\n`require()`ing the proper bindings file for the current node version, platform\nand architecture is as simple as:\n\n``` js\nvar bindings = require(\'bindings\')(\'binding.node\')\n\n// Use your bindings defined in your C files\nbindings.your_c_function()\n```\n\n\nNice Error Output\n-----------------\n\nWhen the `.node` file could not be loaded, `node-bindings` throws an Error with\na nice error message telling you exactly what was tried. You can also check the\n`err.tries` Array property.\n\n```\nError: Could not load the bindings file. Tried:\n → /Users/nrajlich/ref/build/binding.node\n → /Users/nrajlich/ref/build/Debug/binding.node\n → /Users/nrajlich/ref/build/Release/binding.node\n → /Users/nrajlich/ref/out/Debug/binding.node\n → /Users/nrajlich/ref/Debug/binding.node\n → /Users/nrajlich/ref/out/Release/binding.node\n → /Users/nrajlich/ref/Release/binding.node\n → /Users/nrajlich/ref/build/default/binding.node\n → /Users/nrajlich/ref/compiled/0.8.2/darwin/x64/binding.node\n    at bindings (/Users/nrajlich/ref/node_modules/bindings/bindings.js:84:13)\n    at Object.<anonymous> (/Users/nrajlich/ref/lib/ref.js:5:47)\n    at Module._compile (module.js:449:26)\n    at Object.Module._extensions..js (module.js:467:10)\n    at Module.load (module.js:356:32)\n    at Function.Module._load (module.js:312:12)\n    ...\n```\n\n\nLicense\n-------\n\n(The MIT License)\n\nCopyright (c) 2012 Nathan Rajlich &lt;nathan@tootallnate.net&gt;\n\nPermission is hereby granted, free of charge, to any person obtaining\na copy of this software and associated documentation files (the\n\'Software\'), to deal in the Software without restriction, including\nwithout limitation the rights to use, copy, modify, merge, publish,\ndistribute, sublicense, and/or sell copies of the Software, and to\npermit persons to whom the Software is furnished to do so, subject to\nthe following conditions:\n\nThe above copyright notice and this permission notice shall be\nincluded in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \'AS IS\', WITHOUT WARRANTY OF ANY KIND,\nEXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF\nMERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.\nIN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY\nCLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,\nTORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE\nSOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n',
+324 silly resolved     _id: 'bindings@1.0.0',
+324 silly resolved     dist: { shasum: 'c3ccde60e9de6807c6f1aa4ef4843af29191c828' },
+324 silly resolved     _from: 'bindings@1.0.0' } ]
+325 info install bindings@1.0.0 into /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/libxmljs
+326 info installOne bindings@1.0.0
+327 verbose from cache /Users/radhamesbrito/.npm/bindings/1.0.0/package/package.json
+328 info /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/libxmljs/node_modules/bindings unbuild
+329 verbose read json /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/libxmljs/node_modules/bindings/package.json
+330 verbose tar unpack /Users/radhamesbrito/.npm/bindings/1.0.0/package.tgz
+331 silly gunzTarPerm modes [ '755', '644' ]
+332 silly gunzTarPerm extractEntry package.json
+333 silly gunzTarPerm extractEntry README.md
+334 silly gunzTarPerm extractEntry bindings.js
+335 verbose read json /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/libxmljs/node_modules/bindings/package.json
+336 info preinstall bindings@1.0.0
+337 verbose from cache /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/libxmljs/node_modules/bindings/package.json
+338 verbose readDependencies using package.json deps
+339 verbose from cache /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/libxmljs/node_modules/bindings/package.json
+340 verbose readDependencies using package.json deps
+341 silly resolved []
+342 verbose about to build /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/libxmljs/node_modules/bindings
+343 info build /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/libxmljs/node_modules/bindings
+344 verbose from cache /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/libxmljs/node_modules/bindings/package.json
+345 verbose linkStuff [ false,
+345 verbose linkStuff   false,
+345 verbose linkStuff   false,
+345 verbose linkStuff   '/Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/libxmljs/node_modules' ]
+346 info linkStuff bindings@1.0.0
+347 verbose linkBins bindings@1.0.0
+348 verbose linkMans bindings@1.0.0
+349 verbose rebuildBundles bindings@1.0.0
+350 info install bindings@1.0.0
+351 info postinstall bindings@1.0.0
+352 verbose about to build /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/libxmljs
+353 info build /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/libxmljs
+354 verbose from cache /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/libxmljs/package.json
+355 verbose linkStuff [ false,
+355 verbose linkStuff   false,
+355 verbose linkStuff   false,
+355 verbose linkStuff   '/Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules' ]
+356 info linkStuff libxmljs@0.6.0
+357 verbose linkBins libxmljs@0.6.0
+358 verbose linkMans libxmljs@0.6.0
+359 verbose rebuildBundles libxmljs@0.6.0
+360 verbose rebuildBundles [ 'bindings' ]
+361 info install libxmljs@0.6.0
+362 verbose unsafe-perm in lifecycle true
+363 silly exec sh "-c" "node-gyp rebuild"
+364 silly sh,-c,node-gyp rebuild,/Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/libxmljs spawning
+365 info postinstall libxmljs@0.6.0
+366 info build /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs
+367 verbose from cache /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/package.json
+368 verbose linkStuff [ false,
+368 verbose linkStuff   false,
+368 verbose linkStuff   false,
+368 verbose linkStuff   '/Users/radhamesbrito/proyects/contact_center/kapiqua25' ]
+369 info linkStuff kapiqua@0.0.1
+370 verbose linkBins kapiqua@0.0.1
+371 verbose linkMans kapiqua@0.0.1
+372 verbose rebuildBundles kapiqua@0.0.1
+373 verbose rebuildBundles [ '.bin',
+373 verbose rebuildBundles   'async',
+373 verbose rebuildBundles   'coffee-script',
+373 verbose rebuildBundles   'connect-xcors',
+373 verbose rebuildBundles   'express',
+373 verbose rebuildBundles   'jade',
+373 verbose rebuildBundles   'jugglingdb',
+373 verbose rebuildBundles   'libxmljs',
+373 verbose rebuildBundles   'pg',
+373 verbose rebuildBundles   'request',
+373 verbose rebuildBundles   'socket.io',
+373 verbose rebuildBundles   'underscore' ]
+374 verbose rebuild bundle /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/coffee-script
+375 info build /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/coffee-script
+376 verbose from cache /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/coffee-script/package.json
+377 info preinstall coffee-script@1.3.3
+378 verbose linkStuff [ false,
+378 verbose linkStuff   false,
+378 verbose linkStuff   false,
+378 verbose linkStuff   '/Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules' ]
+379 info linkStuff coffee-script@1.3.3
+380 verbose linkBins coffee-script@1.3.3
+381 verbose link bins [ { coffee: './bin/coffee', cake: './bin/cake' },
+381 verbose link bins   '/Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/.bin',
+381 verbose link bins   false ]
+382 verbose linkMans coffee-script@1.3.3
+383 verbose rebuildBundles coffee-script@1.3.3
+384 error Error: EPERM, chmod '/Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/.bin/coffee'
+384 error  { [Error: EPERM, chmod '/Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/.bin/coffee']
+384 error   errno: 50,
+384 error   code: 'EPERM',
+384 error   path: '/Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/.bin/coffee' }
+385 error Please try running this command again as root/Administrator.
+386 error System Darwin 11.4.0
+387 error command "node" "/usr/local/bin/npm" "install" "-d"
+388 error cwd /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs
+389 error node -v v0.8.0
+390 error npm -v 1.1.32
+391 error path /Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/.bin/coffee
+392 error code EPERM
+393 error message EPERM, chmod '/Users/radhamesbrito/proyects/contact_center/kapiqua25/kapiquajs/node_modules/.bin/coffee'
+394 error errno 50
+395 error 50 errno
+396 verbose exit [ 50, true ]
