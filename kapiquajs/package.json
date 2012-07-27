@@ -11,5 +11,6 @@
 		, "jugglingdb":"0.1.12"
 		, "async":"0.1.22"
 		, "socket.io": "0.9.6"
+		, "libxmljs" : "0.6.0"
   }
 }

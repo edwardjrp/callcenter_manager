@@ -1,4 +1,4 @@
-var app, cartProducts, express, io, pg, request, util, _;
+var CartProducts, app, express, io, pg, util, _;
 
 express = require('express');
 
@@ -8,9 +8,7 @@ pg = require('pg');
 
 util = require('util');
 
-request = require('request');
-
-cartProducts = require('./routes/cart_products');
+CartProducts = require('./routes/cart_products');
 
 app = module.exports = express.createServer();
 
@@ -38,9 +36,15 @@ app.configure('production', function() {
 });
 
 io.sockets.on("connection", function(socket) {
-  socket.on("cart_products:create", cartProducts.create);
-  socket.on("cart_products:update", cartProducts.update);
-  socket.on("cart_products:delete", cartProducts.destroy);
+  socket.on("cart_products:create", function(data, responder) {
+    return CartProducts.create(data, responder, socket);
+  });
+  socket.on("cart_products:update", function(data, responder) {
+    return CartProducts.update(data, responder, socket);
+  });
+  socket.on("cart_products:delete", function(data, responder) {
+    return CartProducts.destroy(data, responder, socket);
+  });
   return socket.on('chat', function(data) {
     return io.sockets.emit('chat', data);
   });

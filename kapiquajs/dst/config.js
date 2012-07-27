@@ -1,6 +1,4 @@
-var Config, pg;
-
-pg = require('pg');
+var Config;
 
 Config = (function() {
 
