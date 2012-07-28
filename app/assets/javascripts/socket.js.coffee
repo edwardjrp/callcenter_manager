@@ -1,6 +1,6 @@
 jQuery ->
-  chat_socket = io.connect('http://localhost:3030')
-  chat_socket.on 'connect', ()->
+  socket = io.connect('http://localhost:3030')
+  socket.on 'connect', ()->
     $('#chatdisplay').append($('<p>').append($('<em>').text(prepare("connected"))))
   
   $('#utils .nav a').on 'click', (event)->
@@ -14,21 +14,27 @@ jQuery ->
       target.addClass('active').show()
       $(this).closest('li').addClass('active')
       
-  chat_socket.on 'chat', (data)->
+  socket.on 'chat', (data)->
     message(data)
     
-  chat_socket.on 'reconnect', () ->
+  socket.on 'price', (data) ->
+    order_reply = data.msg
+    for order_item in order_reply.order_items
+      console.log order_item.priced_at
+    console.log data
+    
+  socket.on 'reconnect', () ->
     $('#lines').remove();
     message({user:'System', msg:' Reconnected to the server'});
     
-  chat_socket.on 'error', (err)->
+  socket.on 'error', (err)->
     console.log err
     err_data = {user: 'System', msg:  (err ? err : 'Se ha perdido la conexion')}
     message(err_data);
       
   $('#chat_send').submit (event)->
     event.preventDefault()
-    chat_socket.emit('chat', {user: me(), msg: $('#chat_message').val()})
+    socket.emit('chat', {user: me(), msg: $('#chat_message').val()})
     $('#chat_message').val('')
   
   message = (data) ->

@@ -15,7 +15,8 @@ class OrderReply
       @can_place = doc.get('//CanPlaceOrder').text()
       @wait_time = doc.get('//EstimatedWaitTime').text()
       @sumary = doc.get('//OrderText').text()
-      @order_items = _.map doc.find('//OrderItem'), (order_item)-> new ReplyItem(order_item)
+      @order_items = _.map doc.find('//OrderItem'), (order_item)-> 
+        new ReplyItem(order_item)
       @sumary = doc.get('//OrderText').text()
       @netamount= doc.get('//NetAmount').text()
       @taxamount= doc.get('//TaxAmount').text()
@@ -27,8 +28,8 @@ class OrderReply
 
 class ReplyItem
   constructor: (order_item)->
-    @code = order_item.get('//ProductCode').text()
-    @quantity = order_item.get('//ItemQuantity').text()
-    @priced_at = order_item.get('//PricedAt').text()
+    @code = order_item.childNodes()[0].text()
+    @quantity = order_item.childNodes()[2].text()
+    @priced_at = order_item.childNodes()[3].text()
       
 module.exports = OrderReply

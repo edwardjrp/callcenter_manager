@@ -75,8 +75,7 @@ class CartProducts
             json_cart.cart_products = results
             respond({type:"success", data: json_cart})
             PulseBridge.price json_cart, null, (res_data) ->
-              # console.log new OrderReply(res_data)
-              socket.emit 'chat', {user: 'pulse ', msg: new OrderReply(res_data)} if socket?
+              socket.emit 'price', {user: 'pulse ', msg: new OrderReply(res_data)} if socket?
 
 
 
