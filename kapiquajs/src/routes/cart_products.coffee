@@ -2,6 +2,7 @@ CartProduct = require('../models/cart_product')
 Cart = require('../models/cart')
 Product = require('../models/product')
 PulseBridge = require('../pulse_bridge/pulse_bridge')
+OrderReply = require('../pulse_bridge/order_reply')
 async = require('async')
 _ = require('underscore')
 
@@ -74,7 +75,8 @@ class CartProducts
             json_cart.cart_products = results
             respond({type:"success", data: json_cart})
             PulseBridge.price json_cart, null, (res_data) ->
-              socket.emit 'chat', {user: 'pulse ', msg: res_data} if socket?
+              # console.log new OrderReply(res_data)
+              socket.emit 'chat', {user: 'pulse ', msg: new OrderReply(res_data)} if socket?
 
 
 

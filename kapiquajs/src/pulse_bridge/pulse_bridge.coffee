@@ -181,12 +181,5 @@ class PulseBridge
      doc.root(envelope)
      doc.toString().replace(/\"/g, '\"')
     
-# log = (text) ->
-#   console.log text
-#   
-#   
-# PulseBridge.price(PulseBridge.cart, log, log)
-# 
-
 
 module.exports = PulseBridge
