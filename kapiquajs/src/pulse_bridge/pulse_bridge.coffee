@@ -1,13 +1,18 @@
 _ = require('underscore')
 request = require('request')
 libxml = require("libxmljs")
+Cart = require('../models/cart')
+Product = require('../models/product')
+Category = require('../models/category')
+async = require('async')
+
 
 class PulseBridge
   @debug = false
   @target = 'http://192.168.85.60:59101/RemotePulseAPI/RemotePulseAPI.WSDL'    
   @headers = {"User-Agent": "kapiqua-node" , "Connection": "close","Accept" : "text/html,application/xhtml+xml,application/xml","Accept-Charset": "utf-8", "Content-Type":"text/xml;charset=UTF-8"}
   
-  @cart = {"advance_order_time":null,"business_date":null,"can_place_order":null,"client_id":null,"communication_failed":false,"company_name":null,"completed":false,"created_at":"2012-07-17T23:51:52-04:00","credit_cart_approval_name":null,"delivery_instructions":null,"discount":null,"discount_auth_id":null,"fiscal_number":null,"fiscal_type":null,"id":1,"message":null,"net_amount":null,"order_progress":null,"order_text":null,"payment_amount":null,"payment_type":null,"service_method":null,"status_text":null,"store_id":null,"store_order_id":null,"tax1_amount":null,"tax2_amount":null,"tax_amount":null,"updated_at":"2012-07-17T23:51:52-04:00","user_id":1,"cart_products":[{"bind_id":null,"cart_id":1,"created_at":"2012-07-27T20:06:28-04:00","id":84,"options":"","product_id":36,"quantity":2,"updated_at":"2012-07-27T20:06:28-04:00","product":{"category_id":4,"created_at":"2012-07-17T23:34:24-04:00","flavorcode":"COKE","id":36,"options":null,"optionselectiongrouptype":null,"productcode":"20BCOKE","productname":"20-oz Bottle Coca Cola","productoptionselectiongroup":null,"sizecode":"20OZB","updated_at":"2012-07-17T23:34:24-04:00"}},{"bind_id":null,"cart_id":1,"created_at":"2012-07-27T20:06:36-04:00","id":85,"options":"","product_id":37,"quantity":1,"updated_at":"2012-07-27T20:06:36-04:00","product":{"category_id":4,"created_at":"2012-07-17T23:34:24-04:00","flavorcode":"DIET","id":37,"options":null,"optionselectiongrouptype":null,"productcode":"20BDCOKE","productname":"20-oz Bottle Coca Cola Light","productoptionselectiongroup":null,"sizecode":"20OZB","updated_at":"2012-07-17T23:34:24-04:00"}}]}
+  @cart = {"advance_order_time":null,"business_date":null,"can_place_order":null,"client_id":null,"communication_failed":false,"company_name":null,"completed":false,"created_at":"2012-07-17T23:51:52-04:00","credit_cart_approval_name":null,"delivery_instructions":null,"discount":null,"discount_auth_id":null,"fiscal_number":null,"fiscal_type":null,"id":1,"message":null,"net_amount":null,"order_progress":null,"order_text":null,"payment_amount":null,"payment_type":null,"service_method":null,"status_text":null,"store_id":null,"store_order_id":null,"tax1_amount":null,"tax2_amount":null,"tax_amount":null,"updated_at":"2012-07-17T23:51:52-04:00","user_id":1,"cart_products":[{"bind_id":null,"cart_id":1,"created_at":"2012-07-27T20:06:28-04:00","id":84,"options":"","product_id":36,"quantity":2,"updated_at":"2012-07-27T20:06:28-04:00","product":{"category_id":4,"created_at":"2012-07-17T23:34:24-04:00","flavorcode":"COKE","id":36,"options":null,"optionselectiongrouptype":null,"productcode":"20BCOKE","productname":"20-oz Bottle Coca Cola","productoptionselectiongroup":null,"sizecode":"20OZB","updated_at":"2012-07-17T23:34:24-04:00"}},{"bind_id":null,"cart_id":1,"created_at":"2012-07-27T20:06:36-04:00","id":85,"options":"","product_id":37,"quantity":1,"updated_at":"2012-07-27T20:06:36-04:00","product":{"category_id":4,"created_at":"2012-07-17T23:34:24-04:00","flavorcode":"DIET","id":37,"options":null,"optionselectiongrouptype":null,"productcode":"20BDCOKE","productname":"20-oz Bottle Coca Cola Light","productoptionselectiongroup":null,"sizecode":"20OZB","updated_at":"2012-07-17T23:34:24-04:00"}},{"bind_id":null,"cart_id":1,"created_at":"2012-07-28T09:09:39-04:00","id":86,"options":"2C-1,2X-1","product_id":173,"quantity":1,"updated_at":"2012-07-28T09:09:39-04:00","product":{"category_id":7,"created_at":"2012-07-17T23:34:24-04:00","flavorcode":"DEEPDISH","id":173,"options":"X,C","optionselectiongrouptype":"PIZZA","productcode":"14PAN","productname":"14&quot; Gordita Napolitana","productoptionselectiongroup":"PIZZA","sizecode":"14","updated_at":"2012-07-17T23:34:24-04:00"}}]}
   
   @make: (action, data) ->
     doc = new libxml.Document()    
@@ -32,6 +37,43 @@ class PulseBridge
    @price: (err_cb, cb) ->
      PulseBridge.send('PriceOrder', PulseBridge.body('PriceOrder', @cart), err_cb, cb)    
          
+         
+   @categories: ()->
+     Category.all {}, (cat_error, categories)->
+       if cat_error?
+         console.log cat_error
+       else
+         get_products = (category, cb)->
+           Product.all {where: {category_id: category.id}}, (cat_product_err, products)->
+             json_category = JSON.parse(JSON.stringify(category))
+             json_category.products = JSON.parse(JSON.stringify(products))
+             cb(null, json_category)  
+         async.map categories,get_products , (err, categories) ->
+           if err?
+             console.log err
+           else
+             console.log categories
+         
+     
+     
+   @parsed_options: (cart_product, categories)->
+     return [] if cart_product.product.options == ''
+     product_options = []
+     recipe = cart_product.options
+     current_category = _.first(_.find(categories, (category)-> category.id == cart_product.product.category_id))
+     options = _.filter current_category.products, (product) -> product.options == 'OPTION'
+     if _.any(recipe.split(','))
+       _.each _.compact(recipe.split(',')), (code) ->
+         core_match = code.match(/^([0-9]{0,2}\.?[0|7|5]{0,2})([A-Z]{1,}[a-z]{0,})(?:\-([L12]))?/)
+         if core_match?
+           core_match[1] = '1' if not core_match[1]? or core_match[1] == ''
+           current_quantity = core_match[1]
+           current_product = _.find(options, (op)-> op.get('productcode') == core_match[2])
+           current_part =  core_match[3] || ''
+           product_option = {quantity: Number(current_quantity), product: current_product, part: current_part}
+           product_options.push product_option
+     product_options
+     
    @body: (action, cart) =>
      doc = new libxml.Document()
      envelope = new libxml.Element(doc,'env:Envelope').attr
@@ -144,8 +186,8 @@ log = (text) ->
   console.log text
   
   
-PulseBridge.price(log, log)
-console.log PulseBridge.cart
+PulseBridge.categories()
+
 
 
 module.exports = PulseBridge
