@@ -73,7 +73,7 @@ class CartProducts
             json_cart = JSON.parse(JSON.stringify(cart))
             json_cart.cart_products = results
             respond({type:"success", data: json_cart})
-            PulseBridge.send 'TestConnection','<Value>Hello there</Value>', null, (res_data) ->
+            PulseBridge.price json_cart, null, (res_data) ->
               socket.emit 'chat', {user: 'pulse ', msg: res_data} if socket?
 
 
