@@ -14,6 +14,7 @@
               <div class='remove_options_and_pricing'>
                 <span class='item_remove'><i class="icon-trash icon-white"></i></span>
                 <span class='show_options'><i class="icon-list icon-white left-margin-1"></i></span>
+                <span class='pricing'></span>
               </div>
             </div>
             <p><%=cart_product.niffty_opions()%></p>

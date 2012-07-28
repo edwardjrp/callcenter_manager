@@ -19,9 +19,10 @@ jQuery ->
     
   socket.on 'price', (data) ->
     order_reply = data.msg
+    i = 0
     for order_item in order_reply.order_items
-      console.log order_item.priced_at
-    console.log data
+      $($('#current_carts_items').find('span.pricing')[i]).text(order_item.priced_at)
+      i++
     
   socket.on 'reconnect', () ->
     $('#lines').remove();
