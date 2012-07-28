@@ -7,11 +7,10 @@ request = require('request');
 libxml = require("libxmljs");
 
 PulseBridge = (function() {
-  var cart;
 
   function PulseBridge() {}
 
-  PulseBridge.debut = false;
+  PulseBridge.debug = false;
 
   PulseBridge.target = 'http://192.168.85.60:59101/RemotePulseAPI/RemotePulseAPI.WSDL';
 
@@ -23,7 +22,7 @@ PulseBridge = (function() {
     "Content-Type": "text/xml;charset=UTF-8"
   };
 
-  PulseBridge.cart = cart = {
+  PulseBridge.cart = {
     "advance_order_time": null,
     "business_date": null,
     "can_place_order": null,
@@ -56,91 +55,47 @@ PulseBridge = (function() {
     "user_id": 1,
     "cart_products": [
       {
-        "bind_id": 180,
+        "bind_id": null,
         "cart_id": 1,
-        "created_at": "2012-07-24T21:57:33-04:00",
-        "id": 80,
-        "options": "C-1,X,1.5C-2,G-2,M-2,O-2,R-2",
-        "product_id": 173,
-        "quantity": 3,
-        "updated_at": "2012-07-24T21:57:33-04:00",
+        "created_at": "2012-07-27T20:06:28-04:00",
+        "id": 84,
+        "options": "",
+        "product_id": 36,
+        "quantity": 2,
+        "updated_at": "2012-07-27T20:06:28-04:00",
         "product": {
-          "category_id": 7,
+          "category_id": 4,
           "created_at": "2012-07-17T23:34:24-04:00",
-          "flavorcode": "DEEPDISH",
-          "id": 173,
-          "options": "X,C",
-          "optionselectiongrouptype": "PIZZA",
-          "productcode": "14PAN",
-          "productname": "14&quot; Gordita Napolitana",
-          "productoptionselectiongroup": "PIZZA",
-          "sizecode": "14",
+          "flavorcode": "COKE",
+          "id": 36,
+          "options": null,
+          "optionselectiongrouptype": null,
+          "productcode": "20BCOKE",
+          "productname": "20-oz Bottle Coca Cola",
+          "productoptionselectiongroup": null,
+          "sizecode": "20OZB",
           "updated_at": "2012-07-17T23:34:24-04:00"
         }
       }, {
         "bind_id": null,
         "cart_id": 1,
-        "created_at": "2012-07-24T22:00:24-04:00",
-        "id": 81,
-        "options": "undefinedC-1,undefinedH-1,2X-1",
-        "product_id": 168,
+        "created_at": "2012-07-27T20:06:36-04:00",
+        "id": 85,
+        "options": "",
+        "product_id": 37,
         "quantity": 1,
-        "updated_at": "2012-07-24T22:00:24-04:00",
+        "updated_at": "2012-07-27T20:06:36-04:00",
         "product": {
-          "category_id": 7,
+          "category_id": 4,
           "created_at": "2012-07-17T23:34:24-04:00",
-          "flavorcode": "DEEPDISH",
-          "id": 168,
-          "options": "X,1.5C,1.5H",
-          "optionselectiongrouptype": "PIZJX",
-          "productcode": "14FHDD",
-          "productname": "14&quot; Gordita Fiesta de Jamon",
-          "productoptionselectiongroup": "PIZJX",
-          "sizecode": "14",
-          "updated_at": "2012-07-17T23:34:24-04:00"
-        }
-      }, {
-        "bind_id": 179,
-        "cart_id": 1,
-        "created_at": "2012-07-24T22:00:27-04:00",
-        "id": 82,
-        "options": "1.5C-1,1.5H-1,X,C-2,1.5P-2",
-        "product_id": 168,
-        "quantity": 6,
-        "updated_at": "2012-07-24T22:00:34-04:00",
-        "product": {
-          "category_id": 7,
-          "created_at": "2012-07-17T23:34:24-04:00",
-          "flavorcode": "DEEPDISH",
-          "id": 168,
-          "options": "X,1.5C,1.5H",
-          "optionselectiongrouptype": "PIZJX",
-          "productcode": "14FHDD",
-          "productname": "14&quot; Gordita Fiesta de Jamon",
-          "productoptionselectiongroup": "PIZJX",
-          "sizecode": "14",
-          "updated_at": "2012-07-17T23:34:24-04:00"
-        }
-      }, {
-        "bind_id": null,
-        "cart_id": 1,
-        "created_at": "2012-07-24T13:04:13-04:00",
-        "id": 77,
-        "options": "2C-1,2X-1",
-        "product_id": 173,
-        "quantity": 4,
-        "updated_at": "2012-07-24T22:15:31-04:00",
-        "product": {
-          "category_id": 7,
-          "created_at": "2012-07-17T23:34:24-04:00",
-          "flavorcode": "DEEPDISH",
-          "id": 173,
-          "options": "X,C",
-          "optionselectiongrouptype": "PIZZA",
-          "productcode": "14PAN",
-          "productname": "14&quot; Gordita Napolitana",
-          "productoptionselectiongroup": "PIZZA",
-          "sizecode": "14",
+          "flavorcode": "DIET",
+          "id": 37,
+          "options": null,
+          "optionselectiongrouptype": null,
+          "productcode": "20BDCOKE",
+          "productname": "20-oz Bottle Coca Cola Light",
+          "productoptionselectiongroup": null,
+          "sizecode": "20OZB",
           "updated_at": "2012-07-17T23:34:24-04:00"
         }
       }

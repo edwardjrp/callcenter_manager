@@ -3,11 +3,11 @@ request = require('request')
 libxml = require("libxmljs")
 
 class PulseBridge
-  @debut = false
+  @debug = false
   @target = 'http://192.168.85.60:59101/RemotePulseAPI/RemotePulseAPI.WSDL'    
   @headers = {"User-Agent": "kapiqua-node" , "Connection": "close","Accept" : "text/html,application/xhtml+xml,application/xml","Accept-Charset": "utf-8", "Content-Type":"text/xml;charset=UTF-8"}
   
-  @cart = cart = {"advance_order_time":null,"business_date":null,"can_place_order":null,"client_id":null,"communication_failed":false,"company_name":null,"completed":false,"created_at":"2012-07-17T23:51:52-04:00","credit_cart_approval_name":null,"delivery_instructions":null,"discount":null,"discount_auth_id":null,"fiscal_number":null,"fiscal_type":null,"id":1,"message":null,"net_amount":null,"order_progress":null,"order_text":null,"payment_amount":null,"payment_type":null,"service_method":null,"status_text":null,"store_id":null,"store_order_id":null,"tax1_amount":null,"tax2_amount":null,"tax_amount":null,"updated_at":"2012-07-17T23:51:52-04:00","user_id":1,"cart_products":[{"bind_id":180,"cart_id":1,"created_at":"2012-07-24T21:57:33-04:00","id":80,"options":"C-1,X,1.5C-2,G-2,M-2,O-2,R-2","product_id":173,"quantity":3,"updated_at":"2012-07-24T21:57:33-04:00","product":{"category_id":7,"created_at":"2012-07-17T23:34:24-04:00","flavorcode":"DEEPDISH","id":173,"options":"X,C","optionselectiongrouptype":"PIZZA","productcode":"14PAN","productname":"14&quot; Gordita Napolitana","productoptionselectiongroup":"PIZZA","sizecode":"14","updated_at":"2012-07-17T23:34:24-04:00"}},{"bind_id":null,"cart_id":1,"created_at":"2012-07-24T22:00:24-04:00","id":81,"options":"undefinedC-1,undefinedH-1,2X-1","product_id":168,"quantity":1,"updated_at":"2012-07-24T22:00:24-04:00","product":{"category_id":7,"created_at":"2012-07-17T23:34:24-04:00","flavorcode":"DEEPDISH","id":168,"options":"X,1.5C,1.5H","optionselectiongrouptype":"PIZJX","productcode":"14FHDD","productname":"14&quot; Gordita Fiesta de Jamon","productoptionselectiongroup":"PIZJX","sizecode":"14","updated_at":"2012-07-17T23:34:24-04:00"}},{"bind_id":179,"cart_id":1,"created_at":"2012-07-24T22:00:27-04:00","id":82,"options":"1.5C-1,1.5H-1,X,C-2,1.5P-2","product_id":168,"quantity":6,"updated_at":"2012-07-24T22:00:34-04:00","product":{"category_id":7,"created_at":"2012-07-17T23:34:24-04:00","flavorcode":"DEEPDISH","id":168,"options":"X,1.5C,1.5H","optionselectiongrouptype":"PIZJX","productcode":"14FHDD","productname":"14&quot; Gordita Fiesta de Jamon","productoptionselectiongroup":"PIZJX","sizecode":"14","updated_at":"2012-07-17T23:34:24-04:00"}},{"bind_id":null,"cart_id":1,"created_at":"2012-07-24T13:04:13-04:00","id":77,"options":"2C-1,2X-1","product_id":173,"quantity":4,"updated_at":"2012-07-24T22:15:31-04:00","product":{"category_id":7,"created_at":"2012-07-17T23:34:24-04:00","flavorcode":"DEEPDISH","id":173,"options":"X,C","optionselectiongrouptype":"PIZZA","productcode":"14PAN","productname":"14&quot; Gordita Napolitana","productoptionselectiongroup":"PIZZA","sizecode":"14","updated_at":"2012-07-17T23:34:24-04:00"}}]}
+  @cart = {"advance_order_time":null,"business_date":null,"can_place_order":null,"client_id":null,"communication_failed":false,"company_name":null,"completed":false,"created_at":"2012-07-17T23:51:52-04:00","credit_cart_approval_name":null,"delivery_instructions":null,"discount":null,"discount_auth_id":null,"fiscal_number":null,"fiscal_type":null,"id":1,"message":null,"net_amount":null,"order_progress":null,"order_text":null,"payment_amount":null,"payment_type":null,"service_method":null,"status_text":null,"store_id":null,"store_order_id":null,"tax1_amount":null,"tax2_amount":null,"tax_amount":null,"updated_at":"2012-07-17T23:51:52-04:00","user_id":1,"cart_products":[{"bind_id":null,"cart_id":1,"created_at":"2012-07-27T20:06:28-04:00","id":84,"options":"","product_id":36,"quantity":2,"updated_at":"2012-07-27T20:06:28-04:00","product":{"category_id":4,"created_at":"2012-07-17T23:34:24-04:00","flavorcode":"COKE","id":36,"options":null,"optionselectiongrouptype":null,"productcode":"20BCOKE","productname":"20-oz Bottle Coca Cola","productoptionselectiongroup":null,"sizecode":"20OZB","updated_at":"2012-07-17T23:34:24-04:00"}},{"bind_id":null,"cart_id":1,"created_at":"2012-07-27T20:06:36-04:00","id":85,"options":"","product_id":37,"quantity":1,"updated_at":"2012-07-27T20:06:36-04:00","product":{"category_id":4,"created_at":"2012-07-17T23:34:24-04:00","flavorcode":"DIET","id":37,"options":null,"optionselectiongrouptype":null,"productcode":"20BDCOKE","productname":"20-oz Bottle Coca Cola Light","productoptionselectiongroup":null,"sizecode":"20OZB","updated_at":"2012-07-17T23:34:24-04:00"}}]}
   
   @make: (action, data) ->
     doc = new libxml.Document()    
@@ -21,7 +21,6 @@ class PulseBridge
     @headers["SOAPAction"]= "http://www.dominos.com/action/#{action}"
     if @debug == true
       console.log @headers
-      console.log body
     request.post {headers: @headers, uri: @target, body: body }, (err, res, res_data) ->
       if err
         err_cb(err)
@@ -31,7 +30,7 @@ class PulseBridge
   
   
    @price: (err_cb, cb) ->
-     PulseBridge.send('PriceOrder', PulseBridge.body('PriceOrder'), err_cb, cb)    
+     PulseBridge.send('PriceOrder', PulseBridge.body('PriceOrder', @cart), err_cb, cb)    
          
    @body: (action, cart) =>
      doc = new libxml.Document()
@@ -102,23 +101,25 @@ class PulseBridge
      #items
      order_items = new libxml.Element(doc,'OrderItems')
      # iteration here
-     order_item = new libxml.Element(doc,'OrderItem')
-     order_item.addChild(new libxml.Element(doc,'ProductCode', '12SCREEN'))
-     order_item.addChild(new libxml.Element(doc,'ProductName').attr('xsi:nil':"true"))
-     order_item.addChild(new libxml.Element(doc,'ItemQuantity', '1'))
-     order_item.addChild(new libxml.Element(doc,'PricedAt', '0'))
-     order_item.addChild(new libxml.Element(doc,'OverrideAmmount').attr('xsi:nil':"true"))
-     order_item.addChild(new libxml.Element(doc,'CookingInstructions').attr('xsi:nil':"true"))
-     # modifier loop
-     item_modifiers = new libxml.Element(doc,'ItemModifiers')
-     # innner modifier loop here
-     item_modifier = new libxml.Element(doc,'ItemModifier').attr({code:'p'})
-     item_modifier.addChild(new libxml.Element(doc,'ItemModifierName').attr('xsi:nil':"true"))
-     item_modifier.addChild(new libxml.Element(doc,'ItemModifierQuantity', '1'))
-     item_modifier.addChild(new libxml.Element(doc,'ItemModifierPart', 'w'))
-     item_modifiers.addChild(item_modifier)
-     order_item.addChild(item_modifiers)
-     order_items.addChild(order_item)
+     if _.any(cart.cart_products)
+       for cart_product in cart.cart_products
+         order_item = new libxml.Element(doc,'OrderItem')
+         order_item.addChild(new libxml.Element(doc,'ProductCode', cart_product.product.productcode))
+         order_item.addChild(new libxml.Element(doc,'ProductName').attr('xsi:nil':"true"))
+         order_item.addChild(new libxml.Element(doc,'ItemQuantity', (cart_product.quantity.toString() || '1')))
+         order_item.addChild(new libxml.Element(doc,'PricedAt', '0'))
+         order_item.addChild(new libxml.Element(doc,'OverrideAmmount').attr('xsi:nil':"true"))
+         order_item.addChild(new libxml.Element(doc,'CookingInstructions').attr('xsi:nil':"true"))
+         # modifier loop
+         item_modifiers = new libxml.Element(doc,'ItemModifiers')
+         # innner modifier loop here
+         # item_modifier = new libxml.Element(doc,'ItemModifier').attr({code:'p'})
+         # item_modifier.addChild(new libxml.Element(doc,'ItemModifierName').attr('xsi:nil':"true"))
+         # item_modifier.addChild(new libxml.Element(doc,'ItemModifierQuantity', '1'))
+         # item_modifier.addChild(new libxml.Element(doc,'ItemModifierPart', 'w'))
+         # item_modifiers.addChild(item_modifier)
+         order_item.addChild(item_modifiers)
+         order_items.addChild(order_item)
      
      order.addChild(order_items)
      # end items
