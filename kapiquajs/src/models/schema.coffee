@@ -111,6 +111,25 @@ Category = DB.define("Category",
     type: String
     length: 255
     
+  has_options:
+    type: Boolean
+    default: false
+
+  type_unit:
+    type: Boolean
+    default: false
+
+  multi:
+    type: Boolean
+    default: false
+
+  hidden:
+    type: Boolean
+    default: false
+
+  base_product:
+    type: Number
+    
   created_at:
     type: Date
     default: Date.now
