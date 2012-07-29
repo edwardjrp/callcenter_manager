@@ -22,7 +22,7 @@ jQuery ->
     for order_item in order_reply.order_items
       for el in $('#current_carts_items').find('span.pricing')
         if $(el).parent().parent().find('input[type=text]').val() ==  order_item.quantity and $(el).parent().parent().data('cart-product-code') == order_item.code and _.isEmpty(_.difference(order_item.options, _.compact($(el).data('options').split(','))))
-          $(el).text(order_item.priced_at)
+          $(el).text("$ #{Number(order_item.priced_at).toFixed(2)}")
     
   socket.on 'reconnect', () ->
     $('#lines').remove();

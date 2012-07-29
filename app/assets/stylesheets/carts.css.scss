@@ -26,14 +26,19 @@ ul#current_carts_items{
 			padding:5px;
 			.remove_options_and_pricing{
 			 display:table;
+			 width:100%;
 			 span{
 			   cursor:pointer;
 			   width:20px;
 			     height:20px;
 			 }
-			.item_price{
+			span.pricing{
 				display:inline;
+				 width:100px;
 				margin-right:10px;
+				color:white;
+				float:right;
+				text-shadow:black 0 1px 0;
 			}	
 			}
 		}
