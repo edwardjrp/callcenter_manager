@@ -1,4 +1,4 @@
-var Cart, CartProduct, CartProducts, Product, PulseBridge, async, _;
+var Cart, CartProduct, CartProducts, OrderReply, Product, PulseBridge, async, _;
 
 CartProduct = require('../models/cart_product');
 
@@ -7,6 +7,8 @@ Cart = require('../models/cart');
 Product = require('../models/product');
 
 PulseBridge = require('../pulse_bridge/pulse_bridge');
+
+OrderReply = require('../pulse_bridge/order_reply');
 
 async = require('async');
 
@@ -144,11 +146,11 @@ CartProducts = (function() {
               type: "success",
               data: json_cart
             });
-            return PulseBridge.send('TestConnection', '<Value>Hello there</Value>', null, function(res_data) {
+            return PulseBridge.price(json_cart, null, function(res_data) {
               if (socket != null) {
-                return socket.emit('chat', {
+                return socket.emit('price', {
                   user: 'pulse ',
-                  msg: res_data
+                  msg: new OrderReply(res_data)
                 });
               }
             });

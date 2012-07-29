@@ -24,7 +24,7 @@ describe 'Categories general' do
   
   
   describe "changing states", js: true do
-    [['change_state_option', 'has_options'], ['change_state_unit','type_unit'],['change_state_multi','multi'], ['change_state_hidden','hidden']].each do |field|
+    [['change_state_option', 'has_options'], ['change_state_unit','type_unit'],['change_state_multi','multi'], ['change_state_hidden','hidden'], ['change_state_sides','has_sides']].each do |field|
       it "should change the state of #{field[1]}" do
         visit admin_categories_path
         within("#category_#{@category.id}") do
