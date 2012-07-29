@@ -4,6 +4,8 @@ describe 'Stores general' do
   before(:each)do
     login(FactoryGirl.create :user, :roles=>[:admin])
     @store = FactoryGirl.create :store, :name=>'test store'
+    @products = []
+    10.times{@products.push FactoryGirl.create :product}
   end
   
   it "should render the link in the nav" do
@@ -22,7 +24,6 @@ describe 'Stores general' do
   
   
   it "should edit in place", js: true do
-    #.form-inplace
     visit admin_stores_path
     within("#store_#{@store.id}") do 
       find('span').click
@@ -30,19 +31,30 @@ describe 'Stores general' do
     end
   end
 
-
-  it "should edit the name", js: true do
-    visit admin_stores_path
-    within("#store_#{@store.id}") do 
-      find('span:first').click
-      page.execute_script("$('.form_in_place').find('input:first').val('edited store')")
-      page.execute_script("$('.form_in_place').find('input:first').trigger('blur')")
-      page.should_not have_css('.form_in_place')
-      page.should have_content('edited store')
+  ['name', 'address'].each do |field|
+    it "should edit the #{field}", js: true do
+      visit admin_stores_path
+      within("#store_#{@store.id}") do 
+        find("span[data-attribute='#{field}']").click
+        page.execute_script("$('.form_in_place').find('input:first').val('edited #{field}')")
+        page.execute_script("$('.form_in_place').find('input:first').trigger('blur')")
+        page.should_not have_css('.form_in_place')
+        page.should have_content("edited #{field}")
+      end
+      visit admin_stores_path
+      within("#store_#{@store.id}"){ page.should have_content("edited #{field}")}
     end
-    visit admin_stores_path
-    within("#store_#{@store.id}"){ page.should have_content('edited store')}
   end
 
+  
+  context "when showing the products" do
+    it "should render the available product for the store" do
+      visit admin_stores_path
+      within("#store_#{@store.id}") do 
+        click_link 'Productos'
+        page.should have_content(@products.first.productname)
+      end
+    end
+  end
   
 end
