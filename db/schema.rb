@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120721121129) do
+ActiveRecord::Schema.define(:version => 20120729162756) do
 
   create_table "addresses", :force => true do |t|
     t.integer  "client_id"
@@ -142,6 +142,15 @@ ActiveRecord::Schema.define(:version => 20120721121129) do
 
   add_index "products", ["options"], :name => "index_products_on_options"
   add_index "products", ["productcode"], :name => "index_products_on_productcode"
+
+  create_table "store_products", :force => true do |t|
+    t.integer  "store_id"
+    t.integer  "product_id"
+    t.boolean  "available",     :default => false
+    t.datetime "depleted_time"
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
+  end
 
   create_table "stores", :force => true do |t|
     t.string   "name"

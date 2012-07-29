@@ -20,7 +20,8 @@ require 'spec_helper'
 describe Product do
   describe "Validation" do
     it{should belong_to :category}
-    it{should have_many :cart_products}
     it{should have_many(:carts).through(:cart_products)}
+    it{should have_many :cart_products}
+    it{should have_many :store_products}    
   end
 end

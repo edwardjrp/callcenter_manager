@@ -50,10 +50,8 @@ describe 'Stores general' do
   context "when showing the products" do
     it "should render the available product for the store" do
       visit admin_stores_path
-      within("#store_#{@store.id}") do 
-        click_link 'Productos'
-        page.should have_content(@products.first.productname)
-      end
+      within("#store_#{@store.id}"){ click_link 'Productos'}
+      within('#products_list'){page.should have_content(@products.first.productname)}
     end
   end
   

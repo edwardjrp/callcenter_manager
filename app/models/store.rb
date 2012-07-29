@@ -15,6 +15,7 @@
 class Store < ActiveRecord::Base
   has_many :carts
   belongs_to :city
+  has_many :store_products
   validates :name, :presence =>true, :uniqueness => true
   validates :address, :presence =>true, :uniqueness => true
   validates :ip, :presence =>true, :uniqueness => true  

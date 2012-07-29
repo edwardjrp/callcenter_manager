@@ -21,5 +21,7 @@ class Admin::StoresController < ApplicationController
   end
 
   def show
+    @store = Store.find(params[:id])
+    @products = Product.page(params[:page])
   end
 end

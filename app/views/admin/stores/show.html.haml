@@ -1,2 +1,27 @@
-%h1 Admin::Stores#show
-%p Find me in app/views/admin/stores/show.html.haml
+- if @products.any?
+  %h3= "Productos para #{@store.name}"
+  =will_paginate @products
+  %table.table.table-striped.table-bordered.table-condensed#products_list
+    %thead
+      %th Categoría
+      %th Disponible
+      %th Productname
+      %th Productcode
+      %th Options
+      %th Flavorcode
+      %th Sizecode
+    %tbody
+      -@products.each do |product|
+        %tr{:data=>{'product-id'=> product.id}, :id=>dom_id(product)}
+          %td= product.category.name
+          %td
+            -if store_product(@store, product).present?
+              = store_product(@store, product).available
+            -else
+              =link_to 'Asignar', nil
+          %td= product.productname
+          %td= product.productcode
+          %td= product.options
+          %td= product.flavorcode
+          %td= product.sizecode
+  =will_paginate @products

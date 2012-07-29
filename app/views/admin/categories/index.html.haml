@@ -11,17 +11,17 @@
   %tbody
     -@categories.each do |category|
       %tr{:data=>{'category-id'=> category.id}, :id=>dom_id(category)}
-        %th= category.name
-        %th
+        %td= category.name
+        %td
           =link_to category.has_options.to_s, nil,:class=>"btn #{set_state_class category.has_options?} change_state_option"
-        %th
+        %td
           =link_to category.type_unit.to_s, nil,:class=>"btn #{set_state_class category.type_unit?} change_state_unit"
-        %th
+        %td
           =link_to category.multi.to_s, nil,:class=>"btn #{set_state_class category.multi?} change_state_multi"
-        %th
+        %td
           =link_to category.has_sides.to_s, nil,:class=>"btn #{set_state_class category.has_sides?} change_state_sides"
-        %th
+        %td
           =link_to category.hidden.to_s, nil,:class=>"btn #{set_state_class category.hidden?} change_state_hidden"
 
-        %th
+        %td
           = select_tag "base_product_#{category.id}",options_for_select(category.products.are_main.map{|p| [p.productname,p.id]}, category.base_product), :data=>{'category-id'=> category.id}, :prompt=>'Seleccione un producto'

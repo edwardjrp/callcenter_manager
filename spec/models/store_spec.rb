@@ -28,5 +28,6 @@ describe Store do
     it{should validate_uniqueness_of :storeid}
     it{should belong_to :city}
     it{should have_many :carts}
+    it{should have_many :store_products}
   end
 end
