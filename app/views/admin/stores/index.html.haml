@@ -1,0 +1,20 @@
+- if @stores.any?
+  %h3 Tiendas
+  %table.table.table-striped.table-bordered.table-condensed#stores_list
+    %thead
+      %th Nombre
+      %th Dirección
+      %th ip
+      %th ciudad
+      %th ID
+      %th 
+    %tbody
+      -@stores.each do |store|
+        %tr{:data=>{'store-id'=> store.id}, :id=>dom_id(store)}
+          %th= best_in_place store, :name, :type => :input, :path=>[:admin, store]
+          %th= best_in_place store, :address, :type => :input, :path=>[:admin, store]
+          %th= best_in_place store, :ip, :type => :input, :path=>[:admin, store]
+          %th= store.city.name
+          %th= store.storeid
+          %th
+            = link_to 'Productos', [:admin,store]

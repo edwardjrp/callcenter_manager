@@ -17,6 +17,8 @@
 //= require jquery.hoverpulse
 //= require jquery.effects.highlight
 //= require select2
+//= require jquery.purr
+//= require best_in_place
 //= require underscore
 //= require backbone
 //= require backbone-relational

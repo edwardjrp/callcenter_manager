@@ -88,7 +88,9 @@
 	  color: #6495ed;
 	}
 }
-
+#footer{
+  height:50px;
+}
 .dropdown-menu {
   left:auto;
 }
@@ -196,3 +198,13 @@
           background-clip: padding-box;
 }
 
+.purr {
+  position: fixed;
+  top: 100px;
+  right: 200px;
+  width: 250px;
+  padding: 20px;
+  background-color: #FCC;
+  border: solid 2px #C66;
+  &:first-letter { text-transform: uppercase; }
+}

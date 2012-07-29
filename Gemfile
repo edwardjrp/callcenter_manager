@@ -55,7 +55,8 @@ gem "haml-rails"
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem 'carrierwave'
-# gem 'best_in_place'
+# gem 'rest_in_place'
+gem 'best_in_place'
 
 # To use ActiveModel has_secure_password
 gem 'bcrypt-ruby', '~> 3.0.0'

@@ -1,7 +1,6 @@
 Kapiqua25::Application.routes.draw do
   
-  get "categories/index"
-
+  
   get "dashboard/index"
 
   get "builder/index"
@@ -40,6 +39,7 @@ Kapiqua25::Application.routes.draw do
         post 'change_has_sides'
       end
     end
+    resources :stores, :except=>[:edit]
     root :to => 'dashboard#index'
   end
   root to: 'home#index'
