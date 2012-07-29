@@ -19,10 +19,10 @@ jQuery ->
     
   socket.on 'price', (data) ->
     order_reply = data.msg
-    i = 0
     for order_item in order_reply.order_items
-      $($('#current_carts_items').find('span.pricing')[i]).text(order_item.priced_at)
-      i++
+      for el in $('#current_carts_items').find('span.pricing')
+        if $(el).parent().parent().find('input[type=text]').val() ==  order_item.quantity and $(el).parent().parent().data('cart-product-code') == order_item.code and _.isEmpty(_.difference(order_item.options, _.compact($(el).data('options').split(','))))
+          $(el).text(order_item.priced_at)
     
   socket.on 'reconnect', () ->
     $('#lines').remove();

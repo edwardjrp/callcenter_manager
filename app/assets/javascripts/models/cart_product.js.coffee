@@ -27,7 +27,18 @@ class Kapiqua25.Models.CartProduct extends Backbone.RelationalModel
           product_options.push product_option
     product_options
 
-
+  
+  options_array: ()->
+    return '' if this.get('product').get('category').get('has_options') == false
+    presentation = _.map @parsed_options(), (option) ->
+      option.quantity = '' if option.quantity == '1' || option.quantity == 1
+      presenter = option.quantity
+      presenter += "#{option.product.get('productcode')}"
+      if (option.part? and option.part.match(/1|2/)) then part = "-#{option.part}" else part = ''
+      presenter += part
+      window.strip(presenter)
+    presentation
+  
   niffty_opions: () ->
     return '' if this.get('product').get('category').get('has_options') == false
     presentation = _.map @parsed_options(), (option) ->
