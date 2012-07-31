@@ -40,6 +40,7 @@ Kapiqua25::Application.routes.draw do
       end
     end
     resources :stores, :except=>[:edit]
+    resources :store_products, :only =>[:create, :delete, :update]
     root :to => 'dashboard#index'
   end
   root to: 'home#index'

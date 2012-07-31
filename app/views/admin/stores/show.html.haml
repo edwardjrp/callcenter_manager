@@ -1,7 +1,7 @@
 - if @products.any?
   %h3= "Productos para #{@store.name}"
   =will_paginate @products
-  %table.table.table-striped.table-bordered.table-condensed#products_list
+  %table.table.table-striped.table-bordered.table-condensed#products_list{:data=>{"store-id"=> @store.id}}
     %thead
       %th Categoría
       %th Disponible
@@ -16,9 +16,9 @@
           %td= product.category.name
           %td
             -if store_product(@store, product).present?
-              = store_product(@store, product).available
+              =link_to store_product(@store, product).available.to_s , "/admin/store_products/#{store_product(@store, product).id}", class: "store_product_change_state_available  btn #{store_product_class(@store, product)}"
             -else
-              =link_to 'Asignar', nil
+              =link_to 'Asignar', '/admin/store_products', class: 'create_store_product'
           %td= product.productname
           %td= product.productcode
           %td= product.options
