@@ -1,0 +1,60 @@
+.row
+  .span4
+    .row
+      .span4
+        %strong Nombre:
+        =@client.full_name
+    .row
+      .span4
+        %strong Correo:
+        =@client.email
+    .well 
+      .row
+        .span4        
+          %h3 Telefonos
+      %hr
+      -@client.phones.each do |phone|
+        .row
+          .span4
+            %strong Numero:
+            =number_to_phone phone.number
+        - if phone.ext.present?
+          .row
+            .span4
+              %strong extensión:
+              =number_to_phone phone.ext
+        %hr 
+    .well 
+      .row
+        .span4        
+          %h3 Direciones
+          %h3
+      -@client.addresses.each do |address|
+        .row
+          .span4
+            %strong Ciudad
+            =address.street.name
+        %hr 
+      
+
+  .span8
+    - if @carts.any?
+      %h3 Ordenes
+      =will_paginate @carts
+      %table.table.table-striped.table-bordered.table-condensed#carts_list
+        %thead
+          %th Agente
+          %th Apellido
+          %th Email
+          %th Cédula
+          %th Activo
+          %th 
+        %tbody
+          -@carts.each do |cart|
+            %tr{:data=>{'store-id'=> cart.id}, :id=>dom_id(cart)}
+              %td= cart.user.full_name
+              %td= cart
+              %td= cart
+      =will_paginate @carts
+    -else
+      %h3 Este cliente no tiene ordenes aún

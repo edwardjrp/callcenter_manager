@@ -1,4 +1,5 @@
 class Admin::StoreProductsController < ApplicationController
+  before_filter {|c| c.accessible_by([:admin], root_path)}
   
   def create
     @store_product = StoreProduct.new(params[:store_product])

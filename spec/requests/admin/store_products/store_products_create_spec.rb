@@ -22,6 +22,8 @@ describe 'Stores general' do
        within("#product_#{@product.id}") do
          click_link('Asignar')
          page.should have_content('false')
+         click_link 'false'
+         page.should have_content('true')
        end
      end
      

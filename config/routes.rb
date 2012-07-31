@@ -1,10 +1,5 @@
 Kapiqua25::Application.routes.draw do
   
-  
-  get "dashboard/index"
-
-  get "builder/index"
-
   get 'login', to: "sessions#new", as: :login
   get 'logout', to: "sessions#destroy", as: :logout
   get 'builder', to: "builder#index", as: :builder
@@ -39,8 +34,9 @@ Kapiqua25::Application.routes.draw do
         post 'change_has_sides'
       end
     end
+    resources :clients
     resources :stores, :except=>[:edit]
-    resources :store_products, :only =>[:create, :delete, :update]
+    resources :store_products, :only =>[:create, :update]
     root :to => 'dashboard#index'
   end
   root to: 'home#index'

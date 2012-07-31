@@ -1,0 +1,21 @@
+- if @clients.any?
+  %h3 Clientes
+  =will_paginate @clients
+  %table.table.table-striped.table-bordered.table-condensed#clients_list
+    %thead
+      %th Nombre
+      %th Apellido
+      %th Email
+      %th Cédula
+      %th Activo
+      %th 
+    %tbody
+      -@clients.each do |client|
+        %tr{:data=>{'store-id'=> client.id}, :id=>dom_id(client)}
+          %td= client.first_name
+          %td= client.last_name
+          %td= client.email
+          %td= number_to_cedula(client.idnumber)
+          %td= link_to client.active.to_s, nil, class: "btn #{set_state_class(client.active)}"
+          %td= link_to 'Ordenes', [:admin,client]
+  =will_paginate @clients
