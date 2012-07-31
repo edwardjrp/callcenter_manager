@@ -32,29 +32,83 @@
       -@client.addresses.each do |address|
         .row
           .span4
-            %strong Ciudad
+            %strong Ciudad:
+            =address.street_area.city.name
+        .row
+          .span4
+            %strong Sector:
+            =address.street_area.name
+        .row
+          .span4
+            %strong Calle:
             =address.street.name
+        .row
+          .span4
+            %strong Numero:
+            =address.number
+        .row
+          .span4
+            %strong Tipo:
+            =address.unit_type
+        -if address.unit_number
+          .row
+            .span4
+              %strong Numero de unidad:
+              =address.unit_number
+        -if address.postal_code
+          .row
+            .span4
+              %strong Codigo postal:
+              =address.postal_code
+
+        -if address.delivery_instructions
+          .row
+            .span3
+              %strong instrucciones de entrega:
+          .row
+            .span3
+              =address.delivery_instructions
+
+
         %hr 
       
 
-  .span8
+  .span8#carts_list
     - if @carts.any?
       %h3 Ordenes
+      %hr
       =will_paginate @carts
-      %table.table.table-striped.table-bordered.table-condensed#carts_list
-        %thead
-          %th Agente
-          %th Apellido
-          %th Email
-          %th Cédula
-          %th Activo
-          %th 
-        %tbody
-          -@carts.each do |cart|
-            %tr{:data=>{'store-id'=> cart.id}, :id=>dom_id(cart)}
-              %td= cart.user.full_name
-              %td= cart
-              %td= cart
+      -@carts.each do |cart|
+        .row
+          .span2
+            %strong Agente:
+            =cart.user.full_name
+          .span2.offset2
+            =l cart.created_at, format: :short
+        .row
+          .span2
+            %strong Monto de la orden:
+            =number_to_currency(cart.payment_amount) || 'N/A'
+          .span2.offset2
+            %strong Modo de servicio:
+            =cart.service_method || 'N/A'
+
+        .row{:data=>{'cart-id'=> cart.id}, :id=>dom_id(cart)}
+          %table.table.table-striped.table-bordered.table-condensed.span8
+            %thead
+              %tr
+                %th Cantidad
+                %th product
+                %th Optiones
+                %th Precio              
+            %tbody
+              -cart.cart_products.each do |cart_product|
+                %tr
+                  %td= cart_product.quantity
+                  %td= cart_product.product.productname
+                  %td= cart_product.product.niffty_options
+                  %td= cart_product.priced_at
+        %hr 
       =will_paginate @carts
     -else
       %h3 Este cliente no tiene ordenes aún

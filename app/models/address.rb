@@ -17,6 +17,7 @@
 class Address < ActiveRecord::Base
   belongs_to :client, :counter_cache => true,:inverse_of => :addresses
   belongs_to :street
+  delegate :area, :to => :street, :prefix => true
   validates :client, presence: true
   validates :street_id, presence: true
   attr_accessible :client_id, :delivery_instructions, :number, :postal_code, :street_id, :unit_number, :unit_type

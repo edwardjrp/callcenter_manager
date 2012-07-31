@@ -11,7 +11,7 @@
       %th 
     %tbody
       -@clients.each do |client|
-        %tr{:data=>{'store-id'=> client.id}, :id=>dom_id(client)}
+        %tr{:data=>{'client-id'=> client.id}, :id=>dom_id(client)}
           %td= client.first_name
           %td= client.last_name
           %td= client.email

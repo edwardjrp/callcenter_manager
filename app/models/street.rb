@@ -12,6 +12,7 @@
 class Street < ActiveRecord::Base
   belongs_to :area
   has_many :addresses
+  delegate :city, :to => :area, :prefix => true
   validates :name, :presence=> true, uniqueness: { scope: :area_id}
   attr_accessible :area_id, :name
   

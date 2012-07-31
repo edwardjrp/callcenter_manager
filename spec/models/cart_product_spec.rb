@@ -10,6 +10,7 @@
 #  options    :string(255)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  priced_at  :decimal(, )
 #
 
 require 'spec_helper'
