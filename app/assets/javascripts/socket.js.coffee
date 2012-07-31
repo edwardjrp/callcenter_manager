@@ -23,6 +23,15 @@ jQuery ->
       for el in $('#current_carts_items').find('span.pricing')
         if $(el).parent().parent().find('input[type=text]').val() ==  order_item.quantity and $(el).parent().parent().data('cart-product-code') == order_item.code and _.isEmpty(_.difference(order_item.options, _.compact($(el).data('options').split(','))))
           $(el).text("$ #{Number(order_item.priced_at).toFixed(2)}")
+    $('#order_net_amount').html("<strong>Neto: </strong>$#{order_reply.netamount}")
+    $('#order_tax_amount').html("<strong>Impuestos: </strong>$#{order_reply.taxamount}")
+    $('#order_payment_amount').html("<strong>Total: </strong>$#{order_reply.payment_amount}")
+
+  socket.on 'start_price_sync', (data) ->
+    $('#sync_message').html('<span>Esperando sincronización con pulse</span>')
+  socket.on 'done_price_sync', (data) ->
+    $('#sync_message').html('<span>Precio sincronizado</span>')
+
     
   socket.on 'reconnect', () ->
     $('#lines').remove();

@@ -146,6 +146,12 @@ CartProducts = (function() {
               type: "success",
               data: json_cart
             });
+            if (socket != null) {
+              socket.emit('start_price_sync', {
+                user: 'pulse ',
+                msg: new Date(json_cart.updated_at)
+              });
+            }
             pulse_com_error = function(comm_err) {
               console.log(comm_err.code);
               if (socket != null) {
@@ -161,8 +167,9 @@ CartProducts = (function() {
               cart.updateAttributes({
                 net_amount: Number(order_reply.netamount),
                 tax_amount: Number(order_reply.taxamount),
-                payment_amount: Number(order_reply.payment_amount)
-              }, function(cart_update_err, data_id) {
+                payment_amount: Number(order_reply.payment_amount),
+                updated_at: new Date()
+              }, function(cart_update_err, updated_cart) {
                 if (cart_update_err) {
                   console.log(cart_update_err);
                   if (socket != null) {
@@ -172,11 +179,10 @@ CartProducts = (function() {
                     });
                   }
                 } else {
-                  console.log(data_id);
                   if (socket != null) {
-                    return socket.emit('chat', {
-                      user: 'system ',
-                      msg: JSON.stringify(data_id)
+                    return socket.emit('done_price_sync', {
+                      user: 'pulse ',
+                      msg: new Date(updated_cart.updated_at)
                     });
                   }
                 }
