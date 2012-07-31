@@ -133,7 +133,7 @@ CartProducts = (function() {
           });
         };
         return async.map(cart_products, get_products, function(err, results) {
-          var json_cart;
+          var json_cart, pulse_com_error;
           if (err) {
             return respond({
               type: "error",
@@ -146,11 +146,47 @@ CartProducts = (function() {
               type: "success",
               data: json_cart
             });
-            return PulseBridge.price(json_cart, null, function(res_data) {
+            pulse_com_error = function(comm_err) {
+              console.log(comm_err);
+              if (socket != null) {
+                return socket.emit('chat', {
+                  user: 'pulse ',
+                  msg: comm_err
+                });
+              }
+            };
+            return PulseBridge.price(json_cart, pulse_com_error, function(res_data) {
+              var order_reply;
+              order_reply = new OrderReply(res_data);
+              console.log(order_reply);
+              cart.updateAttributes({
+                net_amount: order_reply.netamount,
+                tax_amount: order_reply.taxamount,
+                payment_amount: order_reply.payment_amount
+              }, function(cart_update_err) {
+                if (cart_update_err) {
+                  console.log(cart_update_err);
+                  if (socket != null) {
+                    return socket.emit('chat', {
+                      user: 'system ',
+                      msg: cart_update_err
+                    });
+                  }
+                } else {
+                  return Cart.find(cart_id, function(c_err, updated_cart) {
+                    if (socket != null) {
+                      return socket.emit('chat', {
+                        user: 'system ',
+                        msg: JSON.stringify(updated_cart)
+                      });
+                    }
+                  });
+                }
+              });
               if (socket != null) {
                 return socket.emit('price', {
                   user: 'pulse ',
-                  msg: new OrderReply(res_data)
+                  msg: order_reply
                 });
               }
             });
