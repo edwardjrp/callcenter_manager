@@ -38,6 +38,11 @@
 
 # end del
 
+@truncate = (text, max_width)->
+  zero_width_space = "&#8203;"
+  if (text.length < max_width) then return text else return text.match(new RegExp(".{1,#{max_width}}", 'g')).join(zero_width_space)
+
+
 
 # classes
   

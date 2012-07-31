@@ -67,9 +67,9 @@ class CartProducts
             json_cp = JSON.parse(JSON.stringify(cp))
             json_cp.product = JSON.parse(JSON.stringify(product))
             cb(null, json_cp)
-        async.map cart_products,get_products, (err, results)->
-          if err
-            respond( {type:"error", data:err })
+        async.map cart_products,get_products, (it_err, results)->
+          if it_err
+            respond( {type:"error", data:it_err })
           else
             json_cart = JSON.parse(JSON.stringify(cart))
             json_cart.cart_products = results
