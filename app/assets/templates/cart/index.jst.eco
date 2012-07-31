@@ -21,7 +21,7 @@
           </li>
         <%end%>
       </ul>
-      <div class='row'><div class='span2'><%=cart.payment_amount%></div></div>
+      <div class='row'><div class='span2'><%=@model.get('payment_amount')%></div></div>
     <%else:%>
       No hay productos en la orden
     <%end%>

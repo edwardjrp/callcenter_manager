@@ -132,12 +132,12 @@ CartProducts = (function() {
             return cb(null, json_cp);
           });
         };
-        return async.map(cart_products, get_products, function(err, results) {
+        return async.map(cart_products, get_products, function(it_err, results) {
           var json_cart, pulse_com_error;
-          if (err) {
+          if (it_err) {
             return respond({
               type: "error",
-              data: err
+              data: it_err
             });
           } else {
             json_cart = JSON.parse(JSON.stringify(cart));
@@ -147,23 +147,22 @@ CartProducts = (function() {
               data: json_cart
             });
             pulse_com_error = function(comm_err) {
-              console.log(comm_err);
+              console.log(comm_err.code);
               if (socket != null) {
                 return socket.emit('chat', {
                   user: 'pulse ',
-                  msg: comm_err
+                  msg: comm_err.code
                 });
               }
             };
             return PulseBridge.price(json_cart, pulse_com_error, function(res_data) {
               var order_reply;
               order_reply = new OrderReply(res_data);
-              console.log(order_reply);
               cart.updateAttributes({
-                net_amount: order_reply.netamount,
-                tax_amount: order_reply.taxamount,
-                payment_amount: order_reply.payment_amount
-              }, function(cart_update_err) {
+                net_amount: Number(order_reply.netamount),
+                tax_amount: Number(order_reply.taxamount),
+                payment_amount: Number(order_reply.payment_amount)
+              }, function(cart_update_err, data_id) {
                 if (cart_update_err) {
                   console.log(cart_update_err);
                   if (socket != null) {
@@ -173,14 +172,13 @@ CartProducts = (function() {
                     });
                   }
                 } else {
-                  return Cart.find(cart_id, function(c_err, updated_cart) {
-                    if (socket != null) {
-                      return socket.emit('chat', {
-                        user: 'system ',
-                        msg: JSON.stringify(updated_cart)
-                      });
-                    }
-                  });
+                  console.log(data_id);
+                  if (socket != null) {
+                    return socket.emit('chat', {
+                      user: 'system ',
+                      msg: JSON.stringify(data_id)
+                    });
+                  }
                 }
               });
               if (socket != null) {

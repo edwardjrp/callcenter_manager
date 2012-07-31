@@ -11,6 +11,9 @@ DB = new Schema('postgres', {
 });
 
 Cart = DB.define("Cart", {
+  id: {
+    type: Number
+  },
   user_id: {
     type: Number
   },

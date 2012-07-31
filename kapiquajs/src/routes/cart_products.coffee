@@ -75,19 +75,18 @@ class CartProducts
             json_cart.cart_products = results
             respond({type:"success", data: json_cart})
             pulse_com_error = (comm_err) ->
-              console.log comm_err
-              socket.emit 'chat', {user: 'pulse ', msg: comm_err} if socket?
+              console.log comm_err.code
+              socket.emit 'chat', {user: 'pulse ', msg: comm_err.code} if socket?
             PulseBridge.price json_cart, pulse_com_error, (res_data) ->
               order_reply = new OrderReply(res_data)
-              console.log order_reply
-              cart.updateAttributes {net_amount: order_reply.netamount, tax_amount: order_reply.taxamount, payment_amount: order_reply.payment_amount}, (cart_update_err)->
+              cart.updateAttributes { net_amount: Number(order_reply.netamount), tax_amount: Number(order_reply.taxamount), payment_amount: Number(order_reply.payment_amount) }, (cart_update_err, data_id)->
                 if cart_update_err
                   console.log cart_update_err
                   # create an error system for socket.id
                   socket.emit 'chat', {user: 'system ', msg: cart_update_err} if socket?
                 else
-                  Cart.find cart_id, (c_err, updated_cart) ->
-                    socket.emit 'chat', {user: 'system ', msg: JSON.stringify(updated_cart)} if socket?
+                  console.log data_id
+                  socket.emit 'chat', {user: 'system ', msg: JSON.stringify(data_id)} if socket?
               socket.emit 'price', {user: 'pulse ', msg: order_reply} if socket?
 
 

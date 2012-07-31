@@ -5,6 +5,9 @@ DB = new Schema('postgres', { 'url': Config.connection_string })
 
 
 Cart = DB.define("Cart",
+  id:
+    type: Number
+    
   user_id:
     type: Number
 
