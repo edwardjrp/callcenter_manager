@@ -28,10 +28,17 @@ jQuery ->
     $('#order_payment_amount').html("<strong>Total: </strong>$#{order_reply.payment_amount}")
 
   socket.on 'start_price_sync', (data) ->
-    $('#sync_message').html('<span>Esperando sincronización con pulse</span>')
+    $('#sync_message').html('<span class="label label-info">Esperando sincronización con pulse</span>')
   socket.on 'done_price_sync', (data) ->
-    $('#sync_message').html('<span>Precio sincronizado</span>')
+    $('#sync_message').html('<span class="label label-info">Precio sincronizado</span>')
 
+    
+  socket.on 'data_error', (err)->
+    switch err.type
+      when 'pulse_connection'
+        window.show_alert("La comunicación pulse Falló: #{err.msg}", 'error')
+        $('#sync_message').html('<span class="label label-important">Los precios no estan sincronizados</span>')
+      when 'db_error' then window.show_alert("No se pudo actualizar la base de datos #{err.msg}", 'error')
     
   socket.on 'reconnect', () ->
     $('#lines').remove();
@@ -39,6 +46,7 @@ jQuery ->
     
   socket.on 'error', (err)->
     console.log err
+    window.show_alert(err, 'error')
     err_data = {user: 'System', msg:  (err ? err : 'Se ha perdido la conexion')}
     message(err_data);
       

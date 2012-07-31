@@ -78,15 +78,15 @@ class CartProducts
             socket.emit 'start_price_sync', {user: 'pulse ', msg: new Date(json_cart.updated_at)} if socket?
             
             pulse_com_error = (comm_err) ->
-              console.log comm_err.code
-              socket.emit 'chat', {user: 'pulse ', msg: comm_err.code} if socket?
+              console.log comm_err
+              socket.emit 'data_error', {type: 'pulse_connection' , msg:JSON.stringify(comm_err)} if socket?
             PulseBridge.price json_cart, pulse_com_error, (res_data) ->
               order_reply = new OrderReply(res_data)
               cart.updateAttributes { net_amount: Number(order_reply.netamount), tax_amount: Number(order_reply.taxamount), payment_amount: Number(order_reply.payment_amount), updated_at: new Date() }, (cart_update_err, updated_cart)->
                 if cart_update_err
                   console.log cart_update_err
                   # create an error system for socket.id
-                  socket.emit 'chat', {user: 'system ', msg: cart_update_err} if socket?
+                  socket.emit 'data_error', {type: 'db_error' , msg:JSON.stringify(cart_update_err)} if socket?
                 else
                   socket.emit 'done_price_sync', {user: 'pulse ', msg: new Date(updated_cart.updated_at)} if socket?
               socket.emit 'price', {user: 'pulse ', msg: order_reply} if socket?

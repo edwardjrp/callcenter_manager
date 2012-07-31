@@ -153,11 +153,11 @@ CartProducts = (function() {
               });
             }
             pulse_com_error = function(comm_err) {
-              console.log(comm_err.code);
+              console.log(comm_err);
               if (socket != null) {
-                return socket.emit('chat', {
-                  user: 'pulse ',
-                  msg: comm_err.code
+                return socket.emit('data_error', {
+                  type: 'pulse_connection',
+                  msg: JSON.stringify(comm_err)
                 });
               }
             };
@@ -173,9 +173,9 @@ CartProducts = (function() {
                 if (cart_update_err) {
                   console.log(cart_update_err);
                   if (socket != null) {
-                    return socket.emit('chat', {
-                      user: 'system ',
-                      msg: cart_update_err
+                    return socket.emit('data_error', {
+                      type: 'db_error',
+                      msg: JSON.stringify(cart_update_err)
                     });
                   }
                 } else {
