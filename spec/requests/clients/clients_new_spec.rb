@@ -119,7 +119,7 @@ describe "Client::New" do
           @phone = FactoryGirl.create :phone, client: @client, number: '8095551234', ext: '99'
         end
       
-        it "should show the validation error for the user", js: true do
+        it "should show the missing name validation error for the user", js: true do
            fill_in "client_search_phone", with: '8095551234'
            fill_in "client_search_ext", with: '45'
            fill_in "client_search_first_name", with: ''
@@ -136,7 +136,7 @@ describe "Client::New" do
            page.should have_content('en blanco')
          end
 
-         it "should show the validation error for the user", js: true do
+         it "should show the missing address info validation error for the user", js: true do
             fill_in "client_search_phone", with: '8095551234'
             fill_in "client_search_ext", with: '45'
             fill_in "client_search_first_name", with: 'rad'
@@ -145,10 +145,8 @@ describe "Client::New" do
             click_button 'Agregar usuario'
             page.should have_content('Addresses')
             page.should have_content('en blanco')
-          end
-           
-           
-               
+          end                          
       end
+      
   end
 end

@@ -208,3 +208,8 @@
   border: solid 2px #C66;
   &:first-letter { text-transform: uppercase; }
 }
+
+.scrollable_dropdown{
+  height:600px;
+  overflow:scroll;
+}

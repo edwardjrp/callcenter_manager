@@ -8,6 +8,7 @@ Kapiqua25::Application.routes.draw do
   resources :carts do
     collection do
       post 'service_method'
+      post 'current_store'
     end
   end
   resources :categories

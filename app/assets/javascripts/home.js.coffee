@@ -6,6 +6,43 @@ jQuery ->
   assign_service_method($('#service_method_delivery'))
   assign_service_method($('#service_method_carry_out'))
   assign_service_method($('#service_method_pickup'))
+  
+  $('.set_last_address').on 'click', (event)->
+    target = $(event.currentTarget)
+    $.ajax
+      type: 'POST'
+      url: "/carts/current_store"
+      datatype: 'json'
+      data: {order_target: { store_id: target.data('store-id'), address_id: target.data('address-id')}}
+      beforeSend: (xhr) ->
+        xhr.setRequestHeader("Accept", "application/json")
+      success: (cart)->
+        $('#choose_store').text("Tienda : #{cart.store.name}")
+        $('.set_last_address').find('i').remove()
+        $('.set_target_store').find('i').remove()
+        $(".set_last_address[data-address-id=#{cart.client.target_address_id}]").prepend('<i class="icon-bookmark">')
+        $(".set_target_store[data-store-id=#{cart.store.id}]").prepend('<i class="icon-ok">')
+        
+  $('.set_target_store').on 'click', (event)->
+    target = $(event.currentTarget)
+    $.ajax
+      type: 'POST'
+      url: "/carts/current_store"
+      datatype: 'json'
+      data: {order_target: { store_id: target.data('store-id')}}
+      beforeSend: (xhr) ->
+        xhr.setRequestHeader("Accept", "application/json")
+      success: (cart)->
+        $('#choose_store').text("Tienda : #{cart.store.name}")
+        $('.set_target_store').find('i').remove()
+        $(".set_target_store[data-store-id=#{cart.store.id}]").prepend('<i class="icon-ok">')
+          
+
+
+
+
+
+  
   $("#client_search_phone").blur ->
     $("#client_search_phone").val window.NumberFormatter.to_phone($("#client_search_phone").val())
   $("#client_search_phone").focus ->
@@ -147,7 +184,7 @@ assign_client_to_current_cart = () ->
         datatype: 'json'
         data: {client_id: $('#client_id').val()}
         beforeSend: (xhr) ->
-          xhr.setRequestHeader("Accept", "application/json")
+          xhr.setRequestHeader("Accept", "application/json") 
         success: (cart_info) ->
           $('#choose_client>span').text("#{cart_info.client.first_name} #{cart_info.client.last_name}")
           $('#choose_client').effect('highlight')

@@ -39,4 +39,8 @@ class Client < ActiveRecord::Base
     "#{self.first_name} #{self.last_name}"  
   end
   
+  def last_address
+    Address.find_by_id self.target_address_id
+  end
+  
 end

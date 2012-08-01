@@ -21,4 +21,12 @@ class Address < ActiveRecord::Base
   validates :client, presence: true
   validates :street_id, presence: true
   attr_accessible :client_id, :delivery_instructions, :number, :postal_code, :street_id, :unit_number, :unit_type
+  
+  
+  def store
+    return nil if street.nil?
+    return nil if street.area.nil?
+    return nil if street.area.store.nil?
+    street.area.store
+  end
 end
