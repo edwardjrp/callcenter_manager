@@ -33,7 +33,7 @@ describe "Client store" do
           page.should have_selector('#store_list', visible: true)
         end
 
-        it "should render the stores list" do
+        it "should render the stores list", js: true do
           page.should have_css('a#choose_store')
           find('a#choose_store').click
           within('#store_list') do
