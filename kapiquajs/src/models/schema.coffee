@@ -450,6 +450,9 @@ CartProduct = DB.define("CartProduct",
 
   bind_id:
     type: Number
+  
+  priced_at:
+    type: Number
 
   created_at:
     type: Date

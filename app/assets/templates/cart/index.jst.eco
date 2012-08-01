@@ -3,9 +3,9 @@
   <div class='content'>
 	  <div class='row'><div class='span3' id='sync_message'></div></div>
     <%if _.any(@model.get('cart_products').models):%>
-	    <%if @model.get('net_amount')?:%><div class='row'><div class='span2' id='order_net_amount'><strong>Neto: </strong>$<%=@model.get('net_amount')%></div></div><%end%>
-      <%if @model.get('tax_amount')?:%><div class='row'><div class='span2' id='order_tax_amount'><strong>Impuestos: </strong>$<%=@model.get('tax_amount')%></div></div><%end%>
-      <%if @model.get('payment_amount')?:%><div class='row'><div class='span2' id='order_payment_amount'><strong>Total: </strong>$<%=@model.get('payment_amount')%></div></div><%end%>
+	    <%if @model.get('net_amount')?:%><div class='row'><div class='span2' id='order_net_amount'><strong>Neto: </strong>$<%=Number(@model.get('net_amount')).toFixed(2)%></div></div><%end%>
+      <%if @model.get('tax_amount')?:%><div class='row'><div class='span2' id='order_tax_amount'><strong>Impuestos: </strong>$<%=Number(@model.get('tax_amount')).toFixed(2)%></div></div><%end%>
+      <%if @model.get('payment_amount')?:%><div class='row'><div class='span2' id='order_payment_amount'><strong>Total: </strong>$<%=Number(@model.get('payment_amount')).toFixed(2)%></div></div><%end%>
       <ul id="current_carts_items">
         <%for cart_product in _.sortBy(@model.get('cart_products').models, (model)-> model.get('id')):%>
           <li>
@@ -18,7 +18,7 @@
               <div class='remove_options_and_pricing'>
                 <span class='item_remove'><i class="icon-trash icon-white"></i></span>
                 <span class='show_options'><i class="icon-list icon-white left-margin-1"></i></span>
-                <span class='pricing' data-options='<%=cart_product.options_array()%>'></span>
+                <span class='pricing' data-options='<%=cart_product.options_array()%>'>$ <%=Number(cart_product.get('priced_at')).toFixed(2)%></span>
               </div>
             </div>
             <p><%=cart_product.niffty_opions()%></p>

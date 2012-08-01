@@ -82,15 +82,23 @@ class CartProducts
               socket.emit 'data_error', {type: 'pulse_connection' , msg:JSON.stringify(comm_err)} if socket?
             PulseBridge.price json_cart, pulse_com_error, (res_data) ->
               order_reply = new OrderReply(res_data)
+              # add hadling for pulse errors
               cart.updateAttributes { net_amount: Number(order_reply.netamount), tax_amount: Number(order_reply.taxamount), payment_amount: Number(order_reply.payment_amount), updated_at: new Date() }, (cart_update_err, updated_cart)->
                 if cart_update_err
                   console.log cart_update_err
                   # create an error system for socket.id
                   socket.emit 'data_error', {type: 'db_error' , msg:JSON.stringify(cart_update_err)} if socket?
                 else
-                  socket.emit 'done_price_sync', {user: 'pulse ', msg: new Date(updated_cart.updated_at)} if socket?
-              socket.emit 'price', {user: 'pulse ', msg: order_reply} if socket?
-              
+                  updated_cart.cart_products {}, (uc_cp_err, updated_cart_cart_products)->
+                    for order_item in order_reply.order_items
+                      for cart_product in updated_cart_cart_products
+                        if Number(cart_product.quantity) == Number(order_item.quantity) and _.find(results, (cp) -> cp.id == cart_product.id).product.productcode == order_item.code and order_item.options.join(',') == cart_product.options
+                          cart_product.updateAttributes { priced_at: Number(order_item.priced_at) , updated_at: new Date() }, (cp_update_price_error, update_price_cart_product)->
+                            if (cp_update_price_error) 
+                              socket.emit 'data_error', {type: 'pulse_connection' , msg:JSON.stringify(cp_update_price_error)} if socket?
+                            else
+                              socket.emit 'item_price_sync', {item_id: update_price_cart_product.id, price: update_price_cart_product.priced_at} if socket?
+                  socket.emit 'cart_price_sync', {net_amount: updated_cart.net_amount, tax_amount: updated_cart.tax_amount, payment_amount: updated_cart.payment_amount} if socket?              
               
 
 

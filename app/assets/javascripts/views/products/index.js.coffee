@@ -69,7 +69,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
       build_options=[]
       _.each selected_options, (op)->
         productcode = $(op).closest('.option_box').data('productcode')
-        quantity = $(op).val()
+        if ($(op).val() == '1') then quantity = '' else quantity = $(op).val()
         build_options.push("#{quantity}#{productcode}")
     #  end type_unit false
 

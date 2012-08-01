@@ -43,10 +43,11 @@ class Kapiqua25.Models.CartProduct extends Backbone.RelationalModel
     return '' if this.get('product').get('category').get('has_options') == false
     presentation = _.map @parsed_options(), (option) ->
       option.quantity = '' if option.quantity == '1' || option.quantity == 1
-      presenter = option.quantity
-      presenter += " #{option.product.get('productname')} "
-      presenter += option.part.replace(/1/,'Izquierda').replace(/2/, 'Derecha').replace(/W/,'Completa')
-      window.strip(presenter)
+      unless option.quantity == 0 || option.quantity == '0' 
+        presenter = option.quantity
+        presenter += " #{option.product.get('productname')} "
+        presenter += option.part.replace(/1/,'Izquierda').replace(/2/, 'Derecha').replace(/W/,'Completa')
+        window.strip(presenter)
     to_sentence presentation
   
   
