@@ -3,9 +3,9 @@
   <div class='content'>
 	  <div class='row'><div class='span3' id='sync_message'></div></div>
     <%if _.any(@model.get('cart_products').models):%>
-	    <%if @model.get('net_amount')?:%><div class='row'><div class='span2' id='order_net_amount'><strong>Neto: </strong>$<%=Number(@model.get('net_amount')).toFixed(2)%></div></div><%end%>
-      <%if @model.get('tax_amount')?:%><div class='row'><div class='span2' id='order_tax_amount'><strong>Impuestos: </strong>$<%=Number(@model.get('tax_amount')).toFixed(2)%></div></div><%end%>
-      <%if @model.get('payment_amount')?:%><div class='row'><div class='span2' id='order_payment_amount'><strong>Total: </strong>$<%=Number(@model.get('payment_amount')).toFixed(2)%></div></div><%end%>
+	    <%if @model.get('net_amount')?:%><div class='row'><div class='span2' id='order_net_amount'><strong>Neto: </strong>$ <%=Number(@model.get('net_amount')).toFixed(2)%></div></div><%end%>
+      <%if @model.get('tax_amount')?:%><div class='row'><div class='span2' id='order_tax_amount'><strong>Impuestos: </strong>$ <%=Number(@model.get('tax_amount')).toFixed(2)%></div></div><%end%>
+      <%if @model.get('payment_amount')?:%><div class='row'><div class='span2' id='order_payment_amount'><strong>Total: </strong>$ <%=Number(@model.get('payment_amount')).toFixed(2)%></div></div><%end%>
       <ul id="current_carts_items">
         <%for cart_product in _.sortBy(@model.get('cart_products').models, (model)-> model.get('id')):%>
           <li>
