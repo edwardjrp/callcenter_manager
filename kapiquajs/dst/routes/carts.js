@@ -40,7 +40,7 @@ Carts = (function() {
             client: client
           });
           if ((client.phones_count != null) && client.phones_count > 0) {
-            client.phones(function(cart_client_phones_err, phones) {
+            return client.phones(function(cart_client_phones_err, phones) {
               if (cart_client_phones_err != null) {
                 if (socket != null) {
                   return socket.emit('cart:price:error', {
@@ -48,27 +48,40 @@ Carts = (function() {
                   });
                 }
               } else {
-                return socket.emit('cart:price:client:phones', {
-                  phones: phones
-                });
-              }
-            });
-          }
-          if ((client.addresses_count != null) && client.addresses_count > 0) {
-            return client.addresses(function(cart_client_addresses_err, addresses) {
-              if (cart_client_addresses_err != null) {
                 if (socket != null) {
-                  return socket.emit('cart:price:error', {
-                    error: JSON.stringify(cart_client_addresses_err)
+                  return socket.emit('cart:price:client:phones', {
+                    phones: phones
                   });
                 }
-              } else {
-                return socket.emit('cart:price:client:addresses', {
-                  addresses: addresses
-                });
               }
             });
           }
+        });
+        cart.cart_products({}, function(c_cp_err, cart_products) {
+          var get_products;
+          get_products = function(cp, cb) {
+            return cp.product(function(p_err, product) {
+              var json_cp;
+              json_cp = JSON.parse(JSON.stringify(cp));
+              json_cp.product = JSON.parse(JSON.stringify(product));
+              return cb(null, json_cp);
+            });
+          };
+          return async.map(cart_products, get_products, function(it_err, results) {
+            if (it_err) {
+              if (socket != null) {
+                return socket.emit('cart:price:error', {
+                  error: JSON.stringify(cart_client_phones_err)
+                });
+              }
+            } else {
+              if (socket != null) {
+                return socket.emit('cart:price:client:cartproducts', {
+                  results: results
+                });
+              }
+            }
+          });
         });
         return console.log('Princing');
       }

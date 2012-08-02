@@ -24,14 +24,20 @@ class Carts
               if cart_client_phones_err?
                 socket.emit 'cart:price:error', {error: JSON.stringify(cart_client_phones_err)} if socket?
               else
-                socket.emit 'cart:price:client:phones', {phones}
-          if client.addresses_count? and client.addresses_count > 0
-            client.addresses (cart_client_addresses_err, addresses)->
-              if cart_client_addresses_err?
-                socket.emit 'cart:price:error', {error: JSON.stringify(cart_client_addresses_err)} if socket?
-              else
-                socket.emit 'cart:price:client:addresses', {addresses}
+                socket.emit 'cart:price:client:phones', {phones} if socket?
 
+        cart.cart_products {}, (c_cp_err, cart_products)->
+          get_products = (cp, cb)->
+            cp.product (p_err, product)->
+              json_cp = JSON.parse(JSON.stringify(cp))
+              json_cp.product = JSON.parse(JSON.stringify(product))
+              cb(null, json_cp)
+          async.map cart_products,get_products, (it_err, results)->
+            if it_err
+              socket.emit 'cart:price:error', {error: JSON.stringify(cart_client_phones_err)} if socket?
+            else
+              socket.emit 'cart:price:client:cartproducts', {results} if socket?
+              
         console.log 'Princing'
 
 
@@ -40,3 +46,13 @@ class Carts
 
 
 module.exports  = Carts
+
+
+
+
+# if client.addresses_count? and client.addresses_count > 0
+#   client.addresses (cart_client_addresses_err, addresses)->
+#     if cart_client_addresses_err?
+#       socket.emit 'cart:price:error', {error: JSON.stringify(cart_client_addresses_err)} if socket?
+#     else
+#       socket.emit 'cart:price:client:addresses', {addresses}

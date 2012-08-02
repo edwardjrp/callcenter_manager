@@ -44,6 +44,11 @@ jQuery ->
     progressbar_advance(3)
     console.log 'phones'
 
+  socket.on 'cart:price:client:cartproducts', (data) ->
+    cart_products = data.results
+    progressbar_advance(4)
+    console.log cart_products
+
 
   
   $('#utils .nav a').on 'click', (event)->
