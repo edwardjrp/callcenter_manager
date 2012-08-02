@@ -12,7 +12,14 @@ class Carts
 
 
   @price: (data, respond, socket) =>
-    console.log 'Princing'
+    console.log data.cart_id
+    Cart.find data.cart_id, (cart_find_err, cart)->
+      if cart_find_err?
+        socket.emit 'data_error', {type: 'error_recuperando datos de la orden' , msg:JSON.stringify(cart_find_err)} if socket?
+      else
+        cart.client (cart_client_err, client)->
+          socket.emit 'chat', {user: 'system ', msg: JSON.stringify(client)}
+        console.log 'Princing'
 
 
   @place: (data, respond, socket) =>

@@ -14,8 +14,12 @@ jQuery ->
       beforeSend: (xhr) ->
         xhr.setRequestHeader("Accept", "application/json")
       success: (cart)->
-        socket.emit 'cart:price', {cart: cart.id}
+        $('#process_inf').text("Procesando orden No. #{cart.id}")
+        $('#progress_bar').find('.bar').animate({width: '10%'})
+        socket.emit 'cart:price', {cart_id: cart.id}
         console.log 'start_checkout'
+      error: (err)->
+        console.log err
   
   $('#utils .nav a').on 'click', (event)->
     event.preventDefault()
