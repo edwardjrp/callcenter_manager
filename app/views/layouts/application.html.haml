@@ -12,6 +12,8 @@
       %meta{:content => "#{current_user.auth_token}", :name => "user"}
     %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}
   %body{id: controller_name}
+    .modal.hide#checkout_Modal
+      =render 'checkout_modal'
     .navbar.navbar-fixed-top
       .navbar-inner
         .container

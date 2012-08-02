@@ -1,0 +1,24 @@
+.modal-header
+  %button.close{"data-dismiss" => "modal", :type => "button"} ×
+  %h3 Resumen de la orden
+.modal-body
+  .row
+    .span4#process_inf Inciando ...
+  .row
+    .span5#progress_bar
+      .progress.progress-striped.active
+        .bar{:style => "width: 0%;"}
+  .row
+    .span4#client_info
+      Validation de Datos del cliente
+      %hr
+  .row
+    .span4#client_info
+      Validation de Datos de la orden
+      %hr
+
+        
+      
+.modal-footer
+  %a#place_order.btn.btn-primary{:href => "#", class: 'disabled'} Ordenar
+  %a.btn{"data-dismiss" => "modal", :href => "#"} Cancelar

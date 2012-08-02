@@ -3,6 +3,12 @@ jQuery ->
   socket.on 'connect', ()->
     $('#chatdisplay').append($('<p>').append($('<em>').text(prepare("connected"))))
   
+  $("#proceed_to_checkout_out").on 'click', (event)->
+    $('#checkout_Modal').modal()
+  
+  $('#checkout_Modal').on 'show', ()->
+    console.log 'start_checkout'
+  
   $('#utils .nav a').on 'click', (event)->
     event.preventDefault()
     if $(this).closest('li').hasClass('active')
