@@ -34,9 +34,8 @@ Carts = (function() {
         }
       } else {
         cart.client(function(cart_client_err, client) {
-          return socket.emit('chat', {
-            user: 'system ',
-            msg: JSON.stringify(client)
+          return socket.emit('cart:price:client', {
+            client: client
           });
         });
         return console.log('Princing');

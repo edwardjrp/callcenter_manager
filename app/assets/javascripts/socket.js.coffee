@@ -15,11 +15,19 @@ jQuery ->
         xhr.setRequestHeader("Accept", "application/json")
       success: (cart)->
         $('#process_inf').text("Procesando orden No. #{cart.id}")
-        $('#progress_bar').find('.bar').animate({width: '10%'})
+        $('#progress_bar').find('.bar').animate({width: '+=10%'})
         socket.emit 'cart:price', {cart_id: cart.id}
         console.log 'start_checkout'
       error: (err)->
         console.log err
+  
+  socket.on 'cart:price:client', (data) ->
+    client = data.client
+    $('#order_client_first_name').text("Nombre: #{client.first_name}")
+    $('#order_client_last_name').text("Apellido: #{client.last_name}")
+    $('#process_inf').text("Cliente recuperado")
+    $('#progress_bar').find('.bar').animate({width: '+=10%'})
+    console.log client
   
   $('#utils .nav a').on 'click', (event)->
     event.preventDefault()

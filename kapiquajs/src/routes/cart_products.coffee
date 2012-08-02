@@ -63,7 +63,7 @@ class CartProducts
     Cart.find cart_id, (c_err, cart) ->
       cart.cart_products {}, (c_cp_err, cart_products)->
         get_products = (cp, cb)->
-          Product.find cp.product(), (p_err, product)->
+          cp.product (p_err, product)->
             json_cp = JSON.parse(JSON.stringify(cp))
             json_cp.product = JSON.parse(JSON.stringify(product))
             cb(null, json_cp)

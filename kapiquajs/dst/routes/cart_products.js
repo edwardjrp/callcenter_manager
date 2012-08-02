@@ -1,10 +1,10 @@
 var Cart, CartProduct, CartProducts, OrderReply, Product, PulseBridge, async, _;
 
-CartProduct = require('../models/cart_product');
-
 Cart = require('../models/cart');
 
 Product = require('../models/product');
+
+CartProduct = require('../models/cart_product');
 
 PulseBridge = require('../pulse_bridge/pulse_bridge');
 
@@ -125,7 +125,7 @@ CartProducts = (function() {
       return cart.cart_products({}, function(c_cp_err, cart_products) {
         var get_products;
         get_products = function(cp, cb) {
-          return Product.find(cp.product(), function(p_err, product) {
+          return cp.product(function(p_err, product) {
             var json_cp;
             json_cp = JSON.parse(JSON.stringify(cp));
             json_cp.product = JSON.parse(JSON.stringify(product));

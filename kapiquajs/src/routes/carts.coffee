@@ -18,7 +18,7 @@ class Carts
         socket.emit 'data_error', {type: 'error_recuperando datos de la orden' , msg:JSON.stringify(cart_find_err)} if socket?
       else
         cart.client (cart_client_err, client)->
-          socket.emit 'chat', {user: 'system ', msg: JSON.stringify(client)}
+          socket.emit 'cart:price:client', {client}
         console.log 'Princing'
 
 
