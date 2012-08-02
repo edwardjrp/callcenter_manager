@@ -7,7 +7,15 @@ jQuery ->
     $('#checkout_Modal').modal()
   
   $('#checkout_Modal').on 'show', ()->
-    console.log 'start_checkout'
+    $.ajax
+      type: 'GET'
+      url: "/carts/current"
+      datatype: 'json'
+      beforeSend: (xhr) ->
+        xhr.setRequestHeader("Accept", "application/json")
+      success: (cart)->
+        socket.emit 'cart:price', {cart: cart.id}
+        console.log 'start_checkout'
   
   $('#utils .nav a').on 'click', (event)->
     event.preventDefault()

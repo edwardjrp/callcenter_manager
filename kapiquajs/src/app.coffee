@@ -7,6 +7,7 @@ _ = require('underscore')
 pg = require('pg')
 util = require('util')
 CartProducts = require('./routes/cart_products')
+Carts = require('./routes/carts')
 
 app = module.exports = express.createServer()
 
@@ -46,6 +47,11 @@ io.sockets.on "connection", (socket) ->
   socket.on 'chat', (data)->
     io.sockets.emit('chat', data);
     
+  socket.on "cart:price", (data, responder) ->
+    Carts.price(data, responder, socket)
+
+  socket.on "cart:place", (data, responder) ->
+    Carts.place(data, responder, socket)
 
 
 process.on 'uncaughtException', (err)->

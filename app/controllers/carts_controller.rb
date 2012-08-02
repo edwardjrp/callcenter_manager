@@ -16,6 +16,12 @@ class CartsController < ApplicationController
     end
   end
   
+  def current
+    respond_to do |format|
+      format.json{ render json: current_cart}
+    end
+  end
+  
   def service_method
     @cart = current_cart
     @cart.service_method = params[:service_method]
