@@ -21,6 +21,10 @@ jQuery ->
       error: (err)->
         console.log err
   
+  socket.on 'cart:price:error', (err) ->
+    $('#process_inf').text("Ha ocurrido un error en el proceso de colocación: #{err}")
+    progressbar_advance(0)
+  
   socket.on 'cart:price:client', (data) ->
     client = data.client
     $('#order_client_first_name').html("<strong>Nombre:</strong> #{client.first_name}")
@@ -35,7 +39,7 @@ jQuery ->
     phones = data.phones
     if phones.length > 0
       for phone in phones
-        $('#order_client_phones').html("<div class='row'><div class=\"span2\"><strong>Numero: </strong> #{window.to_phone(phone.number)}</div><div class=\"span2\"><strong>Extension: </strong> #{phone.ext || 'N/A'}</div></div>")
+        $('#order_client_phones').append("<div class='row'><div class=\"span2\"><strong>Numero: </strong> #{window.to_phone(phone.number)}</div><div class=\"span2\"><strong>Extension: </strong> #{phone.ext || 'N/A'}</div></div>")
         $('#process_inf').text("Mostrando numeros telefonicos")
     progressbar_advance(3)
     console.log 'phones'
