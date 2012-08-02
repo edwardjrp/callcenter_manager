@@ -15,19 +15,32 @@ jQuery ->
         xhr.setRequestHeader("Accept", "application/json")
       success: (cart)->
         $('#process_inf').text("Procesando orden No. #{cart.id}")
-        $('#progress_bar').find('.bar').animate({width: '+=10%'})
+        $('#progress_bar').find('.bar')
+        progressbar_advance(1)
         socket.emit 'cart:price', {cart_id: cart.id}
-        console.log 'start_checkout'
       error: (err)->
         console.log err
   
   socket.on 'cart:price:client', (data) ->
     client = data.client
-    $('#order_client_first_name').text("Nombre: #{client.first_name}")
-    $('#order_client_last_name').text("Apellido: #{client.last_name}")
-    $('#process_inf').text("Cliente recuperado")
-    $('#progress_bar').find('.bar').animate({width: '+=10%'})
-    console.log client
+    $('#order_client_first_name').html("<strong>Nombre:</strong> #{client.first_name}")
+    $('#order_client_last_name').html("<strong>Apellido:</strong> #{client.last_name}")
+    $('#order_client_email').html("<strong>Email:</strong> #{client.email}")
+    $('#order_client_idnumber').html("<strong>Cédula:</strong> #{window.to_idnumber(client.idnumber)}")
+    $('#process_inf').text("Cliente encontrado")
+    progressbar_advance(2)
+    console.log 'client'
+
+  socket.on 'cart:price:client:phones', (data) ->
+    phones = data.phones
+    if phones.length > 0
+      for phone in phones
+        $('#order_client_phones').html("<div class='row'><div class=\"span2\"><strong>Numero: </strong> #{window.to_phone(phone.number)}</div><div class=\"span2\"><strong>Extension: </strong> #{phone.ext || 'N/A'}</div></div>")
+        $('#process_inf').text("Mostrando numeros telefonicos")
+    progressbar_advance(3)
+    console.log 'phones'
+
+
   
   $('#utils .nav a').on 'click', (event)->
     event.preventDefault()
@@ -87,5 +100,8 @@ jQuery ->
     sent = new Date()
     "enviado-#{sent.toString()}: #{msg}"
       
-    
-  
+  progressbar_advance = (times) ->
+    total_width = $('#progress_bar').width()
+    new_width = (times*(total_width*0.1))
+    console.log new_width
+    $('#progress_bar').find('.bar').animate({width: "#{new_width}px"})

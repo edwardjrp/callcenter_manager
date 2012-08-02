@@ -1,4 +1,4 @@
-var Cart, CartProduct, Carts, Client, OrderReply, Product, PulseBridge, Store, async, _;
+var Cart, CartProduct, Carts, Client, OrderReply, Phone, Product, PulseBridge, Store, async, _;
 
 Cart = require('../models/cart');
 
@@ -7,6 +7,8 @@ Product = require('../models/product');
 Client = require('../models/client');
 
 Store = require('../models/store');
+
+Phone = require('../models/Phone');
 
 CartProduct = require('../models/cart_product');
 
@@ -34,9 +36,26 @@ Carts = (function() {
         }
       } else {
         cart.client(function(cart_client_err, client) {
-          return socket.emit('cart:price:client', {
+          socket.emit('cart:price:client', {
             client: client
           });
+          if ((client.phones_count != null) && client.phones_count > 0) {
+            return client.phones(function(cart_client_phones_err, phones) {
+              if (cart_client_phones_err != null) {
+                if (socket != null) {
+                  return socket.emit('data_error', {
+                    type: 'error_recuperando datos de la orden',
+                    msg: JSON.stringify(cart_find_err)
+                  });
+                }
+              } else {
+                socket.emit('cart:price:client:phones', {
+                  phones: phones
+                });
+                return console.log(phones);
+              }
+            });
+          }
         });
         return console.log('Princing');
       }

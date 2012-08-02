@@ -30,13 +30,30 @@
   if _.isString(string)
     string.replace(/^\s(.+)\s$/,'$1')
   else 
-    throw 'NO A STRING'
+    throw 'NOT A STRING'
     
 @to_sentence = (string_array)->
   string_array = _.compact(string_array)
   return string_array[0] if string_array.length == 1
   (_.flatten([(_.without(string_array, _.last(string_array))).join(', '), _.last(string_array)])).join(' y ')
 
+
+@to_phone = (string)->
+  string = string.toString() if string? and _.isNumber(string)
+  return string if string.length != 10
+  if _.isString(string)
+    string.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')
+  else 
+    throw 'NOT A STRING'
+       
+@to_idnumber = (string)->
+  string = string.toString() if string? and _.isNumber(string)
+  return string if string.length != 11
+  if _.isString(string)
+    string.replace(/(\d{3})(\d{7})(\d{1})/,'$1-$2-$3')
+  else 
+    throw 'NOT A STRING'
+  
 # end del
 
 @truncate = (text, max_width)->
