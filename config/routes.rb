@@ -9,6 +9,7 @@ Kapiqua25::Application.routes.draw do
     collection do
       post 'service_method'
       post 'current_store'
+      post 'discount'
       get 'current'
     end
   end

@@ -62,14 +62,29 @@ jQuery ->
     $('#order_cart_products').find(".span5[data-cart-product-id='#{data.item_id}']").append("<p><strong>Precio: </strong>$ #{Number(data.price).toFixed(2).toString()}</p>")
 
   socket.on 'cart:price:pulse:cartpriced', (data) ->
-    $('#order_totals').append("<div class='row'><div class=\"span4\"'><p><strong>Neto: </strong>$#{data.net_amount}<p><p><strong>Impuestos: </strong>$#{data.tax_amount}<p><p><strong>Total: </strong>$#{data.payment_amount}<p></div></div>")
-    $('#order_totals').append("<div class='row'><div class=\"span4\"'><label class=\"checkbox\"><input type=\"checkbox\"> Aplicar exoneración</label></div></div>")
-    $('#order_totals').append("<div class='row'><div class=\"span4\"'><label class=\"checkbox\"><input type=\"checkbox\"> Aplicar descuento</label></div></div>")
-    $('#order_totals').append("<div class='row'><div class=\"span4\"'><input type=\"text\" class=\"span2\" placeholder=\"Monto a descontar\"></div></div>")
+    $('#order_totals').append("<div class='row'><div class=\"span4\"'><p><strong>Neto: </strong>$#{data.net_amount}</p><p><strong>Impuestos: </strong>$<span id='order_tax'>#{data.tax_amount}</span></p><p><strong>Total: </strong>$#{data.payment_amount}</p></div></div>")
+    $('#order_totals').append("<div class='row'><div class=\"span4\"'><label class=\"checkbox\"><input type=\"checkbox\" id='discount_tax'> Aplicar exoneración</label></div></div>")
+    $('#order_totals').append("<div class='row'><div class=\"span4\"'><label class=\"checkbox\"><input type=\"checkbox\" id='discount_amount'> Aplicar descuento</label></div></div>")
+    $('#order_totals').append("<div class='row'><div class=\"span4\"'><input type=\"text\" class=\"span2\" id='order_discount_amount' placeholder=\"Monto a descontar\"></div></div>")
     $('#order_totals').append("<div class='row'><div class=\"span4\"'><strong>Autorización</strong></div></div>")
-    $('#order_totals').append("<div class='row'><div class=\"span4\"'><input type=\"text\" class=\"span2\" placeholder=\"supervisor\"></div></div>")      
-    $('#order_totals').append("<div class='row'><div class=\"span4\"'><input type=\"password\" class=\"span2\" ></div></div>")     
-    $('#order_totals').append("<div class='row'><div class=\"span4\"'><button type=\"submit\" class=\"btn\">Autorizar</button></div></div>")    
+    $('#order_totals').append("<div class='row'><div class=\"span4\"'><input type=\"text\" class=\"span2\" id='discount_user' placeholder=\"supervisor\"></div></div>")      
+    $('#order_totals').append("<div class='row'><div class=\"span4\"'><input type=\"password\" class=\"span2\" id='discount_pass'></div></div>")     
+    $('#order_totals').append("<div class='row'><div class=\"span4\"'><button type=\"submit\" class=\"btn\" id = 'require_discount_auth'>Autorizar</button></div></div>")
+    $('#require_discount_auth').on 'click', (event)->
+      target = $(event.currentTarget)
+      $.ajax
+        type: 'POST'
+        url: "/carts/discount"
+        datatype: 'json'
+        data: {discount: { auth_user: $('#order_totals').find('#discount_user').val(), tax_discount_amount: $('#order_tax').text(),  auth_pass: $('#order_totals').find('#discount_pass').val(), discount_tax: $('#discount_tax').val(),  discount_amount: $('#discount_amount').val(), order_discount_amount: $('#order_discount_amount').val()}}
+        beforeSend: (xhr) ->
+          xhr.setRequestHeader("Accept", "application/json")
+        success: (data)->
+          target.after("<div class='row'><div class=\"span4\"'><strong>La Orden se colocara por #{data.new_payment_amount}</strong></div></div>")
+          target.after("<div class='row'><div class=\"span4\"'>Orden autorizada por #{JSON.parse(data.authorized_by).first_name} #{JSON.parse(data.authorized_by).last_name}</div></div>")
+          $('#process_inf').text("Descuento aprobado")
+        error: (err)->
+          console.log err
     $('#process_inf').text("Totales recibidos")  
     progressbar_advance(6)
     
