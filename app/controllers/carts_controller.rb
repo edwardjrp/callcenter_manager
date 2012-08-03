@@ -33,7 +33,7 @@ class CartsController < ApplicationController
         discount_amount = 0 if discount_amount.blank?
         tax_discount = params[:discount][:tax_discount_amount] || 0
         tax_discount = 0 if params[:discount][:discount_tax] != 'on'
-        # begin
+        begin
           new_current_payment_amount= current_cart.payment_amount - (Float(tax_discount) + Float(discount_amount))
           new_current_payment_amount= current_cart.payment_amount if new_current_payment_amount < 0
           if user && user.is?(:admin)
@@ -45,9 +45,9 @@ class CartsController < ApplicationController
           else
             format.json{render json: {error: 'NO se autorizo el descuento'}, :status => 422}      
           end
-        # rescue
-        #     format.json{render json: {error: 'El descuento no se puede aplicar'}, :status => 422}      
-        # end
+        rescue
+            format.json{render json: {error: 'El descuento no se puede aplicar'}, :status => 422}      
+        end
       else
         format.json{render json: {error: 'Parametros incompletos'}, :status => 422}      
       end
