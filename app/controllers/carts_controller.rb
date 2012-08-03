@@ -18,7 +18,7 @@ class CartsController < ApplicationController
   
   def current
     respond_to do |format|
-      format.json{ render json: current_cart}
+      format.json{ render json: current_cart.to_json(include: [:store])}
     end
   end
   

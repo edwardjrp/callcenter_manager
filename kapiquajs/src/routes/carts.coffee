@@ -70,6 +70,7 @@ class Carts
 
 
   @place: (data, respond, socket) =>
+    socket.emit 'cart:price:error', {error: 'La información requerida para colocar la orden no esta completa'} if socket?
     console.log 'Placing'
 
 

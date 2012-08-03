@@ -172,6 +172,11 @@ Carts = (function() {
   };
 
   Carts.place = function(data, respond, socket) {
+    if (socket != null) {
+      socket.emit('cart:price:error', {
+        error: 'La información requerida para colocar la orden no esta completa'
+      });
+    }
     return console.log('Placing');
   };
 

@@ -16,13 +16,23 @@ jQuery ->
       success: (cart)->
         $('#process_inf').text("Procesando orden No. #{cart.id}")
         $('#progress_bar').find('.bar')
+        $('#order_info').find('.row:first').after("<div class='row bottom-margin-1'><div class=\"span2 \"><strong>Modo de servicio: </strong> #{cart.service_method}</div></div>")
+        $('#order_info').find('.row:first').after("<div class='row bottom-margin-1'><div class=\"span2 \"><strong>Tienda: </strong> #{cart.store.name} - #{cart.store.storeid}</div></div>")  
+        console.log cart
         progressbar_advance(1)
         socket.emit 'cart:price', {cart_id: cart.id}
       error: (err)->
         console.log err
   
+  
+  $('#checkout_Modal').on 'hide', ()->
+    alert('FALTA CORREGIR ERROR DE DUPLICACION')
+  
+  
   socket.on 'cart:price:error', (err) ->
     $('#process_inf').text("Ha ocurrido un error en el proceso de colocación: #{err}")
+    $('a#place_order').addClass('disabled')  
+    $('a#place_order').off 'click'
     progressbar_advance(0)
   
   socket.on 'cart:price:client', (data) ->
@@ -48,7 +58,7 @@ jQuery ->
     cart_products = data.results
     if cart_products.length > 0
       for cart_product in cart_products
-        $('#order_cart_products').append("<div class='row'><div class=\"span5\" data-cart-product-id='#{cart_product.id}'><h4>#{cart_product.quantity} x #{cart_product.product.productname}</h4><p><strong>Opciones: </strong> #{cart_product.options}<p></div></div>")
+        $('#order_cart_products').append("<div class='row bottom-margin-1 top-margin-1'><div class=\"span5\" data-cart-product-id='#{cart_product.id}'><h4>#{cart_product.quantity} x #{cart_product.product.productname}</h4><p><strong>Opciones: </strong> #{cart_product.options}<p></div></div>")
       $('#process_inf').text("Mostrando lista de productos")
     progressbar_advance(4)
 
@@ -70,6 +80,9 @@ jQuery ->
     $('#order_totals').append("<div class='row'><div class=\"span4\"'><input type=\"text\" class=\"span2\" id='discount_user' placeholder=\"supervisor\"></div></div>")      
     $('#order_totals').append("<div class='row'><div class=\"span4\"'><input type=\"password\" class=\"span2\" id='discount_pass'></div></div>")     
     $('#order_totals').append("<div class='row'><div class=\"span4\"'><button type=\"submit\" class=\"btn\" id = 'require_discount_auth'>Autorizar</button></div></div>")
+    $('a#place_order').removeClass('disabled')  
+    $('a#place_order').on 'click', (event)->
+      socket.emit 'cart:place', {cart_id: cart.id}  
     $('#require_discount_auth').on 'click', (event)->
       target = $(event.currentTarget)
       $.ajax
@@ -137,19 +150,79 @@ jQuery ->
     socket.emit('chat', {user: me(), msg: $('#chat_message').val()})
     $('#chat_message').val('')
   
-  message = (data) ->
-    $('#chatdisplay').append($('<p>').append($('<b>').text(data.user), window.truncate(data.msg, 30)))
-    $("#chatdisplay").scrollTop($("#chatdisplay")[0].scrollHeight);
-  
-  me = ()->
-    "#{$('#current_username').text()} : "
-      
-  prepare = (msg) ->
-    sent = new Date()
-    "enviado-#{sent.toString()}: #{msg}"
-      
-  progressbar_advance = (times) ->
-    total_width = $('#progress_bar').width()
-    new_width = (times*(total_width*0.1))
-    console.log new_width
-    $('#progress_bar').find('.bar').css({width: "#{new_width}px"})
+message = (data) ->
+  $('#chatdisplay').append($('<p>').append($('<b>').text(data.user), window.truncate(data.msg, 30)))
+  $("#chatdisplay").scrollTop($("#chatdisplay")[0].scrollHeight);
+
+me = ()->
+  "#{$('#current_username').text()} : "
+    
+prepare = (msg) ->
+  sent = new Date()
+  "enviado-#{sent.toString()}: #{msg}"
+    
+progressbar_advance = (times) ->
+  total_width = $('#progress_bar').width()
+  new_width = (times*(total_width*0.1))
+  console.log new_width
+  $('#progress_bar').find('.bar').css({width: "#{new_width}px"})
+
+
+reset_modal =   '<div class="row">
+            <div class="span8" id="process_inf">Inciando ...</div>
+          </div>
+          <div class="row">
+            <div class="span8" id="progress_bar">
+              <div class="progress progress-striped active">
+                <div class="bar" style="width: 0%;"></div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="span4" id="client_info">
+              <div class="row">
+                <div class="span4 bottom-margin-1">
+                  <h4>Validation de Datos del cliente</h4>
+                </div>
+              </div>
+              <div class="row">
+                <div class="span2" id="order_client_first_name"></div>
+                <div class="span2" id="order_client_last_name"></div>
+              </div>
+              <div class="row">
+                <div class="span2" id="order_client_email"></div>
+                <div class="span2" id="order_client_idnumber"></div>
+              </div>
+              <div class="row">
+                <div class="span4" id="order_client_phones"></div>
+              </div>
+              <div class="row">
+                <div class="span4">
+                  <hr>
+                </div>
+              </div>
+              <div class="row">
+                <div class="span4 bottom-margin-1">
+                  <h4>Totales</h4>
+                </div>
+              </div>
+              <div class="row">
+                <div class="span4" id="order_totals"></div>
+              </div>
+              <div class="row">
+                <div class="span4">
+                  <hr>
+                </div>
+              </div>
+            </div>
+            <div class="span4" id="order_info">
+              <div class="row">
+                <div class="span4 bottom-margin-1">
+                  <h4>Datos de la orden</h4>
+                </div>
+              </div>
+              <div class="row">
+                <div class="span4" id="order_cart_products"></div>
+              </div>
+            </div>
+          </div>'
