@@ -68,18 +68,101 @@ Carts = (function() {
             });
           };
           return async.map(cart_products, get_products, function(it_err, results) {
+            var json_cart, pulse_com_error;
             if (it_err) {
               if (socket != null) {
                 return socket.emit('cart:price:error', {
-                  error: JSON.stringify(cart_client_phones_err)
+                  error: JSON.stringify(it_err)
                 });
               }
             } else {
               if (socket != null) {
-                return socket.emit('cart:price:client:cartproducts', {
+                socket.emit('cart:price:cartproducts', {
                   results: results
                 });
               }
+              json_cart = JSON.parse(JSON.stringify(cart));
+              json_cart.cart_products = results;
+              if (socket != null) {
+                socket.emit('cart:price:pulse:start', {});
+              }
+              pulse_com_error = function(comm_err) {
+                console.log(comm_err);
+                if (socket != null) {
+                  return socket.emit('cart:price:error', {
+                    error: JSON.stringify(comm_err)
+                  });
+                }
+              };
+              return PulseBridge.price(json_cart, pulse_com_error, function(res_data) {
+                var order_reply;
+                order_reply = new OrderReply(res_data);
+                return cart.updateAttributes({
+                  net_amount: Number(order_reply.netamount),
+                  tax_amount: Number(order_reply.taxamount),
+                  payment_amount: Number(order_reply.payment_amount),
+                  updated_at: new Date()
+                }, function(cart_update_err, updated_cart) {
+                  if (cart_update_err) {
+                    console.log(cart_update_err);
+                    if (socket != null) {
+                      return socket.emit('cart:price:error', {
+                        error: JSON.stringify(comm_err)
+                      });
+                    }
+                  } else {
+                    updated_cart.cart_products({}, function(uc_cp_err, updated_cart_cart_products) {
+                      var cart_product, order_item, _i, _len, _ref, _results;
+                      _ref = order_reply.order_items;
+                      _results = [];
+                      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                        order_item = _ref[_i];
+                        _results.push((function() {
+                          var _j, _len1, _results1;
+                          _results1 = [];
+                          for (_j = 0, _len1 = updated_cart_cart_products.length; _j < _len1; _j++) {
+                            cart_product = updated_cart_cart_products[_j];
+                            if (Number(cart_product.quantity) === Number(order_item.quantity) && _.find(results, function(cp) {
+                              return cp.id === cart_product.id;
+                            }).product.productcode === order_item.code && order_item.options.join(',') === cart_product.options) {
+                              _results1.push(cart_product.updateAttributes({
+                                priced_at: Number(order_item.priced_at),
+                                updated_at: new Date()
+                              }, function(cp_update_price_error, update_price_cart_product) {
+                                if (cp_update_price_error) {
+                                  if (socket != null) {
+                                    return socket.emit('cart:price:error', {
+                                      error: JSON.stringify(cp_update_price_error)
+                                    });
+                                  }
+                                } else {
+                                  if (socket != null) {
+                                    return socket.emit('cart:price:pulse:itempriced', {
+                                      item_id: update_price_cart_product.id,
+                                      price: update_price_cart_product.priced_at
+                                    });
+                                  }
+                                }
+                              }));
+                            } else {
+                              _results1.push(void 0);
+                            }
+                          }
+                          return _results1;
+                        })());
+                      }
+                      return _results;
+                    });
+                    if (socket != null) {
+                      return socket.emit('cart:price:pulse:cartpriced', {
+                        net_amount: updated_cart.net_amount,
+                        tax_amount: updated_cart.tax_amount,
+                        payment_amount: updated_cart.payment_amount
+                      });
+                    }
+                  }
+                });
+              });
             }
           });
         });

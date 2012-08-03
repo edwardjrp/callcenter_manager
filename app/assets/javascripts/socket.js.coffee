@@ -42,17 +42,37 @@ jQuery ->
         $('#order_client_phones').append("<div class='row'><div class=\"span2\"><strong>Numero: </strong> #{window.to_phone(phone.number)}</div><div class=\"span2\"><strong>Extension: </strong> #{phone.ext || 'N/A'}</div></div>")
       $('#process_inf').text("Mostrando numeros telefonicos")
     progressbar_advance(3)
-    console.log 'phones'
 
-  socket.on 'cart:price:client:cartproducts', (data) ->
+
+  socket.on 'cart:price:cartproducts', (data) ->
     cart_products = data.results
     if cart_products.length > 0
       for cart_product in cart_products
-        $('#order_cart_products').append("<div class='row'><div class=\"span5\"><h4>#{cart_product.quantity} x #{cart_product.product.productname}</h4><p><strong>Opciones: </strong> #{cart_product.options}<p></div></div>")
+        $('#order_cart_products').append("<div class='row'><div class=\"span5\" data-cart-product-id='#{cart_product.id}'><h4>#{cart_product.quantity} x #{cart_product.product.productname}</h4><p><strong>Opciones: </strong> #{cart_product.options}<p></div></div>")
       $('#process_inf').text("Mostrando lista de productos")
     progressbar_advance(4)
-    console.log cart_products
 
+    
+  socket.on 'cart:price:pulse:start', () ->
+    $('#process_inf').text("Iniciando comunicación con pulse")
+    progressbar_advance(5)
+
+
+  socket.on 'cart:price:pulse:itempriced', (data) ->
+    $('#order_cart_products').find(".span5[data-cart-product-id='#{data.item_id}']").append("<p><strong>Precio: </strong>$ #{Number(data.price).toFixed(2).toString()}</p>")
+
+  socket.on 'cart:price:pulse:cartpriced', (data) ->
+    $('#order_totals').append("<div class='row'><div class=\"span4\"'><p><strong>Neto: </strong>$#{data.net_amount}<p><p><strong>Impuestos: </strong>$#{data.tax_amount}<p><p><strong>Total: </strong>$#{data.payment_amount}<p></div></div>")
+    $('#order_totals').append("<div class='row'><div class=\"span4\"'><label class=\"checkbox\"><input type=\"checkbox\"> Aplicar exoneración</label></div></div>")
+    $('#order_totals').append("<div class='row'><div class=\"span4\"'><label class=\"checkbox\"><input type=\"checkbox\"> Aplicar descuento</label></div></div>")
+    $('#order_totals').append("<div class='row'><div class=\"span4\"'><input type=\"text\" class=\"span2\" placeholder=\"Monto a descontar\"></div></div>")
+    $('#order_totals').append("<div class='row'><div class=\"span4\"'><strong>Autorización</strong></div></div>")
+    $('#order_totals').append("<div class='row'><div class=\"span4\"'><input type=\"text\" class=\"span2\" placeholder=\"supervisor\"></div></div>")      
+    $('#order_totals').append("<div class='row'><div class=\"span4\"'><input type=\"password\" class=\"span2\" ></div></div>")     
+    $('#order_totals').append("<div class='row'><div class=\"span4\"'><button type=\"submit\" class=\"btn\">Autorizar</button></div></div>")    
+    $('#process_inf').text("Totales recibidos")  
+    progressbar_advance(6)
+    
 
   
   $('#utils .nav a').on 'click', (event)->
@@ -117,4 +137,4 @@ jQuery ->
     total_width = $('#progress_bar').width()
     new_width = (times*(total_width*0.1))
     console.log new_width
-    $('#progress_bar').find('.bar').animate({width: "#{new_width}px"})
+    $('#progress_bar').find('.bar').css({width: "#{new_width}px"})

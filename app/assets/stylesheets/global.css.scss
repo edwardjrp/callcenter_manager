@@ -219,3 +219,14 @@
     background-color:#D9EDF7;
   }
 }
+#checkout_Modal{
+  top:30%;
+  left:20%;
+  .modal-body{  
+    max-height:600px;
+  }
+
+  #order_cart_products{
+    max-height:500px;
+  }
+}
