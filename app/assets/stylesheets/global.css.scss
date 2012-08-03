@@ -213,3 +213,9 @@
   height:600px;
   overflow:scroll;
 }
+
+#order_cart_products{
+  .row:nth-child(odd){
+    background-color:#D9EDF7;
+  }
+}

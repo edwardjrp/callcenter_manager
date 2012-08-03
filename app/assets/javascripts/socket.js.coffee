@@ -40,12 +40,16 @@ jQuery ->
     if phones.length > 0
       for phone in phones
         $('#order_client_phones').append("<div class='row'><div class=\"span2\"><strong>Numero: </strong> #{window.to_phone(phone.number)}</div><div class=\"span2\"><strong>Extension: </strong> #{phone.ext || 'N/A'}</div></div>")
-        $('#process_inf').text("Mostrando numeros telefonicos")
+      $('#process_inf').text("Mostrando numeros telefonicos")
     progressbar_advance(3)
     console.log 'phones'
 
   socket.on 'cart:price:client:cartproducts', (data) ->
     cart_products = data.results
+    if cart_products.length > 0
+      for cart_product in cart_products
+        $('#order_cart_products').append("<div class='row'><div class=\"span5\"><h4>#{cart_product.quantity} x #{cart_product.product.productname}</h4><p><strong>Opciones: </strong> #{cart_product.options}<p></div></div>")
+      $('#process_inf').text("Mostrando lista de productos")
     progressbar_advance(4)
     console.log cart_products
 

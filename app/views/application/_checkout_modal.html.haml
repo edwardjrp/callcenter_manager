@@ -3,15 +3,15 @@
   %h3 Resumen de la orden
 .modal-body
   .row
-    .span4#process_inf Inciando ...
+    .span5#process_inf Inciando ...
   .row
     .span5#progress_bar
       .progress.progress-striped.active
         .bar{:style => "width: 0%;"}
   .row
-    .span4#client_info
+    .span5#client_info
       .row
-        .span4.bottom-margin-1
+        .span5.bottom-margin-1
           %h4 Validation de Datos del cliente
       .row
         .span2#order_client_first_name
@@ -22,12 +22,19 @@
       .row
         .span4#order_client_phones
       .row
-        .span4
+        .span5
           %hr
+        
   .row
-    .span4#client_info
-      Validation de Datos de la orden
-      %hr
+    .span5#order_info
+      .row
+        .span5.bottom-margin-1
+          %h4 Validation de Datos del cliente
+      .row
+        .span5#order_cart_products
+      .row
+        .span5
+          %hr
 
         
       
