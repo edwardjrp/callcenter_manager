@@ -6,8 +6,6 @@ jQuery ->
   assign_service_method($('#service_method_delivery'))
   assign_service_method($('#service_method_carry_out'))
   assign_service_method($('#service_method_pickup'))
-  
-  console.log JST['test'](t: 'super')
     
   $('.set_last_address').on 'click', (event)->
     target = $(event.currentTarget)
@@ -95,26 +93,14 @@ jQuery ->
         $('#client_search_ext').val('')
         reset_form()
 
-email_input_field_template = $('<div class="control-group" id="client_search_email_controls"><label class="control-label" for="email">Email</label><div class="controls"><input class="input-xlarge" id="client_search_email" name="client[email]" type="text"></div></div>')
-city_select_template = $('<div class="control-group" id="client_search_address_city_controls"><label class="control-label" for="client_search_address_city">Ciudad</label><div class="controls"><select id="client_search_address_city"></select></div></div>')
-area_select_template = $('<div class="control-group" id="client_search_address_area_controls"><label class="control-label" for="client_search_address_area">Sector</label><div class="controls"><input type="hidden" id="client_search_address_area" style=" display: none; "></div></div>')
-street_select_template = $('<div class="control-group" id="client_search_address_street_controls"><label class="control-label" for="client_search_address_street">Calle</label><div class="controls"><input type="hidden" id="client_search_address_street" name="client[address][street_id]" style=" display: none; "></div></div>')
-number_input_template = $('<div class="control-group" id="client_search_address_number_controls"><label class="control-label" for="client_search_address_number">No.</label><div class="controls"><input type="text" id="client_search_address_number" name="client[address][number]"></div></div>')
-unit_type_select_template = $('<div class="control-group" id="client_search_address_unit_type_controls"><label class="control-label" for="client_search_address_unit_type">Tipo.</label><div class="controls"><select id="client_search_address_unit_type" name="client[address][unit_type]"><option value="casa">Casa</option><option value="oficina">Oficina</option><option value="edificio">Edificio</option></select></div></div>')
-unit_number_input_template = $('<div class="control-group" id="client_search_address_unit_number_controls"><label class="control-label" for="client_search_address_unit_number">No. unidad</label><div class="controls"><input type="text" id="client_search_address_unit_number" name="client[address][unit_number]"></div></div>')
-postal_code_input_template = $('<div class="control-group" id="client_search_address_postal_code_controls"><label class="control-label" for="client_search_address_postal_code">Codigo postal</label><div class="controls"><input type="text" id="client_search_address_postal_code" name="client[address][postal_code]"></div></div>')
-delivery_instructions_input_template= $('<div class="control-group" id="client_search_address_delivery_instructions_controls"><label class="control-label" for="client_search_address_delivery_instructions">Instrucciones</label><div class="controls"><textarea id="client_search_address_delivery_instructions" rows=3 class="input-xlarge" name="client[address][delivery_instructions]"></textarea></div></div>')
-button_template_no_user  = $('<div class="form-actions" id="user_not_found_buttons"><button type="submit" class="btn btn-primary"  id="add_client_button">Agregar usuario</button><button class="btn remote_parent left-margin-1" >Cancelar</button></div>')
 
 
 client_create =  ()->
   $('#client_search_first_name').val('')
   $('#client_search_last_name').val('')
-  $('#client_search').find('fieldset').append(email_input_field_template) if $('#client_search_email').length == 0
-  $('#client_search').find('fieldset').append(city_select_template) if $('#client_search_address_city_controls').length == 0
+  $('#client_search').find('fieldset').append(JST['clients/client_extra_fields']()) if $('#client_search_email').length == 0
   fill_option() if $('#client_search_address_city').find('option').length == 0
   $('#client_search_address_city').select2()
-  $('#client_search').find('fieldset').append(area_select_template) if $('#client_search_address_area_controls').length == 0
   $('#client_search_address_area').select2
       placeholder: "Seleccione un sector"
       minimumInputLength: 2
@@ -128,7 +114,6 @@ client_create =  ()->
           results: $.map(areas, (area)->
               {id: area.id, text: area.name}
             )
-  $('#client_search').find('fieldset').append(street_select_template) if $('#client_search_address_street_controls').length == 0
   $('#client_search_address_street').select2
       placeholder: "Seleccione una calle"
       minimumInputLength: 1
@@ -142,12 +127,6 @@ client_create =  ()->
           results: $.map(streets, (street)->
               {id: street.id, text: street.name}
             )
-  $('#client_search').find('fieldset').append(number_input_template) if $('#client_search_address_number_controls').length == 0   
-  $('#client_search').find('fieldset').append(unit_type_select_template) if $('#client_search_address_unit_type_controls').length == 0   
-  $('#client_search').find('fieldset').append(unit_number_input_template) if $('#client_search_address_unit_number_controls').length == 0      
-  $('#client_search').find('fieldset').append(postal_code_input_template) if $('#client_search_address_postal_code_controls').length == 0                 
-  $('#client_search').find('fieldset').append(delivery_instructions_input_template) if $('#client_search_address_delivery_instructions_controls').length == 0
-  $('#client_search').append(button_template_no_user) if $('#user_not_found_buttons').length == 0
   unless $('#add_client_button').data("events")? and $('#add_client_button').data("events").click? and $('#add_client_button').data("events").click.length > 0
     $('#add_client_button').on 'click', (event) ->
       event.preventDefault()
@@ -213,6 +192,7 @@ reset_form = ->
 clear_extra_data = () ->
   $('#client_search_email').val('')
   window.del($('#client_search_email_controls'))
+  window.del($('#client_search_idnumber_controls'))
   window.del($('#user_not_found_buttons'))
   $("#client_search_address_city").select2("destroy")
   $('#client_search_address_area').select2("destroy")

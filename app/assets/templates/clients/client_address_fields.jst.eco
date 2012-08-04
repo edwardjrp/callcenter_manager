@@ -1,15 +1,3 @@
-<div class="control-group" id="client_search_email_controls">
-	<label class="control-label" for="client_search_email">Email</label>
-	<div class="controls">
-		<input class="input-xlarge" id="client_search_email" name="client[email]" type="text">
-	</div>
-</div>
-<div class="control-group" id="client_search_idnumber_controls">
-	<label class="control-label" for="client_search_idnumber">Cédula</label>
-	<div class="controls">
-		<input class="input-xlarge" id="client_search_idnumber" name="client[idnumber]" type="text">
-	</div>
-</div>
 <div class="control-group" id="client_search_address_city_controls">
 	<label class="control-label" for="client_search_address_city">Ciudad</label>
 	<div class="controls">
@@ -61,8 +49,4 @@
 	<div class="controls">
 		<textarea id="client_search_address_delivery_instructions" rows=3 class="input-xlarge" name="client[address][delivery_instructions]"></textarea>
 	</div>
-</div>
-<div class="form-actions" id="user_not_found_buttons">
-	<button type="submit" class="btn btn-primary"  id="add_client_button">Agregar usuario</button>
-	<button class="btn remote_parent left-margin-1" >Cancelar</button>
 </div>

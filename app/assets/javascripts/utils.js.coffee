@@ -13,6 +13,7 @@
 # alert
 @show_alert = (msg, type)->
   throw "Missing arguments" if !msg? or  !type?
+  $(window).scrollTop(0)
   if $('.alert').size() > 0
     $('.alert').replaceWith("<div class=\"alert alert-#{type}\"><button class=\"close\" data-dismiss=\"alert\">×</button>#{msg}</div>")
   else
