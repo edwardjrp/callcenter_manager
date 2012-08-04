@@ -1,10 +1,10 @@
 # #encoding: utf-8
 require 'csv'
-if Rails.env.production?
+# if Rails.env.production?
   require 'factory_girl'
   require 'faker'
-  Dir[Rails.root.join("spec/factories/*.rb")].each {|f| require f}
-end
+  # Dir[Rails.root.join("spec/factories/*.rb")].each {|f| require f}
+# end
 # # This file should contain all the record creation needed to seed the database with its default values.
 # # The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
 # #

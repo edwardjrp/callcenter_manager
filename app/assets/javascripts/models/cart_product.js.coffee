@@ -51,7 +51,7 @@ class Kapiqua25.Models.CartProduct extends Backbone.RelationalModel
     to_sentence presentation
   
   
-  socket: io.connect('http://localhost:3030')
+  socket: io.connect('http://192.168.100.3:3030')
     
   
   sync: (method, model, options)=>
