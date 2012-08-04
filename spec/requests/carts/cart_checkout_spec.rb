@@ -12,8 +12,8 @@ describe "Cart checkout" do
         page.should have_css('#proceed_to_checkout_out')
       end
       
-      it "should show the model" do
-        click_link('#proceed_to_checkout_out')
+      it "should show the model", js: true do
+        find('#proceed_to_checkout_out').click
         page.should have_css('#checkout_Modal', visible: true)
       end
       

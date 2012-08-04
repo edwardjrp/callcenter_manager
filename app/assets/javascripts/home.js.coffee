@@ -7,6 +7,8 @@ jQuery ->
   assign_service_method($('#service_method_carry_out'))
   assign_service_method($('#service_method_pickup'))
   
+  console.log JST['test'](t: 'super')
+    
   $('.set_last_address').on 'click', (event)->
     target = $(event.currentTarget)
     $.ajax
@@ -37,10 +39,6 @@ jQuery ->
         $('.set_target_store').find('i').remove()
         $(".set_target_store[data-store-id=#{cart.store.id}]").prepend('<i class="icon-ok">')
           
-
-
-
-
 
   
   $("#client_search_phone").blur ->

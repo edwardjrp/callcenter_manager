@@ -21,6 +21,7 @@ describe "Client::New" do
          fill_in "client_search_ext", with: '45'
          fill_in "client_search_first_name", with: 'Tester'
          fill_in "client_search_last_name", with: 'Last'
+         fill_in "client_search_idnumber", with: '00113574388'
          fill_in "client_search_email", with: 'test@mail.com'
          select  @city.name, from:  'client_search_address_city'
          page.execute_script "$('#client_search_address_street').val('#{@street.id}')"
