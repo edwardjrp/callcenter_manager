@@ -36,9 +36,7 @@ jQuery ->
         $('#choose_store').text("Tienda : #{cart.store.name}")
         $('.set_target_store').find('i').remove()
         $(".set_target_store[data-store-id=#{cart.store.id}]").prepend('<i class="icon-ok">')
-          
 
-  
   $("#client_search_phone").blur ->
     $("#client_search_phone").val window.NumberFormatter.to_phone($("#client_search_phone").val())
   $("#client_search_phone").focus ->
@@ -99,8 +97,9 @@ client_create =  ()->
   $('#client_search_first_name').val('')
   $('#client_search_last_name').val('')
   $('#client_search').find('fieldset').append(JST['clients/client_extra_fields']()) if $('#client_search_email').length == 0
-  fill_option() if $('#client_search_address_city').find('option').length == 0
-  $('#client_search_address_city').select2()
+  $('#client_search_address_city').select2
+    placeholder: "Seleccione una Ciudad"
+    data: _.map($('#client_search').find('fieldset').data('cities'), (c)-> {id: c.id, text: c.name})
   $('#client_search_address_area').select2
       placeholder: "Seleccione un sector"
       minimumInputLength: 2
@@ -111,7 +110,7 @@ client_create =  ()->
           q:term
           city_id: $('#client_search_address_city').val()
         results: (areas, page)->
-          results: $.map(areas, (area)->
+          results: _.map(areas, (area)->
               {id: area.id, text: area.name}
             )
   $('#client_search_address_street').select2
@@ -147,10 +146,6 @@ client_create =  ()->
           clear_extra_data()
         error: (response) ->
           window.show_alert(response.responseText, 'error')
-
-fill_option = ()->
-  $.each $('#client_search').find('fieldset').data('cities'), (index, value) ->
-    $('#client_search_address_city').append($("<option value=#{value[0]}>#{value[1]}</option>"))
 
 assign_client_to_current_cart = () ->
   $('#client_search input').on 'keypress', (event)->

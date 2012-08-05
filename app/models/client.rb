@@ -20,7 +20,7 @@ class Client < ActiveRecord::Base
   validates :first_name, presence:  true
   validates :last_name, presence:  true
   validates :idnumber, uniqueness:  true, allow_nil: true
-  validates :email, uniqueness:  true, allow_nil: true
+  validates :email, uniqueness:  true, :email_format => true, allow_nil: true, :allow_blank => true
   has_many :phones, :inverse_of => :client
   has_many :addresses#, :inverse_of => :client
   has_many :carts

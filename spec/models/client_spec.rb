@@ -28,6 +28,8 @@ describe Client do
     it{should validate_presence_of :last_name}  
     it{should validate_uniqueness_of :idnumber}
     it{should validate_uniqueness_of :email}  
+    it{ should validate_format_of(:email).with('test@mail.com')}
+
     it{should have_many :phones}
   end
   

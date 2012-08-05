@@ -13,7 +13,8 @@
 <div class="control-group" id="client_search_address_city_controls">
 	<label class="control-label" for="client_search_address_city">Ciudad</label>
 	<div class="controls">
-		<select id="client_search_address_city"></select>
+		<input type="hidden" id="client_search_address_city" style=" display: none; ">
+		<!-- <select id="client_search_address_city"></select> -->
 	</div>
 </div>
 <div class="control-group" id="client_search_address_area_controls">
@@ -45,7 +46,7 @@
 	</div>
 </div>
 <div class="control-group" id="client_search_address_unit_number_controls">
-	<label class="control-label" for="client_search_address_unit_number">No. unidad</label>
+	<label class="control-label" for="client_search_address_unit_number">No. apartamento</label>
 	<div class="controls">
 		<input type="text" id="client_search_address_unit_number" name="client[address][unit_number]">
 	</div>

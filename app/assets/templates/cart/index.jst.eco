@@ -7,7 +7,7 @@
       <%if @model.get('tax_amount')?:%><div class='row'><div class='span2' id='order_tax_amount'><strong>Impuestos: </strong>$ <%=Number(@model.get('tax_amount')).toFixed(2)%></div></div><%end%>
       <%if @model.get('payment_amount')?:%><div class='row'><div class='span2' id='order_payment_amount'><strong>Total: </strong>$ <%=Number(@model.get('payment_amount')).toFixed(2)%></div></div><%end%>
       <ul id="current_carts_items">
-        <%for cart_product in _.sortBy(@model.get('cart_products').models, (model)-> model.get('id')):%>
+        <%for cart_product in _.sortBy(@model.get('cart_products').models, (model)-> -(model.get('id'))):%>
           <li>
             <div class='item' data-cart-product-id="<%=cart_product.id%>" data-cart-product-cid="<%=cart_product.cid%>" data-cart-product-code="<%=cart_product.get('product').get('productcode')%>">
               <input name="quantity" type="text" value="<%=cart_product.get('quantity')%>">
@@ -16,8 +16,8 @@
                 <%-"/ #{cart_product.secondary().get('productname')}"%>
               <%end%>
               <div class='remove_options_and_pricing'>
-                <span class='item_remove'><i class="icon-trash icon-white"></i></span>
-                <span class='show_options'><i class="icon-list icon-white left-margin-1"></i></span>
+                <span class='item_remove' rel='tooltip' title='Eliminar'><i class="icon-trash icon-white"></i></span>
+                <span class='show_options' rel='tooltip' title='Monstra opciones'><i class="icon-list icon-white left-margin-1"></i></span>
                 <span class='pricing' data-options='<%=cart_product.options_array()%>'>$ <%=Number(cart_product.get('priced_at')).toFixed(2)%></span>
               </div>
             </div>

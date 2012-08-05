@@ -23,13 +23,23 @@ describe "Client::New" do
          fill_in "client_search_last_name", with: 'Last'
          fill_in "client_search_idnumber", with: '00113574388'
          fill_in "client_search_email", with: 'test@mail.com'
-         select  @city.name, from:  'client_search_address_city'
+         # select  @city.name, from:  'client_search_address_city'
          page.execute_script "$('#client_search_address_street').val('#{@street.id}')"
          fill_in 'client_search_address_number', with: '1'
          select 'Casa', from: 'client_search_address_unit_type'
          fill_in 'client_search_address_unit_number', with: '1'
          fill_in 'client_search_address_postal_code', with: '1'
          fill_in 'client_search_address_delivery_instructions', with: '1'
+         click_button 'Agregar usuario'
+         page.should have_content('Cliente creado')
+         page.should_not have_css('#client_search_email')
+       end
+
+       it "should create a new client from name and phone alone", js: true do
+         fill_in "client_search_phone", with: '8095554321'
+         fill_in "client_search_ext", with: '45'
+         fill_in "client_search_first_name", with: 'Tester'
+         fill_in "client_search_last_name", with: 'Last'
          click_button 'Agregar usuario'
          page.should have_content('Cliente creado')
          page.should_not have_css('#client_search_email')
@@ -41,7 +51,7 @@ describe "Client::New" do
           fill_in "client_search_first_name", with: 'tester'
           fill_in "client_search_last_name", with: 'Last'
           fill_in "client_search_email", with: 'test2@mail.com'
-          select  @city.name, from:  'client_search_address_city'
+          # select  @city.name, from:  'client_search_address_city'
           page.execute_script "$('#client_search_address_street').val('#{@street.id}')"
           fill_in 'client_search_address_number', with: '1'
           select 'Casa', from: 'client_search_address_unit_type'
@@ -55,13 +65,14 @@ describe "Client::New" do
 
        # this test does not pass when phones are the same
        it "should create clients in sequence", js: true do
-        pending('has to test manually')
+         page.execute_script "$('.subnav-fixed').css('display', 'none')"
+         page.execute_script "$('#utils').css('display', 'none')"
          fill_in "client_search_phone", with: '8095551234'
          fill_in "client_search_ext", with: '41'
          fill_in "client_search_first_name", with: 'Tester'
          fill_in "client_search_last_name", with: 'Last'
          fill_in "client_search_email", with: 'test1@mail.com'
-         select  @city.name, from:  'client_search_address_city'
+         # select  @city.name, from:  'client_search_address_city'
          page.execute_script "$('#client_search_address_street').val('#{@street.id}')"
          fill_in 'client_search_address_number', with: '1'
          select 'Casa', from: 'client_search_address_unit_type'
@@ -75,7 +86,7 @@ describe "Client::New" do
          fill_in "client_search_first_name", with: 'iester'
          fill_in "client_search_last_name", with: 'Last'
          fill_in "client_search_email", with: 'test2@mail.com'
-         select  @city.name, from:  'client_search_address_city'
+         # select  @city.name, from:  'client_search_address_city'
          page.execute_script "$('#client_search_address_street').val('#{@street.id}')"
          fill_in 'client_search_address_number', with: '1'
          select 'Casa', from: 'client_search_address_unit_type'
@@ -83,14 +94,13 @@ describe "Client::New" do
          fill_in 'client_search_address_postal_code', with: '1'
          fill_in 'client_search_address_delivery_instructions', with: '1'
          click_button 'Agregar usuario'
-         save_and_open_page
          page.should have_content('Cliente creado')
           fill_in "client_search_phone", with: '8095341234'
           fill_in "client_search_ext", with: '43'
           fill_in "client_search_first_name", with: 'iester'
           fill_in "client_search_last_name", with: 'Last'
           fill_in "client_search_email", with: 'test3@mail.com'
-          select  @city.name, from:  'client_search_address_city'
+          # select  @city.name, from:  'client_search_address_city'
           page.execute_script "$('#client_search_address_street').val('#{@street.id}')"
           fill_in 'client_search_address_number', with: '1'
           select 'Casa', from: 'client_search_address_unit_type'
@@ -121,14 +131,19 @@ describe "Client::New" do
           @client = FactoryGirl.create(:client, first_name: 'tester')
           @phone = FactoryGirl.create :phone, client: @client, number: '8095551234', ext: '99'
         end
-      
+        
+        it "should validate address if city or its childrens are selected" do
+          pending('Test')
+        end
+
+
         it "should show the missing name validation error for the user", js: true do
            fill_in "client_search_phone", with: '8095551234'
            fill_in "client_search_ext", with: '45'
            fill_in "client_search_first_name", with: ''
            fill_in "client_search_last_name", with: 'Last'
            fill_in "client_search_email", with: 'test@mail.com'
-           select  @city.name, from:  'client_search_address_city'
+           # select  @city.name, from:  'client_search_address_city'
            page.execute_script "$('#client_search_address_street').val('#{@street.id}')"
            fill_in 'client_search_address_number', with: '1'
            select 'Casa', from: 'client_search_address_unit_type'
@@ -139,7 +154,7 @@ describe "Client::New" do
            page.should have_content('en blanco')
          end
 
-         it "should show the missing address info validation error for the user", js: true do
+         it "should no longer show the missing address info validation error for the user", js: true do
             fill_in "client_search_phone", with: '8095551234'
             fill_in "client_search_ext", with: '45'
             fill_in "client_search_first_name", with: 'rad'
