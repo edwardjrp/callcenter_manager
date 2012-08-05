@@ -109,9 +109,9 @@ ActiveRecord::Schema.define(:version => 20120731123537) do
     t.integer  "target_phone_id"
     t.integer  "phones_count"
     t.integer  "addresses_count"
-    t.boolean  "active"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+    t.boolean  "active",            :default => true
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
   end
 
   add_index "clients", ["email"], :name => "index_clients_on_email", :unique => true
