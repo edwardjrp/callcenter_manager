@@ -16,8 +16,20 @@ class ClientsController < ApplicationController
     end
   end
 
+  def update
+    @client = Client.find params[:id]
+    respond_to do |format|
+      if @client.update_attributes(params[:client])
+        format.json{ respond_with_bip(@client)}
+      else
+        format.json{ respond_with_bip(@client)}
+      end
+    end
+  end
+   
 
   def show
     @client = Client.find(params[:id])
+    @carts = @client.carts.page(params[:page])
   end
 end

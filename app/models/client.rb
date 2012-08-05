@@ -42,5 +42,21 @@ class Client < ActiveRecord::Base
   def last_address
     Address.find_by_id self.target_address_id
   end
+
+
+  def cedula
+    new_idnumber= idnumber.to_s.strip unless idnumber.nil?
+    begin
+      if new_idnumber.length == 11
+        return new_idnumber.gsub(/([0-9]{3})([0-9]{7})([0-9]{1})/,"\\1-\\2-\\3")
+     elsif new_idnumber.length == 9
+        return new_idnumber.gsub(/([0-9]{1})([0-9]{2})([0-9]{5})([0-9]{1})/,"\\1-\\2-\\3-\\4")
+     else
+       return new_idnumber
+     end
+    rescue
+      return new_idnumber
+    end
+  end
   
 end

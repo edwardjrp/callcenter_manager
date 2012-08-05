@@ -9,7 +9,7 @@ class CreateClients < ActiveRecord::Migration
       t.integer :target_phone_id
       t.integer :phones_count
       t.integer :addresses_count
-      t.boolean :active
+      t.boolean :active, :default=> true
 
       t.timestamps
     end
