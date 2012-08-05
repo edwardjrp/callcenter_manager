@@ -2,9 +2,11 @@
   .subnav.subnav-fixed
     %ul.nav.nav-pills
       %li
-        %a{:id => "choose_client", :href=>'#'}
-          Cliente:
-          %span=current_cart.client.present? ? current_cart.client.full_name : "N/A"
+        - if current_cart.client.present?
+          =link_to "Cliente: #{current_cart.client.full_name}", current_cart.client, :id => "choose_client"
+        -else
+          %a{:id => "choose_client", :href=>'#'}
+            Cliente: N/A
       %li
         %a#choose_service_method.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
           Modo de servicio:

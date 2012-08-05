@@ -9,7 +9,7 @@ class CartsController < ApplicationController
          @cart.user = current_user unless @cart.user == current_user
          @cart.client = @client unless @cart.client == @client
          @cart.save
-         format.json{render :json => @cart.as_json(only: [:service_method, :store_id], include: [client: {only: [:first_name, :last_name]}])}
+         format.json{render :json => @cart.as_json(only: [:service_method, :store_id], include: [client: {only: [:id, :first_name, :last_name]}])}
       else
         format.json{render :nothing =>true, :status => 422}
       end
@@ -25,7 +25,7 @@ class CartsController < ApplicationController
   
   def discount
     @cart = current_cart
-    #MODE TO MODEL
+    #MOVE TO MODEL
     respond_to do |format|
       if params[:discount]
         user = User.authenticate(params[:discount][:auth_user], params[:discount][:auth_pass])

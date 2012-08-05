@@ -45,6 +45,7 @@ describe "Home::Indices" do
        after(:each)do
          Capybara.use_default_driver
        end
+       
        it "should find the users in the list", js: true do
          selector = '.ui-menu-item a:first'
          fill_in "client_search_phone", with: '8095551234'

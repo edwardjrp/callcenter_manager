@@ -160,7 +160,7 @@ assign_client_to_current_cart = () ->
         beforeSend: (xhr) ->
           xhr.setRequestHeader("Accept", "application/json") 
         success: (cart_info) ->
-          $('#choose_client>span').text("#{cart_info.client.first_name} #{cart_info.client.last_name}")
+          $('#choose_client').text("Cliente: #{cart_info.client.first_name} #{cart_info.client.last_name}").attr('href', "/clients/#{cart_info.client.id}")
           $('#choose_client').effect('highlight')
           window.hide_popover($('#client_search_panel'))
           window.show_alert('Cliente asignado.', 'success')
