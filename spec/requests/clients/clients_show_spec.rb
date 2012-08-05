@@ -2,7 +2,7 @@
 require 'spec_helper'
 
 describe "Client::Show" do
-  describe "when show the client information" do
+  describe "when show the client information", js:true do
     before(:each) do
       Capybara.current_driver = :selenium_chrome
       login(FactoryGirl.create(:user))
@@ -23,9 +23,23 @@ describe "Client::Show" do
       Capybara.use_default_driver
     end
 
-    it "should take to the show client page", js:true do
+    it "should take to the show client page" do
       within('.subnav-fixed'){click_link(@client.full_name)}
       page.should have_content('Información del cliente')
+    end
+
+    describe "whe editing the client" do
+      before(:each) do
+        within('.subnav-fixed'){click_link(@client.full_name)}
+      end
+
+      it "should edit the name" do
+        find("#best_in_place_client_#{@client.id}_first_name").click
+        page.should have_css('.form_in_place')
+        within('.form_in_place'){ fill_in 'first_name', :with => 'Edited client'}
+        page.execute_script("$('.form_in_place').find('input:first').trigger('blur')")
+        within("#best_in_place_client_#{@client.id}_first_name"){ page.should have_content 'Edited client'}
+      end
     end
 
   end
