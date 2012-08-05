@@ -24,6 +24,10 @@ describe "Home::Indices" do
          page.should have_content('No tiene permitido el acceso esta sección')
        end
        
+       it "should not allow to write in the non phone fields at first" do
+        page.should have_css('#client_search_first_name[readonly=\'readonly\']')
+       end
+
     end
     
     context "When search for a client" do

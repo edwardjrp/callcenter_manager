@@ -95,7 +95,9 @@ jQuery ->
 
 client_create =  ()->
   $('#client_search_first_name').val('')
+  $('#client_search_first_name').removeAttr('readonly')
   $('#client_search_last_name').val('')
+  $('#client_search_last_name').removeAttr('readonly')
   $('#client_search').find('fieldset').append(JST['clients/client_extra_fields']()) if $('#client_search_email').length == 0
   $('#client_search_address_city').select2
     placeholder: "Seleccione una Ciudad"
@@ -180,11 +182,15 @@ assign_service_method = (target)->
       
 reset_form = ->
   $('#client_search_first_name').val('')
+  $('#client_search_first_name').attr('readonly', 'readonly')
   $('#client_search_last_name').val('')
+  $('#client_search_last_name').attr('readonly', 'readonly')
   $('#client_id').val('')
   window.hide_popover($('#client_search_panel'))
 
 clear_extra_data = () ->
+  $('#client_search_first_name').attr('readonly', 'readonly')
+  $('#client_search_last_name').attr('readonly', 'readonly')
   $('#client_search_email').val('')
   window.del($('#client_search_email_controls'))
   window.del($('#client_search_idnumber_controls'))
