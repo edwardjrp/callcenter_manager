@@ -25,14 +25,10 @@
         .span4
           %strong Activo:
           =best_in_place @client, :active, type: :select, collection: [[ false, 'No'],[true, 'Si']]
-    .well#phone_list
+    .well#phones_list
       .row
         .span4        
           %h3 Telefonos
-          %a#add_address{href: '#', data: {cities: City.all.to_json(only: [:id, :name])}}
-            Agregar
-
-          =render 'modal', :modal_id => 'add_address_modal', :title=>'Agregar Dirección'
       %hr
       -@client.phones.each do |phone|
         .row
@@ -45,53 +41,55 @@
               %strong extensión:
               =number_to_phone phone.ext
         %hr 
-    .well
+    .well#addresses_list
       .row
         .span4        
           %h3 Direcciones
-          %h3
-      -@client.addresses.each do |address|
-        .row
-          .span4
-            %strong Ciudad:
-            =address.street_area.city.name
-        .row
-          .span4
-            %strong Sector:
-            =address.street_area.name
-        .row
-          .span4
-            %strong Calle:
-            =address.street.name
-        .row
-          .span4
-            %strong Numero:
-            =address.number
-        .row
-          .span4
-            %strong Tipo:
-            =address.unit_type
-        -if address.unit_number
+          %a#add_address{href: '#', data: {cities: City.all.to_json(only: [:id, :name])}}
+            Agregar
+          =render 'modal', :modal_id => 'add_address_modal', :title=>'Agregar Dirección'
+          %hr
+      #client_address_list
+        -@client.addresses.each do |address|
           .row
             .span4
-              %strong Numero de unidad:
-              =address.unit_number
-        -if address.postal_code
+              %strong Ciudad:
+              =address.street_area.city.name
           .row
             .span4
-              %strong Codigo postal:
-              =address.postal_code
-
-        -if address.delivery_instructions
+              %strong Sector:
+              =address.street_area.name
           .row
-            .span3
-              %strong instrucciones de entrega:
+            .span4
+              %strong Calle:
+              =address.street.name
           .row
-            .span3
-              =address.delivery_instructions
+            .span4
+              %strong Numero:
+              =address.number
+          .row
+            .span4
+              %strong Tipo:
+              =address.unit_type
+          -if address.unit_number
+            .row
+              .span4
+                %strong Numero de unidad:
+                =address.unit_number
+          -if address.postal_code
+            .row
+              .span4
+                %strong Codigo postal:
+                =address.postal_code
 
-
-        %hr 
+          -if address.delivery_instructions
+            .row
+              .span3
+                %strong instrucciones de entrega:
+            .row
+              .span3
+                =address.delivery_instructions
+          %hr 
       
 
   .span8#carts_list

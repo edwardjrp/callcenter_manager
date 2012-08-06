@@ -1,0 +1,20 @@
+<div class='row'>
+  <div class='span4'>
+    <strong>Numero:</strong>
+    <%=@address.number%>
+  </div>
+</div>
+<div class='row'>
+  <div class='span4'>
+    <strong>Tipo:</strong>
+    <%=@address.unit_type%>
+  </div>
+</div>
+
+<div class='row'>
+  <div class='span4'>
+    <strong>Instrucciones de entrega:</strong>
+    <%=@address.delivery_instructions%>
+  </div>
+</div>
+<hr/>

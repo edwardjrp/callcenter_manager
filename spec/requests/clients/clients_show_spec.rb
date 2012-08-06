@@ -42,8 +42,8 @@ describe "Client::Show" do
       end
 
 
-      it "should render the add phone link" do
-        within('#phone_list'){page.should have_content('Agregar')}
+      it "should render the add address link" do
+        within('#addresses_list'){page.should have_content('Agregar')}
       end
     end
 

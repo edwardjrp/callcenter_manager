@@ -5,7 +5,7 @@ class AddressesController < ApplicationController
     @client = Client.find(params[:client_id])
     @address = @client.addresses.build(params[:address])
     respond_to do |format|
-      format.json{ render json: @address}
+      format.json{ render json: @address.to_json(include: {street: {include: {area: {include: {city: {}}}}}})}
     end
   end
 
