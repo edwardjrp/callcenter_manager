@@ -31,7 +31,24 @@
 </div>
 <div class='row'>
   <div class='span4'>
+    <strong>Numero de unidad:</strong>
+    <%=@address.unit_number%>
+  </div>
+</div>
+<div class='row'>
+  <div class='span4'>
+    <strong>Codigo postal:</strong>
+    <%=@address.postal_code%>
+  </div>
+</div>
+
+<div class='row'>
+  <div class='span4'>
     <strong>Instrucciones de entrega:</strong>
+  </div>
+</div>
+<div class='row'>
+  <div class='span4'>
     <%=@address.delivery_instructions%>
   </div>
 </div>

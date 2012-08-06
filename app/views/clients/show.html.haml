@@ -48,7 +48,7 @@
           %a#add_address{href: '#', data: {cities: City.all.to_json(only: [:id, :name])}}
             Agregar
           =render 'modal', :modal_id => 'add_address_modal', :title=>'Agregar Dirección'
-          %hr
+      %hr
       #client_address_list
         -@client.addresses.each do |address|
           .row
