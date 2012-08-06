@@ -44,9 +44,10 @@ jQuery ->
         beforeSend: (xhr) ->
           xhr.setRequestHeader("Accept", "application/json")
         success: (address)->
-          console.log address
           $('#client_address_list').prepend(JST['clients/address'](address: address))
           $('#add_address_modal').modal('hide')
         error: (err)->
-          console.log err
+          for error in JSON.parse(err.responseText)
+            $("<div class='purr'>#{error}<div>").purr()
+            console.log error
     $('#add_address_modal').modal('show')

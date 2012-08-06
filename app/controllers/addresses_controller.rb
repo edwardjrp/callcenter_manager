@@ -5,7 +5,11 @@ class AddressesController < ApplicationController
     @client = Client.find(params[:client_id])
     @address = @client.addresses.build(params[:address])
     respond_to do |format|
-      format.json{ render json: @address.to_json(include: {street: {include: {area: {include: {city: {}}}}}})}
+      if @address.save
+        format.json{ render json: @address.to_json(include: {street: {include: {area: {include: {city: {}}}}}})}
+      else
+        format.json{ render json: [@address.errors.full_messages], status: 422}
+      end
     end
   end
 
