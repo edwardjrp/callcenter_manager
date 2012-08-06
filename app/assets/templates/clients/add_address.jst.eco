@@ -1,0 +1,58 @@
+<form class="form-horizontal" id='add_address_form'>
+  <fieldset>
+    <legend>Datos de dirección</legend>
+    <div class="control-group" id="client_address_city_controls">
+  <label class="control-label" for="client_address_city">Ciudad</label>
+  <div class="controls">
+    <input type="hidden" id="client_address_city" style=" display: none; ">
+  </div>
+</div>
+<div class="control-group" id="client_address_area_controls">
+  <label class="control-label" for="client_address_area">Sector</label>
+  <div class="controls">
+    <input type="hidden" id="client_address_area" style=" display: none; ">
+  </div>
+</div>
+<div class="control-group" id="client_address_street_controls">
+  <label class="control-label" for="client_address_street">Calle</label>
+  <div class="controls">
+    <input type="hidden" id="client_address_street" name="address[street_id]" style=" display: none; ">
+  </div>
+</div>
+<div class="control-group" id="client_address_number_controls">
+  <label class="control-label" for="client_address_number">No.</label>
+  <div class="controls">
+    <input type="text" id="client_address_number" name="address[number]">
+  </div>
+</div>
+<div class="control-group" id="client_address_unit_type_controls">
+  <label class="control-label" for="client_address_unit_type">Tipo.</label>
+  <div class="controls">
+    <select id="client_address_unit_type" name="address[unit_type]">
+      <option value="casa">Casa</option>
+      <option value="oficina">Oficina</option>
+      <option value="edificio">Edificio</option>
+    </select>
+  </div>
+</div>
+<div class="control-group" id="client_address_unit_number_controls">
+  <label class="control-label" for="client_address_unit_number">No. apartamento</label>
+  <div class="controls">
+    <input type="text" id="client_address_unit_number" name="address[unit_number]">
+  </div>
+</div>
+<div class="control-group" id="client_address_postal_code_controls">
+  <label class="control-label" for="client_address_postal_code">Codigo postal</label>
+  <div class="controls">
+    <input type="text" id="client_address_postal_code" name="address[postal_code]">
+  </div>
+</div>
+<div class="control-group" id="client_address_delivery_instructions_controls">
+  <label class="control-label" for="client_address_delivery_instructions">Instrucciones</label>
+  <div class="controls">
+    <textarea id="client_address_delivery_instructions" rows=3 class="input-xlarge" name="address[delivery_instructions]"></textarea>
+  </div>
+</div>
+
+  </fieldset>
+</form>

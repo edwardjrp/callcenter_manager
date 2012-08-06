@@ -1,0 +1,9 @@
+.modal.hide{id: "#{modal_id}"}
+  .modal-header
+    %button.close{"data-dismiss" => "modal", :type => "button"} ×
+    %h3="#{title}"
+  .modal-body
+    Loading
+  .modal-footer
+    %a.btn{"data-dismiss" => "modal", :href => "#"} Cerrar
+    %a.btn.btn-primary{:href => "#" , :id=>"#{modal_id}_button"} Guardar

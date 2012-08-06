@@ -25,10 +25,14 @@
         .span4
           %strong Activo:
           =best_in_place @client, :active, type: :select, collection: [[ false, 'No'],[true, 'Si']]
-    .well 
+    .well#phone_list
       .row
         .span4        
           %h3 Telefonos
+          %a#add_address{href: '#', data: {cities: City.all.to_json(only: [:id, :name])}}
+            Agregar
+
+          =render 'modal', :modal_id => 'add_address_modal', :title=>'Agregar Dirección'
       %hr
       -@client.phones.each do |phone|
         .row
@@ -41,7 +45,7 @@
               %strong extensión:
               =number_to_phone phone.ext
         %hr 
-    .well 
+    .well
       .row
         .span4        
           %h3 Direcciones

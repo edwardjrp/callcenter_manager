@@ -40,6 +40,11 @@ describe "Client::Show" do
         page.execute_script("$('.form_in_place').find('input:first').trigger('blur')")
         within("#best_in_place_client_#{@client.id}_first_name"){ page.should have_content 'Edited client'}
       end
+
+
+      it "should render the add phone link" do
+        within('#phone_list'){page.should have_content('Agregar')}
+      end
     end
 
   end
