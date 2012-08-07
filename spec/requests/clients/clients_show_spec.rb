@@ -45,6 +45,30 @@ describe "Client::Show" do
       it "should render the add address link" do
         within('#addresses_list'){page.should have_content('Agregar')}
       end
+
+      it "should show the add address modal" do
+        within('#addresses_list'){click_link('Agregar')}
+        page.should have_css('#add_address_modal', :visible => true)
+      end
+
+       it "should add an address to the client" do
+        within('#addresses_list'){click_link('Agregar')}
+        within('#add_address_modal')do 
+          page.execute_script "$('#client_address_street').val('#{@street.id}')"
+          fill_in 'client_address_number', with: '1'
+          select 'Casa', from: 'client_address_unit_type'
+          fill_in 'client_address_unit_number', with: '1'
+          fill_in 'client_address_postal_code', with: '1'
+          fill_in 'client_address_delivery_instructions', with: '1'
+          click_link 'Guardar'
+        end
+        page.should have_css('#add_address_modal', :visible => false)
+        within('#addresses_list') do 
+          page.should have_content(@city.name)
+          page.should have_content(@area.name)
+          page.should have_content(@street.name)
+        end
+      end
     end
 
   end

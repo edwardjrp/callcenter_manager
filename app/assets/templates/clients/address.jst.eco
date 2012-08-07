@@ -16,7 +16,6 @@
     <%=@address.street.name%>
   </div>
 </div>
-
 <div class='row'>
   <div class='span4'>
     <strong>Numero:</strong>
@@ -41,7 +40,6 @@
     <%=@address.postal_code%>
   </div>
 </div>
-
 <div class='row'>
   <div class='span4'>
     <strong>Instrucciones de entrega:</strong>
