@@ -76,11 +76,22 @@ describe "Client::Show" do
           within('#phones_list'){page.should have_content('Agregar')}
         end
 
-        it "should show the add prhone modal" do
+        it "should show the add phone modal" do
           within('#phones_list'){click_link('Agregar')}
           page.should have_css('#add_phone_modal', :visible => true)
         end
 
+        it "should add an phone to the client" do
+          within('#phones_list'){click_link('Agregar')}
+          within('#add_phone_modal')do 
+            fill_in 'client_phone_number', with: '8095652095'
+            click_link 'Guardar'
+          end
+          page.should have_css('#add_phone_modal', :visible => false)
+          within('#phones_list') do 
+            page.should have_content('809-565-2095')
+          end
+        end
       end
     end
   end
