@@ -1,0 +1,17 @@
+<form class="form-horizontal" id='add_phone_form'>
+  <fieldset>
+    <legend>Datos de Numero telefonico</legend>
+    <div class="control-group" id="client_phone_number_controls">
+      <label class="control-label" for="client_phone_number">Numero</label>
+      <div class="controls">
+        <input type="text" id="client_phone_number" name="phone[number]">
+      </div>
+    </div>
+    <div class="control-group" id="client_phone_ext_controls">
+      <label class="control-label" for="client_ext_number">Extensión</label>
+      <div class="controls">
+        <input type="text" id="client_ext_number" name="phone[ext]">
+      </div>
+    </div>
+  </div>
+</div>

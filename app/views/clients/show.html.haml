@@ -29,18 +29,22 @@
       .row
         .span4        
           %h3 Telefonos
+          %a#add_phone{href: '#'}
+            Agregar
+          =render 'modal', :modal_id => 'add_phone_modal', :title=>'Agregar Telefono'
       %hr
-      -@client.phones.each do |phone|
-        .row
-          .span4
-            %strong Numero:
-            =number_to_phone phone.number
-        - if phone.ext.present?
+      #client_phone_list
+        -@client.phones.each do |phone|
           .row
             .span4
-              %strong extensión:
-              =number_to_phone phone.ext
-        %hr 
+              %strong Numero:
+              =number_to_phone phone.number
+          - if phone.ext.present?
+            .row
+              .span4
+                %strong extensión:
+                =phone.ext
+          %hr 
     .well#addresses_list
       .row
         .span4        

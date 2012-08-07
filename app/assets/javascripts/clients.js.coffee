@@ -51,3 +51,6 @@ jQuery ->
             $("<div class='purr'>#{error}<div>").purr()
             console.log error
     $('#add_address_modal').modal('show')
+  $('#add_phone').on 'click', (event)->
+    $('#add_phone_modal').find('.modal-body').html(JST['clients/add_phone']())
+    $('#add_phone_modal').modal('show')

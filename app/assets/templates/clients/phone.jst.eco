@@ -1,0 +1,14 @@
+<div class= 'row'>
+  <div class= 'span4'>
+      <strong> Numero: </strong>
+      <%=window.to_phone(@phone.number)%>
+    <% if phone.ext?:%>
+  </div>
+</div>
+<div class= 'row'>
+  <div class= 'span4'>
+    <strong> extensión: </strong>
+    <%=@phone.ext%>
+  </div>
+</div>
+<hr/>
