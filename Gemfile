@@ -82,6 +82,7 @@ group :development, :test do
   gem 'jasminerice'
   gem 'guard-jasmine'
   gem 'growl'
+  gem 'debugger'
   #   gem 'vcr', '~> 2.0.0'
   # gem 'webmock', '~> 1.8.3'
   gem 'guard-rspec'
