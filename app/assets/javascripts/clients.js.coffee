@@ -53,4 +53,6 @@ jQuery ->
     $('#add_address_modal').modal('show')
   $('#add_phone').on 'click', (event)->
     $('#add_phone_modal').find('.modal-body').html(JST['clients/add_phone']())
+    $('#client_phone_number').restric('alpha').restric('spaces')
+    $('#client_ext_number').restric('alpha').restric('spaces')
     $('#add_phone_modal').modal('show')
