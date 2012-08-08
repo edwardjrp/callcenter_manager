@@ -33,6 +33,7 @@ describe "client delete" do
       within(".client_address[data-address-id='#{@address.id}']") do 
         page.should have_css('.icon-trash')
         find('.icon-trash').click
+        page.driver.browser.switch_to.alert.accept
       end
       page.should_not have_css(".client_address[data-address-id='#{@address.id}']")
     end
