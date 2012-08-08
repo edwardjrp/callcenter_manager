@@ -22,8 +22,6 @@ class PhonesController < ApplicationController
   
   def clients
     @phone = Phone.find_phones(params[:client]).first
-    Rails.logger.debug @phone.inspect
-    Rails.logger.debug @phone.client.inspect
     @client = @phone.client
     respond_to do |format|
       format.json{render json: (@client || [])}

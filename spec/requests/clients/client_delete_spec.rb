@@ -12,7 +12,7 @@ describe "client delete" do
       @city = @area.city
       @client = FactoryGirl.create(:client, first_name: 'tester')
       @phone = FactoryGirl.create :phone, client: @client, number: '8095551234', ext: '99'
-      @address= FactoryGirl.create :address, street: @street#, client: @client
+      @address= FactoryGirl.create :address, street: @street, client: @client
       visit root_path
       selector = '.ui-menu-item  a:first'
       fill_in "client_search_phone", with: '8095551234'

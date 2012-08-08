@@ -97,7 +97,7 @@
                   =address.delivery_instructions
             %hr 
       
-
+  -Rails.logger.debug Address.all
   .span8#carts_list
     - if @carts.any?
       %h3 Ordenes
