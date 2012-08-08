@@ -30,6 +30,11 @@ describe "client delete" do
       page.should have_css('#addresses_list')
       page.should have_content(@address.street.name)
       page.should have_css(".client_address[data-address-id='#{@address.id}']")
+      within(".client_address[data-address-id='#{@address.id}']") do 
+        page.should have_css('.icon-trash')
+        find('.icon-trash').click
+      end
+      page.should_not have_css(".client_address[data-address-id='#{@address.id}']")
     end
   end
 

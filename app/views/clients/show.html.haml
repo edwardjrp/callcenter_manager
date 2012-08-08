@@ -58,6 +58,9 @@
         -@client.addresses.order('created_at DESC').each do |address|
           .client_address{ :data=> {'address-id'=> address.id}}
             .row
+              .span3
+                %i.icon-trash.right
+            .row
               .span4
                 %strong Ciudad:
                 =address.street_area.city.name
@@ -93,7 +96,7 @@
                 .span3
                   %strong instrucciones de entrega:
               .row
-                .span3
+                .span4
                   =address.delivery_instructions
             %hr 
       

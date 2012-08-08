@@ -13,6 +13,14 @@ class AddressesController < ApplicationController
     end
   end
 
+  def destroy
+    @address = Address.find params[:id]
+    @address.destroy
+    respond_to do |format|
+      format.js{ render nothing: true, status: 200}
+    end
+  end
+
   def areas
     @areas = Area.find_area(params)
     respond_to do |format|

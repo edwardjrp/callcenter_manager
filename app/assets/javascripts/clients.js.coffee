@@ -74,3 +74,20 @@ jQuery ->
       error: (err)->
         for error in JSON.parse(err.responseText)
           $("<div class='purr'>#{error}<div>").purr()
+
+  $('#client_address_list').on 'click', '.icon-trash', (event)->
+    target = $(event.currentTarget)
+    if confirm('¿Seguro que desea borrar esta dirección?')
+      $.ajax
+        type: 'DELETE'
+        datatype: 'json'
+        url: "/addresses/#{target.closest('.client_address').data('address-id')}"
+        success: ()->
+          target.closest('.client_address').remove()
+        error: (err)->
+          alert('No se pudo realizar la operación')
+ 
+
+
+
+
