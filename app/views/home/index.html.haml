@@ -1,8 +1,13 @@
 .row
   .span6.offset2
-    .panel#client_search_panel
+    .panel#client_search_panel.span6
       %h3 Clientes
       .content
+        .row#import_client.none
+          .span2.offset4
+            %a.btn.rigth#import_client_button
+              %i.icon.icon-share
+              Importar
         =form_tag root_path, class: "form-horizontal", id: "client_search" do
           =hidden_field_tag 'client[id]'
           %fieldset{data: {cities: City.all.to_json(only: [:id, :name])}}

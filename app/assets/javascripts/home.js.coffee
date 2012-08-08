@@ -91,9 +91,33 @@ jQuery ->
         $('#client_search_ext').val('')
         reset_form()
 
+  $('#client_search_panel').on 'click', '#add_client_button', (event) ->
+    event.preventDefault()
+    $.ajax
+      type: 'POST'
+      url: "/clients"
+      datatype: 'json'
+      data: $('#client_search').serialize()
+      beforeSend: (xhr) ->
+        xhr.setRequestHeader("Accept", "application/json")
+      success: (response) ->
+        $('#client_search_first_name').val(response.first_name.toTitleCase())
+        $('#client_search_last_name').val(response.last_name.toTitleCase())
+        $('#client_id').val(response.id)
+        window.show_alert('Cliente creado.', 'success')
+        $('#client_search_phone').focus()
+        window.show_popover($('#client_search_panel'), 'Cliente asignado', 'Presione ENTER para asignar el cliente creado a la orden actual.')
+        clear_extra_data()
+      error: (response) ->
+        window.show_alert(response.responseText, 'error')
 
+  $('#client_search_panel').on 'click', '#import_client_button', (event) ->
+    event.preventDefault()
+    console.log 'clicked importer'
 
+    
 client_create =  ()->
+  $('#import_client').show()
   $('#client_search_first_name').val('')
   $('#client_search_first_name').removeAttr('readonly')
   $('#client_search_last_name').val('')
@@ -128,26 +152,7 @@ client_create =  ()->
           results: $.map(streets, (street)->
               {id: street.id, text: street.name}
             )
-  unless $('#add_client_button').data("events")? and $('#add_client_button').data("events").click? and $('#add_client_button').data("events").click.length > 0
-    $('#add_client_button').on 'click', (event) ->
-      event.preventDefault()
-      $.ajax
-        type: 'POST'
-        url: "/clients"
-        datatype: 'json'
-        data: $('#client_search').serialize()
-        beforeSend: (xhr) ->
-          xhr.setRequestHeader("Accept", "application/json")
-        success: (response) ->
-          $('#client_search_first_name').val(response.first_name.toTitleCase())
-          $('#client_search_last_name').val(response.last_name.toTitleCase())
-          $('#client_id').val(response.id)
-          window.show_alert('Cliente creado.', 'success')
-          $('#client_search_phone').focus()
-          window.show_popover($('#client_search_panel'), 'Cliente asignado', 'Presione ENTER para asignar el cliente creado a la orden actual.')
-          clear_extra_data()
-        error: (response) ->
-          window.show_alert(response.responseText, 'error')
+ 
 
 assign_client_to_current_cart = () ->
   $('#client_search input').on 'keypress', (event)->
@@ -189,6 +194,7 @@ reset_form = ->
   window.hide_popover($('#client_search_panel'))
 
 clear_extra_data = () ->
+  $('#import_client').hide()
   $('#client_search_first_name').attr('readonly', 'readonly')
   $('#client_search_last_name').attr('readonly', 'readonly')
   $('#client_search_email').val('')
