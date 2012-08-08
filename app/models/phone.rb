@@ -16,6 +16,7 @@ class Phone < ActiveRecord::Base
   validates :client, presence: true
   attr_accessible :ext, :number
   before_validation :clear_number
+  before_destroy :ensure_one_phone
   
   def self.find_phones(client)
     phones = self.scoped
@@ -28,5 +29,15 @@ class Phone < ActiveRecord::Base
   private
     def clear_number
       self.number = self.number.gsub(/[^\d]/,'') if self.number.present?
+    end
+
+    def ensure_one_phone
+      if self.client.present?
+        client = self.client
+        unless client.phones.count > 1
+          self.errors.add(:base, 'El cliente debe tener al menos un numero telefonico')
+          return false
+        end
+      end
     end
 end

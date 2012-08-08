@@ -37,6 +37,9 @@
         -@client.phones.order('created_at DESC').each do |phone|
           .client_phone{ :data=> {'phone-id'=> phone.id}}
             .row
+              .span3
+                %i.icon-trash.right
+            .row
               .span4
                 %strong Numero:
                 =number_to_phone phone.number

@@ -1,8 +1,8 @@
  #encoding: utf-8
 require 'spec_helper'
 
-describe "client delete" do
- describe 'deleting and address', js: true do
+describe "client delete phone and address" do
+ describe 'when deleting phones and address', js: true do
     before(:each) do
       Capybara.current_driver = :selenium_chrome
       @user = FactoryGirl.create(:user)
@@ -12,6 +12,7 @@ describe "client delete" do
       @city = @area.city
       @client = FactoryGirl.create(:client, first_name: 'tester')
       @phone = FactoryGirl.create :phone, client: @client, number: '8095551234', ext: '99'
+      @phone2 = FactoryGirl.create :phone, client: @client, number: '8095551235', ext: '99'
       @address= FactoryGirl.create :address, street: @street, client: @client
       visit root_path
       selector = '.ui-menu-item  a:first'
@@ -26,7 +27,7 @@ describe "client delete" do
       Capybara.use_default_driver
     end
 
-    it "should have the address in the list" do
+    it "should have remove the address from the addresses_list" do
       page.should have_css('#addresses_list')
       page.should have_content(@address.street.name)
       page.should have_css(".client_address[data-address-id='#{@address.id}']")
@@ -36,6 +37,17 @@ describe "client delete" do
         page.driver.browser.switch_to.alert.accept
       end
       page.should_not have_css(".client_address[data-address-id='#{@address.id}']")
+    end
+
+    it "should have remove the phone from the phone_list" do
+      page.should have_css('#phones_list')
+      page.should have_css(".client_phone[data-phone-id='#{@phone2.id}']")
+      within(".client_phone[data-phone-id='#{@phone2.id}']") do 
+        page.should have_css('.icon-trash')
+        find('.icon-trash').click
+        page.driver.browser.switch_to.alert.accept
+      end
+      page.should_not have_css(".client_phone[data-phone-id='#{@phone2.id}']")
     end
   end
 

@@ -86,7 +86,19 @@ jQuery ->
           target.closest('.client_address').remove()
         error: (err)->
           alert('No se pudo realizar la operación')
- 
+
+  $('#client_phone_list').on 'click', '.icon-trash', (event)->
+    target = $(event.currentTarget)
+    if confirm('¿Seguro que desea borrar este telefono?')
+      $.ajax
+        type: 'DELETE'
+        datatype: 'json'
+        url: "/phones/#{target.closest('.client_phone').data('phone-id')}"
+        success: ()->
+          target.closest('.client_phone').remove()
+        error: (err)->
+          $("<div class='purr'>#{err.responseText}<div>").purr()
+  
 
 
 
