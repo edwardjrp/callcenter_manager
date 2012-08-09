@@ -38,11 +38,23 @@ jQuery ->
         $("<div class='purr'>Debe ingresar un numero telefonico valido<div>").purr()
       else
         $("#import_client_modal").modal('show')
-        socket.emit 'clients:olo:index', {phone: window.NumberFormatter.to_clear(phone), ext: ext}, (data)->
+        socket.emit 'clients:olo:index', {phone: window.NumberFormatter.to_clear(phone), ext: ext}, (response)->
           $("#import_client_modal").find('.modal-footer').remove()
-          $("#import_client_modal").find('.modal-body').html(JST['clients/import_client']())
-          $('#import_client_wizard').smartWizard()
-          console.log data
+          if response? and response.type == 'success'
+            if _.any(response.data)
+              clients = response.data
+              clients = [clients] unless _.isArray(clients)
+              $("#import_client_modal").find('.modal-body').html(JST['clients/import_client'](clients: clients))
+              $('#import_client_wizard').smartWizard
+                labelNext: 'Siguiente'
+                labelPrevious: 'Anterior'
+                labelFinish: 'Terminar'
+                onLeaveStep:leaveAStepCallback
+            else
+              $("#import_client_modal").modal('hide')
+              $("<div class='purr'>No hay clientes en olo2 con este numero telefonico<div>").purr()
+          else
+            $("<div class='purr'>#{response.data}<div>").purr()
 
 
 
@@ -184,6 +196,15 @@ progressbar_advance = (times) ->
   console.log new_width
   $('#progress_bar').find('.bar').css({width: "#{new_width}px"})
 
+
+leaveAStepCallback = (obj)->
+  isStepValid = true
+  step_num = obj.attr('rel')
+  if step_num == '1' || step_num == 1
+    isStepValid = false if $('#step-1').find('input[type=radio]:checked').size() == 0
+    $('#import_client_wizard').smartWizard('showMessage','Debe selecionar un cliente primero');
+  isStepValid
+  
 
 reset_modal =   '<div class="row">
             <div class="span8" id="process_inf">Inciando ...</div>
