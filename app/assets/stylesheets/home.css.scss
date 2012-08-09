@@ -7,3 +7,11 @@
 #client_search_last_name{
   background-color: white;
 }
+
+#import_client_modal{
+  width:1000px;
+  .modal-body{  
+    max-height:600px;
+  }
+  left:35%;
+}

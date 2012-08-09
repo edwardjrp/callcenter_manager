@@ -39,7 +39,9 @@ jQuery ->
       else
         $("#import_client_modal").modal('show')
         socket.emit 'clients:olo:index', {phone: window.NumberFormatter.to_clear(phone), ext: ext}, (data)->
-          console.log 'responde from node'
+          $("#import_client_modal").find('.modal-footer').remove()
+          $("#import_client_modal").find('.modal-body').html(JST['clients/import_client']())
+          $('#import_client_wizard').smartWizard()
           console.log data
 
 
