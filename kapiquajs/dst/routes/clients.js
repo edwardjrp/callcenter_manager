@@ -19,21 +19,29 @@ Client = (function() {
   };
 
   Client.olo_with_phone = function(data, respond, socket) {
-    console.log('processing');
-    request.get({
+    return request.get({
       headers: {},
-      uri: 'http://localhost:4000/api/users.json'
+      uri: "http://localhost:4000/api/users/with_phone.json?phone=" + data.phone + "&ext=" + data.ext
     }, function(err, res, res_data) {
       if (err) {
-        return console.log(err);
+        return respond({
+          type: 'error',
+          data: "Hubo un error opteniendo la respuesta desde olo: " + err
+        });
       } else {
-        return console.log(res_data);
+        if ((res_data != null) && res_data !== 'null') {
+          return respond({
+            type: 'success',
+            data: JSON.parse(res_data)
+          });
+        } else {
+          return respond({
+            type: 'success',
+            data: []
+          });
+        }
       }
     });
-    respond({
-      clients: 'Queried for the clients'
-    });
-    return console.log('querying olo2 clients list');
   };
 
   return Client;

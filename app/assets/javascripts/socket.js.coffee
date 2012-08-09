@@ -32,10 +32,15 @@ jQuery ->
   if $('#client_search_panel').size() > 0
     $('#client_search_panel').on 'click', '#import_client_button', (event) ->
       event.preventDefault()
-      $("#import_client_modal").modal('show')
-      socket.emit 'clients:olo:index', {phone: '8095080393'}, (data)->
-        console.log 'responde from node'
-        console.log data
+      phone = $('#client_search_phone').val()
+      ext= $('#client_search_ext').val()
+      unless phone? or phone.length != 10
+        $("<div class='purr'>Debe ingresar un numero telefonico valido<div>").purr()
+      else
+        $("#import_client_modal").modal('show')
+        socket.emit 'clients:olo:index', {phone: window.NumberFormatter.to_clear(phone), ext: ext}, (data)->
+          console.log 'responde from node'
+          console.log data
 
 
 

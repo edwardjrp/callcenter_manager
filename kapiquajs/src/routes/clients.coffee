@@ -11,15 +11,14 @@ class Client
     console.log 'querying olo2 clients show'
 
   @olo_with_phone: (data, respond, socket) ->
-    console.log 'processing'
-    request.get {headers: {}, uri: 'http://localhost:4000/api/users.json' }, (err, res, res_data) ->
+    request.get {headers: {}, uri: "http://localhost:4000/api/users/with_phone.json?phone=#{data.phone}&ext=#{data.ext}" }, (err, res, res_data) ->
       if err
-        console.log err
+        respond({type: 'error', data: "Hubo un error opteniendo la respuesta desde olo: #{err}"})
       else
-        respond(res_data)
-
-    respond({clients: 'Queried for the clients'})
-    console.log 'querying olo2 clients list'
+        if res_data? and res_data != 'null'
+          respond({type: 'success', data: JSON.parse(res_data)})
+        else
+          respond({type: 'success', data: []})
 
 
 module.exports = Client
