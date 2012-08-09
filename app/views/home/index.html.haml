@@ -8,6 +8,7 @@
             %a.btn.rigth#import_client_button
               %i.icon.icon-share
               Importar
+            =render 'modal', :modal_id => 'import_client_modal', :title=>'Importar cliente'
         =form_tag root_path, class: "form-horizontal", id: "client_search" do
           =hidden_field_tag 'client[id]'
           %fieldset{data: {cities: City.all.to_json(only: [:id, :name])}}

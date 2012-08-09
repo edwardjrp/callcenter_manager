@@ -1,4 +1,4 @@
-var CartProducts, Carts, app, express, io, pg, util, _;
+var CartProducts, Carts, Clients, app, express, io, pg, util, _;
 
 express = require('express');
 
@@ -11,6 +11,8 @@ util = require('util');
 CartProducts = require('./routes/cart_products');
 
 Carts = require('./routes/carts');
+
+Clients = require('./routes/clients');
 
 app = module.exports = express.createServer();
 
@@ -49,6 +51,9 @@ io.sockets.on("connection", function(socket) {
   });
   socket.on('chat', function(data) {
     return io.sockets.emit('chat', data);
+  });
+  socket.on("clients:olo:index", function(data, responder) {
+    return Clients.olo_with_phone(data, responder, socket);
   });
   socket.on("cart:price", function(data, responder) {
     return Carts.price(data, responder, socket);

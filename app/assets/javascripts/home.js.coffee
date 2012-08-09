@@ -111,11 +111,7 @@ jQuery ->
       error: (response) ->
         window.show_alert(response.responseText, 'error')
 
-  $('#client_search_panel').on 'click', '#import_client_button', (event) ->
-    event.preventDefault()
-    console.log 'clicked importer'
 
-    
 client_create =  ()->
   $('#import_client').show()
   $('#client_search_first_name').val('')

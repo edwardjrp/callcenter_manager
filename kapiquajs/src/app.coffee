@@ -8,6 +8,7 @@ pg = require('pg')
 util = require('util')
 CartProducts = require('./routes/cart_products')
 Carts = require('./routes/carts')
+Clients = require('./routes/clients')
 
 app = module.exports = express.createServer()
 
@@ -46,6 +47,9 @@ io.sockets.on "connection", (socket) ->
   
   socket.on 'chat', (data)->
     io.sockets.emit('chat', data);
+
+  socket.on "clients:olo:index", (data, responder) ->
+    Clients.olo_with_phone(data, responder, socket)  
     
   socket.on "cart:price", (data, responder) ->
     Carts.price(data, responder, socket)

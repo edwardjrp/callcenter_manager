@@ -29,6 +29,16 @@ jQuery ->
     alert('FALTA CORREGIR ERROR DE DUPLICACION')
   
   
+  if $('#client_search_panel').size() > 0
+    $('#client_search_panel').on 'click', '#import_client_button', (event) ->
+      event.preventDefault()
+      $("#import_client_modal").modal('show')
+      socket.emit 'clients:olo:index', {phone: '8095080393'}, (data)->
+        console.log 'responde from node'
+        console.log data
+
+
+
   socket.on 'cart:price:error', (err) ->
     $('#process_inf').text("Ha ocurrido un error en el proceso de colocación: #{err}")
     $('a#place_order').addClass('disabled')  
