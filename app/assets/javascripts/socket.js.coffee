@@ -51,6 +51,7 @@ jQuery ->
                 labelPrevious: 'Anterior'
                 labelFinish: 'Terminar'
                 onLeaveStep:leaveAStepCallback
+                onFinish: FinishCallBack
             else
               $("#import_client_modal").modal('hide')
               $("<div class='purr'>No hay clientes en olo2 con este numero telefonico<div>").purr()
@@ -250,9 +251,31 @@ leaveAStepCallback = (obj)->
     current_client = _.find clients, (client) -> client.id == Number($('#step-1').find('input[type=radio]:checked').val())
     _.each _.first(current_client.addresses, 4), (address) ->
       $('#import_client_wizard').find("#import_phone_list").find('.row').append(JST['clients/import_phone'](address: address))
-
+  else if step_num == '3' || step_num == 3
+    if $('#import_client_wizard').find("#import_phone_list").find('input[type=checkbox]:checked').size() < 1
+      isStepValid = false
+      $('#import_client_wizard').smartWizard('showMessage','Debe importar al menos un numero telefonico')
+    else
+      $('#import_client_wizard').find('.msgBox').fadeOut("normal")
   isStepValid
   
+FinishCallBack = (obj)->
+  clients = clients = $('#import_client_wizard').data('clients')
+  current_client = _.find clients, (client) -> client.id == Number($('#step-1').find('input[type=radio]:checked').val())
+  address_obj_array = _.uniq(_.compact(_.map($('#import_client_wizard').find("#import_address_list").find('.street_selection'), (street_el)-> $(street_el).closest('ul')[0] if $(street_el).select2('val') !='')))
+  addresses = []
+  _.each address_obj_array, (address_obj)->
+    address =
+      client_id:  current_client.id
+      street_id: $(address_obj).find('.street_selection:first').select2('val')
+      number: $(address_obj).find('.number_selected:first').text()
+      unit_type: $(address_obj).find('.unit_type_selected:first').text()
+      unit_number: $(address_obj).find('.unit_number_selected:first').text()
+      postal_code: $(address_obj).find('.postal_code_selected:first').text()
+      delivery_instructions: $(address_obj).find('.delivery_instructions_selected:first').text()
+    addresses.push address
+  console.log addresses
+  # current_client.addresses = _.without()
 
 reset_modal =   '<div class="row">
             <div class="span8" id="process_inf">Inciando ...</div>
