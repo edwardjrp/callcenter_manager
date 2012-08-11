@@ -260,6 +260,7 @@ leaveAStepCallback = (obj)->
   isStepValid
   
 FinishCallBack = (obj)->
+  isValid = true
   clients = clients = $('#import_client_wizard').data('clients')
   current_client = _.find clients, (client) -> client.id == Number($('#step-1').find('input[type=radio]:checked').val())
   address_obj_array = _.uniq(_.compact(_.map($('#import_client_wizard').find("#import_address_list").find('.street_selection'), (street_el)-> $(street_el).closest('ul')[0] if $(street_el).select2('val') !='')))
@@ -274,8 +275,39 @@ FinishCallBack = (obj)->
       postal_code: $(address_obj).find('.postal_code_selected:first').text()
       delivery_instructions: $(address_obj).find('.delivery_instructions_selected:first').text()
     addresses.push address
-  console.log addresses
-  # current_client.addresses = _.without()
+
+  phone_obj_array = _.uniq(_.compact(_.map($('#import_client_wizard').find("#import_phone_list").find('.phone_selection'), (phone_el)-> $(phone_el).closest('ul')[0] if $(phone_el).is(':checked'))))
+  phones = []
+  _.each phone_obj_array, (phone_obj)->
+    phone =
+      client_id:  current_client.id
+      number: $(phone_obj).find('.number_selected:first').text()
+      ext: $(phone_obj).find('.ext_selected:first').text()
+    phones.push(phone)
+
+  new_client = 
+    first_name: current_client.name
+    last_name: current_client.last_name
+    email: current_client.email
+    idnumber: current_client.idnumber
+    active: (current_client.state != 'disabled')
+
+  if current_client? and  _.any(phones)
+    $.ajax
+      type: 'POST'
+      url: '/clients/import'
+      datatype: 'json'
+      data: {client: new_client, addresses: addresses, phones: phones}
+      beforeSend: (xhr)->
+        xhr.setRequestHeader("Accept", "application/json")
+      success: (response)->
+        console.log response
+        $("#import_client_modal").modal('hide')
+      error: (err)->
+        $('#import_client_wizard').smartWizard('showMessage',"Un error impidio la importación #{err}")
+  else
+    isValid = false
+  isValid
 
 reset_modal =   '<div class="row">
             <div class="span8" id="process_inf">Inciando ...</div>

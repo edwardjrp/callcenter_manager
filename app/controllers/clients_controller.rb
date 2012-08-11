@@ -28,6 +28,14 @@ class ClientsController < ApplicationController
   end
    
 
+  def import
+    @client = Client.new(params[:client])
+    respond_to do |format|
+      format.json{ render json: @client}
+    end
+  end
+
+
   def show
     @client = Client.find(params[:id])
     @carts = @client.carts.page(params[:page])
