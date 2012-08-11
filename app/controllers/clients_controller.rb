@@ -31,7 +31,12 @@ class ClientsController < ApplicationController
   def import
     @client = Client.new(params[:client])
     respond_to do |format|
-      format.json{ render json: @client}
+      if @client.save
+        format.json{ render json: @client}
+      else
+        Rails.logger.debug @client.errors.full_messages
+        format.json{render json: @client.errors.full_messages.to_sentence , :status => 422}
+      end
     end
   end
 

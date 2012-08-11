@@ -267,7 +267,7 @@ FinishCallBack = (obj)->
   addresses = []
   _.each address_obj_array, (address_obj)->
     address =
-      client_id:  current_client.id
+      client_id: current_client.id
       street_id: $(address_obj).find('.street_selection:first').select2('val')
       number: $(address_obj).find('.number_selected:first').text()
       unit_type: $(address_obj).find('.unit_type_selected:first').text()
@@ -280,7 +280,6 @@ FinishCallBack = (obj)->
   phones = []
   _.each phone_obj_array, (phone_obj)->
     phone =
-      client_id:  current_client.id
       number: $(phone_obj).find('.number_selected:first').text()
       ext: $(phone_obj).find('.ext_selected:first').text()
     phones.push(phone)
@@ -291,20 +290,22 @@ FinishCallBack = (obj)->
     email: current_client.email
     idnumber: current_client.idnumber
     active: (current_client.state != 'disabled')
+    phones_attributes: phones
+    addresses_attributes: addresses
 
   if current_client? and  _.any(phones)
     $.ajax
       type: 'POST'
       url: '/clients/import'
       datatype: 'json'
-      data: {client: new_client, addresses: addresses, phones: phones}
+      data: {client: new_client}
       beforeSend: (xhr)->
         xhr.setRequestHeader("Accept", "application/json")
       success: (response)->
         console.log response
         $("#import_client_modal").modal('hide')
       error: (err)->
-        $('#import_client_wizard').smartWizard('showMessage',"Un error impidio la importación #{err}")
+        $('#import_client_wizard').smartWizard('showMessage',"Un error impidio la importación")
   else
     isValid = false
   isValid
