@@ -45,6 +45,7 @@ jQuery ->
               clients = response.data
               clients = [clients] unless _.isArray(clients)
               $("#import_client_modal").find('.modal-body').html(JST['clients/import_client'](clients: clients))
+              $('#import_client_wizard').data('clients', clients)
               $('#import_client_wizard').smartWizard
                 labelNext: 'Siguiente'
                 labelPrevious: 'Anterior'
@@ -200,9 +201,47 @@ progressbar_advance = (times) ->
 leaveAStepCallback = (obj)->
   isStepValid = true
   step_num = obj.attr('rel')
+  clients = $('#import_client_wizard').data('clients')
   if step_num == '1' || step_num == 1
     isStepValid = false if $('#step-1').find('input[type=radio]:checked').size() == 0
-    $('#import_client_wizard').smartWizard('showMessage','Debe selecionar un cliente primero');
+    if isStepValid == false 
+      $('#import_client_wizard').smartWizard('showMessage','Debe selecionar un cliente primero')
+    else
+      $('#import_client_wizard').find('.msgBox').fadeOut("normal")
+      current_client = _.find clients, (client) -> client.id == Number($('#step-1').find('input[type=radio]:checked').val())
+      $('#import_client_wizard').find("#import_address_list").append('<div class="row"></row>')
+      $('#import_client_wizard').smartWizard('showMessage',"Solor podra importar 4 de las #{current_client.addresses.length} direcciones de este cliente") if current_client.addresses > 4
+      for address in _.first(current_client.addresses, 4) 
+        $('#import_client_wizard').find("#import_address_list").find('.row').append(JST['clients/import_address'](address: address))
+        $("#client_address_city_#{address.id}").select2
+            placeholder: "Seleccione una Ciudad"
+            data: _.map($('#client_search').find('fieldset').data('cities'), (c)-> {id: c.id, text: c.name})
+        $("#client_address_area_#{address.id}").select2
+          placeholder: "Seleccione un sector"
+          minimumInputLength: 2
+          ajax:
+            url: '/addresses/areas.json'
+            datatype: 'json'
+            data: (term, page)->
+              q:term
+              city_id: $("#client_address_city_#{address.id}").val()
+            results: (areas, page)->
+              results: _.map(areas, (area)->
+                  {id: area.id, text: area.name}
+                )
+        $("#client_address_street_#{address.id}").select2
+          placeholder: "Seleccione una calle"
+          minimumInputLength: 1
+          ajax:
+            url: '/addresses/streets.json'
+            datatype: 'json'
+            data: (term, page)->
+              q:term
+              area_id: $("#client_address_area_#{address.id}").val()
+            results: (streets, page)->
+              results: $.map(streets, (street)->
+                  {id: street.id, text: street.name}
+                )
   isStepValid
   
 
