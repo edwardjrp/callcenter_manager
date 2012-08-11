@@ -209,7 +209,6 @@ leaveAStepCallback = (obj)->
     else
       $('#import_client_wizard').find('.msgBox').fadeOut("normal")
       current_client = _.find clients, (client) -> client.id == Number($('#step-1').find('input[type=radio]:checked').val())
-      $('#import_client_wizard').find("#import_address_list").append('<div class="row"></row>')
       $('#import_client_wizard').smartWizard('showMessage',"Solor podra importar 4 de las #{current_client.addresses.length} direcciones de este cliente") if current_client.addresses > 4
       _.each _.first(current_client.addresses, 4), (address) ->
         $('#import_client_wizard').find("#import_address_list").find('.row').append(JST['clients/import_address'](address: address))
@@ -243,6 +242,15 @@ leaveAStepCallback = (obj)->
               results: $.map(streets, (street)->
                   {id: street.id, text: street.name}
                 )
+  else if step_num == '2' || step_num == 2
+    if _.any(_.map($('#import_client_wizard').find("#import_address_list").find('.street_selection'), (street_el)-> $(street_el).select2('val')), (street_el_val)-> street_el_val == '')
+      $('#import_client_wizard').smartWizard('showMessage','Las direcciones donde no ha elegido una calle no serán importadas')
+    else
+      $('#import_client_wizard').find('.msgBox').fadeOut("normal")
+    current_client = _.find clients, (client) -> client.id == Number($('#step-1').find('input[type=radio]:checked').val())
+    _.each _.first(current_client.addresses, 4), (address) ->
+      $('#import_client_wizard').find("#import_phone_list").find('.row').append(JST['clients/import_phone'](address: address))
+
   isStepValid
   
 
