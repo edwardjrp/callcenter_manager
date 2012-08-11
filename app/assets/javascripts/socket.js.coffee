@@ -211,7 +211,7 @@ leaveAStepCallback = (obj)->
       current_client = _.find clients, (client) -> client.id == Number($('#step-1').find('input[type=radio]:checked').val())
       $('#import_client_wizard').find("#import_address_list").append('<div class="row"></row>')
       $('#import_client_wizard').smartWizard('showMessage',"Solor podra importar 4 de las #{current_client.addresses.length} direcciones de este cliente") if current_client.addresses > 4
-      for address in _.first(current_client.addresses, 4) 
+      _.each _.first(current_client.addresses, 4), (address) ->
         $('#import_client_wizard').find("#import_address_list").find('.row').append(JST['clients/import_address'](address: address))
         $("#client_address_city_#{address.id}").select2
             placeholder: "Seleccione una Ciudad"
@@ -223,6 +223,7 @@ leaveAStepCallback = (obj)->
             url: '/addresses/areas.json'
             datatype: 'json'
             data: (term, page)->
+              console.log address
               q:term
               city_id: $("#client_address_city_#{address.id}").val()
             results: (areas, page)->

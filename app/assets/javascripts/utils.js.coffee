@@ -48,6 +48,7 @@
     throw 'NOT A STRING'
        
 @to_idnumber = (string)->
+  return string unless string?
   string = string.toString() if string? and _.isNumber(string)
   return string if string.length != 11
   if _.isString(string)
