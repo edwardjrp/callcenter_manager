@@ -24,6 +24,6 @@ describe Address do
     it{should belong_to :client}
     it{should belong_to :street}
     it{should validate_presence_of :street_id}
-    it{should validate_presence_of :client_id}
+    # it{should validate_presence_of :client_id}
   end
 end

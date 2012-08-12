@@ -212,7 +212,7 @@ leaveAStepCallback = (obj)->
       current_client = _.find clients, (client) -> client.id == Number($('#step-1').find('input[type=radio]:checked').val())
       $('#import_client_wizard').smartWizard('showMessage',"Solor podra importar 4 de las #{current_client.addresses.length} direcciones de este cliente") if current_client.addresses > 4
       _.each _.first(current_client.addresses, 4), (address) ->
-        $('#import_client_wizard').find("#import_address_list").find('.row').append(JST['clients/import_address'](address: address))
+        $('#import_client_wizard').find("#import_address_list").find('.row').append(JST['clients/import_address'](address: address)) if $("#import_address_#{address.id}").size() == 0
         $("#client_address_city_#{address.id}").select2
             placeholder: "Seleccione una Ciudad"
             data: _.map($('#client_search').find('fieldset').data('cities'), (c)-> {id: c.id, text: c.name})
@@ -250,7 +250,7 @@ leaveAStepCallback = (obj)->
       $('#import_client_wizard').find('.msgBox').fadeOut("normal")
     current_client = _.find clients, (client) -> client.id == Number($('#step-1').find('input[type=radio]:checked').val())
     _.each _.first(current_client.addresses, 4), (address) ->
-      $('#import_client_wizard').find("#import_phone_list").find('.row').append(JST['clients/import_phone'](address: address))
+      $('#import_client_wizard').find("#import_phone_list").find('.row').append(JST['clients/import_phone'](address: address)) if $("#import_phone_#{address.id}").size() == 0
   else if step_num == '3' || step_num == 3
     if $('#import_client_wizard').find("#import_phone_list").find('input[type=checkbox]:checked').size() < 1
       isStepValid = false
@@ -301,14 +301,47 @@ FinishCallBack = (obj)->
       data: {client: new_client}
       beforeSend: (xhr)->
         xhr.setRequestHeader("Accept", "application/json")
-      success: (response)->
-        console.log response
+      success: (saved_client)->
+        console.log saved_client
         $("#import_client_modal").modal('hide')
+        clear_extra_data()
+        set_form_import(saved_client, _.find(phones, (phone)-> phone.number == $('#client_search_phone').val()))
       error: (err)->
         $('#import_client_wizard').smartWizard('showMessage',"Un error impidio la importación")
   else
     isValid = false
   isValid
+
+set_form_import = (client, phone)->
+  $('#client_search_phone').val(window.to_phone(phone.number))
+  $('#client_search_ext').val(phone.ext)
+  $('#client_search_first_name').val(client.first_name)
+  $('#client_search_first_name').attr('readonly', 'readonly')
+  $('#client_search_last_name').val(client.last_name)
+  $('#client_search_last_name').attr('readonly', 'readonly')
+  $('#client_id').val(client.id)
+  window.show_popover($('#client_search_panel'), 'Cliente Importado', 'Presione ENTER para asignar el cliente importado a la orden actual.')
+
+clear_extra_data = () ->
+  $('#import_client').hide()
+  $('#client_search_first_name').attr('readonly', 'readonly')
+  $('#client_search_last_name').attr('readonly', 'readonly')
+  $('#client_search_email').val('')
+  window.del($('#client_search_email_controls'))
+  window.del($('#client_search_idnumber_controls'))
+  window.del($('#user_not_found_buttons'))
+  $("#client_search_address_city").select2("destroy")
+  $('#client_search_address_area').select2("destroy")
+  $('#client_search_address_street').select2("destroy")
+  window.del($('#client_search_address_city_controls'))
+  window.del($('#client_search_address_area_controls'))
+  window.del($('#client_search_address_street_controls'))
+  window.del($('#client_search_address_number_controls'))
+  window.del($('#client_search_address_unit_type_controls'))
+  window.del($('#client_search_address_unit_number_controls'))
+  window.del($('#client_search_address_postal_code_controls'))
+  window.del($('#client_search_address_delivery_instructions_controls'))
+
 
 reset_modal =   '<div class="row">
             <div class="span8" id="process_inf">Inciando ...</div>
