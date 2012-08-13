@@ -6,6 +6,37 @@ jQuery ->
   assign_service_method($('#service_method_delivery'))
   assign_service_method($('#service_method_carry_out'))
   assign_service_method($('#service_method_pickup'))
+
+
+
+  if $('#client_search_panel').size() > 0
+    $('#client_search_panel').on 'click', '#import_client_button', (event) ->
+      event.preventDefault()
+      phone = $('#client_search_phone').val()
+      ext= $('#client_search_ext').val()
+      unless phone? or phone.length != 10
+        $("<div class='purr'>Debe ingresar un numero telefonico valido<div>").purr()
+      else
+        $("#import_client_modal").modal('show')
+        socket.emit 'clients:olo:index', {phone: window.NumberFormatter.to_clear(phone), ext: ext}, (response)->
+          $("#import_client_modal").find('.modal-footer').remove()
+          if response? and response.type == 'success'
+            if _.any(response.data)
+              clients = response.data
+              clients = [clients] unless _.isArray(clients)
+              $("#import_client_modal").find('.modal-body').html(JST['clients/import_client'](clients: clients))
+              $('#import_client_wizard').data('clients', clients)
+              $('#import_client_wizard').smartWizard
+                labelNext: 'Siguiente'
+                labelPrevious: 'Anterior'
+                labelFinish: 'Terminar'
+                onLeaveStep:leaveAStepCallback
+                onFinish: FinishCallBack
+            else
+              $("#import_client_modal").modal('hide')
+              $("<div class='purr'>No hay clientes en olo2 con este numero telefonico<div>").purr()
+          else
+            $("<div class='purr'>#{response.data}<div>").purr()
     
   $('.set_last_address').on 'click', (event)->
     target = $(event.currentTarget)
@@ -111,6 +142,128 @@ jQuery ->
       error: (response) ->
         window.show_alert(response.responseText, 'error')
 
+leaveAStepCallback = (obj)->
+  isStepValid = true
+  step_num = obj.attr('rel')
+  clients = $('#import_client_wizard').data('clients')
+  if step_num == '1' || step_num == 1
+    isStepValid = false if $('#step-1').find('input[type=radio]:checked').size() == 0
+    if isStepValid == false 
+      $('#import_client_wizard').smartWizard('showMessage','Debe selecionar un cliente primero')
+    else
+      $('#import_client_wizard').find('.msgBox').fadeOut("normal")
+      current_client = _.find clients, (client) -> client.id == Number($('#step-1').find('input[type=radio]:checked').val())
+      $('#import_client_wizard').smartWizard('showMessage',"Solor podra importar 4 de las #{current_client.addresses.length} direcciones de este cliente") if current_client.addresses > 4
+      _.each _.first(current_client.addresses, 4), (address) ->
+        $('#import_client_wizard').find("#import_address_list").find('.row').append(JST['clients/import_address'](address: address)) if $("#import_address_#{address.id}").size() == 0
+        $("#client_address_city_#{address.id}").select2
+            placeholder: "Seleccione una Ciudad"
+            data: _.map($('#client_search').find('fieldset').data('cities'), (c)-> {id: c.id, text: c.name})
+        $("#client_address_area_#{address.id}").select2
+          placeholder: "Seleccione un sector"
+          minimumInputLength: 2
+          ajax:
+            url: '/addresses/areas.json'
+            datatype: 'json'
+            data: (term, page)->
+              console.log address
+              q:term
+              city_id: $("#client_address_city_#{address.id}").val()
+            results: (areas, page)->
+              results: _.map(areas, (area)->
+                  {id: area.id, text: area.name}
+                )
+        $("#client_address_street_#{address.id}").select2
+          placeholder: "Seleccione una calle"
+          minimumInputLength: 1
+          ajax:
+            url: '/addresses/streets.json'
+            datatype: 'json'
+            data: (term, page)->
+              q:term
+              area_id: $("#client_address_area_#{address.id}").val()
+            results: (streets, page)->
+              results: $.map(streets, (street)->
+                  {id: street.id, text: street.name}
+                )
+  else if step_num == '2' || step_num == 2
+    if _.any(_.map($('#import_client_wizard').find("#import_address_list").find('.street_selection'), (street_el)-> $(street_el).select2('val')), (street_el_val)-> street_el_val == '')
+      $('#import_client_wizard').smartWizard('showMessage','Las direcciones donde no ha elegido una calle no serán importadas')
+    else
+      $('#import_client_wizard').find('.msgBox').fadeOut("normal")
+    current_client = _.find clients, (client) -> client.id == Number($('#step-1').find('input[type=radio]:checked').val())
+    _.each _.first(current_client.addresses, 4), (address) ->
+      $('#import_client_wizard').find("#import_phone_list").find('.row').append(JST['clients/import_phone'](address: address)) if $("#import_phone_#{address.id}").size() == 0
+  else if step_num == '3' || step_num == 3
+    if $('#import_client_wizard').find("#import_phone_list").find('input[type=checkbox]:checked').size() < 1
+      isStepValid = false
+      $('#import_client_wizard').smartWizard('showMessage','Debe importar al menos un numero telefonico')
+    else
+      $('#import_client_wizard').find('.msgBox').fadeOut("normal")
+  isStepValid
+  
+FinishCallBack = (obj)->
+  isValid = true
+  clients = clients = $('#import_client_wizard').data('clients')
+  current_client = _.find clients, (client) -> client.id == Number($('#step-1').find('input[type=radio]:checked').val())
+  address_obj_array = _.uniq(_.compact(_.map($('#import_client_wizard').find("#import_address_list").find('.street_selection'), (street_el)-> $(street_el).closest('ul')[0] if $(street_el).select2('val') !='')))
+  addresses = []
+  _.each address_obj_array, (address_obj)->
+    address =
+      client_id: current_client.id
+      street_id: $(address_obj).find('.street_selection:first').select2('val')
+      number: $(address_obj).find('.number_selected:first').text()
+      unit_type: $(address_obj).find('.unit_type_selected:first').text()
+      unit_number: $(address_obj).find('.unit_number_selected:first').text()
+      postal_code: $(address_obj).find('.postal_code_selected:first').text()
+      delivery_instructions: $(address_obj).find('.delivery_instructions_selected:first').text()
+    addresses.push address
+
+  phone_obj_array = _.uniq(_.compact(_.map($('#import_client_wizard').find("#import_phone_list").find('.phone_selection'), (phone_el)-> $(phone_el).closest('ul')[0] if $(phone_el).is(':checked'))))
+  phones = []
+  _.each phone_obj_array, (phone_obj)->
+    phone =
+      number: $(phone_obj).find('.number_selected:first').text()
+      ext: $(phone_obj).find('.ext_selected:first').text()
+    phones.push(phone)
+
+  new_client = 
+    first_name: current_client.name
+    last_name: current_client.last_name
+    email: current_client.email
+    idnumber: current_client.idnumber
+    active: (current_client.state != 'disabled')
+    phones_attributes: phones
+    addresses_attributes: addresses
+
+  if current_client? and  _.any(phones)
+    $.ajax
+      type: 'POST'
+      url: '/clients/import'
+      datatype: 'json'
+      data: {client: new_client}
+      beforeSend: (xhr)->
+        xhr.setRequestHeader("Accept", "application/json")
+      success: (saved_client)->
+        console.log saved_client
+        $("#import_client_modal").modal('hide')
+        clear_extra_data()
+        set_form_import(saved_client, _.find(phones, (phone)-> phone.number == $('#client_search_phone').val()))
+      error: (err)->
+        $('#import_client_wizard').smartWizard('showMessage',"Un error impidio la importación")
+  else
+    isValid = false
+  isValid
+
+set_form_import = (client, phone)->
+  $('#client_search_phone').val(window.to_phone(phone.number))
+  $('#client_search_ext').val(phone.ext)
+  $('#client_search_first_name').val(client.first_name)
+  $('#client_search_first_name').attr('readonly', 'readonly')
+  $('#client_search_last_name').val(client.last_name)
+  $('#client_search_last_name').attr('readonly', 'readonly')
+  $('#client_id').val(client.id)
+  window.show_popover($('#client_search_panel'), 'Cliente Importado', 'Presione ENTER para asignar el cliente importado a la orden actual.')
 
 client_create =  ()->
   $('#import_client').show()

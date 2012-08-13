@@ -12,6 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require ./setup_socket
 //= require bootstrap
 //= require jquery.ui.autocomplete
 //= require jquery.hoverpulse
@@ -29,4 +30,4 @@
 //= require_tree ./collections
 //= require_tree ./views
 //= require_tree ./routers
-//= require_tree .
+//= require_tree .  

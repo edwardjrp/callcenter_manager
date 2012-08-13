@@ -32,7 +32,7 @@ class ClientsController < ApplicationController
     @client = Client.new(params[:client])
     respond_to do |format|
       if @client.save
-        @clietnt.mark_as_imported
+        @client.mark_as_imported
         format.json{ render json: @client}
       else
         Rails.logger.debug @client.errors.full_messages
