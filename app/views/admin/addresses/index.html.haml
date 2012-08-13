@@ -16,4 +16,14 @@
           .tab-content
             - city.areas.each do |area|
               .tab-pane{id: "area_#{area.id}"}
-                hello
+                .tabbable.tabs-left#street_search_scroll
+                  %ul.nav.nav-tabs
+                    -area.streets.each do |street|
+                      %li
+                        %a{:href=>"#street_#{street.id}", :data=>{:toggle=>"tab"}}
+                          =street.name
+                  .tab-content
+                    -area.streets.each do |street|
+                      .tab-pane{id: "street_#{street.id}"}
+                        Stores
+
