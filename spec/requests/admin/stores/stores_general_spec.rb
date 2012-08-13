@@ -23,28 +23,28 @@ describe 'Stores general' do
   end
   
   
-  it "should edit in place", js: true do
-    visit admin_stores_path
-    within("#store_#{@store.id}") do 
-      find('span').click
-      page.should have_css('span>form.form_in_place')
-    end
-  end
+  # it "should edit in place", js: true do
+  #   visit admin_stores_path
+  #   within("#store_#{@store.id}") do 
+  #     find('span').click
+  #     page.should have_css('span>form.form_in_place')
+  #   end
+  # end
 
-  ['name', 'address'].each do |field|
-    it "should edit the #{field}", js: true do
-      visit admin_stores_path
-      within("#store_#{@store.id}") do 
-        find("span[data-attribute='#{field}']").click
-        page.execute_script("$('.form_in_place').find('input:first').val('edited #{field}')")
-        page.execute_script("$('.form_in_place').find('input:first').trigger('blur')")
-        page.should_not have_css('.form_in_place')
-        page.should have_content("edited #{field}")
-      end
-      visit admin_stores_path
-      within("#store_#{@store.id}"){ page.should have_content("edited #{field}")}
-    end
-  end
+  # ['name', 'address'].each do |field|
+  #   it "should edit the #{field}", js: true do
+  #     visit admin_stores_path
+  #     within("#store_#{@store.id}") do 
+  #       find("span[data-attribute='#{field}']").click
+  #       page.execute_script("$('.form_in_place').find('input:first').val('edited #{field}')")
+  #       page.execute_script("$('.form_in_place').find('input:first').trigger('blur')")
+  #       page.should_not have_css('.form_in_place')
+  #       page.should have_content("edited #{field}")
+  #     end
+  #     visit admin_stores_path
+  #     within("#store_#{@store.id}"){ page.should have_content("edited #{field}")}
+  #   end
+  # end
 
   
   context "when showing the products" do

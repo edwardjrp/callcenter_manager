@@ -25,7 +25,7 @@ class Client < ActiveRecord::Base
   has_many :addresses#, :inverse_of => :client
   has_many :carts
   accepts_nested_attributes_for :phones
-  accepts_nested_attributes_for :addresses, :reject_if => proc { |address| address['street_id'].nil? }
+  accepts_nested_attributes_for :addresses, :reject_if => proc { |address| address['street_id'].blank?  }
   attr_accessible :active, :email, :first_name, :idnumber, :last_name, :phones_attributes, :addresses_attributes
   
   def self.find_clients(client)
