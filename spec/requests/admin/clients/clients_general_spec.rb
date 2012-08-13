@@ -29,6 +29,6 @@ describe 'Stores general' do
 
   it "should render the import client link" do
     visit admin_clients_path
-    page.should have_content('Importar cliente')
+    page.should have_content('Clientes OLO')
   end
 end

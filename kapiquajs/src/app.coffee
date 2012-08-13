@@ -48,8 +48,14 @@ io.sockets.on "connection", (socket) ->
   socket.on 'chat', (data)->
     io.sockets.emit('chat', data);
 
-  socket.on "clients:olo:index", (data, responder) ->
+  socket.on "clients:olo:phone", (data, responder) ->
     Clients.olo_with_phone(data, responder, socket)  
+
+  socket.on "clients:olo:index", (data, responder) ->
+    Clients.olo_index(data, responder, socket)  
+
+  socket.on "clients:olo:show", (data, responder) ->
+    Clients.olo_show(data, responder, socket)  
     
   socket.on "cart:price", (data, responder) ->
     Carts.price(data, responder, socket)

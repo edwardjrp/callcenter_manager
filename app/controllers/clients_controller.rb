@@ -30,13 +30,18 @@ class ClientsController < ApplicationController
 
   def import
     @client = Client.new(params[:client])
+    present_client= Client.find_by_idnumber(params[:client][:idnumber])
     respond_to do |format|
-      if @client.save
-        @client.mark_as_imported
-        format.json{ render json: @client}
+      if present_client.nil?
+        if @client.save
+          @client.mark_as_imported
+          format.json{ render json: @client}
+        else
+          Rails.logger.debug @client.errors.full_messages
+          format.json{render json: @client.errors.full_messages.to_sentence , :status => 422}
+        end
       else
-        Rails.logger.debug @client.errors.full_messages
-        format.json{render json: @client.errors.full_messages.to_sentence , :status => 422}
+        format.json{render json: {msg: 'El cliente ya esta presente', present_client: present_client.to_json( include: [ addresses: {}, phones: {}] ), client: @client} , :status => 422}
       end
     end
   end

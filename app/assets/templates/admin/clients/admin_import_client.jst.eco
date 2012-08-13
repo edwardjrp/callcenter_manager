@@ -1,0 +1,26 @@
+<div id="admin_import_client_wizard" class="swMain">
+  <ul>
+    <li><a href="#step-1">
+          <label class="stepNumber">1</label>
+          <span class="stepDesc">
+             Ajustes<br />
+             <small>Ajuste de datos de direcciones</small>
+          </span>
+      </a></li>
+    <li><a href="#step-2">
+          <label class="stepNumber">2</label>
+          <span class="stepDesc">
+             Cofirmación<br />
+             <small>Datos de contacto</small>
+          </span>                   
+       </a></li>
+  </ul>
+  <div id="step-1">
+      <h2 class="StepTitle">Paso 1 - Edite los campos de las direcciones</h2> 
+      <div id='import_address_list'><div class = 'row'></div></div>
+  </div>                      
+  <div id="step-2">
+      <h2 class="StepTitle">Paso 2 - Confirme los numeros telefonicos</h2>   
+       <div id='import_phone_list'><div class = 'row'></div></div>
+  </div>
+</div>

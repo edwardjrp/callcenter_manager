@@ -48,5 +48,7 @@ body { padding-top: 100px; }
 @import './builder';
 @import './carts';
 @import './chat';
+@import './admin/clients';
+@import './clients';
 @import 'select2';
 @import 'smart_wizard';

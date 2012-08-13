@@ -19,8 +19,8 @@ jQuery ->
         $("<div class='purr'>Debe ingresar un numero telefonico valido<div>").purr()
       else
         $("#import_client_modal").modal('show')
-        socket.emit 'clients:olo:index', {phone: window.NumberFormatter.to_clear(phone), ext: ext}, (response)->
-          $("#import_client_modal").find('.modal-footer').remove()
+        $("#import_client_modal").find('.modal-footer').remove()
+        socket.emit 'clients:olo:phone', {phone: window.NumberFormatter.to_clear(phone), ext: ext}, (response)->
           if response? and response.type == 'success'
             if _.any(response.data)
               clients = response.data
@@ -205,7 +205,7 @@ leaveAStepCallback = (obj)->
   
 FinishCallBack = (obj)->
   isValid = true
-  clients = clients = $('#import_client_wizard').data('clients')
+  clients = $('#import_client_wizard').data('clients')
   current_client = _.find clients, (client) -> client.id == Number($('#step-1').find('input[type=radio]:checked').val())
   address_obj_array = _.uniq(_.compact(_.map($('#import_client_wizard').find("#import_address_list").find('.street_selection'), (street_el)-> $(street_el).closest('ul')[0] if $(street_el).select2('val') !='')))
   addresses = []

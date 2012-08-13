@@ -41,7 +41,11 @@ Kapiqua25::Application.routes.draw do
         post 'change_has_sides'
       end
     end
-    resources :clients
+    resources :clients do 
+      collection do 
+        get 'olo'
+      end
+    end
     resources :stores, :except=>[:edit]
     resources :store_products, :only =>[:create, :update]
     root :to => 'dashboard#index'

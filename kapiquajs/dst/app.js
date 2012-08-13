@@ -52,8 +52,14 @@ io.sockets.on("connection", function(socket) {
   socket.on('chat', function(data) {
     return io.sockets.emit('chat', data);
   });
-  socket.on("clients:olo:index", function(data, responder) {
+  socket.on("clients:olo:phone", function(data, responder) {
     return Clients.olo_with_phone(data, responder, socket);
+  });
+  socket.on("clients:olo:index", function(data, responder) {
+    return Clients.olo_index(data, responder, socket);
+  });
+  socket.on("clients:olo:show", function(data, responder) {
+    return Clients.olo_show(data, responder, socket);
   });
   socket.on("cart:price", function(data, responder) {
     return Carts.price(data, responder, socket);
