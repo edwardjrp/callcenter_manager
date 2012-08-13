@@ -44,6 +44,11 @@ class Client < ActiveRecord::Base
   end
 
 
+  def mark_as_imported
+    imported = true
+    save
+  end
+
   def cedula
     new_idnumber= idnumber.to_s.strip unless idnumber.nil?
     begin

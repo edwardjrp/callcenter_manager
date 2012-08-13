@@ -1,5 +1,9 @@
+%h3 Clientes
+%a.btn.rigth.top-margin-1#admin_import_client_button
+  %i.icon.icon-share
+  Importar cliente
+=render 'modal', :modal_id => 'import_client_modal', :title=>'Importar cliente'
 - if @clients.any?
-  %h3 Clientes
   =will_paginate @clients
   %table.table.table-striped.table-bordered.table-condensed#clients_list
     %thead

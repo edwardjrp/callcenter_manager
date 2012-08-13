@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120731123537) do
+ActiveRecord::Schema.define(:version => 20120813122906) do
 
   create_table "addresses", :force => true do |t|
     t.integer  "client_id"
@@ -74,6 +74,7 @@ ActiveRecord::Schema.define(:version => 20120731123537) do
     t.boolean  "completed",                 :default => false
     t.datetime "created_at",                                   :null => false
     t.datetime "updated_at",                                   :null => false
+    t.integer  "message_mask"
   end
 
   add_index "carts", ["client_id"], :name => "index_carts_on_client_id"
@@ -110,8 +111,9 @@ ActiveRecord::Schema.define(:version => 20120731123537) do
     t.integer  "phones_count"
     t.integer  "addresses_count"
     t.boolean  "active",            :default => true
-    t.datetime "created_at",                          :null => false
-    t.datetime "updated_at",                          :null => false
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
+    t.boolean  "imported",          :default => false
   end
 
   add_index "clients", ["email"], :name => "index_clients_on_email", :unique => true
