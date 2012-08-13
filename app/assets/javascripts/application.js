@@ -15,6 +15,8 @@
 //= require ./setup_socket
 //= require bootstrap
 //= require jquery.ui.autocomplete
+//= require jquery.ui.draggable
+//= require jquery.ui.droppable
 //= require jquery.hoverpulse
 //= require jquery.effects.highlight
 //= require select2

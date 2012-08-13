@@ -44,6 +44,9 @@ Kapiqua25::Application.routes.draw do
       end
     end
     resources :addresses
+    resources :cities, :only => [:create, :update, :destroy]
+    resources :areas, :only => [:create, :update, :destroy]
+    resources :streets, :only => [:create, :update, :destroy]
     resources :clients do 
       collection do 
         get 'olo'

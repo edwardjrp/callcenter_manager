@@ -5,7 +5,14 @@
   max-height: 500px;
   overflow:scroll;
 }
+.content_follow_wrapper{
+  top:190px;
+  position:absolute;
+}
 #street_search_scroll{
   max-height: 500px;
   overflow:scroll;
+  .drag_street{
+    border-bottom: 1px solid #DDD;
+  }
 }

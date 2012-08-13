@@ -1,0 +1,2 @@
+module Admin::StreetsHelper
+end
