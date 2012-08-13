@@ -2,6 +2,7 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 jQuery ->
+  socket = window.socket
   assign_client_to_current_cart()
   assign_service_method($('#service_method_delivery'))
   assign_service_method($('#service_method_carry_out'))

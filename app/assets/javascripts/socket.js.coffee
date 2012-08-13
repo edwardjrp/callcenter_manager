@@ -1,5 +1,5 @@
 jQuery ->
-  socket = window.socket#io.connect('http://localhost:3030')
+  socket = window.socket
   socket.on 'connect', ()->
     $('#chatdisplay').append($('<p>').append($('<em>').text(prepare("connected"))))
   
