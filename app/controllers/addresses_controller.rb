@@ -1,4 +1,3 @@
-
 class AddressesController < ApplicationController
 
   def create

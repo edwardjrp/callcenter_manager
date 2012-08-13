@@ -1,0 +1,19 @@
+.tabbable.tabs-left
+  %ul.nav.nav-tabs
+    - @cities.each do |city|
+      %li
+        %a{:href=>"#city_#{city.id}", :data=>{:toggle=>"tab"}}
+          = city.name
+  .tab-content
+    - @cities.each do |city|
+      .tab-pane{id: "city_#{city.id}"}
+        .tabbable.tabs-left#area_search_scroll
+          %ul.nav.nav-tabs
+            - city.areas.each do |area|
+              %li
+                %a{:href=>"#area_#{area.id}", :data=>{:toggle=>"tab"}}
+                  = area.name
+          .tab-content
+            - city.areas.each do |area|
+              .tab-pane{id: "area_#{area.id}"}
+                hello

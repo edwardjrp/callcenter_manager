@@ -12,9 +12,9 @@
     %tbody
       -@stores.each do |store|
         %tr{:data=>{'store-id'=> store.id}, :id=>dom_id(store)}
-          %td= best_in_place store, :name, :type => :input, :path=>[:admin, store]
-          %td= best_in_place store, :address, :type => :input, :path=>[:admin, store]
-          %td= best_in_place store, :ip, :type => :input, :path=>[:admin, store]
+          %td= store.name
+          %td= store.address
+          %td= store.ip
           %td= store.city.name
           %td= store.storeid
           %td
