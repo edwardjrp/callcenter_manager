@@ -41,7 +41,7 @@ class ClientsController < ApplicationController
           format.json{render json: @client.errors.full_messages.to_sentence , :status => 422}
         end
       else
-        format.json{render json: {msg: 'El cliente ya esta presente', present_client: present_client.to_json( include: [ addresses: {}, phones: {}] ), client: @client} , :status => 422}
+        format.json{render json: { msg: 'El cliente ya esta presente', present_client: present_client.to_json( include: [ addresses: {}, phones: {} ] ), client: params[:client]} , :status => 422}
       end
     end
   end

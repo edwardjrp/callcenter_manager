@@ -251,7 +251,11 @@ FinishCallBack = (obj)->
         clear_extra_data()
         set_form_import(saved_client, _.find(phones, (phone)-> phone.number == $('#client_search_phone').val()))
       error: (err)->
-        $('#import_client_wizard').smartWizard('showMessage',"Un error impidio la importación")
+        error = JSON.parse(err.responseText)
+        if error.msg?
+          $('#import_client_wizard').smartWizard('showMessage',"El cliente ya esta presente")
+        else
+          $('#import_client_wizard').smartWizard('showMessage',"Un error impidio la importación")
   else
     isValid = false
   isValid

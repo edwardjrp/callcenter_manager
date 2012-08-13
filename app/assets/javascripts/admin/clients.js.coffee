@@ -142,11 +142,23 @@ FinishCallBack = (obj)->
       beforeSend: (xhr)->
         xhr.setRequestHeader("Accept", "application/json")
       success: (saved_client)->
-        console.log saved_client
         $("#admin_import_client_modal").modal('hide')
         window.show_alert('El cliente se importo desde olo 2, por favor confirme que aparece en el listado de cleintes local', 'success')
       error: (err)->
-        $('#admin_import_client_wizard').smartWizard('showMessage',"Un error impidio la importación")
+        error = JSON.parse(err.responseText)
+        if error.msg?
+          merge(error.client, JSON.parse(error.present_client))
+        else
+          $('#admin_import_client_wizard').smartWizard('showMessage',"Un error impidio la importación")
   else
     isValid = false
   isValid
+
+  merge = (new_client, present_client)->
+    $('#admin_client_conflict_modal').modal('show')
+    $("#admin_client_conflict_modal").find('.modal-body').html(JST['admin/clients/admin_client_conflict'](new_client: new_client, present_client: present_client))
+    $('#admin_client_conflict_modal_button').on 'click', (event)->
+      console.log 'updated'
+      $('#admin_client_conflict_modal').modal('hide')
+      $("#admin_import_client_modal").modal('hide')
+      window.show_alert('Los datos ha sido actualizados', 'success')

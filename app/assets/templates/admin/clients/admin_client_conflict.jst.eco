@@ -1,0 +1,43 @@
+<h3>Datos personales</h3>
+<table class='table table-striped table-bordered table-condensed'>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Cliente Contact Center</th>
+      <th>Cliente Olo</th>
+      <th>Importar</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Nombre</td>
+      <td><%=@new_client.first_name%></td>
+      <td><%=@present_client.first_name%></td>
+      <td><input type='checkbox' class='overwrite_first_name'/></td>
+    </tr>
+    <tr>
+      <td>Apellido</td>
+      <td><%=@new_client.last_name%></td>
+      <td><%=@present_client.last_name%></td>
+      <td><input type='checkbox' class='overwrite_last_name'/></td>
+    </tr>
+    <tr>
+      <td>Cédula</td>
+      <td><%=window.to_idnumber(@new_client.idnumber)%></td>
+      <td><%=window.to_idnumber(@present_client.idnumber)%></td>
+      <td><input type='checkbox' class='overwrite_idnumber'/></td>
+    </tr>
+    <tr>
+      <td>Email</td>
+      <td><%=@new_client.email%></td>
+      <td><%=@present_client.email%></td>
+      <td><input type='checkbox' class='overwrite_email'/></td>
+    </tr>
+    <tr>
+      <td>Estado</td>
+      <td><%=@new_client.active%></td>
+      <td><%=@present_client.active%></td>
+      <td><input type='checkbox' class='overwrite_active'/></td>
+    </tr>
+  </tbody>
+</table>
