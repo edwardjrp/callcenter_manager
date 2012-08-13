@@ -1,0 +1,13 @@
+<div class= 'span3'>
+  <ul class='unstyled import_address_ul' id='import_address_<%=@address.id%>' data-address-id='<%=@address.id%>'>
+    <li><input type="hidden"  id="client_address_city_<%=@address.id%>" style=" display: none; "></li>
+    <li><input type="hidden"  id="client_address_area_<%=@address.id%>" style=" display: none; "></li>
+    <li><input type="hidden" class = 'street_selection' id="client_address_street_<%=@address.id%>" name="address[street_id]" style=" display: none; "></li>
+    <li><strong>Numero: </strong><span class='number_selected'><%=@address.number%></span></li>
+    <li><strong>Tipo: </strong><span class='unit_type_selected'><%=@address.kind%></span></li>
+    <li><strong>No. apartamento: </strong><span class='unit_number_selected'><%=@address.aptnumber%></span></li>
+    <li><strong>Codigo Postal: </strong><span class='postal_code_selected'><%=@address.zipcode%></span></li>
+    <li><strong>Instrucciones de entrega: </strong><span class='delivery_instructions_selected'><%=@address.delivery_instructions%></span></li>
+  </ul>
+  <hr/>
+</div>

@@ -1,0 +1,9 @@
+<div class= 'span3'>
+  <ul class='unstyled import_address_ul' id='import_phone_<%=@address.id%>' data-address-id='<%=@address.id%>' >
+    <li><input type="checkbox" class = 'phone_selection'  name="phone[<%=@address.phone%>]" value='t'> Importar</li>
+    <li><strong>Tipo: </strong><%=@address.kind%></li>
+    <li><strong>Numero: </strong><span class='number_selected'><%=window.to_phone @address.phone%></span></li>
+    <li><strong>Ext: </strong><span class='ext_selected'><%=@address.extension%></span></li>
+  </ul>
+  <hr/>
+</div>

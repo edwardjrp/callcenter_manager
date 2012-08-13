@@ -1,0 +1,56 @@
+<div id="import_client_wizard" class="swMain">
+  <ul>
+    <li><a href="#step-1">
+          <label class="stepNumber">1</label>
+          <span class="stepDesc">
+             Selección<br />
+             <small>Selección el cliente</small>
+          </span>
+      </a></li>
+    <li><a href="#step-2">
+          <label class="stepNumber">2</label>
+          <span class="stepDesc">
+             Ajustes<br />
+             <small>Ajuste de datos de direcciones</small>
+          </span>
+      </a></li>
+    <li><a href="#step-3">
+          <label class="stepNumber">3</label>
+          <span class="stepDesc">
+             Cofirmación<br />
+             <small>Datos de contacto</small>
+          </span>                   
+       </a></li>
+  </ul>
+  <div id="step-1">   
+      <h2 class="StepTitle">Paso 1 - selecione el cliente a importar</h2>
+      <table class='table table-striped'>
+        <thead>
+          <tr>
+            <th>selecionar</th>
+            <th>Cedula</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%for client in @clients:%>
+          <tr>
+            <td><input type="radio" name="client" value="<%=client.id%>"></td>
+            <td><%= window.to_idnumber(client.idnumber)%></td>
+            <td><%= client.name%></td>
+            <td><%= client.last_name%></td>
+          </tr>
+          <%end%>
+        </tbody>
+      </table>
+  </div>
+  <div id="step-2">
+      <h2 class="StepTitle">Paso 2 - Edite los campos de las direcciones</h2> 
+       <div id='import_address_list'><div class = 'row'></div></div>
+  </div>                      
+  <div id="step-3">
+      <h2 class="StepTitle">Paso 3 - Confirme los numeros telefonicos</h2>   
+       <div id='import_phone_list'><div class = 'row'></div></div>
+  </div>
+</div>
