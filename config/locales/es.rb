@@ -65,24 +65,6 @@
          "unit_type"=>"Tipo de Residencia",
          "number"=>"Numero",
          "unit_number"=>"Numero de residencia"
-      },
-      "group"=>{
-        "name"=>"Nombre"
-      },
-      "crust"=>{
-         "sername"=>"Nombre en pulse",
-         "image"=>"Imagen",
-         "name"=>"Nombre",
-         "description"=>"Descripción",
-      },
-      "province"=>{
-        "name"=>"nombre"
-      },
-      "operator"=>{
-        "name"=>"Nombres",
-        "last_name"=>"Apellidos",
-        "password"=>"Password",
-        "password_confirmation"=>"Confirmar password",
       }
     },
     "actions"=>{

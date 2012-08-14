@@ -1,3 +1,4 @@
+# encoding: utf-8
 # == Schema Information
 #
 # Table name: stores
@@ -17,7 +18,7 @@ require 'spec_helper'
 describe Store do
   describe "Validations" do
     before(:each) do
-      FactoryGirl.create :store
+      @store = FactoryGirl.create :store
     end
     it{should validate_presence_of :name}
     it{should validate_uniqueness_of :name}
@@ -26,6 +27,10 @@ describe Store do
     it{should validate_uniqueness_of :ip}
     it{should validate_presence_of :storeid}
     it{should validate_uniqueness_of :storeid}
+    it{should validate_format_of(:ip).with('255.255.255.255')}
+    it{should validate_format_of(:ip).not_with('256.255.255.255').with_message(/no es válido/)}
+    it{should validate_format_of(:ip).not_with('256.255.255. 255').with_message(/no es válido/)}
+    it{should validate_format_of(:ip).not_with('256.255.255255').with_message(/no es válido/)}
     it{should belong_to :city}
     it{should have_many :carts}
     it{should have_many :store_products}

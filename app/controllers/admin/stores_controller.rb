@@ -11,13 +11,16 @@ class Admin::StoresController < ApplicationController
 
   def update
     @store = Store.find(params[:id])
-    respond_to  do |format|
-      if @store.update_attributes(params[:store])
-        format.json {render json: @store }
-      else
-        format.json {render json: [@store.errors.full_messages.to_sentence], :status=>422 }
-      end
+    if @store.update_attributes(params[:store])
+      flash['success']='Tienda actualizada'
+      redirect_to admin_stores_path
+    else
+      render action: :edit
     end
+  end
+
+  def edit
+    @store = Store.find params[:id]
   end
 
   def show

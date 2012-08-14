@@ -52,7 +52,7 @@ Kapiqua25::Application.routes.draw do
         get 'olo'
       end
     end
-    resources :stores, :except=>[:edit]
+    resources :stores
     resources :store_products, :only =>[:create, :update]
     root :to => 'dashboard#index'
   end

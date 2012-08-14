@@ -20,5 +20,6 @@ class Store < ActiveRecord::Base
   validates :address, :presence =>true, :uniqueness => true
   validates :ip, :presence =>true, :uniqueness => true  
   validates :storeid, :presence =>true, :uniqueness => true
-  attr_accessible :address, :city_id, :ip, :name, :storeid
+  validates :ip , :format => {:with=>/^([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])$/}
+  attr_accessible :name, :address, :city_id, :ip, :storeid
 end

@@ -19,4 +19,5 @@
           %td= store.storeid
           %td
             = link_to 'Productos', [:admin,store]
+            = link_to 'Editar', [:edit, :admin,store]
   =will_paginate @stores
