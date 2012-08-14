@@ -29,17 +29,25 @@ describe CartProduct do
     before(:each) do
       @category = FactoryGirl.create :category
       @product_holder = FactoryGirl.create :product, :productcode => 'TEST', :category=> @category, :options => 'X'
-      @options_item = FactoryGirl.create :product, :productcode => 'X', :category=>@category, :options => 'OPTION'
-      # @cart_product = FactoryGirl.attributes_for :cart_product, :options => 'X', :product => @xholder
+      @options_item_x = FactoryGirl.create :product, :productcode => 'X', :category=>@category, :options => 'OPTION'
+      @options_item_sidble = FactoryGirl.create :product, :productcode => 'SIDBLE', :category=>@category, :options => 'OPTION'
     end
 
     ['','0.75','1.5','2','3'].each do |q|
       ['X','SIDBLE'].each do |p|
         it "should parse a #{p} with #{q} as quantity" do
+          q = Float(q) unless q.blank?
           @cart_product = FactoryGirl.attributes_for :cart_product, :options => "#{q}#{p}", :product => @product_holder
-          q = '1' if q == ''
+          q = '1.0' if q.blank?
           save_without_massasignment(CartProduct,@cart_product).parsed_options.should include(quantity: Float(q), code: p, part: 'W')
         end
+
+        it "should show niffty #{p} with #{q} as quantity" do
+          @cart_product = FactoryGirl.attributes_for :cart_product, :options => "#{Float(q)}#{p}", :product => @product_holder
+          q = '1' if q == ''
+          save_without_massasignment(CartProduct,@cart_product).niffty_options.should match("#{q}#{Product.find_by_productcode(p).productname}")
+        end
+
       end
     end
   end
