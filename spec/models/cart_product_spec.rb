@@ -50,5 +50,9 @@ describe CartProduct do
 
       end
     end
+
+    it "Should parse a product with sides" do
+      pending('Missing test code')
+    end
   end
 end
