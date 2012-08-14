@@ -60,7 +60,7 @@ Spork.prefork do
     config.use_transactional_fixtures = false
     # config.use_transactional_fixtures = true
     config.include(AuthenticationMacros)
-    
+    config.include(MassAssignmentMacros)
     # class ActiveRecord::Base
     #   mattr_accessor :shared_connection
     #   @@shared_connection = nil
