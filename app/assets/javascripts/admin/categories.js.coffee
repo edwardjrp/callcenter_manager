@@ -2,7 +2,7 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 jQuery ->
-  $('#categories_list select').select2()
+  $('#categories_list select').select2({placeholder: 'Seleccione un producto'})
   $('#categories_list select').change (event)->
     target = $(this)
     $.ajax
