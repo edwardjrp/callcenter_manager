@@ -30,17 +30,13 @@
           %small Confirme el resultado
   #step-1
     %h2.StepTitle Este es el cliente que sera actualizado
-    = search_form_for [:admin,@search],  url: merge_admin_clients_path, :html=>{:class=>'well form-search top-margin-1 filter span8'} do |f|
-      =f.text_field :first_name_cont, :class=> 'input-medium search-query', :placeholder=>'Nombre'
-      =f.text_field :last_name_cont, :class=> 'input-medium search-query', :placeholder=>'Apellido'
-      =f.text_field :idnumber_cont, :class=> 'input-medium search-query', :placeholder=>'Cedula'
-      =f.text_field :email_cont, :class=> 'input-medium search-query', :placeholder=>'Email'
-      =f.submit 'Buscar', :name=>nil, :class=> 'btn client_merge_search'
+    = render 'merge_search', :form_id =>'target_client_search'
     #choose_destination_client
 
   #step-2
     %h2.StepTitle Este cleinte sera eliminado y sus datos transferidos al anterior
-    / step content
+    = render 'merge_search', :form_id =>'target_client_search'
+    #choose_source_client
   #step-3
     %h2.StepTitle Elijas los valores que deben mantenerce
     / step content

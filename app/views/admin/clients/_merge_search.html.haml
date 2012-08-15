@@ -1,0 +1,5 @@
+= search_form_for [:admin,@search],  url: merge_admin_clients_path, :html=>{:class=>'well form-search top-margin-1 filter span8', :id=>form_id} do |f|
+  =f.text_field :idnumber_cont, :class=> 'input-medium search-query', :placeholder=>'Cedula'
+  =f.text_field :first_name_cont, :class=> 'input-medium search-query', :placeholder=>'Nombre'
+  =f.text_field :last_name_cont, :class=> 'input-medium search-query', :placeholder=>'Apellido'
+  =f.submit 'Buscar', :name=>nil, :class=> 'btn client_merge_search'

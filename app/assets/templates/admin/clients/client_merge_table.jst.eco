@@ -6,13 +6,15 @@
     <th>Apellido</th>
   </tr></thead>
   <tbody>
-    <tr data-client-id="2" id="client_2">
-      <th>
-        <input type="checkbox">
-      </th>
-      <td>Brionna</td>
-      <td>Mante</td>
-      <td>131-7280450-1</td>
-    </tr>
+    <%for client in @clients:%>
+      <tr  id="client_<%=client.id%>">
+        <th>
+          <input type="radio" name='client' class='client_selection' data-client-id="<%=client.id%>">
+        </th>
+        <td><%=window.to_idnumber( client.idnumber)%></td>
+        <td><%=client.first_name%></td>
+        <td><%=client.last_name%></td>
+      </tr>
+    <%end%>
   </tbody>
 </table>
