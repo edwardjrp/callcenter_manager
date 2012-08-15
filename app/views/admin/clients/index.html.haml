@@ -2,7 +2,7 @@
   %h3.bottom-margin-1 Clientes Contact Center
 .row
   .span2=link_to 'Clientes Olo', olo_admin_clients_path, class: 'btn btn-large'
-  .span2=link_to 'Fusión de clientes', olo_admin_clients_path, class: 'btn btn-large'
+  .span2=link_to 'Fusión de clientes', merge_admin_clients_path, class: 'btn btn-large'
 .row  
   = search_form_for [:admin,@search], :html=>{:class=>'well form-search top-margin-1 filter'} do |f|
     =f.text_field :first_name_cont, :class=> 'input-medium search-query', :placeholder=>'Nombre'

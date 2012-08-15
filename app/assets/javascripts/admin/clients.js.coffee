@@ -2,6 +2,13 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 jQuery ->
+  if $('#client_merge').size() > 0
+    $('#client_merge').smartWizard
+      labelNext: 'Siguiente'
+      labelPrevious: 'Anterior'
+      labelFinish: 'Terminar'
+
+
   if $('#olo_client_list').size() > 0
     socket = window.socket
     page = 1

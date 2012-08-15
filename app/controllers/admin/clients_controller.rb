@@ -13,4 +13,8 @@ class Admin::ClientsController < ApplicationController
 
   def olo
   end
+
+  def merge
+    @clients = Client.all
+  end
 end
