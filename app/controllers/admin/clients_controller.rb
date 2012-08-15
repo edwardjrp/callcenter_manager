@@ -15,6 +15,11 @@ class Admin::ClientsController < ApplicationController
   end
 
   def merge
-    @clients = Client.all
+    @search = Client.search(params[:q])
+    @clients= @search.result.limit(4)
+    respond_to do |format|
+      format.json{ render json: @clients.to_json( include: [ addresses: {}, phones: {} ] )}
+      format.html
+    end
   end
 end

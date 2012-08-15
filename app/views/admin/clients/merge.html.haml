@@ -4,39 +4,46 @@
       %a{:href => "#step-1"}
         %label.stepNumber 1
         %span.stepDesc
-          Step 1
+          Cliente 1
           %br/
-          %small Step 1 description
+          %small Seleccione un cliente objetivo
     %li
       %a{:href => "#step-2"}
         %label.stepNumber 2
         %span.stepDesc
-          Step 2
+          Cliente 2
           %br/
-          %small Step 2 description
+          %small Seleccione un segundo
     %li
       %a{:href => "#step-3"}
         %label.stepNumber 3
         %span.stepDesc
-          Step 3
+          Comparación
           %br/
-          %small Step 3 description
+          %small Coteje los datos
     %li
       %a{:href => "#step-4"}
         %label.stepNumber 4
         %span.stepDesc
-          Step 4
+          Resultado
           %br/
-          %small Step 4 description
+          %small Confirme el resultado
   #step-1
-    %h2.StepTitle Step 1 Content
-    / step content
+    %h2.StepTitle Este es el cliente que sera actualizado
+    = search_form_for [:admin,@search],  url: merge_admin_clients_path, :html=>{:class=>'well form-search top-margin-1 filter span8'} do |f|
+      =f.text_field :first_name_cont, :class=> 'input-medium search-query', :placeholder=>'Nombre'
+      =f.text_field :last_name_cont, :class=> 'input-medium search-query', :placeholder=>'Apellido'
+      =f.text_field :idnumber_cont, :class=> 'input-medium search-query', :placeholder=>'Cedula'
+      =f.text_field :email_cont, :class=> 'input-medium search-query', :placeholder=>'Email'
+      =f.submit 'Buscar', :name=>nil, :class=> 'btn client_merge_search'
+    #choose_destination_client
+
   #step-2
-    %h2.StepTitle Step 2 Content
+    %h2.StepTitle Este cleinte sera eliminado y sus datos transferidos al anterior
     / step content
   #step-3
-    %h2.StepTitle Step 3 Title
+    %h2.StepTitle Elijas los valores que deben mantenerce
     / step content
   #step-4
-    %h2.StepTitle Step 4 Title
+    %h2.StepTitle Por favor, verifique el resultado de la funsión
     / step content

@@ -14,7 +14,7 @@ describe 'Stores general' do
     page.should have_content('Fusión de clientes')
   end
 
-  it "should render the merge clients link" do
+  it "should render the merge clients wizard" do
     visit admin_clients_path
     click_link('Fusión de clientes')
     page.should have_css('.swMain')
