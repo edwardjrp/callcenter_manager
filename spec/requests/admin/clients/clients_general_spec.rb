@@ -21,15 +21,15 @@ describe 'Stores general' do
   it "show the client orders" do
     visit admin_clients_path
     within("#client_#{@client.id}") do 
-      page.should have_content('Ordenes')
-      click_link 'Ordenes'
+      page.should have_content('Detalles')
+      click_link 'Detalles'
     end
     page.should have_css('#carts_list')
   end
 
   it "should render the ransack filter" do
     visit admin_clients_path
-    page.should have_content('.filter')
+    page.should have_css('.filter')
   end
 
   it "should render the import client link" do
