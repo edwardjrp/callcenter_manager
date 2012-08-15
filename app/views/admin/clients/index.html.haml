@@ -1,5 +1,11 @@
-%h3 Clientes Contact Center
-=link_to 'Clientes Olo', olo_admin_clients_path, class:'margin-bottom-1 margin-top-1'
+%h3.bottom-margin-1 Clientes Contact Center
+=link_to 'Clientes Olo', olo_admin_clients_path
+= search_form_for [:admin,@search], :html=>{:class=>'well form-search top-margin-1'} do |f|
+  =f.text_field :first_name_cont, :class=> 'input-medium search-query', :placeholder=>'Nombre'
+  =f.text_field :last_name_cont, :class=> 'input-medium search-query', :placeholder=>'Apellido'
+  =f.text_field :idnumber_cont, :class=> 'input-medium search-query', :placeholder=>'Cedula'
+  =f.text_field :email_cont, :class=> 'input-medium search-query', :placeholder=>'Email'
+  =f.submit 'Buscar', :name=>nil, :class=> 'btn'
 - if @clients.any?
   =will_paginate @clients
   %table.table.table-striped.table-bordered.table-condensed#clients_list

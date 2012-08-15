@@ -2,7 +2,8 @@ class Admin::ClientsController < ApplicationController
   before_filter {|c| c.accessible_by([:admin], root_path)}
   
   def index
-    @clients= Client.order('created_at DESC').page(params[:page])
+    @search = Client.search(params[:q])
+    @clients= @search.result.page(params[:page])
   end
 
   def show

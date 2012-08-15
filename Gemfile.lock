@@ -201,6 +201,8 @@ GEM
       faye-websocket (~> 0.4, >= 0.4.4)
       http_parser.rb (~> 0.5.3)
       multi_json (~> 1.0)
+    polyamorous (0.5.0)
+      activerecord (~> 3.0)
     polyglot (0.3.3)
     pry (0.9.10)
       coderay (~> 1.0.5)
@@ -232,6 +234,10 @@ GEM
       thor (>= 0.14.6, < 2.0)
     raindrops (0.10.0)
     rake (0.9.2.2)
+    ransack (0.7.0)
+      actionpack (~> 3.0)
+      activerecord (~> 3.0)
+      polyamorous (~> 0.5.0)
     rb-fchange (0.0.5)
       ffi
     rb-fsevent (0.9.1)
@@ -362,6 +368,7 @@ DEPENDENCIES
   poltergeist
   pry-rails
   rails (= 3.2.7)
+  ransack
   role_model
   rspec-rails
   sass-rails (~> 3.2.3)

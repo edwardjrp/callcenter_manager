@@ -37,6 +37,7 @@ gem 'unicorn', :group=> :production
 # To use debugger
 # gem 'debugger'
 gem 'role_model'
+gem 'ransack'
 gem 'backbone-on-rails'
 gem 'savon'
 gem "cancan"

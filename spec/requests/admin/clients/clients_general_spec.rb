@@ -27,6 +27,11 @@ describe 'Stores general' do
     page.should have_css('#carts_list')
   end
 
+  it "should render the ransack filter" do
+    visit admin_clients_path
+    page.should have_content('.filter')
+  end
+
   it "should render the import client link" do
     visit admin_clients_path
     page.should have_content('Clientes Olo')
