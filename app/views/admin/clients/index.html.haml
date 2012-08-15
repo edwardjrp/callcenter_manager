@@ -18,5 +18,5 @@
           %td= client.email
           %td= number_to_cedula(client.idnumber)
           %td= link_to client.active.to_s, nil, class: "btn #{set_state_class(client.active)}"
-          %td= link_to 'Ordenes', [:admin,client]
+          %td= link_to 'Detalles', [:admin,client]
   =will_paginate @clients
