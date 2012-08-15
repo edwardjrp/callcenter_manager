@@ -1,2 +1,2 @@
-%h1 Admin::Stores#new
-%p Find me in app/views/admin/stores/new.html.haml
+=simple_form_for [:admin, @store], html: {class: 'form-horizontal'} do |f|
+  = render 'form', :f => f

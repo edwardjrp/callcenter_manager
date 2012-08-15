@@ -7,6 +7,17 @@ class Admin::StoresController < ApplicationController
   end
 
   def new
+    @store = Store.new
+  end
+
+  def create
+    @store= Store.new(params[:store])
+    if @store.save
+      flash['success'] ="Tienda creada"
+      redirect_to admin_stores_path
+    else
+      render action: :new 
+    end
   end
 
   def update

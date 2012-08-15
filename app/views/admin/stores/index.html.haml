@@ -1,5 +1,6 @@
-- if @stores.any?
-  %h3 Tiendas
+%h3.bottom-margin-1 Tiendas
+=link_to 'Agregar Tienda', new_admin_store_path, class: 'btn bottom-margin-1'
+- if @stores.any?  
   =will_paginate @stores
   %table.table.table-striped.table-bordered.table-condensed#stores_list
     %thead
@@ -9,6 +10,8 @@
       %th ciudad
       %th ID
       %th 
+      %th 
+      %th 
     %tbody
       -@stores.each do |store|
         %tr{:data=>{'store-id'=> store.id}, :id=>dom_id(store)}
@@ -17,7 +20,7 @@
           %td= store.ip
           %td= store.city.name
           %td= store.storeid
-          %td
-            = link_to 'Productos', [:admin,store]
-            = link_to 'Editar', [:edit, :admin,store]
+          %td= link_to 'Productos', [:admin,store]
+          %td= link_to 'Editar', [:edit, :admin,store]
+          %td= link_to 'Eliminar', [ :admin,store], :data => { :confirm => '¿Seguro que desea Eliminar esta tienda?' } , method: :delete
   =will_paginate @stores

@@ -50,6 +50,47 @@ describe 'Stores general' do
     page.should have_content('Tienda actualizada')
   end
 
+  it "should render the add store link" do
+    visit admin_stores_path
+    page.should have_content('Agregar Tienda')
+  end
+
+  it "should render the add store form" do
+    visit admin_stores_path
+    page.should click_link('Agregar Tienda')
+    page.should have_css('.simple_form')
+  end
+
+  it "should create a new store" do
+    visit new_admin_store_path
+    fill_in 'Name', with: 'Test store'
+    fill_in 'Address', with: 'Test address'
+    fill_in 'Ip', with: '127.0.0.1'
+    select @store.city.name, :from =>'store_city_id'
+    fill_in 'Storeid', with: '15871'
+    click_button 'Guardar Tienda'
+    page.should have_css('#stores_list')
+    page.should have_content('Test store')
+    page.should have_content("Tienda creada")
+  end
+
+  it "should show the delete store link" do
+    visit admin_stores_path
+    within("#store_#{@store.id}") do 
+      page.should have_content('Eliminar')
+    end
+  end
+
+  it "should the delete store", js: true do
+    visit admin_stores_path
+    name = @store.name
+    within("#store_#{@store.id}") do 
+      click_link('Eliminar')
+    end
+    page.should have_content(name)
+
+  end
+
   
   context "when showing the products" do
     it "should render the available product for the store" do
