@@ -8,19 +8,31 @@ jQuery ->
 
     socket.emit 'clients:olo:index', {page: page}, (response)->
       $('#olo_client_list').html(JST['admin/clients/olo_index'](clients: response.data, page: page))
+      if page == 1
+        $('#olo_client_list').find('.prev').addClass('disabled')
 
     $('#olo_client_list').on 'click', '.prev a', (event)->
       event.preventDefault()
+      prev_page = page
       page--
-      page = 1 if page < 1
-      socket.emit 'clients:olo:index', {page: page}, (response)->
-        $('#olo_client_list').html(JST['admin/clients/olo_index'](clients: response.data, page: page))
+      page = 1 if page < 2
+      unless prev_page == page
+        socket.emit 'clients:olo:index', {page: page}, (response)->
+          $('#olo_client_list').html(JST['admin/clients/olo_index'](clients: response.data))
+          if page == 1
+            $('#olo_client_list').find('.prev').addClass('disabled')
 
     $('#olo_client_list').on 'click', '.next a', (event)->
       event.preventDefault()
+      prev_page = page
       page++ 
       socket.emit 'clients:olo:index', {page: page}, (response)->
-        $('#olo_client_list').html(JST['admin/clients/olo_index'](clients: response.data, page: page))
+        if _.any(response.data)
+          $('#olo_client_list').html(JST['admin/clients/olo_index'](clients: response.data))
+        else
+          page = prev_page
+          $("<div class='purr'>No hay más datos disponibles<div>").purr()
+
 
     $('#olo_client_list').on 'click', '.olo_client_import', (event)->
       target = $(event.currentTarget)

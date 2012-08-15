@@ -1,13 +1,10 @@
 <div class="pagination">
   <ul>
     <li class="prev previous_page">
-      <a href="#">← Previous</a>
-    </li>
-    <li class="active">
-      <a rel="start" href="#"><%=@page%></a>
+      <a href="#">← Previous 30</a>
     </li>
     <li class="next next_page ">
-      <a rel="next" href="#">Next →</a>
+      <a rel="next" href="#">Next 30 →</a>
     </li>
   </ul>
 </div>
@@ -43,9 +40,6 @@
   <ul>
     <li class="prev previous_page">
       <a href="#">← Previous</a>
-    </li>
-    <li class="active">
-      <a rel="start" href="#"><%=@page%></a>
     </li>
     <li class="next next_page ">
       <a rel="next" href="#">Next →</a>
