@@ -11,9 +11,10 @@
 #  target_phone_id   :integer
 #  phones_count      :integer
 #  addresses_count   :integer
-#  active            :boolean
+#  active            :boolean          default(TRUE)
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
+#  imported          :boolean          default(FALSE)
 #
 
 class Client < ActiveRecord::Base

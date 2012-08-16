@@ -32,6 +32,7 @@
 #  completed                 :boolean          default(FALSE)
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
+#  message_mask              :integer
 #
 
 class Cart < ActiveRecord::Base
@@ -44,6 +45,7 @@ class Cart < ActiveRecord::Base
   belongs_to :store
   has_many :cart_products
   has_many :products, :through=> :cart_products
+  before_create :set_default_mailbox
   
   validates :user_id, presence: true
   
@@ -63,5 +65,46 @@ class Cart < ActiveRecord::Base
       self.service_method == self.class.service_methods[2]
   end
   
+  def self.valid_mailboxes
+     ['nuevos', 'archivados', 'eliminados', 'criticos']
+  end
+  
+  
+  def mailboxes=(mailboxes)
+    role = []
+    return role if mailboxes.nil?
+    role.push mailboxes if mailboxes.is_a? String
+    role = mailboxes.compact
+    self.message_mask = (role & self.class.valid_mailboxes).map { |r| 2**self.class.valid_mailboxes.index(r) }.sum
+  end
+
+  def mailboxes
+    self.class.valid_mailboxes.reject do |r|
+      ((message_mask || 0) & 2**self.class.valid_mailboxes.index(r)).zero?
+    end
+  end
+
+  def set_default_mailbox
+    self.mailboxes = ['nuevos']
+  end
+  
+  def archive!
+     self.mailboxes = ['archivados']
+     self.save
+  end
+
+  def trash!
+     self.mailboxes = ['eliminados']
+     self.save
+  end
+
+  def critical!
+    self.mailboxes = self.mailboxes.push('criticos')
+    self.save
+  end
+
+  def in?(mailbox)
+     self.mailboxes.include?(mailbox)
+  end
   
 end

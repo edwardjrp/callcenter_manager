@@ -2,6 +2,10 @@ Kapiqua25::Application.routes.draw do
   
   
 
+  get "carts/index"
+
+  get "carts/show"
+
   get 'login', to: "sessions#new", as: :login
   get 'logout', to: "sessions#destroy", as: :logout
   get 'builder', to: "builder#index", as: :builder
@@ -43,6 +47,7 @@ Kapiqua25::Application.routes.draw do
         post 'change_has_sides'
       end
     end
+    resources :carts
     resources :addresses
     resources :cities, :only => [:create, :update, :destroy]
     resources :areas, :only => [:create, :update, :destroy]

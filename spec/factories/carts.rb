@@ -2,5 +2,7 @@
 
 FactoryGirl.define do
   factory :cart do
+    association(:user)
+    association(:client)
   end
 end

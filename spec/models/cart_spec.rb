@@ -32,6 +32,7 @@
 #  completed                 :boolean          default(FALSE)
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
+#  message_mask              :integer
 #
 
 require 'spec_helper'
@@ -44,5 +45,38 @@ describe Cart do
     it{should belong_to :store}
     it{should have_many :cart_products}
     it{should have_many(:products).through(:cart_products)}
+  end
+
+
+  describe 'mailboxes' do
+    before(:each) do
+      @cart = FactoryGirl.create :cart
+    end
+
+    it "should return the available mailboxes" do
+      Cart.valid_mailboxes.should include('nuevos', 'archivados', 'eliminados', 'criticos')
+    end
+
+    it "should return nuevos if the cart if new" do
+      @cart.mailboxes.should include('nuevos')
+    end
+
+    it "should move to archivados" do
+      @cart.archive!
+      @cart.mailboxes.should_not include('nuevos')
+      @cart.mailboxes.should include('archivados')
+    end
+
+    it "should move to eliminados" do
+      @cart.trash!
+      @cart.mailboxes.should_not include('nuevos')
+      @cart.mailboxes.should include('eliminados')
+    end
+
+    it "should mark as criticos" do
+      @cart.critical!
+      @cart.mailboxes.should include('nuevos')
+      @cart.mailboxes.should include('criticos')
+    end
   end
 end

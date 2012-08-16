@@ -42,7 +42,7 @@ describe 'Stores general' do
     visit edit_admin_store_path(@store)
     page.should have_css('.simple_form')
     fill_in 'Name', with: 'edited name'
-    click_button 'Actualizar Tienda'
+    within('.simple_form'){find('.btn').click}
     page.should have_css('#stores_list')
     within("#store_#{@store.id}") do 
       page.should have_content('edited name')
@@ -68,7 +68,7 @@ describe 'Stores general' do
     fill_in 'Ip', with: '127.0.0.1'
     select @store.city.name, :from =>'store_city_id'
     fill_in 'Storeid', with: '15871'
-    click_button 'Guardar Tienda'
+    within('.simple_form'){find('.btn').click}
     page.should have_css('#stores_list')
     page.should have_content('Test store')
     page.should have_content("Tienda creada")
