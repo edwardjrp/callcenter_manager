@@ -1,2 +1,51 @@
-%h1 Admin::Carts#index
-%p Find me in app/views/admin/carts/index.html.haml
+.row
+  .span3
+    %h2 Ordenes
+.row
+  .span3
+    =select_tag :mailboxes, options_for_select(Cart.valid_mailboxes)
+.row
+  .span9
+    - if @carts.any?
+      =will_paginate @carts
+      %table.table.table-striped.table-bordered.table-condensed#cart_list
+        %thead
+          %th selección
+          %th ID
+          %th ID orden Pulse
+          %th Cliente
+          %th Agente
+          %th Telefono
+          %th 
+        %tbody
+          -@carts.each do |cart|
+            %tr{:data=>{'cart-id'=> cart.id}, :id=>dom_id(cart)}
+              %td
+                %input{type:'checkbox'}
+              %td= cart.id
+              %td= cart.store_order_id
+              %td
+                - if cart.client.present?
+                  = cart.client.full_name
+              %td= cart.user.full_name
+              %td
+                - if cart.client.present?
+                  = cart.client.last_phone
+              %td= link_to 'Detalles', [:admin,cart]
+      =will_paginate @carts
+
+  .span3
+    .row
+      .span3
+        .panel
+          %h3 Filtrar
+          .content
+            = search_form_for [:admin,@search], url: admin_carts_path, :html=>{:class=>'form-horizontal top-margin-1 filter'} do |f|
+              %fieldset 
+                =f.label :created_at_gteq, 'Creado entre'
+                =f.text_field :created_at_gteq, :class=> 'input-medium'
+                =f.label :created_at_lteq, 'y'
+                =f.text_field :created_at_lteq, :class=> 'input-medium'
+              .form-actions      
+                =f.submit 'Buscar', :name=>nil, :class=> 'btn'
+    .row

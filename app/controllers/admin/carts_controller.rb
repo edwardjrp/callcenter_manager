@@ -1,6 +1,7 @@
 class Admin::CartsController < ApplicationController
   def index
-    @carts = Cart.page(params[:page])
+    @search = Cart.search(params[:q])
+    @carts= @search.result.page(params[:page])
   end
 
   def show

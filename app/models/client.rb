@@ -44,6 +44,10 @@ class Client < ActiveRecord::Base
     Address.find_by_id self.target_address_id
   end
 
+  def last_phone
+    Phone.find_by_id self.target_phone_id
+  end
+
 
   def mark_as_imported
     imported = true
