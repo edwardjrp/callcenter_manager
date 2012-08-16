@@ -8,30 +8,40 @@
   .span9
     - if @carts.any?
       =will_paginate @carts
-      %table.table.table-striped.table-bordered.table-condensed#cart_list
-        %thead
-          %th selección
-          %th ID
-          %th ID orden Pulse
-          %th Cliente
-          %th Agente
-          %th Telefono
-          %th 
-        %tbody
-          -@carts.each do |cart|
-            %tr{:data=>{'cart-id'=> cart.id}, :id=>dom_id(cart)}
-              %td
-                %input{type:'checkbox'}
-              %td= cart.id
-              %td= cart.store_order_id
-              %td
-                - if cart.client.present?
-                  = cart.client.full_name
-              %td= cart.user.full_name
-              %td
-                - if cart.client.present?
-                  = cart.client.last_phone
-              %td= link_to 'Detalles', [:admin,cart]
+      .tabbable.tabs-left
+        %ul.nav.nav-tabs
+          - Cart.valid_mailboxes.each do |mailbox|
+            %li
+              %a{:href=>"#cart_#{mailbox}", :data=>{:toggle=>"tab"}}
+                = mailbox
+        .tab-content
+          - Cart.valid_mailboxes.each do |mailbox|
+            .tab-pane{id: "cart_#{mailbox}"}
+              %table.table.table-striped.table-bordered.table-condensed#cart_list
+                %thead
+                  %th selección
+                  %th ID
+                  %th ID orden Pulse
+                  %th Cliente
+                  %th Agente
+                  %th Telefono
+                  %th 
+                %tbody
+                  -@carts.each do |cart|
+                    - if cart.in?(mailbox)
+                      %tr{:data=>{'cart-id'=> cart.id}, :id=>dom_id(cart)}
+                        %td
+                          %input{type:'checkbox'}
+                        %td= cart.id
+                        %td= cart.store_order_id
+                        %td
+                          - if cart.client.present?
+                            = cart.client.full_name
+                        %td= cart.user.full_name
+                        %td
+                          - if cart.client.present?
+                            = cart.client.last_phone
+                        %td= link_to 'Detalles', [:admin,cart]
       =will_paginate @carts
 
   .span3
@@ -41,7 +51,9 @@
           %h3 Filtrar
           .content
             = search_form_for [:admin,@search], url: admin_carts_path, :html=>{:class=>'form-horizontal top-margin-1 filter'} do |f|
-              %fieldset 
+              %fieldset
+                =f.label :id_eq, 'id'
+                =f.text_field :id_eq, :class=> 'input-medium'
                 =f.label :created_at_gteq, 'Creado entre'
                 =f.text_field :created_at_gteq, :class=> 'input-medium'
                 =f.label :created_at_lteq, 'y'

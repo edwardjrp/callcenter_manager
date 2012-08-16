@@ -5,12 +5,11 @@ jQuery ->
   
   $('#utils .nav a').on 'click', (event)->
     event.preventDefault()
+    target = $(".tab-pane##{$(this).attr('href').replace(/#/,'')}")
     if $(this).closest('li').hasClass('active')
-      target = $(".tab-pane##{$(this).attr('href').replace(/#/,'')}")
       target.removeClass('active').hide()
       $(this).closest('li').removeClass('active')
     else
-      target= $(".tab-pane##{$(this).attr('href').replace(/#/,'')}")
       target.addClass('active').show()
       $(this).closest('li').addClass('active')
       

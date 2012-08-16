@@ -49,6 +49,12 @@ class Cart < ActiveRecord::Base
   
   validates :user_id, presence: true
   
+  scope :recents, where(message_mask: 1)
+  scope :archived, where(message_mask: 2)
+  scope :trashed, where(message_mask: 4)
+  scope :criticals, where('message_mask = 8 or message_mask = 9 or message_mask = 10 or message_mask = 12')
+
+
   def self.service_methods
     %w( delivery pickup carryout )
   end
@@ -66,16 +72,17 @@ class Cart < ActiveRecord::Base
   end
   
   def self.valid_mailboxes
+     #    1         2             4             8
      ['nuevos', 'archivados', 'eliminados', 'criticos']
   end
   
   
-  def mailboxes=(mailboxes)
-    role = []
-    return role if mailboxes.nil?
-    role.push mailboxes if mailboxes.is_a? String
-    role = mailboxes.compact
-    self.message_mask = (role & self.class.valid_mailboxes).map { |r| 2**self.class.valid_mailboxes.index(r) }.sum
+  def mailboxes=(sent_mailboxes)
+    current_mailboxes = []
+    return current_mailboxes if sent_mailboxes.blank?
+    current_mailboxes.push(sent_mailboxes) if sent_mailboxes.is_a? String
+    current_mailboxes = sent_mailboxes.compact
+    self.message_mask = (current_mailboxes & self.class.valid_mailboxes).map { |r| 2**self.class.valid_mailboxes.index(r) }.sum
   end
 
   def mailboxes
