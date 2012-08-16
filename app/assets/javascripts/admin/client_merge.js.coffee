@@ -21,11 +21,11 @@ jQuery ->
             else
               $('#client_merge').find('.msgBox').fadeOut("normal")
           when '2'
-            if _.isEmpty(source_client)
-              isValidStep = false
-              $('#client_merge').smartWizard('showMessage',"Debe elegir un cliente")
-            else
-              $('#client_merge').find('.msgBox').fadeOut("normal")
+            # if _.isEmpty(source_client)
+            isValidStep = false
+            $('#client_merge').smartWizard('showMessage',"Debe elegir un cliente")
+            # else
+            #   $('#client_merge').find('.msgBox').fadeOut("normal")
         isValidStep
 
   

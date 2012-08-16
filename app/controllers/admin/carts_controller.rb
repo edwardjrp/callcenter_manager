@@ -5,5 +5,6 @@ class Admin::CartsController < ApplicationController
   end
 
   def show
+    raise Exception.new (' Wrong number of arguments 1 for 0')
   end
 end
