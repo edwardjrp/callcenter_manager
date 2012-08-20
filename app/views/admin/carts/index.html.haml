@@ -5,7 +5,7 @@
   .span3
     =select_tag :mailboxes, options_for_select(Cart.valid_mailboxes)
 .row
-  .span9
+  .span9#carts_list
     - if @carts.any?
       =will_paginate @carts
       .tabbable.tabs-left
@@ -17,7 +17,7 @@
         .tab-content
           - Cart.valid_mailboxes.each do |mailbox|
             .tab-pane{id: "cart_#{mailbox}"}
-              %table.table.table-striped.table-bordered.table-condensed#cart_list
+              %table.table.table-striped.table-bordered.table-condensed
                 %thead
                   %th selección
                   %th ID

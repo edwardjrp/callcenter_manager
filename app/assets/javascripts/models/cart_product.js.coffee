@@ -49,15 +49,12 @@ class Kapiqua25.Models.CartProduct extends Backbone.RelationalModel
         presenter += option.part.replace(/1/,'Izquierda').replace(/2/, 'Derecha').replace(/W/,'Completa')
         window.strip(presenter)
     to_sentence presentation
-  
-  
-  socket: io.connect('http://localhost:3030')
     
   
   sync: (method, model, options)=>
     namespace = _.last(model.url().split('/'))
     current_cart = this.get('cart')
-    @socket.emit "#{namespace}:#{method}", this.toJSON(), (response) ->
+    window.socket.emit "#{namespace}:#{method}", this.toJSON(), (response) ->
       if response?
         if response.type? and response.type == 'success'
           current_cart.set(response.data)
