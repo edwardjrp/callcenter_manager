@@ -34,17 +34,12 @@
     #choose_destination_client
 
   #step-2
-    %h2.StepTitle Este cleinte sera eliminado y sus datos transferidos al anterior
+    %h2.StepTitle Este cliente será eliminado y sus datos serán transferidos al seleccionado en el paso 1
     = render 'merge_search', :form_id =>'target_client_search'
     #choose_source_client
   #step-3
     %h2.StepTitle Elijas los valores que deben mantenerce
-    %table.table
-      %thead
-        %th Campo
-        %th Cliente a fuente
-        %th Cliente a destino
-      %tbody#client_personal_data_merge
+    #client_personal_data_merge
   #step-4
     %h2.StepTitle Por favor, verifique el resultado de la funsión
     / step content

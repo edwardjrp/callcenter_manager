@@ -23,8 +23,12 @@ jQuery ->
               isValidStep = false
               $('#client_merge').smartWizard('showMessage',"Debe elegir un cliente")
             else
-              $('#client_merge').find('.msgBox').fadeOut("normal")
-              $('#step-3').find('#client_personal_data_merge').html(JST['admin/clients/client_merge_personal'](target_client: target_client, source_client: source_client))
+              if target_client.id == source_client.id
+                isValidStep = false
+                $('#client_merge').smartWizard('showMessage',"El cliente a importar debe ser diferente")
+              else
+                $('#client_merge').find('.msgBox').fadeOut("normal")
+                $('#step-3').find('#client_personal_data_merge').html(JST['admin/clients/client_merge_personal'](target_client: target_client, source_client: source_client))
         isValidStep
 
   
@@ -47,7 +51,6 @@ jQuery ->
 
     $('#step-2').on 'click','.client_merge_search', (event)->
       event.preventDefault()
-      console.log 'clicked'
       form =$('#step-2').find('form')
       $.ajax
         type: 'GET'
