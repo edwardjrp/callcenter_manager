@@ -2,6 +2,17 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 jQuery ->
+
+  $('.expand_phones').on 'click', (event)->
+      event.preventDefault()
+      target = $(event.currentTarget)
+      target.next().toggle()
+
+  $('#clear_phone_search').on 'click', (event)->
+    event.preventDefault()
+    target= $(event.currentTarget)
+    target.closest('form')[0].reset()
+
   if $('#olo_client_list').size() > 0
     socket = window.socket
     page = 1
