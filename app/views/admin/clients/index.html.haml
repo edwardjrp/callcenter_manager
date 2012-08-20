@@ -18,8 +18,8 @@
     %table.table.table-striped.table-bordered.table-condensed#clients_list
       %thead
         %th= sort_link @search, :id, "ID"
-        %th= sort_link @search, :first_name
-        %th= sort_link @search, :last_name
+        %th= sort_link @search, :first_name, 'Nombre'
+        %th= sort_link @search, :last_name, "Apellido"
         %th= sort_link @search, :email, "Email"
         %th= sort_link @search, :idnumber, "Cédula"
         %th= sort_link @search, :created_at, "Creación"
