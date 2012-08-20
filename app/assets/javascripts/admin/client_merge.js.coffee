@@ -29,6 +29,12 @@ jQuery ->
               else
                 $('#client_merge').find('.msgBox').fadeOut("normal")
                 $('#step-3').find('#client_personal_data_merge').html(JST['admin/clients/client_merge_personal'](target_client: target_client, source_client: source_client))
+          when '3'
+            unless mandatory_fields_check()
+              isValidStep = false
+              $('#client_merge').smartWizard('showMessage',"Debe elegir los valores a importar, algunos valores son obligatorios")
+            else
+              console.log $('#client_personal_data_merge').find("input[name='client_merge_first_name']:checked")
         isValidStep
 
   
@@ -72,4 +78,10 @@ jQuery ->
     $('#choose_source_client').on 'click' , '.client_selection', (event)->
       target = $(event.currentTarget)
       source_client = _.find($('#choose_source_client').data('clients'), (client)-> client.id ==  $('#choose_source_client').find('input[type=radio]:checked').data('client-id'))
+
+  mandatory_fields_check = ()->
+    isValid = true
+    isValid = false if $('#client_personal_data_merge').find("input[name='client_merge_first_name']:checked").length == 0
+    isValid = false if $('#client_personal_data_merge').find("input[name='client_merge_last_name']:checked").length == 0
+    isValid    
 
