@@ -7,44 +7,44 @@
   <tbody>
     <tr>
       <th>Nombre:</th>
-      <td>
+      <td data-client-first-name = '<%=@source_client.first_name%>'>
         <input type='radio' name='client_merge_first_name'/>
         <%=@source_client.first_name%>
       </td>
-      <td>
+      <td data-client-first-name = '<%=@target_client.first_name%>'>
         <input type='radio' name='client_merge_first_name'/>
         <%=@target_client.first_name%>
       </td>
     <tr/>
     <tr>
       <th>Apellido:</th>
-      <td>
+      <td data-client-last-name = '<%=@source_client.last_name%>'>
         <input type='radio' name='client_merge_last_name'/>
         <%=@source_client.last_name%>
       </td>
-      <td>
+      <td data-client-last-name = '<%=@target_client.last_name%>'>
         <input type='radio' name='client_merge_last_name'/>
         <%=@target_client.last_name%>
       </td>
     <tr/>
     <tr>
       <th>Cédula:</th>
-      <td>
+      <td data-client-idnumber = '<%=@source_client.idnumber%>'>
         <input type='radio' name='client_merge_idnumber'/>
         <%=window.to_idnumber(@source_client.idnumber)%>
       </td>
-      <td>
+      <td data-client-idnumber = '<%=@target_client.idnumber%>'>
         <input type='radio' name='client_merge_idnumber'/>
         <%=window.to_idnumber(@target_client.idnumber)%>
       </td>
     <tr/>
     <tr>
       <th>Email:</th>
-      <td>
+      <td data-client-email = '<%=@source_client.email%>'>
         <input type='radio' name='client_merge_email'/>
         <%=@source_client.email%>
       </td>
-      <td>
+      <td data-client-email = '<%=@source_client.email%>'>
         <input type='radio' name='client_merge_email'/>
         <%=@target_client.email%>
       </td>

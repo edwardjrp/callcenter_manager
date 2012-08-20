@@ -3,6 +3,7 @@ jQuery ->
   if $('#client_merge').size() > 0
     target_client = {}
     source_client = {}
+    merged_client = {}
 
     $('#client_merge').smartWizard
       labelNext: 'Siguiente'
@@ -34,7 +35,9 @@ jQuery ->
               isValidStep = false
               $('#client_merge').smartWizard('showMessage',"Debe elegir los valores a importar, algunos valores son obligatorios")
             else
-              console.log $('#client_personal_data_merge').find("input[name='client_merge_first_name']:checked")
+              $('#client_merge').find('.msgBox').fadeOut("normal")
+              build_merger_client()
+              console.log merged_client
         isValidStep
 
   
@@ -83,5 +86,11 @@ jQuery ->
     isValid = true
     isValid = false if $('#client_personal_data_merge').find("input[name='client_merge_first_name']:checked").length == 0
     isValid = false if $('#client_personal_data_merge').find("input[name='client_merge_last_name']:checked").length == 0
+    isValid = false if $('.merge_phone_selection:checked').length == 0
     isValid    
 
+  build_merger_client = ()->
+    merged_client.first_name = $('#client_personal_data_merge').find("input[name='client_merge_first_name']:checked").closest('td').data('client-first-name')
+    merged_client.last_name = $('#client_personal_data_merge').find("input[name='client_merge_last_name']:checked").closest('td').data('client-last-name')
+    merged_client.idnumber = $('#client_personal_data_merge').find("input[name='client_merge_idnumber']:checked").closest('td').data('client-idnumber')
+    merged_client.email = $('#client_personal_data_merge').find("input[name='client_merge_email']:checked").closest('td').data('client-email')
