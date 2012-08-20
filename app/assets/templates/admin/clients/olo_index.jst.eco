@@ -36,9 +36,9 @@
 </table>
 <ul class ='pager'>
   <li class="prev previous">
-    <a href="#">← Previous</a>
+    <a href="#">← Previous 30</a>
   </li>
   <li class="next">
-    <a rel="next" href="#">Next →</a>
+    <a rel="next" href="#">Next 30 →</a>
   </li>
 </ul>
