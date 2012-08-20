@@ -24,6 +24,7 @@ jQuery ->
               $('#client_merge').smartWizard('showMessage',"Debe elegir un cliente")
             else
               $('#client_merge').find('.msgBox').fadeOut("normal")
+              $('#step-3').find('#client_personal_data_merge').html(JST['admin/clients/client_merge_personal'](target_client: target_client, source_client: source_client))
         isValidStep
 
   
