@@ -15,13 +15,8 @@ describe 'Stores general' do
   it "should render the stores listing" do
     visit admin_stores_path
     page.should have_css('#stores_list')
-  end
-
-  it "should render the test store" do
-    visit admin_stores_path
     page.should have_content('test store')
   end
-  
   
   it "should render the edit link" do
     visit admin_stores_path
@@ -87,8 +82,8 @@ describe 'Stores general' do
     within("#store_#{@store.id}") do 
       click_link('Eliminar')
     end
-    page.should have_content(name)
-
+    page.should_not have_content(name)
+    page.should have_content('Tienda eliminada')
   end
 
   

@@ -28,7 +28,8 @@ class Client < ActiveRecord::Base
   accepts_nested_attributes_for :phones
   accepts_nested_attributes_for :addresses, :reject_if => proc { |address| address['street_id'].blank?  }
   attr_accessible :active, :email, :first_name, :idnumber, :last_name, :phones_attributes, :addresses_attributes
-  
+  self.per_page = 15
+
   def self.find_clients(client)
     clients = self.scoped
     # clients = clients.merge(self.joins(:phones).where('phones.number like ?', "#{client[:phone]}%")) if client.present? && client[:phone].present?

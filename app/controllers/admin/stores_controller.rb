@@ -38,4 +38,14 @@ class Admin::StoresController < ApplicationController
     @store = Store.find(params[:id])
     @products = Product.page(params[:page])
   end
+
+  def destroy
+    @store = Store.find params[:id]
+    if @store.destroy
+      flash[:success]='Tienda eliminada'
+    else
+      flash[:error]=@store.errors.full_message.to_sentence
+    end
+    redirect_to admin_stores_path
+  end
 end

@@ -44,3 +44,5 @@
 - <del>aggregating items should check binding id to see if we are adding to a combined element</del>
 
 - back  links missing in admin section
+
+- Implemento dicontinued store and products

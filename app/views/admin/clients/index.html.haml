@@ -14,19 +14,23 @@
     =will_paginate @clients
     %table.table.table-striped.table-bordered.table-condensed#clients_list
       %thead
-        %th Nombre
-        %th Apellido
-        %th Email
-        %th Cédula
+        %th= sort_link @search, :id, "ID"
+        %th= sort_link @search, :first_name, "Nombre"
+        %th= sort_link @search, :last_name, "Apellido"
+        %th= sort_link @search, :email, "Email"
+        %th= sort_link @search, :idnumber, "Cédula"
+        %th= sort_link @search, :created_at, "Creación"
         %th Activo
         %th 
       %tbody
         -@clients.each do |client|
           %tr{:data=>{'client-id'=> client.id}, :id=>dom_id(client)}
+            %td= client.id
             %td= client.first_name
             %td= client.last_name
             %td= client.email
             %td= number_to_cedula(client.idnumber)
+            %td= l client.created_at, :format => :short
             %td= link_to client.active.to_s, nil, class: "btn #{set_state_class(client.active)}"
             %td= link_to 'Detalles', [:admin,client]
     =will_paginate @clients
