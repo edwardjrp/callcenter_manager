@@ -101,7 +101,7 @@
       <td>
         <%for address in @source_client.addresses:%>
           <input type='checkbox' class='merge_address_selection'/>
-          <address>
+          <address data-client-address-id='<%=address.id%>'>
           <strong><%=address.unit_type%></strong><br>
           <%=address.street.name%>, No. <%=address.number%><br>
           <%=address.street.area.name%>, <%=address.street.area.city.name%><br>
@@ -113,7 +113,7 @@
       <td>
         <%for address in @target_client.addresses:%>
           <input type='checkbox' class='merge_address_selection'/>
-          <address>
+          <address data-client-address-id='<%=address.id%>'>
           <strong><%=address.unit_type%></strong><br>
           <%=address.street.name%>, No. <%=address.number%><br>
           <%=address.street.area.name%>, <%=address.street.area.city.name%><br>
