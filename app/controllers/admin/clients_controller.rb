@@ -18,7 +18,7 @@ class Admin::ClientsController < ApplicationController
     @search = Client.search(params[:q])
     @clients= @search.result.limit(4)
     respond_to do |format|
-      format.json{ render json: @clients.to_json( include: { addresses: {}, phones: {} } )}
+      format.json{ render json: @clients.to_json( include: { addresses: { include: { street: { include: { area: { include: { city: {}}}}}}}, phones: {} } )}
       format.html
     end
   end

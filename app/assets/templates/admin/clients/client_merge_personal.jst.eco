@@ -54,6 +54,10 @@
       <th>Telefonos:</th>
       <td>
         <table>
+          <thead>
+            <th>Numero</th>
+            <th>Extension</th>
+          </thead>
           <tbody>
             <%for phone in @source_client.phones:%>
               <tr data-client-phone-id='<%=phone.id%>'> 
@@ -62,7 +66,7 @@
                   <%=window.to_phone(phone.number)%>
                 </td>
                 <%if phone.ext?:%>
-                  <td>Ext. <%=phone.ext%></td>
+                  <td><%=phone.ext%></td>
                 <%end%>
               </tr>
             <%end%>
@@ -71,6 +75,10 @@
       </td>
       <td>
         <table>
+          <thead>
+            <th>Numero</th>
+            <th>Extension</th>
+          </thead>
           <tbody>
             <%for phone in @target_client.phones:%>
               <tr data-client-phone-id='<%=phone.id%>' >
@@ -79,7 +87,7 @@
                 <%=window.to_phone(phone.number)%>
               </td>
               <%if phone.ext?:%>
-                <td>Ext. <%=phone.ext%></td>
+                <td><%=phone.ext%></td>
               <%end%>
               </tr>
             <%end%>
@@ -91,42 +99,28 @@
     <tr>
       <th>Direcciones:</th>
       <td>
-        <table>
-          <tbody>
-            <%for address in @source_client.addresses:%>
-              <tr data-client-address-id='<%=address.id%>'> 
-                <td>
-                  <input type='checkbox' class='merge_address_selection'/>
-                  <%=address.number%>
-                </td>
-              </tr>
-              <tr > 
-                <td>
-                  <%=address.unit_type%>
-                </td>
-              </tr>
-            <%end%>
-          </tbody>
-        </table>
+        <%for address in @source_client.addresses:%>
+          <input type='checkbox' class='merge_address_selection'/>
+          <address>
+          <strong><%=address.unit_type%></strong><br>
+          <%=address.street.name%>, No. <%=address.number%><br>
+          <%=address.street.area.name%>, <%=address.street.area.city.name%><br>
+          <abbr title="Codigo postal">CP:<%=address.postal_code%></abbr><br>
+          <%=address.delivery_instructions%>
+          </address>
+        <%end%>
       </td>
       <td>
-        <table>
-          <tbody>
-            <%for address in @target_client.addresses:%>
-              <tr data-client-address-id='<%=address.id%>'> 
-                <td>
-                  <input type='checkbox' class='merge_address_selection'/>
-                  <%=address.number%>
-                </td>
-              </tr>
-              <tr > 
-                <td>
-                  <%=address.unit_type%>
-                </td>
-              </tr>
-            <%end%>
-          </tbody>
-        </table>
+        <%for address in @target_client.addresses:%>
+          <input type='checkbox' class='merge_address_selection'/>
+          <address>
+          <strong><%=address.unit_type%></strong><br>
+          <%=address.street.name%>, No. <%=address.number%><br>
+          <%=address.street.area.name%>, <%=address.street.area.city.name%><br>
+          <abbr title="Codigo postal">CP:<%=address.postal_code%></abbr><br>
+          <%=address.delivery_instructions%>
+          </address>
+        <%end%>
       </td>
     <tr/>
 
