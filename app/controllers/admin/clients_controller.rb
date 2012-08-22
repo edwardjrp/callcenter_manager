@@ -27,8 +27,10 @@ class Admin::ClientsController < ApplicationController
     @client = Client.find(params[:merged_client][:id])
     respond_to do |format|
       if @client.merge(params[:merged_client], params[:source_client_id])
+        flash[:success]='Clientes fusionados correctamente.'
         format.json{render json: @client}
       else
+        flash[:error]="Un error ha impedido completar el proceso"
         format.json{render json: @client.errors.full_messages.to_sentence}
       end
     end

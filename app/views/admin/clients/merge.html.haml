@@ -30,13 +30,17 @@
           %small Confirme el resultado
   #step-1
     %h2.StepTitle Este es el cliente que sera actualizado
-    = render 'merge_search', :form_id =>'target_client_search'
-    #choose_destination_client
+    .row
+      .span8= render 'merge_search', :form_id =>'target_client_search'
+    .row  
+      #choose_destination_client.span8
 
   #step-2
     %h2.StepTitle Este cliente será eliminado y sus datos serán transferidos al seleccionado en el paso 1
-    = render 'merge_search', :form_id =>'source_client_search'
-    #choose_source_client
+    .row
+      .span8= render 'merge_search', :form_id =>'source_client_search'
+    .row
+      #choose_source_client.span8
   #step-3
     %h2.StepTitle Elijas los valores que deben mantenerce
     #client_personal_data_merge
