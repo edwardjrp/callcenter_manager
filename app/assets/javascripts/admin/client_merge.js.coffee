@@ -40,6 +40,7 @@ jQuery ->
               $('#merge_client_confirmation').html(JST['admin/clients/merged_client'](merged_client:merged_client))
         isValidStep
       onFinish: (obj)->
+        $('.actionBar').find('a').addClass('buttonDisabled')
         $.ajax
           type: 'PUT'
           url: '/admin/clients/merge_clients'
@@ -48,9 +49,9 @@ jQuery ->
           beforeSend: (xhr)->
             xhr.setRequestHeader("Accept", "application/json")
           success: (response) ->
-            console.log response
+            window.location = '/admin/clients'
           error: (response) ->
-            console.log response
+            $('#client_merge').smartWizard('showMessage',"Un error ha impedido completar el proceso")
 
 
   

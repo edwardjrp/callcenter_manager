@@ -3,7 +3,7 @@ class Admin::ClientsController < ApplicationController
   
   def index
     @search = Client.search(params[:q])
-    @clients= @search.result.page(params[:page])
+    @clients= @search.result(:distinct => true).page(params[:page])
   end
 
   def show
@@ -16,7 +16,7 @@ class Admin::ClientsController < ApplicationController
 
   def merge
     @search = Client.search(params[:q])
-    @clients= @search.result.limit(4)
+    @clients= @search.result(:distinct => true).limit(4)
     respond_to do |format|
       format.json{ render json: @clients.to_json( include: { addresses: { include: { street: { include: { area: { include: { city: {}}}}}}}, phones: {} } )}
       format.html

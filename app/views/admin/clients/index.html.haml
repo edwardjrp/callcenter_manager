@@ -28,6 +28,7 @@
         %th 
       %tbody
         -@clients.each do |client|
+          =client.inspect
           %tr{:data=>{'client-id'=> client.id}, :id=>dom_id(client)}
             %td= client.id
             %td= client.first_name
