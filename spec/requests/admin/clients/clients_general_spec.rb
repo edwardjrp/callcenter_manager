@@ -52,6 +52,7 @@ describe 'Clients general' do
       fill_in 'q_phones_number_start', with: search_phone.number
       click_button 'Buscar'
       within('#clients_list'){page.should have_content(search_client.first_name)}
+      within('#clients_list'){page.should_not have_content(@client.first_name)}
     end
   end
 end
