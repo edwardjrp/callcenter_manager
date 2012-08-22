@@ -22,7 +22,7 @@ require 'spec_helper'
 describe Client do
   describe 'Validations' do
     before(:each) do
-      @client = FactoryGirl.create :client
+      @client = FactoryGirl.create :client,  first_name: 'test'
     end
     
     it{should validate_presence_of :first_name}
@@ -41,6 +41,27 @@ describe Client do
     
     it " full_name: should return the concatenation of first_name and last_name" do
       @client.full_name.should == "#{@client.first_name} #{@client.last_name}"  
+    end
+  end
+
+  describe "when mergin clients" do
+    before(:each) do
+      @client = FactoryGirl.create :client,  first_name: 'test'
+      @client_source = FactoryGirl.create :client, first_name: 'test source'
+      @phone = FactoryGirl.create :phone, client: @client_source
+      @client_attr = {"first_name"=>@client_source.first_name,"last_name"=>@client_source.last_name,"email"=>@client_source.email,"idnumber"=>@client_source.idnumber, 'phones_attributes' => { '0'=> @phone.attributes}}
+    end
+
+    it "should merge the 2 clients " do
+        @client.first_name.should == 'test'
+        expect{@client.merge(@client_attr, @client_source.id)}.to change{Client.count}.by(-1)
+        @client.first_name.should == 'test source'
+    end
+
+    it "should delete the source client" do
+      source_id = @client_source.id
+      @client.merge(@client_attr, @client_source.id)
+      Client.exists?(source_id).should be_false
     end
   end
 end

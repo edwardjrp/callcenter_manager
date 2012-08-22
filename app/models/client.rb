@@ -56,7 +56,31 @@ class Client < ActiveRecord::Base
   end
 
   def merge(attr, source_id)
-    transaction do 
+    self.transaction do
+      self.first_name = attr['first_name']
+      self.last_name = attr['last_name']
+      self.email = attr['email']
+      self.idnumber = attr['idnumber']
+      if attr['phones_attributes'].present? && attr['phones_attributes'].any?
+        attr['phones_attributes'].each_value do |phone_attr|
+          if Phone.exists?(phone_attr['id'])
+            phone = Phone.find_by_id(phone_attr['id'])
+            phone.client_id = self.id 
+            phone.save
+          end
+        end
+      end
+      if attr['addresses_attributes'].present? && attr['addresses_attributes'].any?
+        attr['addresses_attributes'].each_value do |address_attr|
+          if Address.exists?(address_attr['id'])
+            address = Address.find_by_id(address_attr['id'])
+            address.client_id = self.id 
+            address.save
+          end
+        end
+      end
+      self.class.find_by_id(source_id).destroy if self.class.exists?(source_id)
+      self.save
     end
   end
 
