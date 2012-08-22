@@ -1,0 +1,58 @@
+<h3 class='margin-bottom-1'>Datos personales</h3>
+<table class = 'table'>
+  <tr>
+    <th>Nombre:</th>
+    <td >
+      <%=@merged_client.first_name%>
+    </td>
+  <tr/>
+  <tr>
+    <th>Apellido:</th>
+    <td >
+        <%=@merged_client.last_name%>
+    </td>
+  </tr>
+  <tr>
+    <th>Cédula:</th>
+    <td >
+      <%=window.to_idnumber(@merged_client.idnumber)%>
+    </td>
+  <tr/>
+  <tr>
+    <th>Email:</th>
+    <td >
+        <%=@merged_client.email%>
+    </td>
+  <tr/>
+</table>
+<h3 class='margin-bottom-1'>Telefonos</h3>
+<table class='table'>
+  <thead>
+    <th>Numero</th>
+    <th>Extensión</th>
+  </thead>
+  <tbody>
+    <%for phone in @merged_client.phones_attributes:%>
+      <tr>
+        <td >
+          <%=window.to_phone(phone.number)%>
+        </td>
+        <%if phone.ext?:%>
+          <td >
+              <%=phone.ext%>
+          </td>
+        <%end%>
+      </tr>
+    <%end%>
+  </tbody>
+</table>
+<h3 class='margin-bottom-1'>Direcciones:</h3>
+<%for address in @merged_client.addresses_attributes:%>
+    <address data-client-address-id='<%=address.id%>'>
+    <strong><%=address.unit_type%></strong><br>
+    <%=address.street.name%>, No. <%=address.number%><br>
+    <%=address.street.area.name%>, <%=address.street.area.city.name%><br>
+    <abbr title="Codigo postal">CP:<%=address.postal_code%></abbr><br>
+    <%=address.delivery_instructions%>
+    </address>
+<%end%>

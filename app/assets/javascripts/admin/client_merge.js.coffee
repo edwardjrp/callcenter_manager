@@ -38,6 +38,7 @@ jQuery ->
               $('#client_merge').find('.msgBox').fadeOut("normal")
               build_merger_client()
               console.log merged_client
+              $('#merge_client_confirmation').html(JST['admin/clients/merged_client'](merged_client:merged_client))
         isValidStep
 
   
@@ -95,6 +96,6 @@ jQuery ->
     merged_client.idnumber = $('#client_personal_data_merge').find("input[name='client_merge_idnumber']:checked").closest('td').data('client-idnumber')
     merged_client.email = $('#client_personal_data_merge').find("input[name='client_merge_email']:checked").closest('td').data('client-email')
     selected_phones = _.map($('.merge_phone_selection:checked').closest('tr'), (select_phone)-> $(select_phone).data('client-phone-id'))
-    merged_client.phone_attributes = _.filter(_.union(target_client.phones , source_client.phones), (phone)-> _.include( selected_phones,phone.id))
+    merged_client.phones_attributes = _.filter(_.union(target_client.phones , source_client.phones), (phone)-> _.include( selected_phones,phone.id))
     selected_addresses = _.map($('.merge_address_selection:checked').next(), (select_address)-> $(select_address).data('client-address-id'))
-    merged_client.address_attributes = _.filter(_.union(target_client.addresses , source_client.addresses), (address)-> _.include(selected_addresses,address.id))
+    merged_client.addresses_attributes = _.filter(_.union(target_client.addresses , source_client.addresses), (address)-> _.include(selected_addresses,address.id))
