@@ -225,6 +225,8 @@ GEM
       activesupport (= 3.2.7)
       bundler (~> 1.0)
       railties (= 3.2.7)
+    rails-settings-cached (0.2.2)
+      rails (>= 3.0.0)
     railties (3.2.7)
       actionpack (= 3.2.7)
       activesupport (= 3.2.7)
@@ -368,6 +370,7 @@ DEPENDENCIES
   poltergeist
   pry-rails
   rails (= 3.2.7)
+  rails-settings-cached
   ransack
   role_model
   rspec-rails

@@ -1,2 +1,2 @@
 jQuery ->
-  window.socket = io.connect('http://192.168.100.3:3030')
+  window.socket = io.connect("http://#{$('meta[name=\'node_url\']').attr('content')}")
