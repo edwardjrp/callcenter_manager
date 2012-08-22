@@ -22,4 +22,15 @@ class Admin::ClientsController < ApplicationController
       format.html
     end
   end
+
+  def merge_clients
+    @client = Client.find(params[:merged_client][:id])
+    respond_to do |format|
+      if @client.merge(params[:merged_client], params[:source_client_id])
+        format.json{render json: @client}
+      else
+        format.json{render json: @client.errors.full_messages.to_sentence}
+      end
+    end
+  end
 end

@@ -56,6 +56,7 @@ Kapiqua25::Application.routes.draw do
       collection do 
         get 'olo'
         get 'merge'
+        put 'merge_clients'
       end
     end
     resources :stores

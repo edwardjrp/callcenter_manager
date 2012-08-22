@@ -37,9 +37,21 @@ jQuery ->
             else
               $('#client_merge').find('.msgBox').fadeOut("normal")
               build_merger_client()
-              console.log merged_client
               $('#merge_client_confirmation').html(JST['admin/clients/merged_client'](merged_client:merged_client))
         isValidStep
+      onFinish: (obj)->
+        $.ajax
+          type: 'PUT'
+          url: '/admin/clients/merge_clients'
+          datatype: 'json'
+          data: { merged_client: merged_client, source_client_id: source_client.id}
+          beforeSend: (xhr)->
+            xhr.setRequestHeader("Accept", "application/json")
+          success: (response) ->
+            console.log response
+          error: (response) ->
+            console.log response
+
 
   
 
@@ -91,6 +103,7 @@ jQuery ->
     isValid    
 
   build_merger_client = ()->
+    merged_client.id = target_client.id
     merged_client.first_name = $('#client_personal_data_merge').find("input[name='client_merge_first_name']:checked").closest('td').data('client-first-name')
     merged_client.last_name = $('#client_personal_data_merge').find("input[name='client_merge_last_name']:checked").closest('td').data('client-last-name')
     merged_client.idnumber = $('#client_personal_data_merge').find("input[name='client_merge_idnumber']:checked").closest('td').data('client-idnumber')

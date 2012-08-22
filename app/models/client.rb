@@ -55,6 +55,11 @@ class Client < ActiveRecord::Base
     save
   end
 
+  def merge(attr, source_id)
+    transaction do 
+    end
+  end
+
   def cedula
     new_idnumber= idnumber.to_s.strip unless idnumber.nil?
     begin
