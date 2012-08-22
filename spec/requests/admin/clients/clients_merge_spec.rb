@@ -1,7 +1,7 @@
 #encoding: utf-8
 require 'spec_helper'
 
-describe 'Stores general' do
+describe 'Cleints merge' do
   before(:each)do
     @user = FactoryGirl.create :user, :roles=>[:admin]
     login(@user)

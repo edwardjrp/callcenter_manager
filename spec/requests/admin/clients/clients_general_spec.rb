@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Stores general' do
+describe 'Clients general' do
   before(:each)do
     @user = FactoryGirl.create :user, :roles=>[:admin]
     login(@user)
@@ -35,5 +35,23 @@ describe 'Stores general' do
   it "should render the import client link" do
     visit admin_clients_path
     page.should have_content('Clientes Olo')
+  end
+
+  describe "when searching" do
+    let(:search_client){ FactoryGirl.create :client,first_name: 'test user', last_name: 'test last name'}
+    let(:search_phone){ FactoryGirl.create :phone, number: '8095652095', ext: '99', client_id: search_client.id}
+    
+
+    it "should render the search form" do
+      visit admin_clients_path
+      page.should have_css('.form-search')
+    end
+
+    it "should find the client from the phone" do 
+      visit admin_clients_path
+      fill_in 'q_phones_number_start', with: search_phone.number
+      click_button 'Buscar'
+      within('#clients_list'){page.should have_content(search_client.first_name)}
+    end
   end
 end
