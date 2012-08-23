@@ -2,9 +2,10 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 jQuery ->
+  $('.best_in_place').best_in_place()
   $('#add_address').on 'click', (event)->
     $('#add_address_modal').find('.modal-body').html(JST['clients/add_address']())
-    $('#add_address_form').prepend("<input type='hidden' id='address_client_id' name='client_id' value='#{_.last(window.location.href.split('/')).match(/\d/)[0]}'>") unless $('#address_client_id').length > 0
+    $('#add_address_form').prepend("<input type='hidden' id='address_client_id' name='client_id' value='#{_.last(window.location.href.split('/')).match(/\d+/)[0]}'>") unless $('#address_client_id').length > 0
     $('#client_address_city').select2
       placeholder: 'Selecione una ciudad'
       data: _.map( $('#add_address').data('cities'), (c) -> {id: c.id, text: c.name} )
@@ -75,7 +76,7 @@ jQuery ->
         for error in JSON.parse(err.responseText)
           $("<div class='purr'>#{error}<div>").purr()
 
-  $('#client_phone_list').on 'click', '.icon-edit', (event)->
+  $('#client_phone_list').on 'click', '.btn_edit', (event)->
     target = $(event.currentTarget)
     modal = target.closest('.client_phone').prev()
     phone = target.closest('.client_phone').data('phone')
@@ -122,7 +123,7 @@ jQuery ->
         $("<div class='purr'>#{err.responseText}<div>").purr()
 
 
-  $('#client_address_list').on 'click', '.icon-edit', (event)->
+  $('#client_address_list').on 'click', '.btn_edit', (event)->
     target = $(event.currentTarget)
     modal = target.closest('.client_address').prev()
     address = target.closest('.client_address').data('address')
@@ -159,7 +160,7 @@ jQuery ->
             )
 
 
-  $('#client_address_list').on 'click', '.icon-trash', (event)->
+  $('#client_address_list').on 'click', '.btn_trash', (event)->
     target = $(event.currentTarget)
     if confirm('¿Seguro que desea borrar esta dirección?')
       $.ajax
@@ -171,7 +172,7 @@ jQuery ->
         error: (err)->
           alert('No se pudo realizar la operación')
 
-  $('#client_phone_list').on 'click', '.icon-trash', (event)->
+  $('#client_phone_list').on 'click', '.btn_trash', (event)->
     target = $(event.currentTarget)
     if confirm('¿Seguro que desea borrar este telefono?')
       $.ajax

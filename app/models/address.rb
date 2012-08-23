@@ -20,6 +20,7 @@ class Address < ActiveRecord::Base
   delegate :area, :to => :street, :prefix => true
   # validates :client_id, presence: true
   validates :street_id, presence: true
+  validates :number, presence: true
   attr_accessible :client_id, :delivery_instructions, :number, :postal_code, :street_id, :unit_number, :unit_type
   
   

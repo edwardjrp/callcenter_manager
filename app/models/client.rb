@@ -20,11 +20,12 @@
 class Client < ActiveRecord::Base
   validates :first_name, presence:  true
   validates :last_name, presence:  true
-  validates :idnumber, uniqueness:  true, allow_nil: true
-  validates :email, uniqueness:  true, :email_format => true, allow_nil: true, :allow_blank => true
+  validates :idnumber, uniqueness:  true, allow_nil: true, :allow_blank => false
+  validates :email, uniqueness:  true, :email_format => true, allow_nil: true, :allow_blank => false
   has_many :phones, :inverse_of => :client
   has_many :addresses#, :inverse_of => :client
   has_many :carts
+  before_validation :fix_blanks
   accepts_nested_attributes_for :phones
   accepts_nested_attributes_for :addresses, :reject_if => proc { |address| address['street_id'].blank?  }
   attr_accessible :active, :email, :first_name, :idnumber, :last_name, :phones_attributes, :addresses_attributes
@@ -98,5 +99,11 @@ class Client < ActiveRecord::Base
       return new_idnumber
     end
   end
-  
+
+  private
+    def fix_blanks
+      self.idnumber = nil if self.idnumber == ''
+      self.email = nil if self.email == ''
+    end
+
 end

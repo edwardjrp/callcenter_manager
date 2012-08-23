@@ -18,7 +18,13 @@ jQuery ->
         data: {cart_ids: cart_ids, destination: target.val()}
         beforeSend: (xhr) ->
           xhr.setRequestHeader("Accept", "application/json")
-        success: (response)->
-          console.log response
+        success: ()->
+          console.log 'HELLO'
+          for order_row in $('.tab-pane.active').find('input.select_for_move:checked').closest('tr')
+            $(order_row).appendTo($("#cart_#{target.val()}").find('tbody'))
+          $("##{target.val()}").trigger('click')
         error: (response)->
+          console.log 'response'
+
+        complete: (response)->
           console.log response

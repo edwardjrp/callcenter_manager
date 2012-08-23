@@ -2,7 +2,7 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 jQuery ->
-
+  $('.best_in_place').best_in_place()
   new_client = {} if $("#admin_import_client_modal").size() > 0
 
   $('.expand_phones').on 'click', (event)->

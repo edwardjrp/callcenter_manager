@@ -1,4 +1,4 @@
-#TODO
+ #TODO
 
 - <del>Cant create several clients in a row because the add button looses its event binding</del>
 
@@ -33,8 +33,6 @@
 
 - categories with multi cant have options unit types
 
-- have to add discontinued to products to allow reimporting
-
 - <del>regex that parses the options is outdated [WLR] is now [W12]</del>
 
 - <del>cartproduct quantity is now decimal and should be integer</del>
@@ -45,4 +43,4 @@
 
 - back  links missing in admin section
 
-- Implemento dicontinued store and products
+- Implementar dicontinuado/borrado store, coupons and products/ have to add discontinued to products to allow reimporting

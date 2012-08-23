@@ -12,7 +12,14 @@
   width:1000px;
   .modal-body{  
     max-height:600px;
+    .stepContainer{
+      .content{  
+        overflow:scroll;
+        height:400px;
+      }
+    }
   }
+  
   left:35%;
   top:40%;
 }

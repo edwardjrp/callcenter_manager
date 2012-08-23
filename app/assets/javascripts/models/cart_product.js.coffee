@@ -54,6 +54,9 @@ class Kapiqua25.Models.CartProduct extends Backbone.RelationalModel
   sync: (method, model, options)=>
     namespace = _.last(model.url().split('/'))
     current_cart = this.get('cart')
+    console.log window.socket
+    console.log this.toJSON()
+    window.socket.emit('chat', {user: 'me', msg: 'TEST'})
     window.socket.emit "#{namespace}:#{method}", this.toJSON(), (response) ->
       if response?
         if response.type? and response.type == 'success'
