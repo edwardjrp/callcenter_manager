@@ -3,7 +3,8 @@ class ClientsController < ApplicationController
   def create
     @client = Client.new(first_name: params[:client][:first_name],
                          last_name: params[:client][:last_name],
-                         email: params[:client][:email], 
+                         email: params[:client][:email],
+                         idnumber: params[:client][:idnumber],
                          phones_attributes: [{number: params[:client][:phone], ext: params[:client][:ext]}],
                          addresses_attributes: [params[:client][:address]])
     respond_to do |format|

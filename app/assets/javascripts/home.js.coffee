@@ -7,6 +7,8 @@ jQuery ->
   assign_service_method($('#service_method_delivery'))
   assign_service_method($('#service_method_carry_out'))
   assign_service_method($('#service_method_pickup'))
+  $('#client_search_first_name').restric('numeric')
+  $('#client_search_last_name').restric('numeric')
 
 
 
@@ -250,6 +252,7 @@ FinishCallBack = (obj)->
         $("#import_client_modal").modal('hide')
         clear_extra_data()
         set_form_import(saved_client, _.find(phones, (phone)-> phone.number == $('#client_search_phone').val()))
+        $('#client_search_phone').focus()
       error: (err)->
         error = JSON.parse(err.responseText)
         if error.msg?
@@ -277,6 +280,7 @@ client_create =  ()->
   $('#client_search_last_name').val('')
   $('#client_search_last_name').removeAttr('readonly')
   $('#client_search').find('fieldset').append(JST['clients/client_extra_fields']()) if $('#client_search_email').length == 0
+  $('#client_search_idnumber').restric('alpha').restric('spaces')
   $('#client_search_address_city').select2
     placeholder: "Seleccione una Ciudad"
     data: _.map($('#client_search').find('fieldset').data('cities'), (c)-> {id: c.id, text: c.name})

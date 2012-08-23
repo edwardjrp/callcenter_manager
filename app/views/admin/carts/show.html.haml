@@ -1,2 +1,57 @@
-%h1 Admin::Carts#show
-%p Find me in app/views/admin/carts/show.html.haml
+.row
+  .span4
+    .row
+      .span4.well
+        %h3 Datos de la orden
+        %dl
+          %dt Agente
+          %dd= @cart.user.full_name
+        %dl
+          %dt Creada
+          %dd="hace #{time_ago_in_words(@cart.created_at)} (#{l(@cart.created_at, :format=> :short)})"
+        %dl
+          %dt Tienda
+          - if @cart.store.present?
+            %dd=" #{@cart.store.storeid} - #{@cart.store.name}"
+          - else
+            %dd No se asigno una tienda
+        %dl
+          %dt Modo de servicio
+          - if @cart.service_method.present?
+            %dd= @cart.service_method
+          - else
+            %dd No se asigno un modo de servicio
+    - if @cart.client
+      .row
+        .span4.well
+          %h3 Datos del cliente
+          %dl
+            %dt Nombre Complato
+            %dd= @cart.client.full_name
+            %dt Telefonos
+            -if @cart.client.phones.any?
+              - @cart.client.phones.each do |phone|
+                %dd="#{number_to_phone phone.number} #{phone.ext}"
+            -else
+              %dd No hay numero disponibles
+    -else
+      .row
+        .span4.well
+          %h3 No se asigno cliente
+  .span8
+    %table.table.table-striped.table-bordered.table-condensed.span8
+      %thead
+        %tr
+          %th Cantidad
+          %th product
+          %th Optiones
+          %th Precio              
+      %tbody
+        -@cart.cart_products.each do |cart_product|
+          %tr
+            %td= cart_product.quantity
+            %td= cart_product.product.productname
+            %td= cart_product.product.niffty_options
+            %td= cart_product.priced_at
+
+

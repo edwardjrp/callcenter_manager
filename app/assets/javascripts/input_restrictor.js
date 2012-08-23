@@ -16,7 +16,15 @@
 			$(this).on('blur', function(){
 				  if($(this).val().match(/\s+/g)) $(this).val('');
 			});
-		}
+		},
+    numeric : function(){
+      $(this).on('keypress', function(event){
+          if (event.which >= 48 && event.which <= 57) event.preventDefault();
+      });
+      $(this).on('blur', function(){
+          if ($(this).val().match(/\[0|9]+/g)) $(this).val('');
+      });
+    }
   };
 
   $.fn.restric = function( method ) {

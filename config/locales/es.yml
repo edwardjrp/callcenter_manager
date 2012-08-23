@@ -100,7 +100,7 @@ es:
       second: Segundos
       year: Año
   errors: &errors
-    format: ! '%{attribute} %{message}'
+    format: ! 'Error en %{attribute}: %{message}'
     messages:
       accepted: debe ser aceptado
       blank: no puede estar en blanco
@@ -203,7 +203,14 @@ es:
       <<: *errors
     models:
       client: 'Cliente'
+      category: 'Categoría'
     attributes:
       user:
         first_name: 'Nombre'
         last_name: 'Apellido'
+      category:
+        multi: 'Selección multiple'
+        has_sides: 'Selección de lados'
+        hidden: 'Oculta'
+        type_unit: 'Opcione en unidades'
+        has_options: 'Tiene opciones'
