@@ -36,7 +36,8 @@ class Admin::StoresController < ApplicationController
 
   def show
     @store = Store.find(params[:id])
-    @products = Product.page(params[:page])
+    @search = Product.search(params[:q])
+    @products = @search.result.page(params[:page])
   end
 
   def destroy

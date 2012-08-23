@@ -1,3 +1,9 @@
+.row  
+  = search_form_for [:admin,@search], :url=> admin_store_path(@store),:html=>{:class=>'well form-search top-margin-1 filter'} do |f|
+    =f.text_field :productname_start, :class=> 'input-medium search-query', :placeholder=>'Productname'
+    =f.text_field :productcode_start, :class=> 'input-medium search-query', :placeholder=>'Productcode'
+    =f.submit 'Buscar', :name=>nil, :class=> 'btn'
+    %a.btn#clear_product_search{ href: '#'} Limpiar
 - if @products.any?
   %h3= "Productos para #{@store.name}"
   =will_paginate @products
