@@ -23,6 +23,17 @@ class AddressesController < ApplicationController
     end
   end
 
+  def update
+    @address = Address.find(params[:id])
+    respond_to do |format|
+      if @address.update_attributes(params[:address])
+        format.json{ render json: @address.to_json(include: {street: { include: {area: {include: {city: {}}}}}})}
+      else
+        format.json{ render json: @address.errors.full_messages.to_json, status: 422}
+      end
+    end
+  end
+
   def areas
     @areas = Area.find_area(params)
     respond_to do |format|

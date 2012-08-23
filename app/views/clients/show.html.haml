@@ -36,7 +36,7 @@
       #client_phone_list
         -@client.phones.order('created_at DESC').each do |phone|
           =render 'modal', :modal_id => "edit_phone_modal_#{phone.id}", :title=>'Editar Telefono'
-          .client_phone{ :data=> {'phone'=> phone.to_json}}
+          .client_phone{:id=> dom_id(phone), :data=> {'phone'=> phone.to_json}}
             .row
               .span3
                 .btn-group.right
@@ -65,7 +65,7 @@
       #client_address_list
         -@client.addresses.order('created_at DESC').each do |address|
           =render 'modal', :modal_id => "edit_address_modal_#{address.id}", :title=>'Editar Dirección'
-          .client_address{ :data=> {'address'=> address.to_json(include: { street: { include: { area: {include: { city: {}}}}}})}}
+          .client_address{:id=> dom_id(address),  :data=> {'address'=> address.to_json(include: { street: { include: { area: {include: { city: {}}}}}})}}
             .row
               .span3
                 .btn-group.right
@@ -113,7 +113,6 @@
                   =address.delivery_instructions
             %hr 
       
-  -Rails.logger.debug Address.all
   .span8#carts_list
     - if @carts.any?
       %h3 Ordenes

@@ -1,7 +1,14 @@
-<div class='client_address' data-address-id='<%=@address.id%>'>
+<div class='client_address' data-address-id='<%=@address.id%>' id = 'address_<%=@address.id%>'>
 <div class="row">
   <div class="span3">
-    <i class="icon-trash right"></i>
+    <div class="btn-group right">
+      <button class="btn">
+        <i class="icon-edit"></i>
+      </button>
+      <button class="btn">
+        <i class="icon-trash"></i>
+      </button>
+    </div>
   </div>
 </div>
 <div class='row'>

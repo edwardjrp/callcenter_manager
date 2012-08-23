@@ -1,4 +1,4 @@
-<form class="form-horizontal" id='edit_phone_form_<%=@phone.id%>'>
+<form class="form-horizontal" id='edit_phone_form_<%=@phone.id%>'  data-phone-id='<%=@phone.id%>'>
   <fieldset>
     <legend>Datos de Numero telefonico</legend>
     <div class="control-group" id="client_phone_number_controls_<%=@phone.id%>">

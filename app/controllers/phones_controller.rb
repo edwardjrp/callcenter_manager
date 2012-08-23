@@ -20,6 +20,18 @@ class PhonesController < ApplicationController
     end
   end
 
+  def update
+    @phone = Phone.find(params[:id])
+    respond_to do |format|
+      if @phone.update_attributes(params[:phone])
+        format.json{ render json: @phone}
+      else
+        format.json{ render json: @phone.errors.full_messages.to_sentence, status: 422}
+      end
+    end
+
+  end
+
   def destroy
    @phone = Phone.find params[:id]
     respond_to do |format|

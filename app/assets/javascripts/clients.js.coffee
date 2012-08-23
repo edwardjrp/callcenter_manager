@@ -82,6 +82,46 @@ jQuery ->
     modal.modal('show')
     modal.find('.modal-body').html(JST['clients/edit_phone'](phone: phone))
 
+  $('#client_phone_list').on 'click', '.btn-primary', (event)->
+    event.preventDefault()
+    target = $(event.currentTarget)
+    form = target.parent().prev().find('form')
+    phone_id = target.parent().prev().find('form').data('phone-id')
+    $.ajax
+      type: 'PUT'
+      datatype: 'json'
+      data: form.serialize()
+      url: "/phones/#{phone_id}"
+      beforeSend: (xhr) ->
+        xhr.setRequestHeader("Accept", "application/json")
+      success: (phone)->
+        $("#phone_#{phone.id}").replaceWith(JST['clients/phone'](phone: phone))
+        target.closest('.modal').modal('hide')
+        $("#phone_#{phone.id}").effect('highlight',  {}, 500)
+      error: (err)->
+        $("<div class='purr'>#{err.responseText}<div>").purr()
+
+  $('#client_address_list').on 'click', '.btn-primary', (event)->
+    event.preventDefault()
+    target = $(event.currentTarget)
+    form = target.parent().prev().find('form')
+    address_id = target.parent().prev().find('form').data('address-id')
+    form.find("input[name='address[street_id]']").val(form.find("input[name='address[street_id]']").data('street-id')) unless form.find("input[name='address[street_id]']") == ''
+    $.ajax
+      type: 'PUT'
+      datatype: 'json'
+      data: form.serialize()
+      url: "/addresses/#{address_id}"
+      beforeSend: (xhr) ->
+        xhr.setRequestHeader("Accept", "application/json")
+      success: (address)->
+        $("#address_#{address.id}").replaceWith(JST['clients/address'](address: address))
+        target.closest('.modal').modal('hide')
+        $("#address_#{address.id}").effect('highlight',  {}, 500)
+      error: (err)->
+        $("<div class='purr'>#{err.responseText}<div>").purr()
+
+
   $('#client_address_list').on 'click', '.icon-edit', (event)->
     target = $(event.currentTarget)
     modal = target.closest('.client_address').prev()

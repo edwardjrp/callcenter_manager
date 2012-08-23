@@ -1,4 +1,4 @@
-<form class="form-horizontal" id='edit_address_form<%=@address.id%>'>
+<form class="form-horizontal" id='edit_address_form_<%=@address.id%>' data-address-id='<%=@address.id%>' >
   <fieldset>
     <legend>Datos de dirección</legend>
     <div class="control-group" id="client_address_city_controls_<%=@address.id%>">
@@ -16,7 +16,7 @@
 <div class="control-group" id="client_address_street_controls_<%=@address.id%>">
   <label class="control-label" for="client_address_street_<%=@address.id%>">Calle</label>
   <div class="controls">
-    <input type="hidden" id="client_address_street_<%=@address.id%>" name="address[street_id]" style=" display: none; " data-placeholder='<%=@address.street.name%>' class='input-medium'>
+    <input type="hidden" id="client_address_street_<%=@address.id%>" name="address[street_id]" style=" display: none; " data-placeholder='<%=@address.street.name%>' data-street-id='<%=@address.street.id%>' class='input-medium'>
   </div>
 </div>
 <div class="control-group" id="client_address_number_controls_<%=@address.id%>">
@@ -50,7 +50,7 @@
 <div class="control-group" id="client_address_delivery_instructions_controls_<%=@address.id%>">
   <label class="control-label" for="client_address_delivery_instructions_<%=@address.id%>">Instrucciones</label>
   <div class="controls">
-    <textarea id="client_address_delivery_instructions_<%=@address.id%>" rows=3 class="input-xlarge" name="address[delivery_instructions]" value='<%=@address.delivery_instructions%>'></textarea>
+    <textarea id="client_address_delivery_instructions_<%=@address.id%>" rows=3 class="input-xlarge" name="address[delivery_instructions]" ><%=@address.delivery_instructions%></textarea>
   </div>
 </div>
 

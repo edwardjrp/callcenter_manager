@@ -1,7 +1,14 @@
-<div class='client_phone' data-phone-id = '<%=@phone.id%>'>
+<div class='client_phone' data-phone = '<%=@phone%>' id = 'phone_<%=@phone.id%>'>
  <div class= 'row'>
     <div class= 'span3'>
-      <i class='icon-trash right'></i>
+      <div class="btn-group right">
+        <button class="btn">
+          <i class="icon-edit"></i>
+        </button>
+        <button class="btn">
+          <i class="icon-trash"></i>
+        </button>
+      </div>
     </div>
   </div>
   <div class= 'row'>
