@@ -47,7 +47,11 @@ Kapiqua25::Application.routes.draw do
         post 'change_has_sides'
       end
     end
-    resources :carts
+    resources :carts do 
+      collection do 
+        put 'assign'
+      end
+    end
     resources :addresses
     resources :cities, :only => [:create, :update, :destroy]
     resources :areas, :only => [:create, :update, :destroy]

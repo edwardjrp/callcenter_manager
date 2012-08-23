@@ -3,16 +3,23 @@
     %h2 Ordenes
 .row
   .span3
-    =select_tag :mailboxes, options_for_select(Cart.valid_mailboxes)
+    =select_tag :mailboxes, options_for_select(Cart.valid_mailboxes), :prompt=> 'Seleccione un mailbox'
 .row
-  .span9#carts_list
+  .span12#carts_list
+    = search_form_for [:admin,@search], :url => admin_carts_path, :html=>{:class=>'well form-search top-margin-1 filter'} do |f|
+      =f.text_field :user_first_name_cont, :class=> 'input-medium search-query', :placeholder=>'Nombre del agente'
+      =f.text_field :user_last_name_cont, :class=> 'input-medium search-query', :placeholder=>'Apellido del agente'
+      =f.text_field :created_at_gteq, :class=> 'input-medium search-query', :placeholder=>'Creado despues de '
+      =f.text_field :created_at_lteq, :class=> 'input-medium search-query', :placeholder=>'Creado despues de '
+      =f.submit 'Buscar', :name=>nil, :class=> 'btn'
+      %a.btn#clear_cart_search{ href: '#'} Limpiar
     - if @carts.any?
       =will_paginate @carts
       .tabbable.tabs-left
         %ul.nav.nav-tabs
           - Cart.valid_mailboxes.each do |mailbox|
             %li
-              %a{:href=>"#cart_#{mailbox}", :data=>{:toggle=>"tab"}}
+              %a{:id => mailbox, :href=>"#cart_#{mailbox}", :data=>{:toggle=>"tab"}}
                 = mailbox
         .tab-content
           - Cart.valid_mailboxes.each do |mailbox|
@@ -31,7 +38,7 @@
                     - if cart.in?(mailbox)
                       %tr{:data=>{'cart-id'=> cart.id}, :id=>dom_id(cart)}
                         %td
-                          %input{type:'checkbox'}
+                          %input.select_for_move{type:'checkbox'}
                         %td= cart.id
                         %td= cart.store_order_id
                         %td
@@ -43,21 +50,3 @@
                             = cart.client.last_phone
                         %td= link_to 'Detalles', [:admin,cart]
       =will_paginate @carts
-
-  .span3
-    .row
-      .span3
-        .panel
-          %h3 Filtrar
-          .content
-            = search_form_for [:admin,@search], url: admin_carts_path, :html=>{:class=>'form-horizontal top-margin-1 filter'} do |f|
-              %fieldset
-                =f.label :id_eq, 'id'
-                =f.text_field :id_eq, :class=> 'input-medium'
-                =f.label :created_at_gteq, 'Creado entre'
-                =f.text_field :created_at_gteq, :class=> 'input-medium'
-                =f.label :created_at_lteq, 'y'
-                =f.text_field :created_at_lteq, :class=> 'input-medium'
-              .form-actions      
-                =f.submit 'Buscar', :name=>nil, :class=> 'btn'
-    .row
