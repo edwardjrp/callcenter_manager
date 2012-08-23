@@ -1,7 +1,11 @@
 <div class= 'span3'>
   <ul class='unstyled import_address_ul' id='import_address_<%=@address.id%>' data-address-id='<%=@address.id%>'>
+    <%console.log @address%>
+    <li>Ciudad : <%=@address.city%></li>
     <li><input type="hidden"  id="client_address_city_<%=@address.id%>" style=" display: none; "></li>
+    <li>Area : <%=@address.zone%></li>
     <li><input type="hidden"  id="client_address_area_<%=@address.id%>" style=" display: none; "></li>
+    <li>Calle : <%=@address.street%></li>
     <li><input type="hidden" class = 'street_selection' id="client_address_street_<%=@address.id%>" name="address[street_id]" style=" display: none; "></li>
     <li><strong>Numero: </strong><span class='number_selected'><%=@address.number%></span></li>
     <li><strong>Tipo: </strong><span class='unit_type_selected'><%=@address.kind%></span></li>

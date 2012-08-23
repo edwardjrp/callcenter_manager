@@ -14,6 +14,17 @@ class Admin::ClientsController < ApplicationController
   def olo
   end
 
+  def update
+    @client = Client.find(params[:id])
+    respond_to do |format|
+      if @client.update_attributes(params[:client])
+        format.json{ render json: @client}
+      else
+        format.json{ render json: @client.errors.full_messages.to_sentence, status: 422}
+      end
+    end
+  end
+
   def merge
     @search = Client.search(params[:q])
     @clients= @search.result(:distinct => true).limit(4)
@@ -31,7 +42,7 @@ class Admin::ClientsController < ApplicationController
         format.json{render json: @client}
       else
         flash[:error]="Un error ha impedido completar el proceso"
-        format.json{render json: @client.errors.full_messages.to_sentence}
+        format.json{render json: @client.errors.full_messages.to_sentence, status: 422}
       end
     end
   end

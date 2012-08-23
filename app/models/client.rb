@@ -51,8 +51,8 @@ class Client < ActiveRecord::Base
 
 
   def mark_as_imported
-    imported = true
-    save
+    self.imported = true
+    self.save
   end
 
   def merge(attr, source_id)

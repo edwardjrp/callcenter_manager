@@ -4,7 +4,13 @@
 #admin_import_client_modal{
   width:1000px;
   .modal-body{  
-    max-height:600px;
+    max-height:700px;
+    .stepContainer{
+      .content{  
+        overflow:scroll;
+        height:400px;
+      }
+    }
   }
   left:35%;
   top:40%;

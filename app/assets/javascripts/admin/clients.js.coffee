@@ -3,6 +3,8 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 jQuery ->
 
+  new_client = {} if $("#admin_import_client_modal").size() > 0
+
   $('.expand_phones').on 'click', (event)->
       event.preventDefault()
       target = $(event.currentTarget)
@@ -61,8 +63,8 @@ jQuery ->
               labelFinish: 'Terminar'
               onLeaveStep:leaveAStepCallback
               onFinish: FinishCallBack
-            $('#admin_import_client_wizard').smartWizard('showMessage',"Solor podra importar 4 de las #{client.addresses.length} direcciones de este cliente") if client.addresses > 4
-            _.each _.first(client.addresses, 4), (address) ->
+            $('#admin_import_client_wizard').smartWizard('showMessage',"Solor podra importar 2 de las #{client.addresses.length} direcciones de este cliente") if client.addresses > 2
+            _.each _.first(client.addresses, 2), (address) ->
               $('#admin_import_client_wizard').find("#import_address_list").find('.row').append(JST['clients/import_address'](address: address)) if $("#import_address_#{address.id}").size() == 0
               $("#client_address_city_#{address.id}").select2
                   placeholder: "Seleccione una Ciudad"
@@ -112,7 +114,7 @@ leaveAStepCallback = (obj)->
     else
       $('#admin_import_client_modal').find('.msgBox').fadeOut("normal")
     current_client = client
-    _.each _.first(current_client.addresses, 4), (address) ->
+    _.each _.first(current_client.addresses, 2), (address) ->
       $('#admin_import_client_modal').find("#import_phone_list").find('.row').append(JST['clients/import_phone'](address: address)) if $("#import_phone_#{address.id}").size() == 0
   else if step_num == '2' || step_num == 2
     if $('#admin_import_client_modal').find("#import_phone_list").find('input[type=checkbox]:checked').size() < 1
@@ -123,7 +125,6 @@ leaveAStepCallback = (obj)->
   isStepValid
 
 FinishCallBack = (obj)->
-  console.log 'ending'
   isValid = true
   client = $('#admin_import_client_wizard').data('client')
   address_obj_array = _.uniq(_.compact(_.map($('#admin_import_client_wizard').find("#import_address_list").find('.street_selection'), (street_el)-> $(street_el).closest('ul')[0] if $(street_el).select2('val') !='')))
@@ -181,7 +182,26 @@ FinishCallBack = (obj)->
     $('#admin_client_conflict_modal').modal('show')
     $("#admin_client_conflict_modal").find('.modal-body').html(JST['admin/clients/admin_client_conflict'](new_client: new_client, present_client: present_client))
     $('#admin_client_conflict_modal_button').on 'click', (event)->
-      console.log 'updated'
-      $('#admin_client_conflict_modal').modal('hide')
-      $("#admin_import_client_modal").modal('hide')
-      window.show_alert('Los datos ha sido actualizados', 'success')
+      new_client.first_name = $("input[name='client_conflic_first_name']:checked").data('client-first-name') if $("input[name='client_conflic_first_name']:checked").size > 0
+      new_client.last_name = $("input[name='client_conflic_last_name']:checked").data('client-last-name') if $("input[name='client_conflic_last_name']:checked").size > 0
+      new_client.email = $("input[name='client_conflic_email']:checked").data('client-email') if $("input[name='client_conflic_email']:checked").size > 0
+      new_client.active = $("input[name='client_conflic_active']:checked").data('client-active') if $("input[name='client_conflic_active']:checked").size > 0
+      new_client.phones_attributes = {}
+      new_client.addresses_attributes = {}
+      if $("#admin_client_conflict_modal").find('input:checked').size() == 0
+        alert('No se ha hecho la selección, la importación se cancelará.')
+      else
+        $.ajax
+          type: 'PUT'
+          url: "/admin/clients/#{present_client.id}"
+          datatype: 'json'
+          data: {client: new_client}
+          beforeSend: (xhr)->
+            xhr.setRequestHeader("Accept", "application/json")
+          success: (saved_client)->
+            $('#admin_client_conflict_modal').modal('hide')
+            $("#admin_import_client_modal").modal('hide')
+            window.show_alert('El cliente se importo desde olo 2, por favor confirme que aparece en el listado de cleintes local', 'success')
+          error: (err)->
+            $("<div class='purr'>#{err.responseText}<div>").purr()
+            

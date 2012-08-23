@@ -23,6 +23,7 @@
         %th= sort_link @search, :email, "Email"
         %th= sort_link @search, :idnumber, "Cédula"
         %th= sort_link @search, :created_at, "Creación"
+        %th Importado
         %th Activo
         %th Telefonos y extentión
         %th 
@@ -35,7 +36,8 @@
             %td= client.email
             %td= number_to_cedula(client.idnumber)
             %td= l client.created_at, :format => :short
-            %td= link_to client.active.to_s, nil, class: "btn #{set_state_class(client.active)}"
+            %td= link_to client.imported.to_s, '#', class: "btn #{set_state_class(client.imported)}"
+            %td= link_to client.active.to_s, '#', class: "btn #{set_state_class(client.active)}"
             %td
               %a.expand_phones{ href: '#'} Expandir
               %ul.hidden_phone_list.unstyled.none
