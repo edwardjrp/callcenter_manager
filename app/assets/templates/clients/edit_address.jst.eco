@@ -1,0 +1,58 @@
+<form class="form-horizontal" id='edit_address_form<%=@address.id%>'>
+  <fieldset>
+    <legend>Datos de dirección</legend>
+    <div class="control-group" id="client_address_city_controls_<%=@address.id%>">
+  <label class="control-label" for="client_address_city_<%=@address.id%>">Ciudad</label>
+  <div class="controls">
+    <input type="hidden" id="client_address_city_<%=@address.id%>" style=" display: none; " data-placeholder='<%=@address.street.area.city.name%>' class='input-medium'>
+  </div>
+</div>
+<div class="control-group" id="client_address_area_controls_<%=@address.id%>">
+  <label class="control-label" for="client_address_area_<%=@address.id%>">Sector</label>
+  <div class="controls">
+    <input type="hidden" id="client_address_area_<%=@address.id%>" style=" display: none; " data-placeholder='<%=@address.street.area.name%>' class='input-medium'>
+  </div>
+</div>
+<div class="control-group" id="client_address_street_controls_<%=@address.id%>">
+  <label class="control-label" for="client_address_street_<%=@address.id%>">Calle</label>
+  <div class="controls">
+    <input type="hidden" id="client_address_street_<%=@address.id%>" name="address[street_id]" style=" display: none; " data-placeholder='<%=@address.street.name%>' class='input-medium'>
+  </div>
+</div>
+<div class="control-group" id="client_address_number_controls_<%=@address.id%>">
+  <label class="control-label" for="client_address_number_<%=@address.id%>">No.</label>
+  <div class="controls">
+    <input type="text" id="client_address_number_<%=@address.id%>" name="address[number]"  value='<%=@address.number%>'>
+  </div>
+</div>
+<div class="control-group" id="client_address_unit_type_controls_<%=@address.id%>">
+  <label class="control-label" for="client_address_unit_type_<%=@address.id%>">Tipo.</label>
+  <div class="controls">
+    <select id="client_address_unit_type_<%=@address.id%>" name="address[unit_type]">
+      <option value="casa">Casa</option>
+      <option value="oficina">Oficina</option>
+      <option value="edificio">Edificio</option>
+    </select>
+  </div>
+</div>
+<div class="control-group" id="client_address_unit_number_controls_<%=@address.id%>">
+  <label class="control-label" for="client_address_unit_number_<%=@address.id%>">No. apartamento</label>
+  <div class="controls">
+    <input type="text" id="client_address_unit_number_<%=@address.id%>" name="address[unit_number]" value='<%=@address.unit_number%>'>
+  </div>
+</div>
+<div class="control-group" id="client_address_postal_code_controls_<%=@address.id%>">
+  <label class="control-label" for="client_address_postal_code_<%=@address.id%>">Codigo postal</label>
+  <div class="controls">
+    <input type="text" id="client_address_postal_code_<%=@address.id%>" name="address[postal_code]" value='<%=@address.postal_code%>'>
+  </div>
+</div>
+<div class="control-group" id="client_address_delivery_instructions_controls_<%=@address.id%>">
+  <label class="control-label" for="client_address_delivery_instructions_<%=@address.id%>">Instrucciones</label>
+  <div class="controls">
+    <textarea id="client_address_delivery_instructions_<%=@address.id%>" rows=3 class="input-xlarge" name="address[delivery_instructions]" value='<%=@address.delivery_instructions%>'></textarea>
+  </div>
+</div>
+
+  </fieldset>
+</form>

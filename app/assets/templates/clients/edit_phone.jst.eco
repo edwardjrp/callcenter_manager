@@ -1,0 +1,17 @@
+<form class="form-horizontal" id='edit_phone_form_<%=@phone.id%>'>
+  <fieldset>
+    <legend>Datos de Numero telefonico</legend>
+    <div class="control-group" id="client_phone_number_controls_<%=@phone.id%>">
+      <label class="control-label" for="client_phone_number_<%=@phone.id%>">Numero</label>
+      <div class="controls">
+        <input type="text" id="client_phone_number_<%=@phone.id%>" name="phone[number]" value='<%=@phone.number%>'>
+      </div>
+    </div>
+    <div class="control-group" id="client_phone_ext_controls_<%=@phone.id%>">
+      <label class="control-label" for="client_ext_number_<%=@phone.id%>">Extensión</label>
+      <div class="controls">
+        <input type="text" id="client_ext_number_<%=@phone.id%>" name="phone[ext]" value='<%=@phone.ext%>'>
+      </div>
+    </div>
+  </div>
+</div>

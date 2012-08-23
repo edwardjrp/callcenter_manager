@@ -41,3 +41,11 @@
 #merge_client_confirmation{
   padding:10px;
 }
+#client_address_list{
+  .modal{
+    top:35%;
+    .modal-body{  
+      max-height:700px;
+    }
+  }
+}

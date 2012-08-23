@@ -75,13 +75,57 @@ jQuery ->
         for error in JSON.parse(err.responseText)
           $("<div class='purr'>#{error}<div>").purr()
 
+  $('#client_phone_list').on 'click', '.icon-edit', (event)->
+    target = $(event.currentTarget)
+    modal = target.closest('.client_phone').prev()
+    phone = target.closest('.client_phone').data('phone')
+    modal.modal('show')
+    modal.find('.modal-body').html(JST['clients/edit_phone'](phone: phone))
+
+  $('#client_address_list').on 'click', '.icon-edit', (event)->
+    target = $(event.currentTarget)
+    modal = target.closest('.client_address').prev()
+    address = target.closest('.client_address').data('address')
+    modal.modal('show')
+    modal.find('.modal-body').html(JST['clients/edit_address'](address: address))
+    $("#client_address_city_#{address.id}").select2
+      placeholder: 'Selecione una ciudad'
+      data: _.map( $('#add_address').data('cities'), (c) -> {id: c.id, text: c.name} )
+    $("#client_address_area_#{address.id}").select2
+      placeholder: "Seleccione un sector"
+      minimumInputLength: 2
+      ajax:
+        url: '/addresses/areas.json'
+        datatype: 'json'
+        data: (term, page)->
+          q:term
+          city_id: $('#client_address_city').val()
+        results: (areas, page)->
+          results: _.map(areas, (area)->
+              {id: area.id, text: area.name}
+            )
+    $("#client_address_street_#{address.id}").select2
+      placeholder: "Seleccione una calle"
+      minimumInputLength: 1
+      ajax:
+        url: '/addresses/streets.json'
+        datatype: 'json'
+        data: (term, page)->
+          q:term
+          area_id: $('#client_address_area').val()
+        results: (streets, page)->
+          results: $.map(streets, (street)->
+              {id: street.id, text: street.name}
+            )
+
+
   $('#client_address_list').on 'click', '.icon-trash', (event)->
     target = $(event.currentTarget)
     if confirm('¿Seguro que desea borrar esta dirección?')
       $.ajax
         type: 'DELETE'
         datatype: 'json'
-        url: "/addresses/#{target.closest('.client_address').data('address-id')}"
+        url: "/addresses/#{target.closest('.client_address').data('address').id}"
         success: ()->
           target.closest('.client_address').remove()
         error: (err)->
@@ -93,7 +137,7 @@ jQuery ->
       $.ajax
         type: 'DELETE'
         datatype: 'json'
-        url: "/phones/#{target.closest('.client_phone').data('phone-id')}"
+        url: "/phones/#{target.closest('.client_phone').data('phone').id}"
         success: ()->
           target.closest('.client_phone').remove()
         error: (err)->
