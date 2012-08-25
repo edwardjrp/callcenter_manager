@@ -91,7 +91,6 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     @selection_marker($(event.currentTarget))
     unless @options.category.get('type_unit') == true
       primary_matchup = @options.matchups.getByCid($($(event.target).parent().find('.btn-primary')).attr('id'))
-      console.log primary_matchup
       secondary_matchup = @options.matchups.getByCid($($(event.target).parent().find('.btn-danger')).attr('id')) if @options.category.get('multi') == true
       @mark_matchup(@options.category,primary_matchup, secondary_matchup)
     else
@@ -103,12 +102,16 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
           
   select_flavor: (event)->
     event.preventDefault()
-    @selection_marker($(event.target))
+    target = $(event.currentTarget)
+    unless target.hasClass('disabled') 
+      @selection_marker(target)
     
   
   select_size: (event)->
     event.preventDefault()
-    @selection_marker($(event.target))  
+    target = $(event.currentTarget)
+    unless target.hasClass('disabled') 
+      @selection_marker(target)
       
   selection_marker: (target)->
     if _.any(target.parent().find('.btn-primary'))
@@ -133,19 +136,37 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
   mark_matchup: (category, primary_matchup,secondary_matchup)->
     $('table.option_table td').css('background-color','transparent').removeClass('primary_selected').removeClass('secondary_selected')
     option_map = {0.75: 1, 1: 2, 1.5: 3, 2:4, 3: 5}
+    unless primary_matchup? or secondary_matchup?
+      $(".sizes").removeClass('disabled')
+      $(".flavors").removeClass('disabled')
     if primary_matchup?
       if category.get('has_sides') == true then main_class =  'options_left' else main_class =  'options_whole'
       @add_selection_class(category, primary_matchup,'primary_selected', main_class)
+      @filter_size_and_flavor(primary_matchup)
     if category.get('has_sides') == true
       unless secondary_matchup?
         if primary_matchup?
           @add_selection_class(category, primary_matchup,'primary_selected', 'options_rigth')
+          @filter_size_and_flavor(primary_matchup)
       if secondary_matchup?
         @add_selection_class(category, secondary_matchup,'secondary_selected', 'options_rigth')
+        @filter_size_and_flavor(secondary_matchup)
       unless  primary_matchup?
         if secondary_matchup?
           @add_selection_class(category, secondary_matchup,'secondary_selected', 'options_left')
-          
+          @filter_size_and_flavor(secondary_matchup)  
+
+  filter_size_and_flavor: (matchup)->
+    $(".sizes").addClass('disabled')
+    $(".flavors").addClass('disabled')
+    if matchup?
+      for el_size in matchup.get('valid_sizes')
+        $(".#{el_size}").removeClass('disabled')
+      for el_flavor in matchup.get('valid_flavors')
+        $(".#{el_flavor}").removeClass('disabled')
+
+
+
  
   add_selection_class: (category, primary_matchup, selection_class, side_class) ->
     if selection_class == 'primary_selected' then color = '#0073CC' else color = '#DA4E49'
