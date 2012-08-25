@@ -30,24 +30,24 @@ describe "client delete phone and address" do
     it "should have remove the address from the addresses_list" do
       page.should have_css('#addresses_list')
       page.should have_content(@address.street.name)
-      page.should have_css(".client_address[data-address-id='#{@address.id}']")
-      within(".client_address[data-address-id='#{@address.id}']") do 
+      page.should have_css("#address_#{@address.id}")
+      within("#address_#{@address.id}") do 
         page.should have_css('.icon-trash')
         find('.icon-trash').click
         page.driver.browser.switch_to.alert.accept
       end
-      page.should_not have_css(".client_address[data-address-id='#{@address.id}']")
+      page.should_not have_css("#address_#{@address.id}")
     end
 
     it "should have remove the phone from the phone_list" do
       page.should have_css('#phones_list')
-      page.should have_css(".client_phone[data-phone-id='#{@phone2.id}']")
-      within(".client_phone[data-phone-id='#{@phone2.id}']") do 
+      page.should have_css("#phone_#{@phone2.id}")
+      within("#phone_#{@phone2.id}") do 
         page.should have_css('.icon-trash')
         find('.icon-trash').click
         page.driver.browser.switch_to.alert.accept
       end
-      page.should_not have_css(".client_phone[data-phone-id='#{@phone2.id}']")
+      page.should_not have_css("#phone_#{@phone2.id}")
     end
   end
 

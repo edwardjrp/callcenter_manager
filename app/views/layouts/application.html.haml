@@ -5,12 +5,11 @@
     /[if lt IE 9]
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
     = stylesheet_link_tag    "application", :media => "all"
-    / = javascript_include_tag "http://#{Kapiqua.node_url}/socket.io/socket.io.js"
-    = javascript_include_tag "http://192.168.100.5:3030/socket.io/socket.io.js"
-    %meta{name: 'node_url', content: "192.168.100.5:3030"}
-    = javascript_include_tag "application"
-    / %meta{name: 'node_url', content: "#{Kapiqua.node_url}"}
+    = javascript_include_tag "http://#{Kapiqua.node_url}/socket.io/socket.io.js"
+    / = javascript_include_tag "http://192.168.100.5:3030/socket.io/socket.io.js"
+    %meta{name: 'node_url', content: "#{Kapiqua.node_url}"}
     / %meta{name: 'node_url', content: "192.168.100.5:3030"}
+    = javascript_include_tag "application"
     = csrf_meta_tags
     -if user_signed_in?
       %meta{:content => "#{current_user.auth_token}", :name => "user"}
