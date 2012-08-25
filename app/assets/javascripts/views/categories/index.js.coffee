@@ -56,12 +56,18 @@ class Kapiqua25.Views.CategoriesIndex extends Backbone.View
   create_matchups: (products, options, category)->
     matchups = new Kapiqua25.Collections.Matchups()
     # if there are no options it should group by flavorcode
-    if _.any(options) and category.get('has_options') == true
+    if _.any(options) and category.get('has_options') == true and category.get('type_unit') == false
       _.each @group_by_options(products), (group, key) =>
           name = @get_presentation_name(group)
           parsed_options =  @parse_options(key,options)
           niffty_options =  @niffty_opions(parsed_options)
           matchups.add {name:  name, options: key, niffty_options: niffty_options, parsed_options:parsed_options, valid_sizes: @get_valid_sizes(group), valid_flavors: @get_valid_flavors(group), is_base: @get_base_matchup(group)?} if name !='' and key != 'null'
+    else if _.any(options) and category.get('has_options') == true and category.get('type_unit') == true
+      _.each products, (product) =>
+          name = product.get('productname')
+          parsed_options =  @parse_options(product.get('options'),options)
+          niffty_options =  @niffty_opions(parsed_options)
+          matchups.add {name:  name, options: product.get('options'), niffty_options: niffty_options, parsed_options:parsed_options, valid_sizes: [ product.get('sizecode') ], valid_flavors: [ product.get('flavorcode') ], is_base: null} if name !=''
     else
       _.each @group_by_flavorcode(products), (group, key) =>
         name = @get_presentation_name(group)
@@ -78,7 +84,7 @@ class Kapiqua25.Views.CategoriesIndex extends Backbone.View
     
   parse_options: (recipe, options)->
     product_options = []
-    if _.any(recipe.split(','))
+    if recipe? and _.any(recipe.split(','))
       _.each _.compact(recipe.split(',')), (code) ->
         core_match = code.match(/^([0-9]{0,2}\.?[0|7|5]{0,2})([A-Z]{1,}[a-z]{0,})(?:\-([L12]))?/)
         if core_match?

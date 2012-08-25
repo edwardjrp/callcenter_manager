@@ -95,6 +95,8 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
       @mark_matchup(@options.category,primary_matchup, secondary_matchup)
     else
       current_matchup = @options.matchups.getByCid($($(event.target).parent().find('.btn-primary')).attr('id'))
+      console.log current_matchup
+      @filter_size_and_flavor(current_matchup)
       _.each current_matchup.get('parsed_options'), (parsed_option) =>
         target = $("##{@options.category.get('name')}_#{parsed_option.product.get('productcode')}")
         target.find('input.unit_option_setter').val(parsed_option.quantity)
@@ -159,6 +161,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
   filter_size_and_flavor: (matchup)->
     $(".sizes").addClass('disabled')
     $(".flavors").addClass('disabled')
+    console.log matchup
     if matchup?
       for el_size in matchup.get('valid_sizes')
         $(".#{el_size}").removeClass('disabled')
