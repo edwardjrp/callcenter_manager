@@ -91,6 +91,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     @selection_marker($(event.currentTarget))
     unless @options.category.get('type_unit') == true
       primary_matchup = @options.matchups.getByCid($($(event.target).parent().find('.btn-primary')).attr('id'))
+      console.log primary_matchup
       secondary_matchup = @options.matchups.getByCid($($(event.target).parent().find('.btn-danger')).attr('id')) if @options.category.get('multi') == true
       @mark_matchup(@options.category,primary_matchup, secondary_matchup)
     else

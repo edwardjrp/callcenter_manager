@@ -39,8 +39,6 @@ Client = (function() {
   };
 
   Client.olo_show = function(data, respond, socket) {
-    console.log(data);
-    console.log('querying olo2 clients show');
     return request.get({
       headers: {},
       uri: "http://localhost:4000/api/users/" + data.id + ".json"

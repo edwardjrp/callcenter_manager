@@ -3,7 +3,7 @@ class Kapiqua25.Views.CategoriesIndex extends Backbone.View
   template: JST['categories/index']
   
   initialize: ->
-    _.bindAll(this, 'get_main_products', 'get_option_products', 'group_by_options', 'get_presentation_name', 'get_flavors', 'get_sizes')
+    _.bindAll(this, 'get_main_products', 'get_option_products', 'group_by_options', 'get_presentation_name', 'get_flavors', 'get_sizes', 'get_valid_sizes', 'get_valid_flavors')
     @product_views = {}
     _.each @collection.models, (category) =>
       unless category.get('hidden') == true
@@ -25,9 +25,16 @@ class Kapiqua25.Views.CategoriesIndex extends Backbone.View
     $("##{target}").find("[data-bproduct='true']").trigger('click') if $("##{target}").find("[data-bproduct='true']").size() > 0
         
   get_main_products: (main_products)->
-    man_products = _.filter main_products.models, (product)-> product.get('options') != 'OPTION'
+    _.filter main_products.models, (product)-> product.get('options') != 'OPTION'
+
+  get_valid_sizes: (main_products)->
+    _.map(main_products, (mproduct)-> mproduct.get('sizecode'))
+
+  get_valid_flavors: (main_products)->
+    _.map(main_products, (mproduct)-> mproduct.get('flavorcode'))
+
   get_option_products: (option_products)->
-    man_products = _.filter option_products.models, (product)-> product.get('options') == 'OPTION'
+    _.filter option_products.models, (product)-> product.get('options') == 'OPTION'
   
   get_flavors: (products)->
     _.uniq(_.map(products, (product)-> product.get('flavorcode')))
@@ -54,13 +61,13 @@ class Kapiqua25.Views.CategoriesIndex extends Backbone.View
           name = @get_presentation_name(group)
           parsed_options =  @parse_options(key,options)
           niffty_options =  @niffty_opions(parsed_options)
-          matchups.add {name:  name, options: key, niffty_options: niffty_options, parsed_options:parsed_options, is_base: @get_base_matchup(group)?} if name !='' and key != 'null'
+          matchups.add {name:  name, options: key, niffty_options: niffty_options, parsed_options:parsed_options, valid_sizes: @get_valid_sizes(group), valid_flavors: @get_valid_flavors(group), is_base: @get_base_matchup(group)?} if name !='' and key != 'null'
     else
       _.each @group_by_flavorcode(products), (group, key) =>
         name = @get_presentation_name(group)
         parsed_options = ''
         niffty_options = ''
-        matchups.add {name:  name, options: '', niffty_options: niffty_options, parsed_options:parsed_options, is_base: @get_base_matchup(group)?} if name !='' and key != 'null'
+        matchups.add {name:  name, options: '', niffty_options: niffty_options, parsed_options:parsed_options, valid_sizes: @get_valid_sizes(group), valid_flavors: @get_valid_flavors(group), is_base: @get_base_matchup(group)?} if name !='' and key != 'null'
     matchups
     
   get_base_matchup: (products)->
