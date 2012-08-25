@@ -88,6 +88,8 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     
   select_specialty: (event)->
     event.preventDefault()
+    $("##{@options.category.get('name')}").find('.flavors_container').find('.btn-primary').removeClass('btn-primary')
+    $("##{@options.category.get('name')}").find('.sizes_container').find('.btn-primary').removeClass('btn-primary')
     @selection_marker($(event.currentTarget))
     unless @options.category.get('type_unit') == true
       primary_matchup = @options.matchups.getByCid($($(event.target).parent().find('.btn-primary')).attr('id'))
@@ -95,8 +97,8 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
       @mark_matchup(@options.category,primary_matchup, secondary_matchup)
     else
       current_matchup = @options.matchups.getByCid($($(event.target).parent().find('.btn-primary')).attr('id'))
-      console.log current_matchup
       @filter_size_and_flavor(current_matchup)
+      $("##{@options.category.get('name')}").find('.unit_option_setter').val('0')
       _.each current_matchup.get('parsed_options'), (parsed_option) =>
         target = $("##{@options.category.get('name')}_#{parsed_option.product.get('productcode')}")
         target.find('input.unit_option_setter').val(parsed_option.quantity)
@@ -159,14 +161,13 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
           @filter_size_and_flavor(secondary_matchup)  
 
   filter_size_and_flavor: (matchup)->
-    $(".sizes").addClass('disabled')
-    $(".flavors").addClass('disabled')
-    console.log matchup
+    $("##{@options.category.get('name')}").find(".sizes").addClass('disabled')
+    $("##{@options.category.get('name')}").find(".flavors").addClass('disabled')
     if matchup?
       for el_size in matchup.get('valid_sizes')
-        $(".#{el_size}").removeClass('disabled')
+        $("##{@options.category.get('name')}").find(".#{el_size}").removeClass('disabled')
       for el_flavor in matchup.get('valid_flavors')
-        $(".#{el_flavor}").removeClass('disabled')
+        $("##{@options.category.get('name')}").find(".#{el_flavor}").removeClass('disabled')
 
 
 
