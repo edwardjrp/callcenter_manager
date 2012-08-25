@@ -10,22 +10,37 @@
     <%end%>
   </div>
 <%end%>
+
+
 <%if _.any(@options.flavors):%>
   <div class='flavors_container'>
-    <h3>Sabores</h3>
-    <%for flavor in @options.flavors:%>
-      <a class ='btn bottom-margin-1 flavors <%=flavor%>' href='#'><%=flavor%></a>
+
+    <%if @options.flavors.length > 1:%>
+      <h3>Sabores</h3>
+      <%for flavor in @options.flavors:%>
+        <a class ='btn bottom-margin-1 flavors <%=flavor%>' data-flavorcode='<%=flavor%>' href='#'><%=flavor%></a>
+      <%end%>
+    <%else:%>
+        <a class ='btn bottom-margin-1 flavors <%=_.first(@options.flavors)%> btn-primary hidden' data-flavorcode='<%=_.first(@options.flavors)%>' href='#'><%=_.first(@options.flavors)%></a>
     <%end%>
   </div>
 <%end%>
+
+
 <%if _.any(@options.sizes):%>
   <div class='sizes_container'>
-    <h3>Tamaños</h3>
-    <%for size in @options.sizes:%>
-      <a class ='btn bottom-margin-1 sizes <%=size%>' href='#'><%=size%></a>
+    <%if @options.sizes.length > 1:%>
+        <h3>Tamaños</h3>
+        <%for size in @options.sizes:%>
+          <a class ='btn bottom-margin-1 sizes <%=size%>' data-sizecode='<%=size%>' href='#'><%=size%></a>
+        <%end%>
+    <%else:%>
+      <a class ='btn bottom-margin-1 sizes <%=_.first(@options.sizes)%> btn-primary hidden' data-sizecode='<%=_.first(@options.sizes)%>' href='#'><%=_.first(@options.sizes)%></a>
     <%end%>
   </div>
 <%end%>
+
+
 <%if _.any(@options.sides):%>
   <h3>Opciones</h3>
   <div class='options_container left-margin-1'>

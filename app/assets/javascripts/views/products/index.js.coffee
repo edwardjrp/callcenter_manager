@@ -24,8 +24,8 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     event.preventDefault()
     options = @options.matchups.getByCid($($(@el).find('.specialties_container').find('.btn-primary')).attr('id'))?.get('options') if @options.category.get('has_options') == true
     options_secondary = @options.matchups.getByCid($($(@el).find('.specialties_container').find('.btn-danger')).attr('id'))?.get('options') if @options.category.get('has_options') == true and @options.category.get('multi') == true
-    flavor = $($(@el).find('.flavors_container').find('.btn-primary')).text()
-    size = $($(@el).find('.sizes_container').find('.btn-primary')).text()
+    flavor = $($(@el).find('.flavors_container').find('.btn-primary')).data('flavorcode')
+    size = $($(@el).find('.sizes_container').find('.btn-primary')).data('sizecode')
     products = new Kapiqua25.Collections.Products()
     products.reset(@collection)
     if (flavor? and size?) and (flavor != '' and size != '')
