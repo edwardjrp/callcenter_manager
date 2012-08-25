@@ -24,8 +24,8 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     event.preventDefault()
     options = @options.matchups.getByCid($($(@el).find('.specialties_container').find('.btn-primary')).attr('id'))?.get('options') if @options.category.get('has_options') == true
     options_secondary = @options.matchups.getByCid($($(@el).find('.specialties_container').find('.btn-danger')).attr('id'))?.get('options') if @options.category.get('has_options') == true and @options.category.get('multi') == true
-    flavor = $($(@el).find('.flavors_container').find('.btn-primary')).data('flavorcode')
-    size = $($(@el).find('.sizes_container').find('.btn-primary')).data('sizecode')
+    flavor = $($(@el).find('.flavors_container').find('.btn-primary')).data('flavorcode').toString()
+    size = $($(@el).find('.sizes_container').find('.btn-primary')).data('sizecode').toString()
     products = new Kapiqua25.Collections.Products()
     products.reset(@collection)
     if (flavor? and size?) and (flavor != '' and size != '')
@@ -72,6 +72,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
         if ($(op).val() == '1') then quantity = '' else quantity = $(op).val()
         build_options.push("#{quantity}#{productcode}")
     #  end type_unit false
+
     if product?
       cart_product = new Kapiqua25.Models.CartProduct()
       cart_product.set({cart: @model, quantity: selected_quantity,product: product, options: build_options.join(','), bind_id: product_secondary?.id})
@@ -88,8 +89,14 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     
   select_specialty: (event)->
     event.preventDefault()
-    $("##{@options.category.get('name')}").find('.flavors_container').find('.btn-primary').removeClass('btn-primary')
-    $("##{@options.category.get('name')}").find('.sizes_container').find('.btn-primary').removeClass('btn-primary')
+    $("##{@options.category.get('name')}")
+    .find('.flavors_container')
+    .find('.btn-primary')
+    .removeClass('btn-primary') unless $("##{@options.category.get('name')}").find('.flavors_container').find('.btn-primary').hasClass('hidden')
+    $("##{@options.category.get('name')}")
+    .find('.sizes_container')
+    .find('.btn-primary')
+    .removeClass('btn-primary') unless $("##{@options.category.get('name')}").find('.sizes_container').find('.btn-primary').hasClass('hidden')
     @selection_marker($(event.currentTarget))
     unless @options.category.get('type_unit') == true
       primary_matchup = @options.matchups.getByCid($($(event.target).parent().find('.btn-primary')).attr('id'))
