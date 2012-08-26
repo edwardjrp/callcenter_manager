@@ -1,50 +1,33 @@
  #TODO
 
-- <del>Cant create several clients in a row because the add button looses its event binding</del>
-
-- the test above does not pass if the phone number are the same and the ext are different
+- the test for clearing the form if the phone number are the same and the ext are different is not passing
 
 - Currently is not clearing the user data when I clear the ext only working for replace
 
-- <del>Need to format phone on blur</del>
-
-- Need to add idnumber
-
-- <del>Need to add addresses</del>
-
 - add functionality to the cancel button
 
-- need to add store selection
-
-- need to add "add phone"
-
-- need to add "add address"
-
+- need to complete and test store selection
 
 - add clear when address dependencies change
 
-- add popover on client create
+- update destination store when service method changes
 
-- <del>test for address presence</del>
+- cart is missing items edit
 
-- categories with unit types cant have multi
-
-- categories with unit types cant have options unset
-
-- categories with multi cant have options unit types
-
-- <del>regex that parses the options is outdated [WLR] is now [W12]</del>
-
-- <del>cartproduct quantity is now decimal and should be integer</del>
-
-- cart is missing item update
-
-- <del>aggregating items should check binding id to see if we are adding to a combined element</del>
-
-- back  links missing in admin section
+- back links missing in most admin sections
 
 - Implementar dicontinuado/borrado store, coupons and products/ have to add discontinued to products to allow reimporting
 
 - socket.io sometimes return 'transport end (undefined)' and ignores messages
 
 - request.js crashes when destination host is unreachable
+
+- settings section is missing
+
+- agents section is missing
+
+- add resports section
+
+- add coupons
+
+- add import section
