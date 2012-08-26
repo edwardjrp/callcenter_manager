@@ -43,7 +43,6 @@ class Carts
               socket.emit 'cart:price:pulse:start', {} if socket?  
               
               pulse_com_error = (comm_err) ->
-                console.log comm_err
                 socket.emit 'cart:price:error', {error: JSON.stringify(comm_err)} if socket?
                 
               PulseBridge.price json_cart, pulse_com_error, (res_data) ->
@@ -65,7 +64,6 @@ class Carts
                               else
                                 socket.emit 'cart:price:pulse:itempriced', {item_id: update_price_cart_product.id, price: update_price_cart_product.priced_at} if socket?
                     socket.emit 'cart:price:pulse:cartpriced', {net_amount: updated_cart.net_amount, tax_amount: updated_cart.tax_amount, payment_amount: updated_cart.payment_amount} if socket?              
-              
         console.log 'Princing'
 
 

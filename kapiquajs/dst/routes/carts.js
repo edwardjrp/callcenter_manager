@@ -87,7 +87,6 @@ Carts = (function() {
                 socket.emit('cart:price:pulse:start', {});
               }
               pulse_com_error = function(comm_err) {
-                console.log(comm_err);
                 if (socket != null) {
                   return socket.emit('cart:price:error', {
                     error: JSON.stringify(comm_err)

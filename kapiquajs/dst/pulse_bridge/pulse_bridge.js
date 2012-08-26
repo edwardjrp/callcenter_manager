@@ -43,15 +43,17 @@ PulseBridge = (function() {
     if (this.debug === true) {
       console.log(this.headers);
     }
-    return request.post({
+    return request({
+      method: 'POST',
       headers: this.headers,
       uri: this.target,
       body: body
     }, function(err, res, res_data) {
       if (err) {
-        return console.log(err);
+        console.log('Before the request handling');
+        return err_cb(err);
       } else {
-        return console.log(res_data);
+        return cb(res_data);
       }
     });
   };

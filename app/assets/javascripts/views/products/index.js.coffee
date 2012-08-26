@@ -80,6 +80,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
       cart_product.save()
       # $(@el).find('.cart_product_quantity').val('1')
       @render()
+      $('.alert').remove()
       current_category_pane = $("##{@options.category.get('name')}")
       current_category_pane.find("[data-bproduct='true']").trigger('click') if (current_category_pane.find("[data-bproduct='true']").size() > 0 and current_category_pane.find('.specialties_container').find('.btn-primary').size() == 0)
     else

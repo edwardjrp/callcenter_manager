@@ -80,6 +80,7 @@ class CartProducts
             pulse_com_error = (comm_err) ->
               console.log comm_err
               socket.emit 'data_error', {type: 'pulse_connection' , msg:JSON.stringify(comm_err)} if socket?
+              
             PulseBridge.price json_cart, pulse_com_error, (res_data) ->
               order_reply = new OrderReply(res_data)
               # add hadling for pulse errors
@@ -90,7 +91,6 @@ class CartProducts
                   socket.emit 'data_error', {type: 'db_error' , msg:JSON.stringify(cart_update_err)} if socket?
                 else
                   updated_cart.cart_products {}, (uc_cp_err, updated_cart_cart_products)->
-                    console.log order_reply.order_items.length
                     for order_item in order_reply.order_items
                       for cart_product in updated_cart_cart_products
                         if Number(cart_product.quantity) == Number(order_item.quantity) and _.find(results, (cp) -> cp.id == cart_product.id).product.productcode == order_item.code and order_item.options.join(',') == cart_product.options

@@ -25,8 +25,9 @@ class PulseBridge
     @headers["SOAPAction"]= "http://www.dominos.com/action/#{action}"
     if @debug == true
       console.log @headers
-    request.post {headers: @headers, uri: @target, body: body }, (err, res, res_data) ->
+    request {method: 'POST', headers: @headers, uri: @target, body: body }, (err, res, res_data) ->
       if err
+        console.log 'Before the request handling'
         err_cb(err)
       else
         cb(res_data)
