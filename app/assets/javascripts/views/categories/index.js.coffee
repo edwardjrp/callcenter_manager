@@ -21,8 +21,8 @@ class Kapiqua25.Views.CategoriesIndex extends Backbone.View
     this
         
   mark_base: (event)->
-    target= $(event.currentTarget).attr('href').replace(/#/,'')
-    $("##{target}").find("[data-bproduct='true']").trigger('click') if $("##{target}").find("[data-bproduct='true']").size() > 0
+    target= $("##{$(event.currentTarget).attr('href').replace(/#/,'')}")
+    target.find("[data-bproduct='true']").trigger('click') if (target.find("[data-bproduct='true']").size() > 0 and target.find('.specialties_container').find('.btn-primary').size() == 0)
         
   get_main_products: (main_products)->
     _.filter main_products.models, (product)-> product.get('options') != 'OPTION'
