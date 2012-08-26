@@ -49,9 +49,9 @@ PulseBridge = (function() {
       body: body
     }, function(err, res, res_data) {
       if (err) {
-        return err_cb(err);
+        return console.log(err);
       } else {
-        return cb(res_data);
+        return console.log(res_data);
       }
     });
   };

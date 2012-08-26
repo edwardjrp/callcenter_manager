@@ -51,6 +51,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
       _.each selected_options, (op)->
         productcode = $(op).data('productcode')
         quantity = reverse_option_map[$(op).find('.primary_selected').length]
+        console.log $(op).find('.primary_selected').length
         if ($(op).find('.primary_selected').hasClass('options_whole') or _.isEmpty($(@el).find('.specialties_container').find('.btn-danger'))) then part = '' else part = '1' 
         assemble_options.push({productcode: productcode, quantity: quantity, part: part })
 

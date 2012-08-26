@@ -44,3 +44,7 @@
 - back  links missing in admin section
 
 - Implementar dicontinuado/borrado store, coupons and products/ have to add discontinued to products to allow reimporting
+
+- socket.io sometimes return 'transport end (undefined)' and ignores messages
+
+- request.js crashes when destination host is unreachable

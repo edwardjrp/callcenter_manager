@@ -90,6 +90,7 @@ class CartProducts
                   socket.emit 'data_error', {type: 'db_error' , msg:JSON.stringify(cart_update_err)} if socket?
                 else
                   updated_cart.cart_products {}, (uc_cp_err, updated_cart_cart_products)->
+                    console.log order_reply.order_items.length
                     for order_item in order_reply.order_items
                       for cart_product in updated_cart_cart_products
                         if Number(cart_product.quantity) == Number(order_item.quantity) and _.find(results, (cp) -> cp.id == cart_product.id).product.productcode == order_item.code and order_item.options.join(',') == cart_product.options

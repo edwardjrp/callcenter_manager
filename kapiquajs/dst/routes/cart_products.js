@@ -181,6 +181,7 @@ CartProducts = (function() {
                 } else {
                   updated_cart.cart_products({}, function(uc_cp_err, updated_cart_cart_products) {
                     var cart_product, order_item, _i, _len, _ref, _results;
+                    console.log(order_reply.order_items.length);
                     _ref = order_reply.order_items;
                     _results = [];
                     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
