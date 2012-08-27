@@ -31,3 +31,5 @@
 - add coupons
 
 - add import section
+
+- Only show completed carts in clients and user carts history

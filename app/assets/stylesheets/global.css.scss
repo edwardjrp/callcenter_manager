@@ -241,3 +241,23 @@
 #import_address_list{
   overflow:scroll;
 }
+.client_active{
+  span{
+    width:30px;
+    padding: 2px;
+    color:white;
+    background-color:#3A87AD;
+    border: 1px solid #CCC;
+    cursor:pointer;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    *border-right-width: 2px;
+    *border-bottom-width: 2px;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
+    -webkit-background-clip: padding-box;
+       -moz-background-clip: padding;
+            background-clip: padding-box;
+  }
+}

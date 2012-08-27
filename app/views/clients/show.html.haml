@@ -22,9 +22,9 @@
           %strong Correo:
           =best_in_place @client, :email
       .row
-        .span4
+        .span4.client_active
           %strong Activo:
-          =best_in_place @client, :active, type: :select, collection: [[ false, 'No'],[true, 'Si']]
+          =best_in_place @client, :active, type: :checkbox, collection: ['No', 'Si']
     .well#phones_list
       .row
         .span4        
