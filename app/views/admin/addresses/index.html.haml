@@ -9,25 +9,4 @@
           %a{:href=>"#city_#{city.id}", :data=>{:toggle=>"tab"}}
             = city.name
     .tab-content
-      - @cities.each do |city|
-        .tab-pane{id: "city_#{city.id}"}
-          =simple_form_for [:admin, Area.new] do |f|
-            =f.input :city_id, :as=> :hidden, :input_html=> {:value => city.id}
-            =f.input :name, label: false, placeholder: 'Nombre', input_html: {class: 'span2'}
-          .tabbable.tabs-left#area_search_scroll
-            %ul.nav.nav-tabs
-              - city.areas.each do |area|
-                %li
-                  %a{:href=>"#area_#{area.id}", :data=>{:toggle=>"tab"}}
-                    = area.name
-            .tab-content
-              - city.areas.each do |area|
-                .tab-pane{id: "area_#{area.id}"}
-                  .content_follow_wrapper
-                    =simple_form_for [:admin, Street.new] do |f|
-                      =f.input :area_id, :as=> :hidden, :input_html=> {:value => area.id}
-                      =f.input :name, label: false, placeholder: 'Nombre', input_html: {class: 'span2'}
-                    %ul.unstyled#street_search_scroll
-                      -area.streets.each do |street|
-                        %li.drag_street
-                          %a{:href=> '#'}=street.name
+      hello
