@@ -53,7 +53,7 @@ Kapiqua25::Application.routes.draw do
       end
     end
     resources :addresses
-    resources :cities, :only => [:create, :update, :destroy] # crud is not complete
+    resources :cities, :only => [:index, :create, :update, :destroy] # crud is not complete
     resources :areas, :only => [:index, :create, :update, :destroy]# crud is not complete
     resources :streets, :only => [:index, :create, :update, :destroy]# crud is not complete
     resources :clients do 

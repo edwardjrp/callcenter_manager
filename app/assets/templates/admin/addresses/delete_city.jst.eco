@@ -1,0 +1,8 @@
+<ul class='unstyled'>
+  <%for city in @cities:%>
+    <li>
+      <a href='/admin/cities/<%=city.id%>' class='destroy_city'> Eliminar</a>
+      <span><%=city.name%></span>
+    </li>
+  <%end%>
+</ul>
