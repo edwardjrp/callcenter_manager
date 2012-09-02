@@ -8,19 +8,20 @@
           %span.caret
         %ul.dropdown-menu
           %li
-            %a{:href => '#', :class =>"add_#{address_element.first}"} Agregar
+            %a{:href => '#', :id =>"add_#{address_element.first}"} Agregar
           %li
-            %a{:href => '#', :class =>"merge_#{address_element.first}"} Fusionar
+            %a{:href => '#', :id =>"merge_#{address_element.first}"} Fusionar
           %li
-            %a{:href => '#', :class =>"delete_#{address_element.first}"} Borrar
+            %a{:href => '#', :id =>"delete_#{address_element.first}"} Borrar
+      =render 'modal', :modal_id => "admin_addresses_#{address_element.first}_actions", :title=>"#{address_element.last}"
   #addresses_tab
     .tabbable.tabs-left
-      %ul.nav.nav-tabs
+      %ul.nav.nav-tabs#cities_tabs
         - @cities.each do |city|
           %li
             %a.city_tab{:href=>"#city_#{city.id}", :data=>{:toggle=>"tab", 'city-id'=> city.id}}
               = city.name
-      .tab-content
+      .tab-content#cities_contents
         - @cities.each do |city|
           .tab-pane.city_pane{id: dom_id(city)}
             Cargando ...
