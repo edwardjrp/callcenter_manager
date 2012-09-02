@@ -5,14 +5,17 @@
   max-height: 500px;
   overflow:scroll;
 }
-.content_follow_wrapper{
-  top:190px;
+#street_tab_content{
+  top:0px;
   position:absolute;
 }
-#street_search_scroll{
+#addresses_tab{
+  position:relative;
+}
+.tabs-left{
   max-height: 500px;
   overflow:scroll;
-  .drag_street{
-    border-bottom: 1px solid #DDD;
-  }
+  // .drag_street{
+  //   border-bottom: 1px solid #DDD;
+  // }
 }

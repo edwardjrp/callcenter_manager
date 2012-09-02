@@ -1,0 +1,18 @@
+<div class="tabbable tabs-left" id='street_tab_content'>
+  <ul class="nav nav-tabs">
+    <%for street in @streets:%>
+      <li>
+        <a class="street_tab" data-street-id="<%=street.id%>" data-toggle="tab" href="#street_<%=street.id%>">
+          <%=street.name%>
+        </a>
+      </li>
+    <%end%>
+  </ul>
+  <div class="tab-content">
+    <%for street in @streets:%>
+      <div class="tab-pane street_pane active" id="street_<%=street.id%>">
+
+      </div>
+    <%end%>
+  </div>
+</div>

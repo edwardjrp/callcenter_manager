@@ -1,0 +1,17 @@
+<div class="tabbable tabs-left" >
+  <ul class="nav nav-tabs">
+    <%for area in @areas:%>
+      <li>
+        <a class="area_tab" data-area-id="<%=area.id%>" data-toggle="tab" href="#area_<%=area.id%>">
+          <%=area.name%>
+        </a>
+      </li>
+    <%end%>
+  </ul>
+  <div class="tab-content">
+    <%for area in @areas:%>
+      <div class="tab-pane area_pane active" id="area_<%=area.id%>">
+      </div>
+    <%end%>
+  </div>
+</div>
