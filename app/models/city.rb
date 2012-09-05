@@ -10,7 +10,7 @@
 
 class City < ActiveRecord::Base
   has_many :stores
-  has_many :areas
+  has_many :areas, dependent: :destroy
   validates :name, :presence => true, :uniqueness=> true
   attr_accessible :name
 end

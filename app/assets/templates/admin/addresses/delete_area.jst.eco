@@ -1,0 +1,16 @@
+<form class="form-search">
+  <input type="text" class="input-medium search-query" name='q'>
+  <button type="submit" class="btn" id='search_area'>Buscar Area</button>
+</form>
+
+<table class='table table-condensed table-bordered table-striped'>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Nombre</th>
+      <th>Ciudad</th>
+    </tr>
+  </thead>
+  <tbody id='add_area_list'>
+  </tbody>
+</table>

@@ -1,5 +1,5 @@
 %h2 Direcciones
-#addresses_list
+#addresses_list{data: {cities: City.all.to_json(only: [:id, :name])}}
   .btn-toolbar
     -[['city','Ciudad'], ['area', 'Zona'], ['street', 'Calle']].each do |address_element|
       .btn-group.bottom-margin-2{:class=> "#{address_element.first}_actions"}

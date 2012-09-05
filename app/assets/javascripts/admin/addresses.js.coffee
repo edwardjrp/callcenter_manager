@@ -90,3 +90,78 @@ jQuery ->
         error: (response)->
           console.log response
           $("<div class='purr'>#{response.responseText}<div>").purr()
+
+    $('#addresses_list').on 'click', "#add_area", (event) ->
+      target =  $(event.currentTarget)
+      $('#admin_addresses_area_actions').modal('show')
+      $('#admin_addresses_area_actions').find('.modal-footer').remove()
+      $('#admin_addresses_area_actions').find('.modal-body').html(JST['admin/addresses/new_area_form'])
+      $("#new_area_city_id").select2
+            placeholder: "Seleccione una Ciudad"
+            data: _.map($('#addresses_list').data('cities'), (c)-> {id: c.id, text: c.name})
+
+    $('#addresses_list').on 'click', "#create_area", (event) ->
+      event.preventDefault()
+      form = $(event.currentTarget).closest('form')
+      $.ajax
+        type: 'POST'
+        url: form.attr('action')
+        datatype: 'JSON'
+        data: form.serialize()
+        beforeSend: (xhr) ->
+          xhr.setRequestHeader("Accept", "application/json")
+        success: (area) ->
+          console.log area
+          $('#admin_addresses_area_actions').modal('hide')
+          $('#areas_tabs').append("<li><a class='area_tab' data-area-id='#{area.id}' data-toggle='tab' href='#area_#{area.id}'>#{area.name}</a></li>")
+          $('#areas_contents').append("<div class='tab-pane area_pane' id='area_#{area.id}'>Cargando ...</div>")
+          $(".area_tab[data-area-id='#{area.id}']").effect("highlight", {}, 500)
+          window.show_alert('Zona Agregada','success')
+        error: (response)->
+          console.log response
+          $("<div class='purr'>#{response.responseText}<div>").purr()
+
+    $('#addresses_list').on 'click', '#search_area', (event)->
+      event.preventDefault()
+      target = $(event.currentTarget)
+      if target.prev().val().length >= 3
+        $.ajax
+          type: 'GET'
+          url: '/admin/areas'
+          datatype: 'JSON'
+          data: target.closest('form').serialize()
+          beforeSend: (xhr) ->
+            xhr.setRequestHeader("Accept", "application/json")
+          success: (areas) ->
+            $('#add_area_list').html('')
+            for area in areas
+              $('#add_area_list').append("<tr><td><a href='/admin/areas/#{area.id}' class='destroy_area'>Eliminar</a></td><td>#{area.name}</td><td>#{area.city.name}</td></tr>")
+            $("<div class='purr'>Agregue mas carácteres para reducir el numero de resultados<div>").purr() if areas.length > 5 
+          error: ()->
+            window.show_alert('Un error impidio cargar el listado de zonas para esta busqueda','error')
+      else
+        $("<div class='purr'>Introduzca al menos 3 carácteres<div>").purr()
+
+    $('#admin_addresses_area_actions').on 'click', '.destroy_area', (event)->
+      event.preventDefault()
+      target = $(event.currentTarget)
+      if confirm('Seguro que desea elimiar esta zona')
+        $.ajax
+          type: 'delete'
+          url: target.attr('href')
+          datatype: 'JSON'
+          beforeSend: (xhr) ->
+            xhr.setRequestHeader("Accept", "application/json")
+          success: (area) ->
+            $('#admin_addresses_area_actions').modal('hide')
+            $('#areas_tabs').find("li a[data-area-id='#{area.id}']").remove()
+            $('#areas_contents').find("#area_#{area.id}").remove()
+            window.show_alert('Zone Eliminada','success')
+          error: ()->
+            window.show_alert('Un error impidio Eliminar este elemento','error')
+
+    $('#addresses_list').on 'click', '#delete_area', (event)->
+      event.preventDefault()
+      $('#admin_addresses_area_actions').modal('show')
+      $('#admin_addresses_area_actions').find('.modal-footer').remove()
+      $('#admin_addresses_area_actions').find('.modal-body').html(JST['admin/addresses/delete_area'])

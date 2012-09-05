@@ -1,0 +1,17 @@
+<form action='/admin/areas' class="form-horizontal">
+  <div class="control-group">
+    <label class="control-label" for="new_area_city_id">Ciudad</label>
+    <div class="controls">
+      <input type="hidden"  id="new_area_city_id" name='area[city_id]' style=" display: none; ">
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="new_area_name">Nombre</label>
+    <div class="controls">
+      <input type="text" id="new_area_name" name='area[name]' placeholder="Nombre">
+    </div>
+  </div>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary" id='create_area'>Agregar Zona</button>
+  </div>
+</form>
