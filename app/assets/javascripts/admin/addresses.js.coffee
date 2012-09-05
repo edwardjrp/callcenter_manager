@@ -160,8 +160,52 @@ jQuery ->
           error: ()->
             window.show_alert('Un error impidio Eliminar este elemento','error')
 
+
     $('#addresses_list').on 'click', '#delete_area', (event)->
       event.preventDefault()
       $('#admin_addresses_area_actions').modal('show')
       $('#admin_addresses_area_actions').find('.modal-footer').remove()
       $('#admin_addresses_area_actions').find('.modal-body').html(JST['admin/addresses/delete_area'])
+
+
+    $('#addresses_list').on 'click', "#add_street", (event) ->
+      target =  $(event.currentTarget)
+      $('#admin_addresses_street_actions').modal('show')
+      $('#admin_addresses_street_actions').find('.modal-footer').remove()
+      $('#admin_addresses_street_actions').find('.modal-body').html(JST['admin/addresses/new_street_form'])
+      $("#new_street_city_id").select2
+            placeholder: "Seleccione una Ciudad"
+            data: _.map($('#addresses_list').data('cities'), (c)-> {id: c.id, text: c.name})
+      $("#new_street_area_id").select2
+        placeholder: "Seleccione un sector"
+        minimumInputLength: 2
+        ajax:
+          url: '/addresses/areas.json'
+          datatype: 'json'
+          data: (term, page)->
+            q:term
+            city_id: $("#new_street_city_id").val()
+          results: (areas, page)->
+            results: _.map(areas, (area)->
+                {id: area.id, text: area.name}
+              )
+
+      $('#addresses_list').on 'click', "#create_street", (event) ->
+        event.preventDefault()
+        form = $(event.currentTarget).closest('form')
+        $.ajax
+          type: 'POST'
+          url: form.attr('action')
+          datatype: 'JSON'
+          data: form.serialize()
+          beforeSend: (xhr) ->
+            xhr.setRequestHeader("Accept", "application/json")
+          success: (street) ->
+            $('#admin_addresses_street_actions').modal('hide')
+            console.log street
+            # $('#areas_tabs').append("<li><a class='area_tab' data-area-id='#{area.id}' data-toggle='tab' href='#area_#{area.id}'>#{area.name}</a></li>")
+            # $('#areas_contents').append("<div class='tab-pane area_pane' id='area_#{area.id}'>Cargando ...</div>")
+            # $(".area_tab[data-area-id='#{area.id}']").effect("highlight", {}, 500)
+            # window.show_alert('Zona Agregada','success')
+          error: (response)->
+            $("<div class='purr'>#{response.responseText}<div>").purr()

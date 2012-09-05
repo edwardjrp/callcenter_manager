@@ -1,0 +1,23 @@
+<form action='/admin/streets' class="form-horizontal">
+  <div class="control-group">
+    <label class="control-label" for="new_street_city_id">Ciudad</label>
+    <div class="controls">
+      <input type="hidden"  id="new_street_city_id" style=" display: none; ">
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="new_street_area_id">Zona</label>
+    <div class="controls">
+      <input type="hidden"  id="new_street_area_id" name='street[area_id]' style=" display: none; ">
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="new_street_name">Nombre</label>
+    <div class="controls">
+      <input type="text" id="new_street_name" name='street[name]' placeholder="Nombre">
+    </div>
+  </div>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary" id='create_street'>Agregar Zona</button>
+  </div>
+</form>
