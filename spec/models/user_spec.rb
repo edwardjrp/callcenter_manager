@@ -46,6 +46,7 @@ describe User do
     it "should generate the auth token for a new user" do
       @user = User.new(username: 'test', first_name: 'tester', last_name:'test_last', password: 'please', idnumber: '00113574339')
       @user.should be_valid
+      @user.save
       @user.auth_token.should_not be_nil
     end
   end
@@ -65,11 +66,11 @@ describe User do
     end
     
     it "should be an admin" do
-      @admin.roles.should include(:admin)
+      @admin.roles.should include('admin')
     end
     
     it "should be an operator" do
-      @user.roles.should include(:operator)
+      @user.roles.should include('operator')
     end
     
   end

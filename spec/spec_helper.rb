@@ -59,6 +59,7 @@ Spork.prefork do
     # instead of true.
     config.use_transactional_fixtures = false
     # config.use_transactional_fixtures = true
+    config.include(FactoryGirl::Syntax::Methods)
     config.include(AuthenticationMacros)
     config.include(MassAssignmentMacros)
     # class ActiveRecord::Base
@@ -73,25 +74,32 @@ Spork.prefork do
     # # Forces all threads to share the same connection. This works on
     # # Capybara because it starts the web server in a thread.
     # ActiveRecord::Base.shared_connection = ActiveRecord::Base.connection
+
+    config.before(:all) do
+      DeferredGarbageCollection.start
+    end
+    config.after(:all) do
+      DeferredGarbageCollection.reconsider
+    end
     config.before(:suite) do 
-          DatabaseCleaner.strategy = :transaction 
-          DatabaseCleaner.clean_with(:truncation) 
-        end
-        
-        config.before(:each) do 
-          if example.metadata[:js] 
-            DatabaseCleaner.strategy = :truncation 
-          else 
-            DatabaseCleaner.start 
-          end 
-        end
-        
-        config.after(:each) do 
-          DatabaseCleaner.clean 
-          if example.metadata[:js] 
-            DatabaseCleaner.strategy = :transaction 
-          end 
-        end
+      DatabaseCleaner.strategy = :transaction 
+      DatabaseCleaner.clean_with(:truncation) 
+    end
+    
+    config.before(:each) do 
+      if example.metadata[:js] 
+        DatabaseCleaner.strategy = :truncation 
+      else 
+        DatabaseCleaner.start 
+      end 
+    end
+    
+    config.after(:each) do 
+      DatabaseCleaner.clean 
+      if example.metadata[:js] 
+        DatabaseCleaner.strategy = :transaction 
+      end 
+    end
 
     # If true, the base class of anonymous controllers will be inferred
     # automatically. This will be the default behavior in future versions of

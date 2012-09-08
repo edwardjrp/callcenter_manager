@@ -247,7 +247,6 @@ GEM
       ffi (>= 0.5.0)
     rdoc (3.12)
       json (~> 1.4)
-    role_model (0.7.1)
     rspec (2.11.0)
       rspec-core (~> 2.11.0)
       rspec-expectations (~> 2.11.0)
@@ -372,7 +371,6 @@ DEPENDENCIES
   rails (= 3.2.7)
   rails-settings-cached
   ransack
-  role_model
   rspec-rails
   sass-rails (~> 3.2.3)
   savon

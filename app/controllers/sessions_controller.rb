@@ -6,7 +6,9 @@ class SessionsController < ApplicationController
   def create
     user = User.authenticate(params[:username], params[:password])
     if user.present?
-      session[:user_token]=user.auth_token
+      session[:user_token]= user.auth_token
+      user.login_count += 1
+      user.save
       flash[:success]="Sesión iniciada"
       if user.is? :admin
         redirect_to admin_root_path

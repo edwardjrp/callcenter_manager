@@ -43,7 +43,7 @@ describe CartProduct do
         end
 
         it "should show niffty #{p} with #{q} as quantity" do
-          @cart_product = FactoryGirl.attributes_for :cart_product, :options => "#{Float(q)}#{p}", :product => @product_holder
+          @cart_product = FactoryGirl.attributes_for :cart_product, :options => "#{q.to_f}#{p}", :product => @product_holder
           q = '1' if q == ''
           save_without_massasignment(CartProduct,@cart_product).niffty_options.should match("#{q}#{Product.find_by_productcode(p).productname}")
         end

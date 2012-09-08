@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
   protected 
     def accessible_by(roles, fallback_path)
        if user_signed_in?
-         unless current_user.has_role? roles
+         unless current_user.is? roles
            flash[:alert] = 'No tiene permitido el acceso esta sección'
            redirect_to fallback_path 
          end

@@ -29,7 +29,7 @@ class CartProduct < ActiveRecord::Base
       options_result = []
       options.split(',').each do |opt|
         code_match = opt.match(/^([0-9]{0,2}\.?[0|7|5]{0,2})([A-Z]{1,}[a-z]{0,})(?:\-([L12]))?/)
-        code_match[1].blank? ? (quantity = 1) : (quantity = Float(code_match[1]))
+        code_match[1].blank? ? (quantity = 1) : (quantity = code_match[1].to_f)
         code = code_match[2]
         part = code_match[3] || 'W'
         options_result.push({ quantity: quantity, code: code, part: part })

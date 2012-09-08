@@ -19,9 +19,6 @@
 #
 
 class User < ActiveRecord::Base
-  include RoleModel
-  roles_attribute :role_mask
-  roles :admin, :supervisor, :operator
   has_secure_password
   validates :username, presence: true, uniqueness: true
   validates :first_name, presence: true
@@ -29,10 +26,12 @@ class User < ActiveRecord::Base
   validates :idnumber, presence: true, uniqueness: true
   has_many :carts
   attr_accessible :first_name, :last_name, :idnumber, :username, :password, :password_confirmation
-  before_validation :generate_auth_token
+  before_create :generate_auth_token
+  before_destroy :ensure_has_no_carts
   
   def self.authenticate(username, password)
-      find_by_username(username).try(:authenticate, password)
+      user = find_by_username(username)
+      user.try(:authenticate, password) if user.present? && user.active?
   end
   
   def full_name
@@ -41,5 +40,38 @@ class User < ActiveRecord::Base
   
   def generate_auth_token
     self.auth_token = SecureRandom.hex(10)
+  end
+
+  def ensure_has_no_carts
+    self.carts.count.zero?
+  end
+
+  def roles=(sent_roles)
+    self.role_mask = (normalize_roles_type(sent_roles) & self.class.valid_roles).map { |r| 2**self.class.valid_roles.index(r) }.sum
+  end
+
+  def roles
+    self.class.valid_roles.reject do |r|
+      ((role_mask || 0) & 2**self.class.valid_roles.index(r)).zero?
+    end
+  end
+
+  def is?(sent_roles)
+    (roles & normalize_roles_type(sent_roles)).any?
+  end
+
+  def self.valid_roles
+    ['admin', 'supervisor', 'operator']
+  end
+
+
+  private 
+
+  def normalize_roles_type(sent_roles)
+    normal_roles = []
+    normal_roles = sent_roles.map(&:to_s)  if sent_roles.is_a?(Array)
+    normal_roles = sent_roles.split(' ').map(&:squish) if sent_roles.is_a? String
+    normal_roles.push sent_roles.to_s if sent_roles.is_a? Symbol
+    normal_roles
   end
 end

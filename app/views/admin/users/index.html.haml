@@ -1,0 +1,27 @@
+%h1.bottom-margin-1 Agentes
+=will_paginate
+%table.table.table-striped.table-bordered.table-condensed#clients_list
+  %thead
+    %tr
+      %th Username
+      %th Nombre 
+      %th Apellido
+      %th Cédula
+      %th Inicios de sesión
+      %th Activo
+      %th
+  %tbody
+    - @users.each do |user| 
+      %tr{ id: dom_id(user)}
+        %td= user.username
+        %td= user.first_name
+        %td= user.last_name
+        %td= number_to_cedula(user.idnumber)
+        %td= user.login_count
+        %td= user.active
+        %td
+          .btn-group
+            =link_to 'Mostrar', [:admin, user], class: 'btn'
+            =link_to 'Editar', edit_admin_user_path(user), class: 'btn'
+            =link_to 'Eliminar', [:admin, user], method: :delete, :data => { :confirm => '¿Seguro que desea eliminar este agente?, si alguna orden hace referencia a este agente no podra ser completamente eliminado' } , class: 'btn'
+=will_paginate

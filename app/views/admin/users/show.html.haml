@@ -1,0 +1,70 @@
+.row
+  .span4
+    .well
+      .row.bottom-margin-1
+        .span4
+          %h3 Información del agente
+      .row
+        .span4
+          %strong Nombre:
+          = @user.first_name 
+      .row
+        .span4
+          %strong Apellido:
+          =@user.last_name
+      .row
+        .span4
+          %strong Cedula:
+          =number_to_cedula @user.idnumber
+      .row
+        .span4
+          %strong Roles:
+          =@user.roles.to_a.to_sentence
+
+      .row
+        .span4
+          %strong Inicios de sesión:
+          =@user.login_count
+      .row
+        .span4.user_active
+          %strong Activo:
+          =@user.active
+  .span8#carts_list
+    - if @carts.any?
+      %h3 Ordenes
+      %hr
+      =will_paginate @carts
+      -@carts.each do |cart|
+        .row
+          .span2
+            %strong Agente:
+            =cart.user.full_name
+          .span2.offset2
+            =l cart.created_at, format: :short
+        .row
+          .span2
+            %strong Monto de la orden:
+            =number_to_currency(cart.payment_amount) || 'N/A'
+          .span2.offset2
+            %strong Modo de servicio:
+            =cart.service_method || 'N/A'
+
+        .row{:data=>{'cart-id'=> cart.id}, :id=>dom_id(cart)}
+          %table.table.table-striped.table-bordered.table-condensed.span8
+            %thead
+              %tr
+                %th Cantidad
+                %th product
+                %th Optiones
+                %th Precio              
+            %tbody
+              -cart.cart_products.each do |cart_product|
+                %tr
+                  %td= cart_product.quantity
+                  %td= cart_product.product.productname
+                  %td= cart_product.product.niffty_options
+                  %td= cart_product.priced_at
+        %hr 
+      =will_paginate @carts
+    -else
+      %h3 Este agente no tiene ordenes aún

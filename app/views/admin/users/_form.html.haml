@@ -1,0 +1,8 @@
+%fieldset
+  %legend Editar Agente
+  =f.input :username
+  =f.input :first_name
+  =f.input :last_name
+  =f.input :idnumber
+  =f.input :roles, :as => :check_boxes, :collection =>User.valid_roles
+  =f.input :active, as: :boolean
