@@ -13,10 +13,10 @@ class Admin::StreetsController < ApplicationController
     @area = Area.find_by_id(params[:street][:area_id])
     @street = @area.streets.new(:name=> params[:street][:name])
     respond_to do |format|
-      if @street.save
+      if @street.save!
         format.json{ render json: @street}
       else
-        format.json{ render json: @street.errors.full_message.to_sentence}
+        format.json{ render json: @street.errors.full_messages.to_sentence, status: 422}
       end
     end
   end

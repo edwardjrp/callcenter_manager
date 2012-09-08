@@ -190,22 +190,19 @@ jQuery ->
                 {id: area.id, text: area.name}
               )
 
-      $('#addresses_list').on 'click', "#create_street", (event) ->
-        event.preventDefault()
-        form = $(event.currentTarget).closest('form')
-        $.ajax
-          type: 'POST'
-          url: form.attr('action')
-          datatype: 'JSON'
-          data: form.serialize()
-          beforeSend: (xhr) ->
-            xhr.setRequestHeader("Accept", "application/json")
-          success: (street) ->
-            $('#admin_addresses_street_actions').modal('hide')
-            console.log street
-            # $('#areas_tabs').append("<li><a class='area_tab' data-area-id='#{area.id}' data-toggle='tab' href='#area_#{area.id}'>#{area.name}</a></li>")
-            # $('#areas_contents').append("<div class='tab-pane area_pane' id='area_#{area.id}'>Cargando ...</div>")
-            # $(".area_tab[data-area-id='#{area.id}']").effect("highlight", {}, 500)
-            # window.show_alert('Zona Agregada','success')
-          error: (response)->
-            $("<div class='purr'>#{response.responseText}<div>").purr()
+    $('#addresses_list').on 'click', "#create_street", (event) ->
+      event.preventDefault()
+      form = $(event.currentTarget).closest('form')
+      $.ajax
+        type: 'POST'
+        url: form.attr('action')
+        datatype: 'JSON'
+        data: form.serialize()
+        beforeSend: (xhr) ->
+          xhr.setRequestHeader("Accept", "application/json")
+        success: (street) ->
+          $('#admin_addresses_street_actions').modal('hide')
+          $('#streets_tabs').append("<li><a class='street_tab' data-street-id='#{street.id}' data-toggle='tab' href='#street_#{street.id}'>#{street.name}</a></li>")
+          window.show_alert('Calle Agregada','success')
+        error: (response)->
+          $("<div class='purr'>#{response.responseText}<div>").purr()
