@@ -51,6 +51,8 @@ SimpleNavigation::Configuration.run do |navigation|
     #
     primary.item :home, 'Clientes', root_path, :unless => Proc.new { current_user.is? :admin }
     primary.item :builder, 'Builder', builder_path, :unless => Proc.new { current_user.is? :admin }
+    primary.item :users, 'Mis Ordenes', users_path, :unless => Proc.new { current_user.is? :admin }
+
     
     primary.item :dashboard, 'Dashboard', admin_root_path, :if => Proc.new { current_user.is? :admin }
     primary.item :stores, 'Tiendas', admin_stores_path, :if => Proc.new { current_user.is? :admin }

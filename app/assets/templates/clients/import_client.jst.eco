@@ -3,22 +3,19 @@
     <li><a href="#step-1">
           <label class="stepNumber">1</label>
           <span class="stepDesc">
-             Selección<br />
-             <small>Selección el cliente</small>
+             Clientes
           </span>
       </a></li>
     <li><a href="#step-2">
           <label class="stepNumber">2</label>
           <span class="stepDesc">
-             Ajustes<br />
-             <small>Ajuste de datos de direcciones</small>
+             Direcciones
           </span>
       </a></li>
     <li><a href="#step-3">
           <label class="stepNumber">3</label>
           <span class="stepDesc">
-             Cofirmación<br />
-             <small>Datos de contacto</small>
+             Telefonos
           </span>                   
        </a></li>
   </ul>
@@ -28,7 +25,7 @@
         <thead>
           <tr>
             <th>selecionar</th>
-            <th>Cedula</th>
+            <th>Cédula</th>
             <th>Nombre</th>
             <th>Apellido</th>
           </tr>

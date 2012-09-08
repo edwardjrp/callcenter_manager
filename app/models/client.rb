@@ -20,14 +20,14 @@
 class Client < ActiveRecord::Base
   validates :first_name, presence:  true
   validates :last_name, presence:  true
-  validates :idnumber, uniqueness:  true, allow_nil: true, :allow_blank => false
+  validates :idnumber, uniqueness:  true, allow_nil: true, :length => { :is => 11 }, :allow_blank => false
   validates :email, uniqueness:  true, :email_format => true, allow_nil: true, :allow_blank => false
   has_many :phones, :inverse_of => :client, dependent: :destroy
   has_many :addresses, dependent: :destroy#, :inverse_of => :client
   has_many :carts
   before_validation :fix_blanks
   accepts_nested_attributes_for :phones
-  accepts_nested_attributes_for :addresses, :reject_if => proc { |address| address['street_id'].blank?  }
+  accepts_nested_attributes_for :addresses, :reject_if => proc { |address| address['street_id'].blank? || address['number'].blank? }
   attr_accessible :active, :email, :first_name, :idnumber, :last_name, :phones_attributes, :addresses_attributes
   self.per_page = 15
 

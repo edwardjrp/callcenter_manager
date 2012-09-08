@@ -48,6 +48,6 @@
                     %li=number_to_phone(phone.number)
             %td
               .btn-group
-                =link_to 'Mostrar', [:admin, client], class: 'btn'
+                =link_to 'Detalles', [:admin, client], class: 'btn'
                 =link_to 'Eliminar', [:admin, client], method: :delete, :data => { :confirm => '¿Seguro que desea eliminar este client?' } , :class=> 'btn '
     =will_paginate @clients
