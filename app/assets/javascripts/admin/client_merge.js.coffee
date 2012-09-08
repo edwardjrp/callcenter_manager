@@ -67,8 +67,11 @@ jQuery ->
         beforeSend: (xhr)->
           xhr.setRequestHeader("Accept", "application/json")
         success: (clients)->
-          $('#choose_destination_client').data('clients', clients)
-          $('#choose_destination_client').html(JST['admin/clients/client_merge_table'](clients:clients))
+          if _.any(clients)
+            $('#choose_destination_client').data('clients', clients)
+            $('#choose_destination_client').html(JST['admin/clients/client_merge_table'](clients:clients))
+          else
+            $("<div class='purr'>La busqueda no produjo resultados<div>").purr()
         error: (err)->
           console.log err
 
@@ -83,8 +86,11 @@ jQuery ->
         beforeSend: (xhr)->
           xhr.setRequestHeader("Accept", "application/json")
         success: (clients)->
-          $('#choose_source_client').data('clients', clients)
-          $('#choose_source_client').html(JST['admin/clients/client_merge_table'](clients:clients))
+          if _.any(clients)
+            $('#choose_source_client').data('clients', clients)
+            $('#choose_source_client').html(JST['admin/clients/client_merge_table'](clients:clients))
+          else
+            $("<div class='purr'>La busqueda no produjo resultados<div>").purr()
         error: (err)->
           console.log err
 

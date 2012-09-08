@@ -46,5 +46,8 @@
                     %li="#{number_to_phone(phone.number)} ext#{phone.ext}"
                   -else
                     %li=number_to_phone(phone.number)
-            %td= link_to 'Detalles', [:admin,client]
+            %td
+              .btn-group
+                =link_to 'Mostrar', [:admin, client], class: 'btn'
+                =link_to 'Eliminar', [:admin, client], method: :delete, :data => { :confirm => '¿Seguro que desea eliminar este client?' } , :class=> 'btn '
     =will_paginate @clients

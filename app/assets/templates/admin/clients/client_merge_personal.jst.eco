@@ -44,7 +44,7 @@
         <input type='radio' name='client_merge_email'/>
         <%=@source_client.email%>
       </td>
-      <td data-client-email = '<%=@source_client.email%>'>
+      <td data-client-email = '<%=@target_client.email%>'>
         <input type='radio' name='client_merge_email'/>
         <%=@target_client.email%>
       </td>

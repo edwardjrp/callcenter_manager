@@ -34,6 +34,16 @@ class Admin::ClientsController < ApplicationController
     end
   end
 
+  def destroy
+    @client = Client.find(params[:id])
+    if @client.destroy
+      flash[:success]='Cliente Eliminado.'
+    else
+      flash[:error]=@client.errors.full_messages.to_sentence
+    end
+    redirect_to admin_client_path
+  end
+
   def merge_clients
     @client = Client.find(params[:merged_client][:id])
     respond_to do |format|

@@ -28,7 +28,7 @@ class Category < ActiveRecord::Base
   private
     def has_modifiers_when_manage_units
       if has_options == false 
-        errors.add(:has_options, "La categoria no tiene complementos") if type_unit == true
+        errors.add(:type_unit, "La categoria no tiene complementos") if type_unit == true
       end
     end
     
@@ -42,7 +42,7 @@ class Category < ActiveRecord::Base
     
     def not_sides_when_manage_units
       if has_sides == true 
-        errors.add(:has_sides, "Las opciones de esta categoria son unidades") if type_unit == true
+        errors.add(:type_unit, "Las opciones de esta categoria son unidades") if type_unit == true
         errors.add(:has_sides, "La categoria no tiene complementos") if has_options == false
       end
     end

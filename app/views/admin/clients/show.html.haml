@@ -1,3 +1,4 @@
+=link_to '<i class="icon-arrow-left"></i> Clientes'.html_safe, admin_clients_path, class: 'btn bottom-margin-1'
 .row
   .span4
     .well
@@ -22,9 +23,9 @@
           %strong Correo:
           =best_in_place @client, :email
       .row
-        .span4
+        .span4.client_active
           %strong Activo:
-          =best_in_place @client, :active, type: :select, collection: [[ false, 'No'],[true, 'Si']]
+          =best_in_place @client, :active, type: :checkbox, collection: ['No', 'Si']
     .well#phones_list
       .row
         .span4        
@@ -35,10 +36,15 @@
       %hr
       #client_phone_list
         -@client.phones.order('created_at DESC').each do |phone|
-          .client_phone{ :data=> {'phone-id'=> phone.id}}
+          =render 'modal', :modal_id => "edit_phone_modal_#{phone.id}", :title=>'Editar Telefono'
+          .client_phone{:id=> dom_id(phone), :data=> {'phone'=> phone.to_json}}
             .row
               .span3
-                %i.icon-trash.right
+                .btn-group.right
+                  %button.btn.btn_edit
+                    %i.icon-edit
+                  %button.btn.btn_trash
+                    %i.icon-trash
             .row
               .span4
                 %strong Numero:
@@ -55,14 +61,19 @@
           %h3 Direcciones
           %a#add_address{href: '#', data: {cities: City.all.to_json(only: [:id, :name])}}
             Agregar
-          =render 'modal', :modal_id => 'add_address_modal', :title=>'Agregar Dirección'
+          =render 'modal', :modal_id => "add_address_modal", :title=>'Agregar Dirección'
       %hr
       #client_address_list
         -@client.addresses.order('created_at DESC').each do |address|
-          .client_address{ :data=> {'address-id'=> address.id}}
+          =render 'modal', :modal_id => "edit_address_modal_#{address.id}", :title=>'Editar Dirección'
+          .client_address{:id=> dom_id(address),  :data=> {'address'=> address.to_json(include: { street: { include: { area: {include: { city: {}}}}}})}}
             .row
               .span3
-                %i.icon-trash.right
+                .btn-group.right
+                  %button.btn.btn_edit
+                    %i.icon-edit
+                  %button.btn.btn_trash
+                    %i.icon-trash
             .row
               .span4
                 %strong Ciudad:
@@ -103,7 +114,6 @@
                   =address.delivery_instructions
             %hr 
       
-  -Rails.logger.debug Address.all
   .span8#carts_list
     - if @carts.any?
       %h3 Ordenes

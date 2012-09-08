@@ -47,6 +47,10 @@ describe 'Clients general' do
       page.should have_css('.form-search')
     end
 
+    it "should delete a client" do
+      pending('Spec pending')
+    end
+
     it "should find the client from the phone" do 
       visit admin_clients_path
       fill_in 'q_phones_number_start', with: search_phone.number
