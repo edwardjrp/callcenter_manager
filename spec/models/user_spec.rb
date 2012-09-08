@@ -34,8 +34,8 @@ describe User do
     it{ should_not validate_presence_of :role_mask}
     it{ should validate_uniqueness_of :idnumber}
     it{ should validate_confirmation_of :password}
+    it{ should allow_mass_assignment_of :active}
     it{ should_not allow_mass_assignment_of :role_mask}
-    it{ should_not allow_mass_assignment_of :active}
     it{ should_not allow_mass_assignment_of :last_action_at}
     it{ should_not allow_mass_assignment_of :login_count}
     it{ should_not allow_mass_assignment_of :password_digest}

@@ -3,7 +3,7 @@ require 'spec_helper'
 
 describe 'Users general' do
   let!(:admin){create :user, :username=>'testadmin', :password=>"please", :password_confirmation=>"please", :roles=>[:admin]}
-  let!(:operator){create :user, :username=>'test', :password=>"please", :password_confirmation=>"please", :roles=>[:operator]}
+  let!(:operator){create :user, :username=>'opt', :password=>"please", :password_confirmation=>"please", :roles=>[:operator]}
 
   context "when logged as an admin" do
     before(:each) do
@@ -33,6 +33,56 @@ describe 'Users general' do
     it "should take to the user edit page" do
       within("#user_#{admin.id}"){click_link('Editar')}
       page.should have_css('form.simple_form')
+    end
+
+    it "should create a user" do
+      click_link('Agregar agente')
+      page.should have_css('form.simple_form')
+      fill_in 'Username', with: 'second'
+      fill_in 'Nombre', with: 'testname2'
+      fill_in 'Apellido', with: 'test2'
+      fill_in 'Cedula', with: '00113574334'
+      fill_in 'Password', with: 'please'
+      fill_in 'Password confirmation', with: 'please'
+      check 'operator'
+      check 'Active'
+      click_button 'Crear Agente'
+      page.should have_content('Agente creado.')
+    end
+
+
+    it "should validation error for new user" do
+      click_link('Agregar agente')
+      page.should have_css('form.simple_form')
+      fill_in 'Username', with: ''
+      fill_in 'Nombre', with: 'testname2'
+      fill_in 'Apellido', with: 'test2'
+      fill_in 'Cedula', with: '00113574334'
+      check 'operator'
+      check 'Active'
+      click_button 'Crear Agente'
+      page.should have_content('no puede')
+    end
+
+    it "should edit the user" do
+      within("#user_#{operator.id}"){click_link('Editar')}
+      fill_in 'Username', with: 'Edited name'
+      click_button 'Actualizar Agente'
+      page.should have_content('Agente actializado.')
+    end
+
+    it "should show valdiation error" do
+      within("#user_#{operator.id}"){click_link('Editar')}
+      fill_in 'Username', with: ''
+      click_button 'Actualizar Agente'
+      page.should have_content('no puede')
+    end
+
+
+    it "should delete the user", js: true do
+      within("#user_#{operator.id}"){click_link('Eliminar')}
+      page.should_not have_content('opt')
+      page.should have_content('Agente eliminado')
     end
   end
 end

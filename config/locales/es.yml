@@ -203,11 +203,13 @@ es:
       <<: *errors
     models:
       client: 'Cliente'
+      user: 'Agente'
       category: 'Categoría'
     attributes:
       user:
         first_name: 'Nombre'
         last_name: 'Apellido'
+        idnumber: 'Cedula'
       category:
         multi: 'Selección multiple'
         has_sides: 'Selección de lados'
