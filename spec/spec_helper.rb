@@ -50,7 +50,7 @@ Spork.prefork do
     end
     Capybara.javascript_driver = :poltergeist
     # Capybara.javascript_driver = :selenium_chrome
-    Capybara.default_wait_time = 5
+    Capybara.default_wait_time = 7
     # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
     # config.fixture_path = "#{::Rails.root}/spec/fixtures"
 

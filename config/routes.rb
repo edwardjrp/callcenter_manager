@@ -2,9 +2,7 @@ Kapiqua25::Application.routes.draw do
   
   
 
-  get "carts/index"
 
-  get "carts/show"
 
   get 'login', to: "sessions#new", as: :login
   get 'logout', to: "sessions#destroy", as: :logout
@@ -47,6 +45,7 @@ Kapiqua25::Application.routes.draw do
         post 'change_has_sides'
       end
     end
+    resources :settings, :only => [:index, :create]
     resources :carts do 
       collection do 
         put 'assign'

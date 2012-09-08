@@ -12,7 +12,7 @@ guard 'livereload' do
 end
 
 
-guard 'rspec', :version => 2, :cli => "--drb --format documentation",:all_after_pass => false, :run_all => { :cli => "--format progress" }do
+guard 'rspec', :version => 2, :cli => "--drb --format documentation",:all_after_pass => false, :run_all => { :cli => "--format progress --order rand" }do
   watch(%r{^spec/.+_spec\.rb$})
   watch(%r{^spec/(application|layouts)/(.+)\.rb$})                  { "spec/request" }
   watch(%r{^app/controllers/admin/(.+)_(controller)\.rb$})  { |m| "spec/requests/admin/#{m[1]}" }

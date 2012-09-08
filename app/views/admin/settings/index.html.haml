@@ -1,0 +1,11 @@
+=simple_form_for :settings, url: admin_settings_path, html: {class: 'form-horizontal'} do |f|
+  %fieldset
+    %legend
+      Configuración
+    = f.input :node_url, label: 'Servicio Websockets'
+    = f.input :price_store_ip, label: 'Ip tienda de precios'
+    = f.input :price_store_id, label: 'Id tienda de precios'
+    = f.input :pulse_port  , label: 'Puerto de escucha en pulse'
+    .form-actions
+      =f.submit 'Guardar', class: 'btn btn-primary'
+      = link_to 'Cancelar', admin_stores_path, class: 'btn'
