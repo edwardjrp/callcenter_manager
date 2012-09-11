@@ -35,3 +35,5 @@
 - Only show completed carts in clients and user carts history
 
 - Handle when Olo2 returns cero clients or there are connection errors
+
+- protect last admin deletion and self deletion

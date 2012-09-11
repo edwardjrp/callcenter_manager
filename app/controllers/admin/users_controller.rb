@@ -1,4 +1,5 @@
 class Admin::UsersController < ApplicationController
+  before_filter {|c| c.accessible_by([:admin], root_path)}
   def index
     @users = User.page(params[:page])
   end

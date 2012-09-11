@@ -1,4 +1,5 @@
 class Admin::CartsController < ApplicationController
+  before_filter {|c| c.accessible_by([:admin], root_path)}
   def index
     @search = Cart.search(params[:q])
     @carts= @search.result(:distinct => true).page(params[:page])

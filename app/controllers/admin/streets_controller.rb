@@ -1,4 +1,5 @@
 class Admin::StreetsController < ApplicationController
+  before_filter {|c| c.accessible_by([:admin], root_path)}
   respond_to :json
   def index
     @area = Area.find_by_id(params[:area_id])

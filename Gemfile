@@ -46,7 +46,6 @@ gem 'simple-navigation-bootstrap'
 gem "transitions", :require => ["transitions", "active_record/transitions"]
 gem 'exception_notification'
 gem 'settler'
-gem 'delayed_job_active_record'
 gem 'acts_as_list'
 gem 'simple_form'
 gem "formtastic"
@@ -56,8 +55,10 @@ gem "haml-rails"
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem 'carrierwave'
-# gem 'rest_in_place'
 gem 'best_in_place'
+gem 'sidekiq'
+gem 'sinatra', require: false
+gem 'slim'
 
 # To use ActiveModel has_secure_password
 gem 'bcrypt-ruby', '~> 3.0.0'

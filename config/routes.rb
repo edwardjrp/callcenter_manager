@@ -1,10 +1,9 @@
+require 'sidekiq/web'
+require "admin_constraint"
+
 Kapiqua25::Application.routes.draw do
   
-  
-
-
-
-  
+  mount Sidekiq::Web => 'admin/tasks', :constraints => AdminConstraint.new
 
   resources :users , :only =>:index
 
@@ -51,6 +50,7 @@ Kapiqua25::Application.routes.draw do
     end
     resources :users
     resources :settings, :only => [:index, :create]
+    resources :services, :only => [:index, :create]
     resources :carts do 
       collection do 
         put 'assign'
@@ -71,6 +71,7 @@ Kapiqua25::Application.routes.draw do
     resources :store_products, :only =>[:create, :update]
     root :to => 'dashboard#index'
   end
+
   root to: 'home#index'
   # The priority is based upon order of creation:
   # first created -> highest priority.

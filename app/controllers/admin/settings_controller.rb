@@ -1,5 +1,6 @@
 #encoding: utf-8
 class Admin::SettingsController < ApplicationController
+  before_filter {|c| c.accessible_by([:admin], root_path)}
   def index
     @settings = Hashit.new(build_settings)
   end
