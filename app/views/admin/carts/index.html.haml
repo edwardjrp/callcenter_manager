@@ -3,14 +3,14 @@
     %h2 Ordenes
 .row
   .span3
-    =select_tag :mailboxes, options_for_select(Cart.valid_mailboxes), :prompt=> 'Seleccione un mailbox'
+    =select_tag :mailboxes, options_for_select( [['Mover a archivados', 'archivados'], ['Mover a eliminados', 'eliminados']]), :prompt=> 'Mover a un mailbox'
 .row
   .span12#carts_list
     = search_form_for [:admin,@search], :url => admin_carts_path, :html=>{:class=>'well form-search top-margin-1 filter'} do |f|
       =f.text_field :user_first_name_cont, :class=> 'input-medium search-query', :placeholder=>'Nombre del agente'
       =f.text_field :user_last_name_cont, :class=> 'input-medium search-query', :placeholder=>'Apellido del agente'
-      =f.text_field :created_at_gteq, :class=> 'input-medium search-query', :placeholder=>'Creado despues de '
-      =f.text_field :created_at_lteq, :class=> 'input-medium search-query', :placeholder=>'Creado despues de '
+      =f.text_field :created_at_gteq, :class=> 'input-medium search-query', :placeholder=>'Creado después de '
+      =f.text_field :created_at_lteq, :class=> 'input-medium search-query', :placeholder=>'Creado antes de '
       =f.submit 'Buscar', :name=>nil, :class=> 'btn'
       %a.btn#clear_cart_search{ href: '#'} Limpiar
     - if @carts.any?

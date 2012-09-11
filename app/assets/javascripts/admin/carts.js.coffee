@@ -28,3 +28,10 @@ jQuery ->
 
         complete: (response)->
           console.log response
+
+
+  $('#q_created_at_gteq').datepicker
+    dateFormat: 'yy-mm-dd'
+    
+  $('#q_created_at_lteq').datepicker
+    dateFormat: 'yy-mm-dd'

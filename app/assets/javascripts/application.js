@@ -19,6 +19,7 @@
 //= require jquery.ui.droppable
 //= require jquery.hoverpulse
 //= require jquery.effects.highlight
+//= require jquery.ui.datepicker
 //= require select2
 //= require jquery.purr
 //= require best_in_place
