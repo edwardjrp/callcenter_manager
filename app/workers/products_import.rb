@@ -14,7 +14,6 @@ class ProductsImport
       doc= Nokogiri::XML(xml_string)
       products_table = doc.css('Products').first.inner_text.gsub(/"/,'&quot;')
       CSV.parse(products_table, {:col_sep=>"\t", :headers=>true}) do |row|
-        # validate descontinued
         Product.create do |product|
           product.category_id = Category.find_or_create_by_name(row['CategoryCode']).id
           product.productcode = row['ProductCode']

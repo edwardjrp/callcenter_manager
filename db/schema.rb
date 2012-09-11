@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120822145710) do
+ActiveRecord::Schema.define(:version => 20120911003304) do
 
   create_table "addresses", :force => true do |t|
     t.integer  "client_id"
@@ -119,6 +119,22 @@ ActiveRecord::Schema.define(:version => 20120822145710) do
   add_index "clients", ["email"], :name => "index_clients_on_email", :unique => true
   add_index "clients", ["idnumber"], :name => "index_clients_on_idnumber", :unique => true
 
+  create_table "import_events", :force => true do |t|
+    t.string   "import_log_id"
+    t.string   "name"
+    t.string   "subject"
+    t.string   "message"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
+  create_table "import_logs", :force => true do |t|
+    t.string   "log_type"
+    t.string   "state"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "phones", :force => true do |t|
     t.string   "number"
     t.string   "ext"
@@ -139,8 +155,9 @@ ActiveRecord::Schema.define(:version => 20120822145710) do
     t.string   "flavorcode"
     t.string   "optionselectiongrouptype"
     t.string   "productoptionselectiongroup"
-    t.datetime "created_at",                  :null => false
-    t.datetime "updated_at",                  :null => false
+    t.datetime "created_at",                                     :null => false
+    t.datetime "updated_at",                                     :null => false
+    t.boolean  "discontinued",                :default => false
   end
 
   add_index "products", ["options"], :name => "index_products_on_options"
@@ -172,8 +189,9 @@ ActiveRecord::Schema.define(:version => 20120822145710) do
     t.string   "ip"
     t.integer  "city_id"
     t.integer  "storeid"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
+    t.boolean  "discontinued", :default => false
   end
 
   create_table "streets", :force => true do |t|

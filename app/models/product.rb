@@ -13,6 +13,7 @@
 #  productoptionselectiongroup :string(255)
 #  created_at                  :datetime         not null
 #  updated_at                  :datetime         not null
+#  discontinued                :boolean          default(FALSE)
 #
 
 class Product < ActiveRecord::Base
