@@ -14,4 +14,6 @@ class ImportLog < ActiveRecord::Base
   validates :log_type, :state, presence: true
   accepts_nested_attributes_for :import_events
   attr_accessible :log_type, :state
+
+  scope :products_import, where(log_type: 'products_import')
 end

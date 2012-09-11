@@ -15,4 +15,6 @@ class ImportEvent < ActiveRecord::Base
   validates :import_log_id, :name, :subject, :message, presence: true
   belongs_to :import_log
   attr_accessible :import_log_id, :message, :name, :subject
+
+  
 end

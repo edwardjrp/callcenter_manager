@@ -1,0 +1,18 @@
+.well
+  %h3 Importacion de productos desde pulse
+  = button_to "Importar", { action: "create", soap_action: 'get_stores_products' }, data: {confirm: "Are you sure?"}, class: 'btn'
+  %h4 
+    Eventos de la importacion de products mas reciente:
+    = time_ago_in_words(@product_import_log.created_at)
+  #products_import_log
+    %table.table.table-striped.table-bordered.table-condensed
+      %thead
+        %th name
+        %th subject
+        %th message
+      %tbody
+        -@product_import_log.import_events.each do |import_event|
+          %tr
+            %td= import_event.name
+            %td= import_event.subject
+            %td= import_event.message

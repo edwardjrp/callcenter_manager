@@ -123,7 +123,7 @@ ActiveRecord::Schema.define(:version => 20120911003304) do
     t.string   "import_log_id"
     t.string   "name"
     t.string   "subject"
-    t.string   "message"
+    t.text     "message"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
   end

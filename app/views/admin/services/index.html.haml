@@ -1,6 +1,4 @@
 %h1 Servicios web externos
-
-.well
-  %h3 Importacion de productos desde pulse
-  = button_to "Importar", { action: "create", soap_action: 'get_stores_products' }, data: {confirm: "Are you sure?"}, class: 'btn'
-  / ="Ultima importacion realizada hace #{time_ago_in_words Kapiqua.last_products_import} ( #{l Kapiqua.last_products_import, format: :short} )"
+#seviceList
+  = render 'imports'
+    

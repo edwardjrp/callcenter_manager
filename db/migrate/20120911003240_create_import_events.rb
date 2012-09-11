@@ -4,7 +4,7 @@ class CreateImportEvents < ActiveRecord::Migration
       t.string :import_log_id
       t.string :name
       t.string :subject
-      t.string :message
+      t.text :message
 
       t.timestamps
     end
