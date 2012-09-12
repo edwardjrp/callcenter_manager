@@ -1,3 +1,4 @@
+= render 'administration'
 =link_to '<i class="icon-arrow-left"></i> Agentes'.html_safe, admin_users_path, class: 'btn bottom-margin-1'
 = simple_form_for [:admin, @user], html: { class: 'form-horizontal'} do |f|
   = render 'form',f: f

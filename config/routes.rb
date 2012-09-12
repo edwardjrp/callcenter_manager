@@ -50,7 +50,10 @@ Kapiqua25::Application.routes.draw do
     end
     resources :users
     resources :settings, :only => [:index, :create]
-    resources :services, :only => [:index, :create]
+
+    # resources :services, :only => [:index, :create]
+    get 'import/products', to: 'services#import_products'
+
     resources :carts do 
       collection do 
         put 'assign'

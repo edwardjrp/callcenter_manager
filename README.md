@@ -37,3 +37,5 @@
 - Handle when Olo2 returns cero clients or there are connection errors
 
 - protect last admin deletion and self deletion
+
+- verify acceptance test for admin stores editing

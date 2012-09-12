@@ -11,7 +11,9 @@ describe 'Services general' do
 
     it 'should render the settings list' do
       visit admin_root_path
-      within('.navbar-fixed-top'){page.should have_content('Servicios web')}
+      within('.navbar-fixed-top'){page.should have_content('Administración')}
+      within('.navbar-fixed-top'){click_link('Administración')}
+      within('.subnav'){page.should have_content('Importación de productos')}
     end
 
     

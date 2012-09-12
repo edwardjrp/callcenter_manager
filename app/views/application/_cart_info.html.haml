@@ -1,57 +1,56 @@
--if user_signed_in? && (!current_user.is? :admin)
-  .subnav.subnav-fixed
-    %ul.nav.nav-pills
-      %li
-        - if current_cart.client.present?
-          =link_to "Cliente: #{current_cart.client.full_name}", current_cart.client, :id => "choose_client"
-        -else
-          %a{:id => "choose_client", :href=>'#'}
-            Cliente: N/A
-      %li
-        %a#choose_service_method.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
-          Modo de servicio:
-          = current_cart.try(:service_method) || " N/A"
-          %b.caret
-        %ul.dropdown-menu#choose_service_method_dropdown
+.subnav.subnav-fixed
+  %ul.nav.nav-pills
+    %li
+      - if current_cart.client.present?
+        =link_to "Cliente: #{current_cart.client.full_name}", current_cart.client, :id => "choose_client"
+      -else
+        %a{:id => "choose_client", :href=>'#'}
+          Cliente: N/A
+    %li
+      %a#choose_service_method.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
+        Modo de servicio:
+        = current_cart.try(:service_method) || " N/A"
+        %b.caret
+      %ul.dropdown-menu#choose_service_method_dropdown
+        %li
+          %a#service_method_delivery{:href=> "#" , :data=> { "service-method"=> 'delivery' }}
+            -if current_cart.delivery? 
+              %i.icon-ok
+            Delivery
+        %li
+          %a#service_method_carry_out{:href=> "#" , :data=> { "service-method"=> 'carryout' }}
+            -if current_cart.carry_out? 
+              %i.icon-ok
+            Carry Out
+        %li
+          %a#service_method_pickup{:href=> "#" , :data=> { "service-method"=> 'pickup' }}
+            -if current_cart.pickup? 
+              %i.icon-ok
+            Pick up
+    %li
+      %a#choose_store.dropdown-toggle{"data-toggle" => "dropdown", :href=>'#'}
+        Tienda:
+        - if current_cart.store.present? && current_cart.store.name
+          = current_cart.store.name
+        - else
+          N/A
+        %b.caret
+      %ul#store_list.dropdown-menu.scrollable_dropdown
+        - if current_cart.present? && current_cart.client.present?
+          -if current_cart.client.addresses.any?
+            -current_cart.client.addresses.each do |address|
+              -if address.store.present?
+                %li
+                  %a.set_last_address{:data=> { "address-id"=> address.id , "store-id"=> address.store.id}}
+                    - if current_cart.client.last_address.present? && current_cart.client.last_address == address
+                      %i.icon-bookmark
+                    ="Calle #{address.street.name}, No. #{address.number} - Tienda: #{address.store.name} #{address.store.storeid}"
+            %hr
+        - Store.all.each do |store|
           %li
-            %a#service_method_delivery{:href=> "#" , :data=> { "service-method"=> 'delivery' }}
-              -if current_cart.delivery? 
+            %a.set_target_store{id: dom_id(store, store.storeid), :data=> { "store-id"=> store.id }}
+              - if current_cart.present? && current_cart.store.present? && store == current_cart.store
                 %i.icon-ok
-              Delivery
-          %li
-            %a#service_method_carry_out{:href=> "#" , :data=> { "service-method"=> 'carryout' }}
-              -if current_cart.carry_out? 
-                %i.icon-ok
-              Carry Out
-          %li
-            %a#service_method_pickup{:href=> "#" , :data=> { "service-method"=> 'pickup' }}
-              -if current_cart.pickup? 
-                %i.icon-ok
-              Pick up
-      %li
-        %a#choose_store.dropdown-toggle{"data-toggle" => "dropdown", :href=>'#'}
-          Tienda:
-          - if current_cart.store.present? && current_cart.store.name
-            = current_cart.store.name
-          - else
-            N/A
-          %b.caret
-        %ul#store_list.dropdown-menu.scrollable_dropdown
-          - if current_cart.present? && current_cart.client.present?
-            -if current_cart.client.addresses.any?
-              -current_cart.client.addresses.each do |address|
-                -if address.store.present?
-                  %li
-                    %a.set_last_address{:data=> { "address-id"=> address.id , "store-id"=> address.store.id}}
-                      - if current_cart.client.last_address.present? && current_cart.client.last_address == address
-                        %i.icon-bookmark
-                      ="Calle #{address.street.name}, No. #{address.number} - Tienda: #{address.store.name} #{address.store.storeid}"
-              %hr
-          - Store.all.each do |store|
-            %li
-              %a.set_target_store{id: dom_id(store, store.storeid), :data=> { "store-id"=> store.id }}
-                - if current_cart.present? && current_cart.store.present? && store == current_cart.store
-                  %i.icon-ok
-                ="#{store.name} #{store.storeid}"
-      %li
-        %a{:id => "proceed_to_checkout_out", :href=>'#'} Checkout!
+              ="#{store.name} #{store.storeid}"
+    %li
+      %a{:id => "proceed_to_checkout_out", :href=>'#'} Checkout!
