@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120911003304) do
+ActiveRecord::Schema.define(:version => 20120912025820) do
 
   create_table "addresses", :force => true do |t|
     t.integer  "client_id"
@@ -118,6 +118,27 @@ ActiveRecord::Schema.define(:version => 20120911003304) do
 
   add_index "clients", ["email"], :name => "index_clients_on_email", :unique => true
   add_index "clients", ["idnumber"], :name => "index_clients_on_idnumber", :unique => true
+
+  create_table "coupons", :force => true do |t|
+    t.string   "code"
+    t.text     "description"
+    t.text     "custom_description"
+    t.text     "generated_description"
+    t.string   "minimum_price"
+    t.boolean  "hidden"
+    t.boolean  "secure"
+    t.string   "effective_days"
+    t.string   "order_sources"
+    t.string   "service_methods"
+    t.date     "expiration_date"
+    t.date     "effective_date"
+    t.boolean  "enable",                :default => true
+    t.boolean  "discontinued",          :default => false
+    t.datetime "created_at",                               :null => false
+    t.datetime "updated_at",                               :null => false
+  end
+
+  add_index "coupons", ["code"], :name => "index_coupons_on_code", :unique => true
 
   create_table "import_events", :force => true do |t|
     t.integer  "import_log_id"

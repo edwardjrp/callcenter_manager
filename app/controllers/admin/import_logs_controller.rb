@@ -20,7 +20,8 @@ class Admin::ImportLogsController < ApplicationController
         flash[:success] = 'Importacion de productos calendarizada.'
         ProductsImport.perform_async
       when ImportLog.coupons_import
-        flash[:success] = 'La tarea solicitada pendiente de implementacion'
+        flash[:success] = 'Importacion de cupones calendarizada.'
+        CouponsImport.perform_async
       when ImportLog.rnc_import
         flash[:success] = 'La tarea solicitada pendiente de implementacion'
       else

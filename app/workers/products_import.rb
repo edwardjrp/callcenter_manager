@@ -24,7 +24,7 @@ class ProductsImport
       CSV.parse(products_table, {:col_sep=>"\t", :headers=>true}) do |row|
         # find product and check if descontinued
         product_to_find = product_present?( row['CategoryCode'], row['ProductCode'], row['ProductName'], row['Options'], row['SizeCode'], row['FlavorCode'], row['OptionSelectionGroupType'], row['ProductOptionSelectionGroup'])
-        if  product_to_find.nil? || (product_to_find.discontinued.present? && product_to_find.discontinued == true)
+        unless product_to_find.present? && product_to_find.discontinued == false
           Product.create do |product|
             product.category_id = Category.find_or_create_by_name(row['CategoryCode']).id
             product.productcode = row['ProductCode']
@@ -37,7 +37,7 @@ class ProductsImport
           end
           import_log.import_events.create(name: 'Nuevo producto agregado', subject: row['ProductCode'] , message: "Se agrego #{row['ProductName']}")
         else
-          import_log.import_events.create(name: 'Conflicto de Importación', subject:"#{product_to_find.id} - #{product_to_find.productcode}" , message: 'Durante la importación se encontro un product identico, pero esta no descontinuado')
+          import_log.import_events.create(name: 'Conflicto de Importación', subject:"#{product_to_find.id} - #{product_to_find.productcode}" , message: 'Durante la importación se encontro un product identico, que no esta descontinuado')
         end
         # end find product and check if discontinued
       end
