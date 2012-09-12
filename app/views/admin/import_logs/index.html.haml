@@ -1,0 +1,24 @@
+= render 'administration'
+%h3.bottom-margin-1 Logs de importación
+.row
+  .span3=button_to 'Importar productos', admin_import_logs_path(log_type: ImportLog.products_import), class: 'btn'
+  .span3=button_to 'Importar cupones', admin_import_logs_path(log_type: ImportLog.coupons_import), class: 'btn'
+
+= will_paginate @import_logs
+%table.table.table-striped.table-bordered.table-condensed#import_logs_list
+  %thead
+    %tr
+      %th Typo de tarea
+      %th Estado
+      %th Iniciada hace
+      %th Iniciada en
+      %td
+  %tbody
+    - @import_logs.each do |import_log| 
+      %tr{ id: dom_id(import_log)}
+        %td= humanize_import_type import_log.log_type
+        %td= import_log.state
+        %td= time_ago_in_words import_log.created_at
+        %td= l import_log.created_at, format: :long
+        %td=link_to 'Ver log', [:admin, import_log]
+= will_paginate @import_logs

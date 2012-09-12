@@ -1,0 +1,19 @@
+= render 'administration'
+=link_to '<i class="icon-arrow-left"></i> Log de importación'.html_safe, admin_import_logs_path, class: 'btn bottom-margin-1'
+%h3.bottom-margin-1=" Eventos para la #{humanize_import_type @import_log.log_type}"
+= will_paginate @import_events
+%table.table.table-striped.table-bordered.table-condensed#import_events_list
+  %thead
+    %tr
+      %th name
+      %th Elemento
+      %th Mensaje
+      %th fecha
+  %tbody
+    - @import_events.each do |import_event| 
+      %tr{ id: dom_id(import_event)}
+        %td= import_event.name
+        %td= import_event.subject
+        %td= import_event.message
+        %td= l import_event.created_at, format: :long
+= will_paginate @import_events

@@ -120,7 +120,7 @@ ActiveRecord::Schema.define(:version => 20120911003304) do
   add_index "clients", ["idnumber"], :name => "index_clients_on_idnumber", :unique => true
 
   create_table "import_events", :force => true do |t|
-    t.string   "import_log_id"
+    t.integer  "import_log_id"
     t.string   "name"
     t.string   "subject"
     t.text     "message"

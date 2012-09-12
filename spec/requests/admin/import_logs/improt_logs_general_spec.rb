@@ -13,7 +13,7 @@ describe 'Services general' do
       visit admin_root_path
       within('.navbar-fixed-top'){page.should have_content('Administración')}
       within('.navbar-fixed-top'){click_link('Administración')}
-      within('.subnav'){page.should have_content('Importación de productos')}
+      within('.subnav'){page.should have_content('Importación')}
     end
 
     

@@ -3,6 +3,10 @@ require "admin_constraint"
 
 Kapiqua25::Application.routes.draw do
   
+  get "import_logs/index"
+
+  get "import_logs/show"
+
   mount Sidekiq::Web => 'admin/tasks', :constraints => AdminConstraint.new
 
   resources :users , :only =>:index
@@ -49,10 +53,9 @@ Kapiqua25::Application.routes.draw do
       end
     end
     resources :users
-    resources :settings, :only => [:index, :create]
 
-    # resources :services, :only => [:index, :create]
-    get 'import/products', to: 'services#import_products'
+    resources :import_logs
+    resources :settings , only: :index
 
     resources :carts do 
       collection do 

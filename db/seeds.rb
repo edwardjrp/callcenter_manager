@@ -86,23 +86,23 @@ if File.exists? addresses_data_file
   end
 end
 
-puts "adding categories and products"
-temp_products_file = Rails.root.join("tmp","15871_get_store_products.xml")
-if File.exists?(temp_products_file)
-  product_file_data = File.open(temp_products_file, 'r:utf-8').read
-  doc= Nokogiri::XML(product_file_data)
-  products_table = doc.css('Products').first.inner_text.gsub(/"/,'&quot;')
-  CSV.parse(products_table, {:col_sep=>"\t", :headers=>true}) do |row|
-    Product.create do |product|
-      # puts "#{row['CategoryCode']} > #{row['ProductCode']} - #{row['ProductName']}"
-      product.category_id = Category.find_or_create_by_name(row['CategoryCode']).id
-      product.productcode = row['ProductCode']
-      product.productname = row['ProductName']
-      product.options = row['Options']
-      product.sizecode = row['SizeCode']
-      product.flavorcode = row['FlavorCode']
-      product.optionselectiongrouptype = row['OptionSelectionGroupType']
-      product.productoptionselectiongroup = row['ProductOptionSelectionGroup']
-    end
-  end
-end
+# puts "adding categories and products"
+# temp_products_file = Rails.root.join("tmp","15871_get_store_products.xml")
+# if File.exists?(temp_products_file)
+#   product_file_data = File.open(temp_products_file, 'r:utf-8').read
+#   doc= Nokogiri::XML(product_file_data)
+#   products_table = doc.css('Products').first.inner_text.gsub(/"/,'&quot;')
+#   CSV.parse(products_table, {:col_sep=>"\t", :headers=>true}) do |row|
+#     Product.create do |product|
+#       # puts "#{row['CategoryCode']} > #{row['ProductCode']} - #{row['ProductName']}"
+#       product.category_id = Category.find_or_create_by_name(row['CategoryCode']).id
+#       product.productcode = row['ProductCode']
+#       product.productname = row['ProductName']
+#       product.options = row['Options']
+#       product.sizecode = row['SizeCode']
+#       product.flavorcode = row['FlavorCode']
+#       product.optionselectiongrouptype = row['OptionSelectionGroupType']
+#       product.productoptionselectiongroup = row['ProductOptionSelectionGroup']
+#     end
+#   end
+# end
