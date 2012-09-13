@@ -11,6 +11,7 @@ jQuery ->
       beforeSend: (xhr) ->
         xhr.setRequestHeader("Accept", "application/json")
       success: (cart)->
+        $('#checkout_Modal').find('.modal-body').html(JST['cart/checkout']())
         $('#process_inf').text("Procesando orden No. #{cart.id}")
         $('#progress_bar').find('.bar')
         $('#order_info').find('.row:first').after("<div class='row bottom-margin-1'><div class=\"span2 \"><strong>Modo de servicio: </strong> #{cart.service_method}</div></div>")
@@ -22,8 +23,8 @@ jQuery ->
         console.log err
   
   
-  $('#checkout_Modal').on 'hide', ()->
-    alert('FALTA CORREGIR ERROR DE DUPLICACION')
+  # $('#checkout_Modal').on 'hide', ()->
+  #   alert('FALTA CORREGIR ERROR DE DUPLICACION')
   
   
   
@@ -122,62 +123,3 @@ progressbar_advance = (times) ->
   new_width = (times*(total_width*0.1))
   console.log new_width
   $('#progress_bar').find('.bar').css({width: "#{new_width}px"})
-
-reset_modal =   '<div class="row">
-            <div class="span8" id="process_inf">Inciando ...</div>
-          </div>
-          <div class="row">
-            <div class="span8" id="progress_bar">
-              <div class="progress progress-striped active">
-                <div class="bar" style="width: 0%;"></div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="span4" id="client_info">
-              <div class="row">
-                <div class="span4 bottom-margin-1">
-                  <h4>Validation de Datos del cliente</h4>
-                </div>
-              </div>
-              <div class="row">
-                <div class="span2" id="order_client_first_name"></div>
-                <div class="span2" id="order_client_last_name"></div>
-              </div>
-              <div class="row">
-                <div class="span2" id="order_client_email"></div>
-                <div class="span2" id="order_client_idnumber"></div>
-              </div>
-              <div class="row">
-                <div class="span4" id="order_client_phones"></div>
-              </div>
-              <div class="row">
-                <div class="span4">
-                  <hr>
-                </div>
-              </div>
-              <div class="row">
-                <div class="span4 bottom-margin-1">
-                  <h4>Totales</h4>
-                </div>
-              </div>
-              <div class="row">
-                <div class="span4" id="order_totals"></div>
-              </div>
-              <div class="row">
-                <div class="span4">
-                  <hr>
-                </div>
-              </div>
-            </div>
-            <div class="span4" id="order_info">
-              <div class="row">
-                <div class="span4 bottom-margin-1">
-                  <h4>Datos de la orden</h4>
-                </div>
-              </div>
-              <div class="row">
-                <div class="span4" id="order_cart_products"></div>
-              </div>
-            </div>
-          </div>'
