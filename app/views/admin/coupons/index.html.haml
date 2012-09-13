@@ -1,0 +1,27 @@
+%h3.bottom-margin-1 Cupones
+= search_form_for [:admin,@search], :html=>{:class=>'well form-search top-margin-1 filter'} do |f|
+  =f.text_field :code_cont, :class=> 'input-medium search-query', :placeholder=>'Código contiene'
+  =f.text_field :minimum_price_gteq, :class=> 'input-medium search-query', :placeholder=>'Precio minimo mayor '
+  =f.text_field :minimum_price_lteq, :class=> 'input-medium search-query', :placeholder=>'Precio minimo menor que'
+  =f.submit 'Buscar', :name=>nil, :class=> 'btn'
+  %a.btn#clear_coupon_search{ href: '#'} Limpiar
+- if @coupons.any?
+  =will_paginate @coupons
+  %table.table.table-striped.table-bordered.table-condensed#coupons_list
+    %thead
+      %th= sort_link @search, :code, "Código"
+      %th Descripción
+      %th= sort_link @search, :minimum_price, 'Precio minimo'
+      %th 
+    %tbody
+      -@coupons.each do |coupon|
+        %tr{:data=>{:id=>dom_id(coupon)}}
+          %td= coupon.code
+          %td= coupon.description
+          %td= number_to_currency coupon.minimum_price
+          %td
+            .btn-group
+              =link_to 'Detalles', [:admin, coupon], class: 'btn'
+              =link_to 'Descontinuar', '#', class: 'btn'
+              =link_to 'Eliminar', [:admin, coupon], method: :delete, :data => { :confirm => '¿Seguro que desea eliminar este cupón?' } , :class=> 'btn '
+  =will_paginate @coupons

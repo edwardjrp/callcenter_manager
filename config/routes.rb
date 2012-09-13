@@ -53,6 +53,7 @@ Kapiqua25::Application.routes.draw do
       end
     end
     resources :users
+    resources :coupons, except: [:new, :create]
 
     resources :import_logs
     resources :settings , only: :index

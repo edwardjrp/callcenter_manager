@@ -27,7 +27,7 @@ class CouponsImport
             coupon.code = coupon_xml.css("Code").inner_text
             coupon.description = coupon_xml.css("Description").inner_text
             coupon.generated_description = coupon_xml.css("GeneratedDescription").inner_text
-            coupon.minimum_price = coupon_xml.css("MinimumPrice").inner_text
+            coupon.minimum_price = coupon_xml.css("MinimumPrice").first.inner_text.to_f
             # coupon.discount_value = coupon_xml.css("DiscountValue").inner_text
             coupon.hidden = coupon_xml.css("Hidden").inner_text
             coupon.secure = coupon_xml.css("Secure").inner_text

@@ -60,6 +60,7 @@ SimpleNavigation::Configuration.run do |navigation|
     primary.item :clients, 'Clientes', admin_clients_path, :if => Proc.new { current_user.is? :admin }
     primary.item :addresses, 'Direcciones', admin_addresses_path, :if => Proc.new { current_user.is? :admin }
     primary.item :carts, 'Ordenes', admin_carts_path, :if => Proc.new { current_user.is? :admin }
+    primary.item :coupons, 'Cupones', admin_coupons_path, :if => Proc.new { current_user.is? :admin }
     primary.item :users, 'Administración', admin_users_path, :if => Proc.new { current_user.is? :admin } 
 
 

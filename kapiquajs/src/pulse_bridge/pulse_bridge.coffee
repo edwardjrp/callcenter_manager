@@ -34,21 +34,21 @@ class PulseBridge
   
   
   
-   @price: (cart, err_cb, cb) ->
-     Category.all {}, (cat_error, categories)->
-        if cat_error?
-          console.log cat_error
-        else
-          get_products = (category, cb)->
-            Product.all {where: {category_id: category.id}}, (cat_product_err, products)->
-              json_category = JSON.parse(JSON.stringify(category))
-              json_category.products = JSON.parse(JSON.stringify(products))
-              cb(null, json_category)  
-          async.map categories,get_products , (err, categories) ->
-            if err?
-              console.log err
-            else
-              PulseBridge.send('PriceOrder', PulseBridge.body('PriceOrder', cart, categories), err_cb, cb)    
+  @price: (cart, err_cb, cb) ->
+    Category.all {}, (cat_error, categories)->
+      if cat_error?
+        console.log cat_error
+      else
+        get_products = (category, cb)->
+          Product.all {where: {category_id: category.id}}, (cat_product_err, products)->
+            json_category = JSON.parse(JSON.stringify(category))
+            json_category.products = JSON.parse(JSON.stringify(products))
+            cb(null, json_category)  
+        async.map categories,get_products , (err, categories) ->
+          if err?
+            console.log err
+          else
+            PulseBridge.send('PriceOrder', PulseBridge.body('PriceOrder', cart, categories), err_cb, cb)    
               
      
      

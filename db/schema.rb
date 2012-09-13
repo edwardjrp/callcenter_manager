@@ -124,7 +124,7 @@ ActiveRecord::Schema.define(:version => 20120912025820) do
     t.text     "description"
     t.text     "custom_description"
     t.text     "generated_description"
-    t.string   "minimum_price"
+    t.decimal  "minimum_price"
     t.boolean  "hidden"
     t.boolean  "secure"
     t.string   "effective_days"
