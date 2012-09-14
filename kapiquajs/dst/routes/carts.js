@@ -1,4 +1,4 @@
-var Address, Cart, CartProduct, Carts, Client, OrderReply, Phone, Product, PulseBridge, Store, async, to_json, _;
+var Address, Cart, CartProduct, Carts, Client, OrderReply, Phone, Product, PulseBridge, Store, async, parsed_options, to_json, _;
 
 Cart = require('../models/cart');
 
@@ -215,7 +215,7 @@ Carts = (function() {
                     var jcp;
                     jcp = to_json(cp);
                     jcp.product = to_json(product);
-                    return cb(null, jcp);
+                    return parsed_options(jcp, cb);
                   });
                 };
                 return async.map(cart_products, get_products, function(it_err, cart_products) {
@@ -241,7 +241,7 @@ Carts = (function() {
                     });
                   }
                 } else {
-                  return callback(null, client, cart_products, phones);
+                  return callback(null, client, cart_products, to_json(phones));
                 }
               });
             } else {
@@ -257,7 +257,7 @@ Carts = (function() {
                     });
                   }
                 } else {
-                  return callback(null, client, cart_products, phones, addresses);
+                  return callback(null, client, cart_products, phones, to_json(addresses));
                 }
               });
             } else {
@@ -272,7 +272,7 @@ Carts = (function() {
                   });
                 }
               } else {
-                return callback(null, client, cart_products, phones, addresses, store);
+                return callback(null, client, cart_products, phones, addresses, to_json(store));
               }
             });
           }
@@ -280,9 +280,9 @@ Carts = (function() {
           if (final_error != null) {
             return console.log('Error at the end');
           } else {
-            console.log(cart);
+            console.log(to_json(cart));
             console.log(cart_products);
-            console.log(client);
+            console.log(to_json(client));
             console.log(phones);
             console.log(addresses);
             return console.log(store);
@@ -299,6 +299,48 @@ Carts = (function() {
 
 to_json = function(obj) {
   return JSON.parse(JSON.stringify(obj));
+};
+
+parsed_options = function(cart_product, callback) {
+  var current_category_id, product_options, recipe;
+  if (cart_product.product.options === '' && cart_product.options === '') {
+    return [];
+  }
+  product_options = [];
+  recipe = cart_product.options || cart_product.product.options;
+  current_category_id = cart_product.product.category_id;
+  return Product.all({
+    where: {
+      category_id: current_category_id,
+      options: 'OPTION'
+    }
+  }, function(cat_options_products_err, cat_options_products) {
+    if (_.any(recipe.split(','))) {
+      _.each(_.compact(recipe.split(',')), function(code) {
+        var code_match, current_part, current_product, current_quantity, product_option;
+        code_match = code.match(/^([0-9]{0,2}\.?[0|7|5]{0,2})([A-Z]{1,}[a-z]{0,})(?:\-([L12]))?/);
+        if (code_match != null) {
+          if (!(code_match[1] != null) || code_match[1] === '') {
+            code_match[1] = '1';
+          }
+          current_quantity = code_match[1];
+          current_product = _.find(cat_options_products, function(op) {
+            return op.productcode === code_match[2];
+          });
+          current_part = code_match[3] || '';
+          product_option = {
+            quantity: Number(current_quantity),
+            product: to_json(current_product),
+            part: current_part
+          };
+          return product_options.push(product_option);
+        }
+      });
+      cart_product.product_options = product_options;
+      console.log(product_options);
+      return callback(null, cart_product);
+    }
+  });
 };
 
 module.exports = Carts;

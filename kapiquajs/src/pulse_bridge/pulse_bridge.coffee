@@ -44,7 +44,7 @@ class PulseBridge
             json_category = JSON.parse(JSON.stringify(category))
             json_category.products = JSON.parse(JSON.stringify(products))
             cb(null, json_category)  
-        async.map categories,get_products , (err, categories) ->
+        async.map categories, get_products , (err, categories) ->
           if err?
             console.log err
           else

@@ -93,7 +93,8 @@ class Carts
                   cp.product (p_err, product) ->
                     jcp = to_json(cp)
                     jcp.product = to_json(product)
-                    cb(null, jcp)
+                    parsed_options(jcp, cb)
+                    
                 async.map cart_products,get_products, (it_err, cart_products) ->
                   if it_err
                     socket.emit 'cart:place:error', {error: JSON.stringify(it_err)} if socket?
@@ -106,17 +107,17 @@ class Carts
                 if cart_client_phones_err?
                   socket.emit 'cart:place:error', {error: JSON.stringify(cart_client_phones_err)} if socket?
                 else
-                  callback(null, client, cart_products, phones)
+                  callback(null, client, cart_products, to_json(phones))
             else
               callback(null, client, cart_products, [])
           ,
           (client, cart_products, phones, callback) ->
             if client.addresses_count? and client.addresses_count > 0
-              client.addresses (cart_client_addresses_err, addresses)->
+              client.addresses (cart_client_addresses_err, addresses) ->
                 if cart_client_addresses_err?
                   socket.emit 'cart:place:error', {error: JSON.stringify(cart_client_addresses_err)} if socket?
                 else
-                  callback(null, client, cart_products, phones, addresses)
+                  callback(null, client, cart_products, phones, to_json(addresses))
             else
               callback(null, client, cart_products, phones, [])
           ,
@@ -125,7 +126,7 @@ class Carts
               if(cart_store_err)
                 socket.emit 'cart:place:error', {error: JSON.stringify(cart_store_err)} if socket?  
               else
-                callback(null, client, cart_products , phones, addresses, store)
+                callback(null, client, cart_products , phones, addresses, to_json(store))
         ]
         ,
         (final_error,  client, cart_products, phones, addresses, store) ->
@@ -133,9 +134,9 @@ class Carts
             console.log 'Error at the end'
             # socket.emit 'cart:place:error', {error: ''} if socket?  
           else
-            console.log cart
+            console.log to_json(cart)
             console.log cart_products
-            console.log client
+            console.log to_json(client)
             console.log phones
             console.log addresses
             console.log store
@@ -144,8 +145,27 @@ class Carts
       console.log 'Placing'
 
 to_json = (obj) ->
-    JSON.parse(JSON.stringify(obj))
+  JSON.parse(JSON.stringify(obj))
 
+
+parsed_options = (cart_product, callback) ->
+  return [] if cart_product.product.options == '' and cart_product.options == ''
+  product_options = []
+  recipe = cart_product.options || cart_product.product.options
+  current_category_id = cart_product.product.category_id
+  Product.all {where: {category_id: current_category_id, options: 'OPTION'}}, (cat_options_products_err, cat_options_products)->
+    if _.any(recipe.split(','))
+      _.each _.compact(recipe.split(',')), (code) ->
+        code_match = code.match(/^([0-9]{0,2}\.?[0|7|5]{0,2})([A-Z]{1,}[a-z]{0,})(?:\-([L12]))?/)
+        if code_match?
+          code_match[1] = '1' if not code_match[1]? or code_match[1] == ''
+          current_quantity = code_match[1]
+          current_product = _.find(cat_options_products, (op)-> op.productcode == code_match[2])
+          current_part =  code_match[3] || ''
+          product_option = {quantity: Number(current_quantity), product: to_json(current_product), part: current_part}
+          product_options.push product_option
+      cart_product.product_options = product_options
+      callback(null, cart_product)
 
 module.exports  = Carts
 
