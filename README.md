@@ -39,3 +39,5 @@
 - protect last admin deletion and self deletion
 
 - verify acceptance test for admin stores editing
+
+- check parsing regexp everywhere

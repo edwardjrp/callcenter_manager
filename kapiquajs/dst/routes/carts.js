@@ -182,12 +182,12 @@ Carts = (function() {
     return Cart.find(data.cart_id, function(cart_find_err, cart) {
       if (cart_find_err != null) {
         if (socket != null) {
-          socket.emit('cart:place:error', {
+          return socket.emit('cart:place:error', {
             error: JSON.stringify(cart_find_err)
           });
         }
       } else {
-        async.waterfall([
+        return async.waterfall([
           function(callback) {
             return cart.client(function(cart_client_err, client) {
               if (cart_client_err) {
@@ -277,19 +277,27 @@ Carts = (function() {
             });
           }
         ], function(final_error, client, cart_products, phones, addresses, store) {
+          var assempled_cart, pulse_com_error;
           if (final_error != null) {
             return console.log('Error at the end');
           } else {
-            console.log(to_json(cart));
-            console.log(cart_products);
-            console.log(to_json(client));
-            console.log(phones);
-            console.log(addresses);
-            return console.log(store);
+            pulse_com_error = function(comm_err) {
+              return console.log(comm_err);
+            };
+            assempled_cart = to_json(cart);
+            assempled_cart.client = client;
+            assempled_cart.cart_products = cart_products;
+            assempled_cart.phones = phones;
+            assempled_cart.addresses = addresses;
+            assempled_cart.store = store;
+            return PulseBridge.price(assempled_cart, pulse_com_error, function(res_data) {
+              var order_reply;
+              order_reply = new OrderReply(res_data);
+              return console.log(order_reply);
+            });
           }
         });
       }
-      return console.log('Placing');
     });
   };
 

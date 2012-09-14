@@ -133,15 +133,20 @@ class Carts
             console.log 'Error at the end'
             # socket.emit 'cart:place:error', {error: ''} if socket?  
           else
-            console.log to_json(cart)
-            console.log cart_products
-            console.log to_json(client)
-            console.log phones
-            console.log addresses
-            console.log store
+            pulse_com_error = (comm_err) ->
+              console.log comm_err
+            assempled_cart = to_json(cart)
+            assempled_cart.client = client
+            assempled_cart.cart_products = cart_products
+            assempled_cart.phones = phones
+            assempled_cart.addresses = addresses
+            assempled_cart.store = store
+            PulseBridge.price assempled_cart, pulse_com_error, (res_data) ->
+              order_reply = new OrderReply(res_data)
+              console.log order_reply
 
 
-      console.log 'Placing'
+      # console.log 'Placing'
 
 to_json = (obj) ->
   JSON.parse(JSON.stringify(obj))
