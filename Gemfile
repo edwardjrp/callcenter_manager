@@ -45,7 +45,6 @@ gem "simple-navigation"
 gem 'simple-navigation-bootstrap'
 gem "transitions", :require => ["transitions", "active_record/transitions"]
 gem 'exception_notification'
-gem 'settler'
 gem 'acts_as_list'
 gem 'simple_form'
 gem "formtastic"

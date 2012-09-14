@@ -52,134 +52,134 @@ class PulseBridge
               
      
      
-   @parsed_options: (cart_product, categories) ->
-     return [] if cart_product.product.options == ''
-     product_options = []
-     recipe = cart_product.options
-     current_category = _.find(categories, (category)-> category.id == cart_product.product.category_id)
-     return [] unless current_category.has_options == true
-     options = _.filter current_category.products, (product) -> product.options == 'OPTION'
-     if _.any(recipe.split(','))
-       _.each _.compact(recipe.split(',')), (code) ->
-         core_match = code.match(/^([0-9]{0,2}\.?[0|7|5]{0,2})([A-Z]{1,}[a-z]{0,})(?:\-([L12]))?/)
-         if core_match?
-           core_match[1] = '1' if not core_match[1]? or core_match[1] == ''
-           current_quantity = core_match[1]
-           current_product = _.find(options, (op)-> op.productcode == core_match[2])
-           current_part =  core_match[3] || ''
-           product_option = {quantity: Number(current_quantity), product: current_product, part: current_part}
-           product_options.push product_option
-     product_options
+  @parsed_options: (cart_product, categories) ->
+    return [] if cart_product.product.options == ''
+    product_options = []
+    recipe = cart_product.options
+    current_category = _.find(categories, (category)-> category.id == cart_product.product.category_id)
+    return [] unless current_category.has_options == true
+    options = _.filter current_category.products, (product) -> product.options == 'OPTION'
+    if _.any(recipe.split(','))
+      _.each _.compact(recipe.split(',')), (code) ->
+        core_match = code.match(/^([0-9]{0,2}\.?[0|7|5]{0,2})([A-Z]{1,}[a-z]{0,})(?:\-([L12]))?/)
+        if core_match?
+          core_match[1] = '1' if not core_match[1]? or core_match[1] == ''
+          current_quantity = core_match[1]
+          current_product = _.find(options, (op)-> op.productcode == core_match[2])
+          current_part =  core_match[3] || ''
+          product_option = {quantity: Number(current_quantity), product: current_product, part: current_part}
+          product_options.push product_option
+    product_options
      
-   @body: (action, cart, categories) =>
-     doc = new libxml.Document()
-     envelope = new libxml.Element(doc,'env:Envelope').attr
-       'xmlns:xsd':"http://www.w3.org/2001/XMLSchema"
-       'xmlns:xsi':"http://www.w3.org/2001/XMLSchema-instance"
-       'xmlns:wsdlns':"http://www.dominos.com/wsdl/"
-       'xmlns:env':'http://schemas.xmlsoap.org/soap/envelope/'
-       'xmlns:ins0':'http://www.dominos.com/type'
-     header = new libxml.Element(doc,'env:Header')
-     auth = new libxml.Element(doc,'Authorization')
-     auth.addChild(new libxml.Element(doc,'FromURI', 'dominos.com'))
-     auth.addChild(new libxml.Element(doc,'User', 'TestingAndSupport'))
-     auth.addChild(new libxml.Element(doc,'Password', 'supp0rtivemeasures'))
-     auth.addChild(new libxml.Element(doc,'TimeStamp',''))
-     header.addChild(auth)
+  @body: (action, cart, categories) =>
+    doc = new libxml.Document()
+    envelope = new libxml.Element(doc,'env:Envelope').attr
+      'xmlns:xsd':"http://www.w3.org/2001/XMLSchema"
+      'xmlns:xsi':"http://www.w3.org/2001/XMLSchema-instance"
+      'xmlns:wsdlns':"http://www.dominos.com/wsdl/"
+      'xmlns:env':'http://schemas.xmlsoap.org/soap/envelope/'
+      'xmlns:ins0':'http://www.dominos.com/type'
+    header = new libxml.Element(doc,'env:Header')
+    auth = new libxml.Element(doc,'Authorization')
+    auth.addChild(new libxml.Element(doc,'FromURI', 'dominos.com'))
+    auth.addChild(new libxml.Element(doc,'User', 'TestingAndSupport'))
+    auth.addChild(new libxml.Element(doc,'Password', 'supp0rtivemeasures'))
+    auth.addChild(new libxml.Element(doc,'TimeStamp',''))
+    header.addChild(auth)
      
-     order = new libxml.Element(doc,'Order').attr({orderid:"Order##{new Date().getTime()}", currency:"en-USD", language:"en-USA"})
-     order.addChild(new libxml.Element(doc,'StoreID', '99998'))
-     order.addChild(new libxml.Element(doc,'ServiceMethod', 'Delivery'))
-     order.addChild(new libxml.Element(doc,'OrderTakeSeconds', '60'))
-     order.addChild(new libxml.Element(doc,'DeliveryInstructions', 'testing kapiqua25'))
-     #order source
-     order_source  = new libxml.Element(doc,'OrderSource')
-     order_source.addChild(new libxml.Element(doc,'OrganizationURI', 'proteus.dominos.com.do'))
-     order_source.addChild(new libxml.Element(doc,'OrderMethod', 'Internet'))
-     order_source.addChild(new libxml.Element(doc,'OrderTaker', 'node-js'))
-     order.addChild(order_source)
-     # end order source
-     #customer info
-     customer = new libxml.Element(doc,'Customer').attr({'type':'Customer-Standard'})
-     customer_address = new libxml.Element(doc,'CustomerAddress').attr({ 'type':"Address-US"})
-     customer_address.addChild(new libxml.Element(doc,'City', 'Santo Domingo'))
-     customer_address.addChild(new libxml.Element(doc,'Region', ''))
-     customer_address.addChild(new libxml.Element(doc,'PostalCode', '99998'))
-     customer_address.addChild(new libxml.Element(doc,'StreetNumber', '99'))
-     customer_address.addChild(new libxml.Element(doc,'StreetName', 'Princing'))
-     customer_address.addChild(new libxml.Element(doc,'AddressLine2').attr({'xsi:nil':"true"}))
-     customer_address.addChild(new libxml.Element(doc,'AddressLine3').attr({'xsi:nil':"true"}))
-     customer_address.addChild(new libxml.Element(doc,'AddressLine4').attr({'xsi:nil':"true"}))
-     customer_address.addChild(new libxml.Element(doc,'UnitType', 'Apartment'))
-     customer_address.addChild(new libxml.Element(doc,'UnitNumber', '202').attr({"xsi:type":"xsd:string"}))
-     customer.addChild(customer_address)
+    order = new libxml.Element(doc,'Order').attr({orderid:"Order##{new Date().getTime()}", currency:"en-USD", language:"en-USA"})
+    order.addChild(new libxml.Element(doc,'StoreID', '99998'))
+    order.addChild(new libxml.Element(doc,'ServiceMethod', 'Delivery'))
+    order.addChild(new libxml.Element(doc,'OrderTakeSeconds', '60'))
+    order.addChild(new libxml.Element(doc,'DeliveryInstructions', 'testing kapiqua25'))
+    #order source
+    order_source  = new libxml.Element(doc,'OrderSource')
+    order_source.addChild(new libxml.Element(doc,'OrganizationURI', 'proteus.dominos.com.do'))
+    order_source.addChild(new libxml.Element(doc,'OrderMethod', 'Internet'))
+    order_source.addChild(new libxml.Element(doc,'OrderTaker', 'node-js'))
+    order.addChild(order_source)
+    # end order source
+    #customer info
+    customer = new libxml.Element(doc,'Customer').attr({'type':'Customer-Standard'})
+    customer_address = new libxml.Element(doc,'CustomerAddress').attr({ 'type':"Address-US"})
+    customer_address.addChild(new libxml.Element(doc,'City', 'Santo Domingo'))
+    customer_address.addChild(new libxml.Element(doc,'Region', ''))
+    customer_address.addChild(new libxml.Element(doc,'PostalCode', '99998'))
+    customer_address.addChild(new libxml.Element(doc,'StreetNumber', '99'))
+    customer_address.addChild(new libxml.Element(doc,'StreetName', 'Princing'))
+    customer_address.addChild(new libxml.Element(doc,'AddressLine2').attr({'xsi:nil':"true"}))
+    customer_address.addChild(new libxml.Element(doc,'AddressLine3').attr({'xsi:nil':"true"}))
+    customer_address.addChild(new libxml.Element(doc,'AddressLine4').attr({'xsi:nil':"true"}))
+    customer_address.addChild(new libxml.Element(doc,'UnitType', 'Apartment'))
+    customer_address.addChild(new libxml.Element(doc,'UnitNumber', '202').attr({"xsi:type":"xsd:string"}))
+    customer.addChild(customer_address)
      
-     customer_name = new libxml.Element(doc,'Name').attr({ 'type':"Name-US"})
-     customer_name.addChild(new libxml.Element(doc,'FirstName', 'Dummy'))
-     customer_name.addChild(new libxml.Element(doc,'LastName', 'Pricing'))
-     customer.addChild(customer_name)
+    customer_name = new libxml.Element(doc,'Name').attr({ 'type':"Name-US"})
+    customer_name.addChild(new libxml.Element(doc,'FirstName', 'Dummy'))
+    customer_name.addChild(new libxml.Element(doc,'LastName', 'Pricing'))
+    customer.addChild(customer_name)
      
-     customer_type_info = new libxml.Element(doc,'CustomerTypeInfo')
-     customer_type_info.addChild(new libxml.Element(doc,'InfoType').attr('xsi:nil':"true"))
-     customer_type_info.addChild(new libxml.Element(doc,'OrganizationName').attr('xsi:nil':"true"))
-     customer_type_info.addChild(new libxml.Element(doc,'Department').attr('xsi:nil':"true"))
-     customer.addChild(customer_type_info)
+    customer_type_info = new libxml.Element(doc,'CustomerTypeInfo')
+    customer_type_info.addChild(new libxml.Element(doc,'InfoType').attr('xsi:nil':"true"))
+    customer_type_info.addChild(new libxml.Element(doc,'OrganizationName').attr('xsi:nil':"true"))
+    customer_type_info.addChild(new libxml.Element(doc,'Department').attr('xsi:nil':"true"))
+    customer.addChild(customer_type_info)
      
-     customer.addChild(new libxml.Element(doc,'Phone', '8095555555'))
-     customer.addChild(new libxml.Element(doc,'Extension', ''))
-     customer.addChild(new libxml.Element(doc,'Email', 'dummy@pricing.com'))
-     customer.addChild(new libxml.Element(doc,'DeliveryInstructions').attr('xsi:nil':"true"))
-     customer.addChild(new libxml.Element(doc,'CustomerTax').attr('xsi:nil':"true"))
+    customer.addChild(new libxml.Element(doc,'Phone', '8095555555'))
+    customer.addChild(new libxml.Element(doc,'Extension', ''))
+    customer.addChild(new libxml.Element(doc,'Email', 'dummy@pricing.com'))
+    customer.addChild(new libxml.Element(doc,'DeliveryInstructions').attr('xsi:nil':"true"))
+    customer.addChild(new libxml.Element(doc,'CustomerTax').attr('xsi:nil':"true"))
      
      
-     order.addChild(customer)
+    order.addChild(customer)
      
-     #end customer info
-     #coupons
-     order.addChild(new libxml.Element(doc,'Coupons'))
-     # end coupons
-     #items
-     order_items = new libxml.Element(doc,'OrderItems')
-     # iteration here
-     if _.any(cart.cart_products)
-       for cart_product in cart.cart_products
-         order_item = new libxml.Element(doc,'OrderItem')
-         order_item.addChild(new libxml.Element(doc,'ProductCode', cart_product.product.productcode))
-         order_item.addChild(new libxml.Element(doc,'ProductName').attr('xsi:nil':"true"))
-         order_item.addChild(new libxml.Element(doc,'ItemQuantity', (cart_product.quantity.toString() || '1')))
-         order_item.addChild(new libxml.Element(doc,'PricedAt', '0'))
-         order_item.addChild(new libxml.Element(doc,'OverrideAmmount').attr('xsi:nil':"true"))
-         order_item.addChild(new libxml.Element(doc,'CookingInstructions').attr('xsi:nil':"true"))
-         # modifier loop
-         item_modifiers = new libxml.Element(doc,'ItemModifiers')
-         if _.any(@parsed_options(cart_product,categories))
-           for parsed_option in @parsed_options(cart_product,categories)             
-             item_modifier = new libxml.Element(doc,'ItemModifier').attr({code: parsed_option.product.productcode})
-             item_modifier.addChild(new libxml.Element(doc,'ItemModifierName').attr('xsi:nil':"true"))
-             item_modifier.addChild(new libxml.Element(doc,'ItemModifierQuantity', parsed_option.quantity.toString()))
-             item_modifier.addChild(new libxml.Element(doc,'ItemModifierPart', parsed_option.part))
-             item_modifiers.addChild(item_modifier)
-         order_item.addChild(item_modifiers)
-         order_items.addChild(order_item)
+    #end customer info
+    #coupons
+    order.addChild(new libxml.Element(doc,'Coupons'))
+    # end coupons
+    #items
+    order_items = new libxml.Element(doc,'OrderItems')
+    # iteration here
+    if _.any(cart.cart_products)
+      for cart_product in cart.cart_products
+        order_item = new libxml.Element(doc,'OrderItem')
+        order_item.addChild(new libxml.Element(doc,'ProductCode', cart_product.product.productcode))
+        order_item.addChild(new libxml.Element(doc,'ProductName').attr('xsi:nil':"true"))
+        order_item.addChild(new libxml.Element(doc,'ItemQuantity', (cart_product.quantity.toString() || '1')))
+        order_item.addChild(new libxml.Element(doc,'PricedAt', '0'))
+        order_item.addChild(new libxml.Element(doc,'OverrideAmmount').attr('xsi:nil':"true"))
+        order_item.addChild(new libxml.Element(doc,'CookingInstructions').attr('xsi:nil':"true"))
+        # modifier loop
+        item_modifiers = new libxml.Element(doc,'ItemModifiers')
+        if _.any(@parsed_options(cart_product,categories))
+          for parsed_option in @parsed_options(cart_product,categories)             
+            item_modifier = new libxml.Element(doc,'ItemModifier').attr({code: parsed_option.product.productcode})
+            item_modifier.addChild(new libxml.Element(doc,'ItemModifierName').attr('xsi:nil':"true"))
+            item_modifier.addChild(new libxml.Element(doc,'ItemModifierQuantity', parsed_option.quantity.toString()))
+            item_modifier.addChild(new libxml.Element(doc,'ItemModifierPart', parsed_option.part))
+            item_modifiers.addChild(item_modifier)
+        order_item.addChild(item_modifiers)
+        order_items.addChild(order_item)
      
-     order.addChild(order_items)
-     # end items
-     #payment
-     payment = new libxml.Element(doc,'Payment')
-     cash_payment = new libxml.Element(doc,'CashPayment')
-     cash_payment.addChild(new libxml.Element(doc,'PaymentAmmount', '10000'))
-     payment.addChild(cash_payment)
-     order.addChild(payment)
-     #end payment
+    order.addChild(order_items)
+    # end items
+    #payment
+    payment = new libxml.Element(doc,'Payment')
+    cash_payment = new libxml.Element(doc,'CashPayment')
+    cash_payment.addChild(new libxml.Element(doc,'PaymentAmmount', '10000'))
+    payment.addChild(cash_payment)
+    order.addChild(payment)
+    #end payment
      
-     body = new libxml.Element(doc,'env:Body')
-     action = new libxml.Element(doc, "ns1:#{action}").attr({ 'xmlns:ns1':"http://www.dominos.com/message/", encodingStyle:"http://schemas.xmlsoap.org/soap/encoding/"})
-     action.addChild(order)
-     body.addChild(action)
-     envelope.addChild(header)
-     envelope.addChild(body) 
-     doc.root(envelope)
-     doc.toString().replace(/\"/g, '\"')
+    body = new libxml.Element(doc,'env:Body')
+    action = new libxml.Element(doc, "ns1:#{action}").attr({ 'xmlns:ns1':"http://www.dominos.com/message/", encodingStyle:"http://schemas.xmlsoap.org/soap/encoding/"})
+    action.addChild(order)
+    body.addChild(action)
+    envelope.addChild(header)
+    envelope.addChild(body) 
+    doc.root(envelope)
+    doc.toString().replace(/\"/g, '\"')
     
 
 module.exports = PulseBridge
