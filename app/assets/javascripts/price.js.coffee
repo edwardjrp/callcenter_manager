@@ -16,15 +16,12 @@ jQuery ->
         $('#progress_bar').find('.bar')
         $('#order_info').find('.row:first').after("<div class='row bottom-margin-1'><div class=\"span2 \"><strong>Modo de servicio: </strong> #{cart.service_method}</div></div>")
         $('#order_info').find('.row:first').after("<div class='row bottom-margin-1'><div class=\"span2 \"><strong>Tienda: </strong> #{cart.store.name} - #{cart.store.storeid}</div></div>") if  cart.store?
-        console.log cart
         progressbar_advance(1)
         socket.emit 'cart:price', {cart_id: cart.id}
+        $('#checkout_Modal').on 'click', 'a#place_order', (event)->
+          socket.emit 'cart:place', { cart_id: cart.id }  
       error: (err)->
         console.log err
-  
-  
-  # $('#checkout_Modal').on 'hide', ()->
-  #   alert('FALTA CORREGIR ERROR DE DUPLICACION')
   
   
   
@@ -42,7 +39,6 @@ jQuery ->
     $('#order_client_idnumber').html("<strong>Cédula:</strong> #{window.to_idnumber(client.idnumber)}")
     $('#process_inf').text("Cliente encontrado")
     progressbar_advance(2)
-    console.log 'client'
 
   socket.on 'cart:price:client:phones', (data) ->
     phones = data.phones
@@ -71,6 +67,7 @@ jQuery ->
     $('#order_cart_products').find(".span5[data-cart-product-id='#{data.item_id}']").append("<p><strong>Precio: </strong>$ #{Number(data.price).toFixed(2).toString()}</p>")
 
   socket.on 'cart:price:pulse:cartpriced', (data) ->
+    console.log data
     $('#order_totals').append("<div class='row'><div class=\"span4\"'><p><strong>Neto: </strong>$#{data.net_amount}</p><p><strong>Impuestos: </strong>$<span id='order_tax'>#{data.tax_amount}</span></p><p><strong>Total: </strong>$#{data.payment_amount}</p></div></div>")
     $('#order_totals').append("<div class='row'><div class=\"span4\"'><label class=\"checkbox\"><input type=\"checkbox\" id='discount_tax'> Aplicar exoneración</label></div></div>")
     $('#order_totals').append("<div class='row'><div class=\"span4\"'><label class=\"checkbox\"><input type=\"checkbox\" id='discount_amount'> Aplicar descuento</label></div></div>")
@@ -79,9 +76,7 @@ jQuery ->
     $('#order_totals').append("<div class='row'><div class=\"span4\"'><input type=\"text\" class=\"span2\" id='discount_user' placeholder=\"supervisor\"></div></div>")      
     $('#order_totals').append("<div class='row'><div class=\"span4\"'><input type=\"password\" class=\"span2\" id='discount_pass'></div></div>")     
     $('#order_totals').append("<div class='row'><div class=\"span4\"'><button type=\"submit\" class=\"btn\" id = 'require_discount_auth'>Autorizar</button></div></div>")
-    $('a#place_order').removeClass('disabled')  
-    $('a#place_order').on 'click', (event)->
-      socket.emit 'cart:place', {cart_id: cart.id}  
+    $('a#place_order').removeClass('disabled')
     $('#require_discount_auth').on 'click', (event)->
       target = $(event.currentTarget)
       $.ajax
@@ -121,5 +116,4 @@ jQuery ->
 progressbar_advance = (times) ->
   total_width = $('#progress_bar').width()
   new_width = (times*(total_width*0.1))
-  console.log new_width
   $('#progress_bar').find('.bar').css({width: "#{new_width}px"})

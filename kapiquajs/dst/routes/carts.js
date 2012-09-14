@@ -1,4 +1,4 @@
-var Address, Cart, CartProduct, Carts, Client, OrderReply, Phone, Product, PulseBridge, Store, async, _;
+var Address, Cart, CartProduct, Carts, Client, OrderReply, Phone, Product, PulseBridge, Store, async, to_json, _;
 
 Cart = require('../models/cart');
 
@@ -36,25 +36,33 @@ Carts = (function() {
         }
       } else {
         cart.client(function(cart_client_err, client) {
-          socket.emit('cart:price:client', {
-            client: client
-          });
-          if ((client.phones_count != null) && client.phones_count > 0) {
-            return client.phones(function(cart_client_phones_err, phones) {
-              if (cart_client_phones_err != null) {
-                if (socket != null) {
-                  return socket.emit('cart:price:error', {
-                    error: JSON.stringify(cart_client_phones_err)
-                  });
-                }
-              } else {
-                if (socket != null) {
-                  return socket.emit('cart:price:client:phones', {
-                    phones: phones
-                  });
-                }
-              }
+          if (cart_client_err) {
+            if (socket != null) {
+              return socket.emit('cart:price:error', {
+                error: JSON.stringify(cart_client_err)
+              });
+            }
+          } else {
+            socket.emit('cart:price:client', {
+              client: client
             });
+            if ((client.phones_count != null) && client.phones_count > 0) {
+              return client.phones(function(cart_client_phones_err, phones) {
+                if (cart_client_phones_err != null) {
+                  if (socket != null) {
+                    return socket.emit('cart:price:error', {
+                      error: JSON.stringify(cart_client_phones_err)
+                    });
+                  }
+                } else {
+                  if (socket != null) {
+                    return socket.emit('cart:price:client:phones', {
+                      phones: phones
+                    });
+                  }
+                }
+              });
+            }
           }
         });
         cart.cart_products({}, function(c_cp_err, cart_products) {
@@ -171,16 +179,126 @@ Carts = (function() {
   };
 
   Carts.place = function(data, respond, socket) {
-    if (socket != null) {
-      socket.emit('cart:price:error', {
-        error: 'La información requerida para colocar la orden no esta completa'
-      });
-    }
-    return console.log('Placing');
+    return Cart.find(data.cart_id, function(cart_find_err, cart) {
+      if (cart_find_err != null) {
+        if (socket != null) {
+          socket.emit('cart:place:error', {
+            error: JSON.stringify(cart_find_err)
+          });
+        }
+      } else {
+        async.waterfall([
+          function(callback) {
+            return cart.client(function(cart_client_err, client) {
+              if (cart_client_err) {
+                if (socket != null) {
+                  return socket.emit('cart:place:error', {
+                    error: JSON.stringify(cart_client_err)
+                  });
+                }
+              } else {
+                return callback(null, client);
+              }
+            });
+          }, function(client, callback) {
+            return cart.cart_products({}, function(c_cp_err, cart_products) {
+              var get_products;
+              if (c_cp_err) {
+                if (socket != null) {
+                  return socket.emit('cart:place:error', {
+                    error: JSON.stringify(c_cp_err)
+                  });
+                }
+              } else {
+                get_products = function(cp, cb) {
+                  return cp.product(function(p_err, product) {
+                    var jcp;
+                    jcp = to_json(cp);
+                    jcp.product = to_json(product);
+                    return cb(null, jcp);
+                  });
+                };
+                return async.map(cart_products, get_products, function(it_err, cart_products) {
+                  if (it_err) {
+                    if (socket != null) {
+                      return socket.emit('cart:place:error', {
+                        error: JSON.stringify(it_err)
+                      });
+                    }
+                  } else {
+                    return callback(null, client, cart_products);
+                  }
+                });
+              }
+            });
+          }, function(client, cart_products, callback) {
+            if ((client.phones_count != null) && client.phones_count > 0) {
+              return client.phones(function(cart_client_phones_err, phones) {
+                if (cart_client_phones_err != null) {
+                  if (socket != null) {
+                    return socket.emit('cart:place:error', {
+                      error: JSON.stringify(cart_client_phones_err)
+                    });
+                  }
+                } else {
+                  return callback(null, client, cart_products, phones);
+                }
+              });
+            } else {
+              return callback(null, client, cart_products, []);
+            }
+          }, function(client, cart_products, phones, callback) {
+            if ((client.addresses_count != null) && client.addresses_count > 0) {
+              return client.addresses(function(cart_client_addresses_err, addresses) {
+                if (cart_client_addresses_err != null) {
+                  if (socket != null) {
+                    return socket.emit('cart:place:error', {
+                      error: JSON.stringify(cart_client_addresses_err)
+                    });
+                  }
+                } else {
+                  return callback(null, client, cart_products, phones, addresses);
+                }
+              });
+            } else {
+              return callback(null, client, cart_products, phones, []);
+            }
+          }, function(client, cart_products, phones, addresses, callback) {
+            return cart.store(function(cart_store_err, store) {
+              if (cart_store_err) {
+                if (socket != null) {
+                  return socket.emit('cart:place:error', {
+                    error: JSON.stringify(cart_store_err)
+                  });
+                }
+              } else {
+                return callback(null, client, cart_products, phones, addresses, store);
+              }
+            });
+          }
+        ], function(final_error, client, cart_products, phones, addresses, store) {
+          if (final_error != null) {
+            return console.log('Error at the end');
+          } else {
+            console.log(cart);
+            console.log(cart_products);
+            console.log(client);
+            console.log(phones);
+            console.log(addresses);
+            return console.log(store);
+          }
+        });
+      }
+      return console.log('Placing');
+    });
   };
 
   return Carts;
 
 }).call(this);
+
+to_json = function(obj) {
+  return JSON.parse(JSON.stringify(obj));
+};
 
 module.exports = Carts;

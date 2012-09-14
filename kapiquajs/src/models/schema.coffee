@@ -493,6 +493,8 @@ Phone.belongsTo(Client, {as: 'client', foreignKey: 'client_id'})
 Cart.hasMany(CartProduct, {as: 'cart_products', foreignKey: 'cart_id'})
 Cart.belongsTo(Client, {as: 'client', foreignKey: 'client_id'})
 Cart.belongsTo(User, {as: 'user', foreignKey: 'user_id'})
+Cart.belongsTo(Store, {as: 'store', foreignKey: 'store_id'})
+
 
 Category.hasMany(Product, {as: 'products', foreignKey: 'category_id'})
 

@@ -18,13 +18,16 @@ class Carts
         socket.emit 'cart:price:error', {error: JSON.stringify(cart_find_err)} if socket?
       else
         cart.client (cart_client_err, client) ->
-          socket.emit 'cart:price:client', {client}
-          if client.phones_count? and client.phones_count > 0
-            client.phones (cart_client_phones_err, phones)->
-              if cart_client_phones_err?
-                socket.emit 'cart:price:error', {error: JSON.stringify(cart_client_phones_err)} if socket?
-              else
-                socket.emit 'cart:price:client:phones', {phones} if socket?
+          if(cart_client_err)
+            socket.emit 'cart:price:error', {error: JSON.stringify(cart_client_err)} if socket?  
+          else
+            socket.emit 'cart:price:client', {client}
+            if client.phones_count? and client.phones_count > 0
+              client.phones (cart_client_phones_err, phones)->
+                if cart_client_phones_err?
+                  socket.emit 'cart:price:error', {error: JSON.stringify(cart_client_phones_err)} if socket?
+                else
+                  socket.emit 'cart:price:client:phones', {phones} if socket?
 
         cart.cart_products {}, (c_cp_err, cart_products)->
           get_products = (cp, cb)->
@@ -68,8 +71,80 @@ class Carts
 
 
   @place: (data, respond, socket) =>
-    socket.emit 'cart:price:error', {error: 'La información requerida para colocar la orden no esta completa'} if socket?
-    console.log 'Placing'
+    # socket.emit 'cart:price:error', {error: 'La información requerida para colocar la orden no esta completa'} if socket?
+    Cart.find data.cart_id, (cart_find_err, cart) ->
+      if cart_find_err?
+        socket.emit 'cart:place:error', {error: JSON.stringify(cart_find_err)} if socket?
+      else
+        async.waterfall [
+          (callback) ->
+            cart.client (cart_client_err, client) ->
+              if(cart_client_err)
+                socket.emit 'cart:place:error', {error: JSON.stringify(cart_client_err)} if socket?  
+              else
+                callback(null, client)
+          ,
+          (client, callback) ->
+            cart.cart_products {}, (c_cp_err, cart_products) ->
+              if(c_cp_err)
+                socket.emit 'cart:place:error', {error: JSON.stringify(c_cp_err)} if socket?
+              else
+                get_products = (cp, cb) ->
+                  cp.product (p_err, product) ->
+                    jcp = to_json(cp)
+                    jcp.product = to_json(product)
+                    cb(null, jcp)
+                async.map cart_products,get_products, (it_err, cart_products) ->
+                  if it_err
+                    socket.emit 'cart:place:error', {error: JSON.stringify(it_err)} if socket?
+                  else
+                    callback(null, client, cart_products)
+          ,
+          ( client, cart_products, callback ) ->
+            if client.phones_count? and client.phones_count > 0
+              client.phones (cart_client_phones_err, phones) ->
+                if cart_client_phones_err?
+                  socket.emit 'cart:place:error', {error: JSON.stringify(cart_client_phones_err)} if socket?
+                else
+                  callback(null, client, cart_products, phones)
+            else
+              callback(null, client, cart_products, [])
+          ,
+          (client, cart_products, phones, callback) ->
+            if client.addresses_count? and client.addresses_count > 0
+              client.addresses (cart_client_addresses_err, addresses)->
+                if cart_client_addresses_err?
+                  socket.emit 'cart:place:error', {error: JSON.stringify(cart_client_addresses_err)} if socket?
+                else
+                  callback(null, client, cart_products, phones, addresses)
+            else
+              callback(null, client, cart_products, phones, [])
+          ,
+          (client, cart_products , phones, addresses, callback) ->
+            cart.store (cart_store_err, store) ->
+              if(cart_store_err)
+                socket.emit 'cart:place:error', {error: JSON.stringify(cart_store_err)} if socket?  
+              else
+                callback(null, client, cart_products , phones, addresses, store)
+        ]
+        ,
+        (final_error,  client, cart_products, phones, addresses, store) ->
+          if final_error?
+            console.log 'Error at the end'
+            # socket.emit 'cart:place:error', {error: ''} if socket?  
+          else
+            console.log cart
+            console.log cart_products
+            console.log client
+            console.log phones
+            console.log addresses
+            console.log store
+
+
+      console.log 'Placing'
+
+to_json = (obj) ->
+    JSON.parse(JSON.stringify(obj))
 
 
 module.exports  = Carts

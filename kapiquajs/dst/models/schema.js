@@ -569,6 +569,11 @@ Cart.belongsTo(User, {
   foreignKey: 'user_id'
 });
 
+Cart.belongsTo(Store, {
+  as: 'store',
+  foreignKey: 'store_id'
+});
+
 Category.hasMany(Product, {
   as: 'products',
   foreignKey: 'category_id'
