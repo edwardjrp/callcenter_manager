@@ -66,7 +66,8 @@ class CartProducts
           cp.product (p_err, product)->
             json_cp = JSON.parse(JSON.stringify(cp))
             json_cp.product = JSON.parse(JSON.stringify(product))
-            cb(null, json_cp)
+            parsed_options(json_cp, cb)
+            # cb(null, json_cp)
         async.map cart_products,get_products, (it_err, results)->
           if it_err
             respond( {type:"error", data:it_err })
@@ -101,8 +102,26 @@ class CartProducts
                               socket.emit 'item_price_sync', {item_id: update_price_cart_product.id, price: update_price_cart_product.priced_at} if socket?
                   socket.emit 'cart_price_sync', {net_amount: updated_cart.net_amount, tax_amount: updated_cart.tax_amount, payment_amount: updated_cart.payment_amount} if socket?              
               
+parsed_options = (cart_product, callback) ->
+  return [] if cart_product.product.options == '' and cart_product.options == ''
+  product_options = []
+  recipe = cart_product.options || cart_product.product.options
+  current_category_id = cart_product.product.category_id
+  Product.all {where: {category_id: current_category_id, options: 'OPTION'}}, (cat_options_products_err, cat_options_products)->
+    if _.any(recipe.split(','))
+      _.each _.compact(recipe.split(',')), (code) ->
+        code_match = code.match(/^([0-9]{0,2}\.?[0|7|5]{0,2})([A-Z]{1,}[a-z]{0,})(?:\-([W12]))?/)
+        if code_match?
+          code_match[1] = '1' if not code_match[1]? or code_match[1] == ''
+          current_quantity = code_match[1]
+          current_product = _.find(cat_options_products, (op)-> op.productcode == code_match[2])
+          current_part =  code_match[3] || 'W'
+          product_option = {quantity: Number(current_quantity), product: to_json(current_product), part: current_part}
+          product_options.push product_option
+      cart_product.product_options = product_options
+      callback(null, cart_product)
 
-
-
+to_json = (obj) ->
+  JSON.parse(JSON.stringify(obj))
             
 module.exports = CartProducts

@@ -5,6 +5,7 @@ Cart = require('../models/cart')
 Product = require('../models/product')
 Category = require('../models/category')
 async = require('async')
+util = require('util')
 
 
 class PulseBridge
@@ -32,46 +33,10 @@ class PulseBridge
       else
         cb(res_data)
   
-  
-  
   @price: (cart, err_cb, cb) ->
-    Category.all {}, (cat_error, categories)->
-      if cat_error?
-        console.log cat_error
-      else
-        get_products = (category, cb)->
-          Product.all {where: {category_id: category.id}}, (cat_product_err, products)->
-            json_category = JSON.parse(JSON.stringify(category))
-            json_category.products = JSON.parse(JSON.stringify(products))
-            cb(null, json_category)  
-        async.map categories, get_products , (err, categories) ->
-          if err?
-            console.log err
-          else
-            PulseBridge.send('PriceOrder', PulseBridge.body('PriceOrder', cart, categories), err_cb, cb)    
-              
+    PulseBridge.send('PriceOrder', PulseBridge.body('PriceOrder', cart), err_cb, cb)    
      
-     
-  @parsed_options: (cart_product, categories) ->
-    return [] if cart_product.product.options == ''
-    product_options = []
-    recipe = cart_product.options
-    current_category = _.find(categories, (category)-> category.id == cart_product.product.category_id)
-    return [] unless current_category.has_options == true
-    options = _.filter current_category.products, (product) -> product.options == 'OPTION'
-    if _.any(recipe.split(','))
-      _.each _.compact(recipe.split(',')), (code) ->
-        core_match = code.match(/^([0-9]{0,2}\.?[0|7|5]{0,2})([A-Z]{1,}[a-z]{0,})(?:\-([L12]))?/)
-        if core_match?
-          core_match[1] = '1' if not core_match[1]? or core_match[1] == ''
-          current_quantity = core_match[1]
-          current_product = _.find(options, (op)-> op.productcode == core_match[2])
-          current_part =  core_match[3] || ''
-          product_option = {quantity: Number(current_quantity), product: current_product, part: current_part}
-          product_options.push product_option
-    product_options
-     
-  @body: (action, cart, categories) =>
+  @body: (action, cart) =>
     doc = new libxml.Document()
     envelope = new libxml.Element(doc,'env:Envelope').attr
       'xmlns:xsd':"http://www.w3.org/2001/XMLSchema"
@@ -152,12 +117,13 @@ class PulseBridge
         order_item.addChild(new libxml.Element(doc,'CookingInstructions').attr('xsi:nil':"true"))
         # modifier loop
         item_modifiers = new libxml.Element(doc,'ItemModifiers')
-        if _.any(@parsed_options(cart_product,categories))
-          for parsed_option in @parsed_options(cart_product,categories)             
-            item_modifier = new libxml.Element(doc,'ItemModifier').attr({code: parsed_option.product.productcode})
+        
+        if _.any(cart_product.product_options)
+          for product_option in cart_product.product_options             
+            item_modifier = new libxml.Element(doc,'ItemModifier').attr({code: product_option.product.productcode})
             item_modifier.addChild(new libxml.Element(doc,'ItemModifierName').attr('xsi:nil':"true"))
-            item_modifier.addChild(new libxml.Element(doc,'ItemModifierQuantity', parsed_option.quantity.toString()))
-            item_modifier.addChild(new libxml.Element(doc,'ItemModifierPart', parsed_option.part))
+            item_modifier.addChild(new libxml.Element(doc,'ItemModifierQuantity', product_option.quantity.toString()))
+            item_modifier.addChild(new libxml.Element(doc,'ItemModifierPart', product_option.part))
             item_modifiers.addChild(item_modifier)
         order_item.addChild(item_modifiers)
         order_items.addChild(order_item)

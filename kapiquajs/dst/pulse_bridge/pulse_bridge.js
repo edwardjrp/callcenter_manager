@@ -1,4 +1,4 @@
-var Cart, Category, Product, PulseBridge, async, libxml, request, _;
+var Cart, Category, Product, PulseBridge, async, libxml, request, util, _;
 
 _ = require('underscore');
 
@@ -13,6 +13,8 @@ Product = require('../models/product');
 Category = require('../models/category');
 
 async = require('async');
+
+util = require('util');
 
 PulseBridge = (function() {
 
@@ -59,77 +61,11 @@ PulseBridge = (function() {
   };
 
   PulseBridge.price = function(cart, err_cb, cb) {
-    return Category.all({}, function(cat_error, categories) {
-      var get_products;
-      if (cat_error != null) {
-        return console.log(cat_error);
-      } else {
-        get_products = function(category, cb) {
-          return Product.all({
-            where: {
-              category_id: category.id
-            }
-          }, function(cat_product_err, products) {
-            var json_category;
-            json_category = JSON.parse(JSON.stringify(category));
-            json_category.products = JSON.parse(JSON.stringify(products));
-            return cb(null, json_category);
-          });
-        };
-        return async.map(categories, get_products, function(err, categories) {
-          if (err != null) {
-            return console.log(err);
-          } else {
-            return PulseBridge.send('PriceOrder', PulseBridge.body('PriceOrder', cart, categories), err_cb, cb);
-          }
-        });
-      }
-    });
+    return PulseBridge.send('PriceOrder', PulseBridge.body('PriceOrder', cart), err_cb, cb);
   };
 
-  PulseBridge.parsed_options = function(cart_product, categories) {
-    var current_category, options, product_options, recipe;
-    if (cart_product.product.options === '') {
-      return [];
-    }
-    product_options = [];
-    recipe = cart_product.options;
-    current_category = _.find(categories, function(category) {
-      return category.id === cart_product.product.category_id;
-    });
-    if (current_category.has_options !== true) {
-      return [];
-    }
-    options = _.filter(current_category.products, function(product) {
-      return product.options === 'OPTION';
-    });
-    if (_.any(recipe.split(','))) {
-      _.each(_.compact(recipe.split(',')), function(code) {
-        var core_match, current_part, current_product, current_quantity, product_option;
-        core_match = code.match(/^([0-9]{0,2}\.?[0|7|5]{0,2})([A-Z]{1,}[a-z]{0,})(?:\-([L12]))?/);
-        if (core_match != null) {
-          if (!(core_match[1] != null) || core_match[1] === '') {
-            core_match[1] = '1';
-          }
-          current_quantity = core_match[1];
-          current_product = _.find(options, function(op) {
-            return op.productcode === core_match[2];
-          });
-          current_part = core_match[3] || '';
-          product_option = {
-            quantity: Number(current_quantity),
-            product: current_product,
-            part: current_part
-          };
-          return product_options.push(product_option);
-        }
-      });
-    }
-    return product_options;
-  };
-
-  PulseBridge.body = function(action, cart, categories) {
-    var auth, body, cart_product, cash_payment, customer, customer_address, customer_name, customer_type_info, doc, envelope, header, item_modifier, item_modifiers, order, order_item, order_items, order_source, parsed_option, payment, _i, _j, _len, _len1, _ref, _ref1;
+  PulseBridge.body = function(action, cart) {
+    var auth, body, cart_product, cash_payment, customer, customer_address, customer_name, customer_type_info, doc, envelope, header, item_modifier, item_modifiers, order, order_item, order_items, order_source, payment, product_option, _i, _j, _len, _len1, _ref, _ref1;
     doc = new libxml.Document();
     envelope = new libxml.Element(doc, 'env:Envelope').attr({
       'xmlns:xsd': "http://www.w3.org/2001/XMLSchema",
@@ -231,20 +167,18 @@ PulseBridge = (function() {
           'xsi:nil': "true"
         }));
         item_modifiers = new libxml.Element(doc, 'ItemModifiers');
-        if (_.any(PulseBridge.parsed_options(cart_product, categories))) {
-          _ref1 = PulseBridge.parsed_options(cart_product, categories);
-          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-            parsed_option = _ref1[_j];
-            item_modifier = new libxml.Element(doc, 'ItemModifier').attr({
-              code: parsed_option.product.productcode
-            });
-            item_modifier.addChild(new libxml.Element(doc, 'ItemModifierName').attr({
-              'xsi:nil': "true"
-            }));
-            item_modifier.addChild(new libxml.Element(doc, 'ItemModifierQuantity', parsed_option.quantity.toString()));
-            item_modifier.addChild(new libxml.Element(doc, 'ItemModifierPart', parsed_option.part));
-            item_modifiers.addChild(item_modifier);
-          }
+        _ref1 = cart_product.product_options;
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          product_option = _ref1[_j];
+          item_modifier = new libxml.Element(doc, 'ItemModifier').attr({
+            code: product_option.product.productcode
+          });
+          item_modifier.addChild(new libxml.Element(doc, 'ItemModifierName').attr({
+            'xsi:nil': "true"
+          }));
+          item_modifier.addChild(new libxml.Element(doc, 'ItemModifierQuantity', product_option.quantity.toString()));
+          item_modifier.addChild(new libxml.Element(doc, 'ItemModifierPart', product_option.part));
+          item_modifiers.addChild(item_modifier);
         }
         order_item.addChild(item_modifiers);
         order_items.addChild(order_item);

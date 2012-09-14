@@ -72,7 +72,7 @@ Carts = (function() {
               var json_cp;
               json_cp = JSON.parse(JSON.stringify(cp));
               json_cp.product = JSON.parse(JSON.stringify(product));
-              return cb(null, json_cp);
+              return parsed_options(json_cp, cb);
             });
           };
           return async.map(cart_products, get_products, function(it_err, results) {
@@ -318,7 +318,7 @@ parsed_options = function(cart_product, callback) {
     if (_.any(recipe.split(','))) {
       _.each(_.compact(recipe.split(',')), function(code) {
         var code_match, current_part, current_product, current_quantity, product_option;
-        code_match = code.match(/^([0-9]{0,2}\.?[0|7|5]{0,2})([A-Z]{1,}[a-z]{0,})(?:\-([L12]))?/);
+        code_match = code.match(/^([0-9]{0,2}\.?[0|7|5]{0,2})([A-Z]{1,}[a-z]{0,})(?:\-([W12]))?/);
         if (code_match != null) {
           if (!(code_match[1] != null) || code_match[1] === '') {
             code_match[1] = '1';
@@ -327,7 +327,7 @@ parsed_options = function(cart_product, callback) {
           current_product = _.find(cat_options_products, function(op) {
             return op.productcode === code_match[2];
           });
-          current_part = code_match[3] || '';
+          current_part = code_match[3] || 'W';
           product_option = {
             quantity: Number(current_quantity),
             product: to_json(current_product),
@@ -337,7 +337,6 @@ parsed_options = function(cart_product, callback) {
         }
       });
       cart_product.product_options = product_options;
-      console.log(product_options);
       return callback(null, cart_product);
     }
   });
