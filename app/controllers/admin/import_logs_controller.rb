@@ -1,6 +1,10 @@
 class Admin::ImportLogsController < ApplicationController
   def index
     @import_logs = ImportLog.order('created_at DESC').page(params[:page])
+    respond_to do |format|
+      format.json{ render json: @import_logs}
+      format.html
+    end
   end
 
   def show
@@ -22,8 +26,6 @@ class Admin::ImportLogsController < ApplicationController
       when ImportLog.coupons_import
         flash[:success] = 'Importacion de cupones calendarizada.'
         CouponsImport.perform_async
-      when ImportLog.rnc_import
-        flash[:success] = 'La tarea solicitada pendiente de implementacion'
       else
         flash[:alert] = 'La tarea solicitada no ha sido reconocida por el sistema'
       end

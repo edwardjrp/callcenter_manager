@@ -3,6 +3,10 @@
 .row
   .span3=button_to 'Importar productos', admin_import_logs_path(log_type: ImportLog.products_import), class: 'btn'
   .span3=button_to 'Importar cupones', admin_import_logs_path(log_type: ImportLog.coupons_import), class: 'btn'
+  .span3
+    =form_for :dgii, url: admin_taxpayer_identifications_path, html: {multipart: true, class: 'form-inline' } do |f|
+      = f.file_field :datafile
+      = submit_tag 'Cargar Numeros Fiscales', class: 'btn'
 
 = will_paginate @import_logs
 %table.table.table-striped.table-bordered.table-condensed#import_logs_list
@@ -15,7 +19,7 @@
       %td
   %tbody
     - @import_logs.each do |import_log| 
-      %tr{ id: dom_id(import_log)}
+      %tr.import_logs{ :id => dom_id(import_log), :data=> { 'import-log-id'=> import_log.id}}
         %td= humanize_import_type import_log.log_type
         %td= import_log.state
         %td= time_ago_in_words import_log.created_at

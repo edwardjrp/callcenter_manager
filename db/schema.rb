@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120912025820) do
+ActiveRecord::Schema.define(:version => 20120916004453) do
 
   create_table "addresses", :force => true do |t|
     t.integer  "client_id"
@@ -221,6 +221,22 @@ ActiveRecord::Schema.define(:version => 20120912025820) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  create_table "taxpayer_identifications", :force => true do |t|
+    t.string "idnumber"
+    t.string "full_name"
+    t.string "company_name"
+    t.string "ocupation"
+    t.string "street"
+    t.string "street_number"
+    t.string "zone"
+    t.string "other"
+    t.string "start_time"
+    t.string "state"
+    t.string "kind"
+  end
+
+  add_index "taxpayer_identifications", ["idnumber"], :name => "index_taxpayer_identifications_on_idnumber", :unique => true
 
   create_table "users", :force => true do |t|
     t.string   "username"
