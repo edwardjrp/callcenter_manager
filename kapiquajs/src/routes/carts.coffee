@@ -34,7 +34,7 @@ class Carts
             cp.product (p_err, product)->
               json_cp = JSON.parse(JSON.stringify(cp))
               json_cp.product = JSON.parse(JSON.stringify(product))
-              parsed_options(json_cp, cb)
+              Carts.parsed_options(json_cp, cb)
               # cb(null, json_cp)
           async.map cart_products,get_products, (it_err, results)->
             if it_err
@@ -90,9 +90,9 @@ class Carts
               else
                 get_products = (cp, cb) ->
                   cp.product (p_err, product) ->
-                    jcp = to_json(cp)
-                    jcp.product = to_json(product)
-                    parsed_options(jcp, cb)
+                    jcp = Carts.to_json(cp)
+                    jcp.product = Carts.to_json(product)
+                    Carts.parsed_options(jcp, cb)
                     
                 async.map cart_products,get_products, (it_err, cart_products) ->
                   if it_err
@@ -106,7 +106,7 @@ class Carts
                 if cart_client_phones_err?
                   socket.emit 'cart:place:error', {error: JSON.stringify(cart_client_phones_err)} if socket?
                 else
-                  callback(null, client, cart_products, to_json(phones))
+                  callback(null, client, cart_products, Carts.to_json(phones))
             else
               callback(null, client, cart_products, [])
           ,
@@ -116,7 +116,7 @@ class Carts
                 if cart_client_addresses_err?
                   socket.emit 'cart:place:error', {error: JSON.stringify(cart_client_addresses_err)} if socket?
                 else
-                  callback(null, client, cart_products, phones, to_json(addresses))
+                  callback(null, client, cart_products, phones, Carts.to_json(addresses))
             else
               callback(null, client, cart_products, phones, [])
           ,
@@ -125,7 +125,7 @@ class Carts
               if(cart_store_err)
                 socket.emit 'cart:place:error', {error: JSON.stringify(cart_store_err)} if socket?  
               else
-                callback(null, client, cart_products , phones, addresses, to_json(store))
+                callback(null, client, cart_products , phones, addresses, Carts.to_json(store))
         ]
         ,
         (final_error,  client, cart_products, phones, addresses, store) ->
@@ -134,42 +134,57 @@ class Carts
             # socket.emit 'cart:place:error', {error: ''} if socket?  
           else
             pulse_com_error = (comm_err) ->
+              # emit an error
               console.log comm_err
-            assempled_cart = to_json(cart)
-            assempled_cart.client = client
-            assempled_cart.cart_products = cart_products
-            assempled_cart.phones = phones
-            assempled_cart.addresses = addresses
-            assempled_cart.store = store
-            PulseBridge.price assempled_cart, pulse_com_error, (res_data) ->
-              order_reply = new OrderReply(res_data)
-              console.log order_reply
+            # check all user elemenents
+            # include user in assembled cart
+            unless cart.completed == true
+              assempled_cart = Carts.to_json(cart)
+              assempled_cart.client = client
+              assempled_cart.cart_products = cart_products
+              assempled_cart.phones = phones
+              assempled_cart.addresses = addresses
+              assempled_cart.store = store
+              if assempled_cart.store and assempled_cart.client and assempled_cart.cart_products.length > 0 and assempled_cart.phones.length > 0
+                # stablish send time to avoid sending for the next 30 seconds or so
+                PulseBridge.price assempled_cart, pulse_com_error, (res_data) ->
+                  order_reply = new OrderReply(res_data)
+                  if order_reply.status == '0'
+                    cart.updateAttributes { store_order_id: order_reply.reply_id, completed: true }, (cart_update_err, updated_cart)->
+                      console.log updated_cart
+                  else
+                    console.log "Notify of the pulse response here : #{order_reply.status_text}"
+              else
+                console.log 'Princing conditions not met'
+            else
+              # here emits cart completer errot
+              console.log 'Cart is complete'
 
 
       # console.log 'Placing'
 
-to_json = (obj) ->
-  JSON.parse(JSON.stringify(obj))
+  @to_json : (obj) ->
+    JSON.parse(JSON.stringify(obj))
 
 
-parsed_options = (cart_product, callback) ->
-  return [] if cart_product.product.options == '' and cart_product.options == ''
-  product_options = []
-  recipe = cart_product.options || cart_product.product.options
-  current_category_id = cart_product.product.category_id
-  Product.all {where: {category_id: current_category_id, options: 'OPTION'}}, (cat_options_products_err, cat_options_products)->
-    if _.any(recipe.split(','))
-      _.each _.compact(recipe.split(',')), (code) ->
-        code_match = code.match(/^([0-9]{0,2}\.?[0|7|5]{0,2})([A-Z]{1,}[a-z]{0,})(?:\-([W12]))?/)
-        if code_match?
-          code_match[1] = '1' if not code_match[1]? or code_match[1] == ''
-          current_quantity = code_match[1]
-          current_product = _.find(cat_options_products, (op)-> op.productcode == code_match[2])
-          current_part =  code_match[3] || 'W'
-          product_option = {quantity: Number(current_quantity), product: to_json(current_product), part: current_part}
-          product_options.push product_option
-      cart_product.product_options = product_options
-      callback(null, cart_product)
+  @parsed_options : (cart_product, callback) ->
+    return [] if cart_product.product.options == '' and cart_product.options == ''
+    product_options = []
+    recipe = cart_product.options || cart_product.product.options
+    current_category_id = cart_product.product.category_id
+    Product.all {where: {category_id: current_category_id, options: 'OPTION'}}, (cat_options_products_err, cat_options_products)->
+      if _.any(recipe.split(','))
+        _.each _.compact(recipe.split(',')), (code) ->
+          code_match = code.match(/^([0-9]{0,2}\.?[0|7|5]{0,2})([A-Z]{1,}[a-z]{0,})(?:\-([W12]))?/)
+          if code_match?
+            code_match[1] = '1' if not code_match[1]? or code_match[1] == ''
+            current_quantity = code_match[1]
+            current_product = _.find(cat_options_products, (op)-> op.productcode == code_match[2])
+            current_part =  code_match[3] || 'W'
+            product_option = {quantity: Number(current_quantity), product: Carts.to_json(current_product), part: current_part}
+            product_options.push product_option
+        cart_product.product_options = product_options
+        callback(null, cart_product)
 
 module.exports  = Carts
 

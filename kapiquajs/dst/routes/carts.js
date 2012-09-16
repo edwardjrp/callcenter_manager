@@ -1,4 +1,4 @@
-var Address, Cart, CartProduct, Carts, Client, OrderReply, Phone, Product, PulseBridge, Store, async, parsed_options, to_json, _;
+var Address, Cart, CartProduct, Carts, Client, OrderReply, Phone, Product, PulseBridge, Store, async, _;
 
 Cart = require('../models/cart');
 
@@ -72,7 +72,7 @@ Carts = (function() {
               var json_cp;
               json_cp = JSON.parse(JSON.stringify(cp));
               json_cp.product = JSON.parse(JSON.stringify(product));
-              return parsed_options(json_cp, cb);
+              return Carts.parsed_options(json_cp, cb);
             });
           };
           return async.map(cart_products, get_products, function(it_err, results) {
@@ -213,9 +213,9 @@ Carts = (function() {
                 get_products = function(cp, cb) {
                   return cp.product(function(p_err, product) {
                     var jcp;
-                    jcp = to_json(cp);
-                    jcp.product = to_json(product);
-                    return parsed_options(jcp, cb);
+                    jcp = Carts.to_json(cp);
+                    jcp.product = Carts.to_json(product);
+                    return Carts.parsed_options(jcp, cb);
                   });
                 };
                 return async.map(cart_products, get_products, function(it_err, cart_products) {
@@ -241,7 +241,7 @@ Carts = (function() {
                     });
                   }
                 } else {
-                  return callback(null, client, cart_products, to_json(phones));
+                  return callback(null, client, cart_products, Carts.to_json(phones));
                 }
               });
             } else {
@@ -257,7 +257,7 @@ Carts = (function() {
                     });
                   }
                 } else {
-                  return callback(null, client, cart_products, phones, to_json(addresses));
+                  return callback(null, client, cart_products, phones, Carts.to_json(addresses));
                 }
               });
             } else {
@@ -272,7 +272,7 @@ Carts = (function() {
                   });
                 }
               } else {
-                return callback(null, client, cart_products, phones, addresses, to_json(store));
+                return callback(null, client, cart_products, phones, addresses, Carts.to_json(store));
               }
             });
           }
@@ -284,19 +284,81 @@ Carts = (function() {
             pulse_com_error = function(comm_err) {
               return console.log(comm_err);
             };
-            assempled_cart = to_json(cart);
-            assempled_cart.client = client;
-            assempled_cart.cart_products = cart_products;
-            assempled_cart.phones = phones;
-            assempled_cart.addresses = addresses;
-            assempled_cart.store = store;
-            return PulseBridge.price(assempled_cart, pulse_com_error, function(res_data) {
-              var order_reply;
-              order_reply = new OrderReply(res_data);
-              return console.log(order_reply);
-            });
+            if (cart.completed !== true) {
+              assempled_cart = Carts.to_json(cart);
+              assempled_cart.client = client;
+              assempled_cart.cart_products = cart_products;
+              assempled_cart.phones = phones;
+              assempled_cart.addresses = addresses;
+              assempled_cart.store = store;
+              if (assempled_cart.store && assempled_cart.client && assempled_cart.cart_products.length > 0 && assempled_cart.phones.length > 0) {
+                return PulseBridge.price(assempled_cart, pulse_com_error, function(res_data) {
+                  var order_reply;
+                  order_reply = new OrderReply(res_data);
+                  if (order_reply.status === '0') {
+                    return cart.updateAttributes({
+                      store_order_id: Number(order_reply.reply_id),
+                      completed: true
+                    }, function(cart_update_err, updated_cart) {
+                      return console.log(updated_cart);
+                    });
+                  } else {
+                    return console.log("Notify of the pulse response here : " + order_reply.status_text);
+                  }
+                });
+              } else {
+                return console.log('Princing conditions not met');
+              }
+            } else {
+              return console.log('Cart is complete');
+            }
           }
         });
+      }
+    });
+  };
+
+  Carts.to_json = function(obj) {
+    return JSON.parse(JSON.stringify(obj));
+  };
+
+  Carts.parsed_options = function(cart_product, callback) {
+    var current_category_id, product_options, recipe;
+    if (cart_product.product.options === '' && cart_product.options === '') {
+      return [];
+    }
+    product_options = [];
+    recipe = cart_product.options || cart_product.product.options;
+    current_category_id = cart_product.product.category_id;
+    return Product.all({
+      where: {
+        category_id: current_category_id,
+        options: 'OPTION'
+      }
+    }, function(cat_options_products_err, cat_options_products) {
+      if (_.any(recipe.split(','))) {
+        _.each(_.compact(recipe.split(',')), function(code) {
+          var code_match, current_part, current_product, current_quantity, product_option;
+          code_match = code.match(/^([0-9]{0,2}\.?[0|7|5]{0,2})([A-Z]{1,}[a-z]{0,})(?:\-([W12]))?/);
+          if (code_match != null) {
+            if (!(code_match[1] != null) || code_match[1] === '') {
+              code_match[1] = '1';
+            }
+            current_quantity = code_match[1];
+            current_product = _.find(cat_options_products, function(op) {
+              return op.productcode === code_match[2];
+            });
+            current_part = code_match[3] || 'W';
+            product_option = {
+              quantity: Number(current_quantity),
+              product: Carts.to_json(current_product),
+              part: current_part
+            };
+            return product_options.push(product_option);
+          }
+        });
+        cart_product.product_options = product_options;
+        return callback(null, cart_product);
       }
     });
   };
@@ -304,50 +366,5 @@ Carts = (function() {
   return Carts;
 
 }).call(this);
-
-to_json = function(obj) {
-  return JSON.parse(JSON.stringify(obj));
-};
-
-parsed_options = function(cart_product, callback) {
-  var current_category_id, product_options, recipe;
-  if (cart_product.product.options === '' && cart_product.options === '') {
-    return [];
-  }
-  product_options = [];
-  recipe = cart_product.options || cart_product.product.options;
-  current_category_id = cart_product.product.category_id;
-  return Product.all({
-    where: {
-      category_id: current_category_id,
-      options: 'OPTION'
-    }
-  }, function(cat_options_products_err, cat_options_products) {
-    if (_.any(recipe.split(','))) {
-      _.each(_.compact(recipe.split(',')), function(code) {
-        var code_match, current_part, current_product, current_quantity, product_option;
-        code_match = code.match(/^([0-9]{0,2}\.?[0|7|5]{0,2})([A-Z]{1,}[a-z]{0,})(?:\-([W12]))?/);
-        if (code_match != null) {
-          if (!(code_match[1] != null) || code_match[1] === '') {
-            code_match[1] = '1';
-          }
-          current_quantity = code_match[1];
-          current_product = _.find(cat_options_products, function(op) {
-            return op.productcode === code_match[2];
-          });
-          current_part = code_match[3] || 'W';
-          product_option = {
-            quantity: Number(current_quantity),
-            product: to_json(current_product),
-            part: current_part
-          };
-          return product_options.push(product_option);
-        }
-      });
-      cart_product.product_options = product_options;
-      return callback(null, cart_product);
-    }
-  });
-};
 
 module.exports = Carts;
