@@ -53,6 +53,7 @@ class Cart < ActiveRecord::Base
   scope :archived, where(message_mask: 2)
   scope :trashed, where(message_mask: 4)
   scope :criticals, where('message_mask = 8 or message_mask = 9 or message_mask = 10 or message_mask = 12')
+  # self.per_page = 20
 
 
   def self.service_methods
@@ -76,6 +77,29 @@ class Cart < ActiveRecord::Base
      ['nuevos', 'archivados', 'eliminados', 'criticos']
   end
   
+
+  def self.detailed_report#(start_time, end_time)
+    CSV.generate do |csv|
+      csv << ['No. Orden', 'Tienda', 'Nueno cliente', 'Cliente', 'Fecha', 'Modo de servicio', 'Agente', 'Tiempo de toma', 'Monto de la order', 'Pago efectivo', 'Typo de factura', 'Estado en pulse']
+      all.each do |cart|
+        csv << [
+          cart.id,
+          cart.store.storeid,
+          '*',
+          "#{cart.client.first_name} #{cart.client.last_name} - #{cart.client.last_phone.number.gsub(/([0-9]{3})([0-9]{3})([0-9]{4})/,'\\1-\\2-\\3')}",
+          cart.created_at.strftime('%Y-%m-%d %H:%M:%S'), # there has to be a completed_on field
+          cart.service_method,
+          cart.user.idnumber,
+          'Provisto por asterisk',
+          cart.payment_amount,
+          cart.payment_type,
+          cart.fiscal_type || 'FinalConsumer',
+          cart.order_progress,
+          cart.products.map(&:productname).to_sentence
+           ]
+      end
+    end
+  end
   
   def mailboxes=(sent_mailboxes)
     current_mailboxes = []

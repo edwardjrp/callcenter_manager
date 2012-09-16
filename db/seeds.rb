@@ -86,23 +86,29 @@ if File.exists? addresses_data_file
   end
 end
 
-# puts "adding categories and products"
-# temp_products_file = Rails.root.join("tmp","15871_get_store_products.xml")
-# if File.exists?(temp_products_file)
-#   product_file_data = File.open(temp_products_file, 'r:utf-8').read
-#   doc= Nokogiri::XML(product_file_data)
-#   products_table = doc.css('Products').first.inner_text.gsub(/"/,'&quot;')
-#   CSV.parse(products_table, {:col_sep=>"\t", :headers=>true}) do |row|
-#     Product.create do |product|
-#       # puts "#{row['CategoryCode']} > #{row['ProductCode']} - #{row['ProductName']}"
-#       product.category_id = Category.find_or_create_by_name(row['CategoryCode']).id
-#       product.productcode = row['ProductCode']
-#       product.productname = row['ProductName']
-#       product.options = row['Options']
-#       product.sizecode = row['SizeCode']
-#       product.flavorcode = row['FlavorCode']
-#       product.optionselectiongrouptype = row['OptionSelectionGroupType']
-#       product.productoptionselectiongroup = row['ProductOptionSelectionGroup']
-#     end
-#   end
-# end
+6.times {FactoryGirl.create :user, :password=>'please', :password_confirmation=>'please', :username=>'test', :roles=> [:operator]}
+unless Product.count == 0
+  500.times do
+    current_cart = Cart.create do |cart| 
+        cart.user_id  = User.all.sample.id
+        cart.client_id  =  Client.all.sample.id
+        cart.store_id  =  Store.all.sample.id
+        cart.store_order_id  =  "%07d" % rand(999)
+        cart.service_method = ['Pickup', 'CarryOut'].sample
+        cart.net_amount = rand(9999) + 100
+        cart.tax_amount = cart.net_amount * 0.16
+        cart.payment_amount = cart.net_amount + cart.tax_amount
+        cart.payment_type = 'CashPayment'
+        cart.discount = (cart.payment_amount * 0.1) * rand(1)
+        cart.discount_auth_id = User.find(2).id if cart.discount > 0
+        cart.completed = true
+    end
+    (rand(10) + 1 ).times do
+      CartProduct.create do |cart_product|
+        cart_product.cart_id = current_cart.id
+        cart_product.product_id = Product.all.sample.id
+        cart_product.quantity = rand(3)
+      end
+    end
+  end
+end

@@ -13,6 +13,7 @@
       =f.text_field :created_at_lteq, :class=> 'input-medium search-query', :placeholder=>'Creado antes de '
       =f.submit 'Buscar', :name=>nil, :class=> 'btn'
       %a.btn#clear_cart_search{ href: '#'} Limpiar
+    =link_to 'Reporte detallado', admin_carts_path(format: :csv)
     - if @carts.any?
       =will_paginate @carts
       .tabbable.tabs-left
@@ -31,7 +32,7 @@
                   %th ID orden Pulse
                   %th Cliente
                   %th Agente
-                  %th Telefono
+                  %th Monto
                   %th 
                 %tbody
                   -@carts.each do |cart|
@@ -45,8 +46,6 @@
                           - if cart.client.present?
                             = cart.client.full_name
                         %td= cart.user.full_name
-                        %td
-                          - if cart.client.present?
-                            = cart.client.last_phone
+                        %td= number_to_currency cart.payment_amount
                         %td= link_to 'Detalles', [:admin,cart]
       =will_paginate @carts
