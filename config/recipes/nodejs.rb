@@ -3,7 +3,8 @@ namespace :nodejs do
   task :install, roles: :app do
     run "#{sudo} add-apt-repository ppa:chris-lea/node.js"
     run "#{sudo} apt-get -y update"
-    run "#{sudo} apt-get -y install nodejs"
+    run "#{sudo} apt-get -y install nodejs npm"
+    run "#{sudo} npm install coffee -g"
   end
   after "deploy:install", "nodejs:install"
 end
