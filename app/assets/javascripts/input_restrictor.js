@@ -6,7 +6,7 @@
 					if(event.which >= 97 && event.which <= 122) event.preventDefault();
 			});
 			$(this).on('blur', function(){
-				  if($(this).val().match(/[a-z|A-Z]/g)) $(this).val('');
+				  if(!$(this).val().match(/[a-z|A-Z]/g)) $(this).val('');
 			});
 	  },
 		spaces : function(){
