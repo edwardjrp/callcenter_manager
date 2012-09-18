@@ -15,5 +15,6 @@ config/database.yml
 /log/*.log
 /tmp
 /public/rnc
+/kapiquajs/node_modules
 coverage
 chromedriver.log

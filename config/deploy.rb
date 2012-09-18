@@ -1,5 +1,8 @@
 require "bundler/capistrano"
 
+load "config/recipes/nginx"
+load "config/recipes/forever"
+load "config/recipes/nodejs"
 
 server '192.168.101.50', :web, :app, :db, primary: true
 set :user, 'soporte'
@@ -49,7 +52,15 @@ namespace :deploy do
     run "cd #{current_path} && bundle exec rake assets:precompile"
     puts "done."
   end
-  before "deploy:setup_config", "deploy:compile_assets"  
+  before "deploy:setup_config", "deploy:compile_assets"
+
+  task :coffee_compile, roles: :app do
+    puts "Compiling coffee files."
+    run "cd #{current_path}/kapiquajs && coffee build.coffee"
+    run "cd #{current_path}/kapiquajs && npm install"
+    puts "done."
+  end
+  before "deploy:setup_config", "deploy:compile_assets" 
 
   task :symlink_config, roles: :app do
     run "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
