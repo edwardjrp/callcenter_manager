@@ -54,13 +54,13 @@ namespace :deploy do
   end
   before "deploy:setup_config", "deploy:compile_assets"
 
-  task :coffee_compile, roles: :app do
-    puts "Compiling coffee files."
-    run "cd #{current_path}/kapiquajs && npm install"
-    run "/usr/bin/coffee #{current_path}/kapiquajs/build.coffee"
-    puts "done."
-  end
-  before "deploy:symlink_config", "deploy:coffee_compile" 
+  # task :coffee_compile, roles: :app do
+  #   puts "Compiling coffee files."
+  #   run "cd #{current_path}/kapiquajs && npm install"
+  #   run "/usr/bin/coffee #{current_path}/kapiquajs/build.coffee"
+  #   puts "done."
+  # end
+  # before "deploy:symlink_config", "deploy:coffee_compile" 
 
   task :symlink_config, roles: :app do
     run "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
