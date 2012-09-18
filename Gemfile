@@ -40,6 +40,7 @@ gem "rails-settings-cached"
 gem 'ransack'
 gem 'backbone-on-rails'
 gem 'savon'
+gem "zip"
 gem "cancan"
 gem "simple-navigation"
 gem 'simple-navigation-bootstrap'
