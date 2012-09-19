@@ -3,7 +3,6 @@ namespace :forever do
   task :install, roles: :app do
     "#{sudo} npm install forever -g"
   end
-
   
   %w[start stop restart].each do |command|
     desc "#{command} forever"

@@ -53,7 +53,7 @@ Kapiqua25::Application.routes.draw do
     resources :coupons, except: [:new, :create]
     resources :taxpayer_identifications, only: [:index, :create]
     resources :import_logs
-    resources :settings , only: :index
+    resources :settings , only: [:index, :create]
 
     resources :carts do 
       collection do 
