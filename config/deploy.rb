@@ -56,8 +56,8 @@ namespace :deploy do
 
   task :coffee_compile, roles: :app do
     puts "Compiling coffee files."
-    run "cd #{current_path}/kapiquajs && npm install"
     run "cd #{current_path}/kapiquajs && #{sudo} npm link coffee-script"
+    run "cd #{current_path}/kapiquajs && npm install"
     run "/usr/bin/coffee #{current_path}/kapiquajs/build.coffee"
     puts "done."
   end
