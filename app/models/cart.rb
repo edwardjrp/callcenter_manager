@@ -1,3 +1,4 @@
+require 'csv'
 # == Schema Information
 #
 # Table name: carts
