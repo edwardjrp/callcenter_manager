@@ -32,10 +32,10 @@ describe 'Clients general' do
     page.should have_css('.filter')
   end
 
-  it "should render the import client link" do
-    visit admin_clients_path
-    page.should have_content('Clientes Olo')
-  end
+  # it "should render the import client link" do
+  #   visit admin_clients_path
+  #   page.should have_content('Clientes Olo')
+  # end
 
   describe "when searching" do
     let(:search_client){ FactoryGirl.create :client,first_name: 'test user', last_name: 'test last name'}

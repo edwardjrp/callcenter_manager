@@ -2,11 +2,11 @@ class Config
   
   @host: "localhost"
   
-  @username: "soporte"
+  @username: "radhamesbrito"
   
-  @password: "d0m1n0s"
+  @password: "siriguillo"
   
-  @db: "kapiqua_production"
+  @db: "kapiqua_development"
     
   @connection_string: "postgres://#{@username}:#{@password}@#{@host}/#{@db}"
   

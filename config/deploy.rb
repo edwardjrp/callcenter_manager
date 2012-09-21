@@ -3,6 +3,7 @@ require "bundler/capistrano"
 load "config/recipes/nginx"
 load "config/recipes/forever"
 load "config/recipes/nodejs"
+load 'deploy/assets'
 
 server '192.168.101.50', :web, :app, :db, primary: true
 set :user, 'soporte'
@@ -23,12 +24,6 @@ default_run_options[:pty] = true
 
 after "deploy", "deploy:cleanup"
 
-# after "deploy:update_code", :bundle_install 
-# desc "install the necessary prerequisites" 
-# task :bundle_install, :roles => :app do
-#   run "cd #{release_path} && bundle install" 
-# end
-
 
 namespace :deploy do
   %w[start stop restart].each do |command|
@@ -46,13 +41,6 @@ namespace :deploy do
    put File.read("config/database.production.yml"), "#{shared_path}/config/database.yml"
   end
   before "deploy:restart", "deploy:setup_config"
-
-  task :compile_assets, roles: :app do
-    puts "Compiling assets."
-    run "cd #{current_path} && bundle exec rake assets:precompile"
-    puts "done."
-  end
-  before "deploy:setup_config", "deploy:compile_assets"
 
   task :coffee_compile, roles: :app do
     puts "Compiling coffee files."
@@ -78,18 +66,3 @@ namespace :deploy do
   end
   before "deploy", "deploy:check_revision"
 end
-
-# if you want to clean up old releases on each deploy uncomment this:
-# after "deploy:restart", "deploy:cleanup"
-
-# if you're still using the script/reaper helper you will need
-# these http://github.com/rails/irs_process_scripts
-
-# If you are using Passenger mod_rails uncomment this:
-# namespace :deploy do
-#   task :start do ; end
-#   task :stop do ; end
-#   task :restart, :roles => :app, :except => { :no_release => true } do
-#     run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
-#   end
-# end
