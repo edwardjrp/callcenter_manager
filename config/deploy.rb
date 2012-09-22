@@ -1,4 +1,5 @@
 require "bundler/capistrano"
+require 'sidekiq/capistrano'
 
 load "config/recipes/nginx"
 load "config/recipes/forever"
@@ -49,7 +50,8 @@ namespace :deploy do
     run "/usr/bin/coffee #{current_path}/kapiquajs/build.coffee"
     puts "done."
   end
-  # before "deploy:symlink_config", "deploy:coffee_compile" 
+  before "forever:restart", "deploy:coffee_compile"
+  after "deploy:restart", "forever:restart" 
 
   task :symlink_config, roles: :app do
     run "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"

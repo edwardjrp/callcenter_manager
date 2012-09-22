@@ -297,7 +297,7 @@ Carts = (function() {
                   order_reply = new OrderReply(res_data);
                   if (order_reply.status === '0') {
                     return cart.updateAttributes({
-                      store_order_id: Number(order_reply.reply_id),
+                      store_order_id: order_reply.reply_id,
                       completed: true
                     }, function(cart_update_err, updated_cart) {
                       return console.log(updated_cart);

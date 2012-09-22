@@ -48,6 +48,6 @@ class ProductsImport
       found = Product.where(productcode: productcode, productname: producname, options: options,
        sizecode: sizecode, flavorcode: flavorcode, optionselectiongrouptype: optionselectiongrouptype,
        productoptionselectiongroup: productoptionselectiongroup).first
-      return found if (found && found.category.name == categorycode)
+      return found if (found && found.category && found.category.name == categorycode)
     end
 end
