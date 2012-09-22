@@ -12,5 +12,13 @@ FactoryGirl.define do
     login_count {rand(99)}
     idnumber {11.times.map{ Random.new.rand(9) }.join}
     active true
+
+    trait :admin do
+      role_mask 1
+    end
+
+    trait :operator do
+      role_mask 2
+    end
   end
 end

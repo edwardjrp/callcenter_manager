@@ -329,6 +329,10 @@ assign_client_to_current_cart = () ->
         success: (cart_info) ->
           $('#choose_client').text("Cliente: #{cart_info.client.first_name} #{cart_info.client.last_name}").attr('href', "/clients/#{cart_info.client.id}")
           $('#choose_client').effect('highlight')
+          $('#choose_service_method').text('Modo de servicio: N/A')
+          $('#choose_service_method').effect('highlight')
+          $('#choose_store').text('Tienda: N/A')
+          $('#choose_store').effect('highlight')
           window.hide_popover($('#client_search_panel'))
           window.show_alert('Cliente asignado.', 'success')
           

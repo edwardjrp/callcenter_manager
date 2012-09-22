@@ -60,6 +60,47 @@ class Cart < ActiveRecord::Base
   def self.service_methods
     %w( delivery pickup carryout )
   end
+
+  def reset_for_new_client!
+    clear_store!
+    clear_discount!
+    clear_prices!
+    clear_service_method!
+  end
+
+  def clear_client!
+    self.client = nil
+    self.save!
+  end
+
+  def clear_service_method!
+    self.service_method = nil
+    self.save!
+  end
+
+  def clear_store!
+    self.store = nil
+    self.save!
+  end
+
+  def clear_discount!
+    self.discount = nil
+    self.discount_auth_id = nil
+    self.save!
+  end
+
+  def clear_prices!
+    self.net_amount = nil
+    self.tax_amount = nil
+    self.tax1_amount = nil
+    self.tax2_amount = nil
+    self.payment_amount = nil
+    self.cart_products.each do | cart_product |
+      cart_product.priced_at = nil
+      cart_product.save
+    end
+    self.save!
+  end
   
   def delivery?
     self.service_method == self.class.service_methods[0]

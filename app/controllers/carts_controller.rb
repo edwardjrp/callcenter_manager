@@ -8,6 +8,7 @@ class CartsController < ApplicationController
          session[:current_cart_id] = @cart.id unless @cart.id == current_cart.id
          @cart.user = current_user unless @cart.user == current_user
          @cart.client = @client unless @cart.client == @client
+         @cart.reset_for_new_client!
          @cart.save
          format.json{render :json => @cart.as_json(only: [:service_method, :store_id], include: [client: {only: [:id, :first_name, :last_name]}])}
       else

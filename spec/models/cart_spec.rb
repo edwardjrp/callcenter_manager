@@ -49,34 +49,152 @@ describe Cart do
 
 
   describe 'mailboxes' do
-    before(:each) do
-      @cart = FactoryGirl.create :cart
-    end
+
+    let!(:cart) { FactoryGirl.create :cart }
 
     it "should return the available mailboxes" do
       Cart.valid_mailboxes.should include('nuevos', 'archivados', 'eliminados', 'criticos')
     end
 
     it "should return nuevos if the cart if new" do
-      @cart.mailboxes.should include('nuevos')
+      cart.mailboxes.should include('nuevos')
     end
 
     it "should move to archivados" do
-      @cart.archive!
-      @cart.mailboxes.should_not include('nuevos')
-      @cart.mailboxes.should include('archivados')
+      cart.archive!
+      cart.mailboxes.should_not include('nuevos')
+      cart.mailboxes.should include('archivados')
     end
 
     it "should move to eliminados" do
-      @cart.trash!
-      @cart.mailboxes.should_not include('nuevos')
-      @cart.mailboxes.should include('eliminados')
+      cart.trash!
+      cart.mailboxes.should_not include('nuevos')
+      cart.mailboxes.should include('eliminados')
     end
 
     it "should mark as criticos" do
-      @cart.critical!
-      @cart.mailboxes.should include('nuevos')
-      @cart.mailboxes.should include('criticos')
+      cart.critical!
+      cart.mailboxes.should include('nuevos')
+      cart.mailboxes.should include('criticos')
+    end
+
+
+  end
+
+  # describe '#clear_all' do
+  #   let!(:client){ create :client }
+  #   let!(:store){ create :store }
+  #   let!(:user){ create :user, :operator }
+  #   let!(:cart){ create :cart, client: client, payment_amount: 100.00, service_method: 'PickUp', store: store, user: user}
+
+  #   it "should reset value to nil or zero " do
+  #     cart.client.should == client
+  #     cart.payment_amount.should == 100.00
+  #     cart.service_method.should == 'PickUp'
+  #     cart.store.should == store
+  #     cart.clear_all
+  #     cart.reload
+  #     art.client.should be_nil
+  #     cart.payment_amount.should == 0
+  #     cart.service_method.should == be_blank
+  #     cart.store.should == be_nil
+  #     cart.user.should == user
+  #   end
+  # end
+
+  describe '#clear_client' do
+    let!(:client){ create :client }
+    let!(:user){ create :user, :operator }
+    let!(:cart){ create :cart, client: client, user: user}
+
+    it "should reset value to nil or zero " do
+      cart.client.should == client
+      cart.clear_client!
+      cart.reload
+      cart.client.should be_nil
+      cart.user.should == user
+    end
+  end
+
+  describe '#clear_service_method!' do
+    let!(:user){ create :user, :operator }
+    let!(:cart){ create :cart, user: user, service_method: 'PickUp'}
+
+    it "should reset value to nil or zero " do
+      cart.service_method.should == 'PickUp'
+      cart.clear_service_method!
+      cart.reload
+      cart.service_method.should be_nil
+      cart.user.should == user
+    end
+  end
+
+  describe '#reset_for_new_client!' do
+    let!(:client){ create :client }
+    let!(:user){ create :user, :operator }
+    let!(:store){ create :store }
+    let!(:cart){ create :cart, client: client, payment_amount: 100.00, service_method: 'PickUp', store: store, user: user}
+
+    it "should reset value to nil or zero " do
+      cart.client.should == client
+      cart.payment_amount.should == 100.00
+      cart.service_method.should == 'PickUp'
+      cart.store.should == store
+      cart.reset_for_new_client!
+      cart.reload
+      cart.payment_amount.should be_nil
+      cart.service_method.should be_nil
+      cart.store.should be_nil
+      cart.client.should == client
+      cart.user.should == user
+    end
+  end
+
+  describe '#clear_discount' do
+    let!(:user){ create :user, :operator }
+    let!(:admin){ create :user, :admin }
+    let!(:cart){ create :cart, user: user, discount: 100 , discount_auth_id: admin.id}
+
+    it "should reset value to nil or zero " do
+      cart.discount.should == 100
+      cart.clear_discount!
+      cart.reload
+      cart.discount.should be_nil
+      cart.discount_auth_id.should be_nil
+      cart.user.should == user
+    end
+  end
+
+  describe '#clear_store' do
+    let!(:store){ create :store }
+    let!(:user){ create :user, :operator }
+    let!(:cart){ create :cart, user: user, store: store}
+
+    it "should reset value to nil or zero " do
+      cart.store.should == store
+      cart.clear_store!
+      cart.reload
+      cart.store.should be_nil
+      cart.user.should == user
+    end
+  end
+
+  describe '#clear_prices' do
+    let!(:user){ create :user, :operator }
+    let!(:cart){ create :cart, user: user, net_amount: 100, tax_amount: 45, tax1_amount: 20, tax2_amount: 15, payment_amount: 145}
+    let!(:cart_product){ create :cart_product , priced_at: 1000, cart: cart }
+
+    it "should reset value to nil or zero " do
+      cart.payment_amount.should == 145
+      cart.clear_prices!
+      cart.reload
+      cart.net_amount.should be_nil
+      cart.tax_amount.should be_nil
+      cart.tax1_amount.should be_nil
+      cart.tax2_amount.should be_nil
+      cart.payment_amount.should be_nil
+      cart.cart_products.first.priced_at.should be_nil
+      cart.user.should == user
     end
   end
 end
