@@ -1,3 +1,5 @@
+= render 'admin_products'
+
 =link_to '<i class="icon-arrow-left"></i> Tiendas'.html_safe, admin_stores_path, class: 'btn bottom-margin-1'
 .row  
   = search_form_for [:admin,@search], :url=> admin_store_path(@store),:html=>{:class=>'well form-search top-margin-1 filter'} do |f|

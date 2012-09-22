@@ -9,7 +9,7 @@ describe 'Stores general' do
   end
   
   it "should render the link in the nav" do
-    within('.navbar-fixed-top'){page.should have_content('Tiendas')}
+    within('.navbar-fixed-top'){page.should have_content('Productos')}
   end
   
   it "should render the stores listing" do

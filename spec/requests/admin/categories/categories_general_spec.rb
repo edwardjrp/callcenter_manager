@@ -8,8 +8,8 @@ describe 'Categories general' do
   end
   
   it "should render de link in the main nav" do
-    visit admin_root_path
-    within('.navbar-fixed-top'){page.should have_content('Categorías')}
+    visit admin_stores_path
+    within('.subnav-fixed'){page.should have_content('Categorías')}
   end
   
   it "should display the categories template" do

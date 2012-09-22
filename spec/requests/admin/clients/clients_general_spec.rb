@@ -1,3 +1,4 @@
+#encoding: utf-8
 require 'spec_helper'
 
 describe 'Clients general' do
@@ -9,11 +10,12 @@ describe 'Clients general' do
   end
   
   it "should render the clients link in the navbar" do
-    within('.navbar-fixed-top'){page.should have_content('Clientes')}
+    visit admin_clients_path
+    within('.subnav-fixed'){page.should have_content('Clientes')}
   end
   
   it "should render the clients list" do
-    within('.navbar-fixed-top'){click_link('Clientes')}
+    within('.navbar-fixed-top'){click_link('Gestión')}
     page.should have_css('#clients_list')
     page.should have_content(@client.first_name)
   end

@@ -1,4 +1,4 @@
-= render 'administration'
+= render 'admin_products'
 =link_to '<i class="icon-arrow-left"></i> Log de importación'.html_safe, admin_import_logs_path, class: 'btn bottom-margin-1'
 %h3.bottom-margin-1=" Eventos para la #{humanize_import_type @import_log.log_type}"
 = will_paginate @import_events

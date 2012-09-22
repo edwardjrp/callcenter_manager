@@ -1,3 +1,5 @@
+= render 'admin_products'
+
 %h3.bottom-margin-1 Cupones
 = search_form_for [:admin,@search], :html=>{:class=>'well form-search top-margin-1 filter'} do |f|
   =f.text_field :code_cont, :class=> 'input-medium search-query', :placeholder=>'Código contiene'

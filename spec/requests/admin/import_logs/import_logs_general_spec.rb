@@ -10,9 +10,7 @@ describe 'Services general' do
     end
 
     it 'should render the settings list' do
-      visit admin_root_path
-      within('.navbar-fixed-top'){page.should have_content('Administración')}
-      within('.navbar-fixed-top'){click_link('Administración')}
+      visit admin_stores_path
       within('.subnav'){page.should have_content('Importación')}
     end
 

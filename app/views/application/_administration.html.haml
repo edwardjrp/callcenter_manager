@@ -1,6 +1,9 @@
 = content_for :subnav do
   .subnav.subnav-fixed
     %ul.nav.nav-pills
+      %li= link_to 'Clientes', admin_clients_path
+      %li= link_to 'Direcciones', admin_addresses_path
       %li= link_to 'Agentes', admin_users_path
-      %li= link_to 'Configuracion', admin_settings_path
-      %li= link_to 'Importación', admin_import_logs_path
+      %li= link_to 'Razones', admin_users_path
+      %li= link_to 'Numeros Fiscales', admin_users_path
+      %li= link_to 'Comunicación', admin_settings_path

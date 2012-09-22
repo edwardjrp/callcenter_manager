@@ -1,3 +1,5 @@
+= render 'administration'
+
 %h2 Direcciones
 #addresses_list{data: {cities: City.all.to_json(only: [:id, :name])}}
   .btn-toolbar
