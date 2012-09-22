@@ -1,8 +1,9 @@
+#encoding: utf-8
 class Admin::ImportLogsController < ApplicationController
   def index
     @import_logs = ImportLog.order('created_at DESC').page(params[:page])
     respond_to do |format|
-      format.json{ render json: @import_logs}
+      format.js
       format.html
     end
   end
@@ -19,15 +20,19 @@ class Admin::ImportLogsController < ApplicationController
 
   private
     def enqueue_task(log_type)
-      case log_type
-      when ImportLog.products_import
-        flash[:success] = 'Importacion de productos calendarizada.'
-        ProductsImport.perform_async
-      when ImportLog.coupons_import
-        flash[:success] = 'Importacion de cupones calendarizada.'
-        CouponsImport.perform_async
-      else
-        flash[:alert] = 'La tarea solicitada no ha sido reconocida por el sistema'
+      begin
+        case log_type
+        when ImportLog.products_import
+          ProductsImport.perform_async
+          flash[:success] = 'Importacion de productos calendarizada.'
+        when ImportLog.coupons_import
+          CouponsImport.perform_async
+          flash[:success] = 'Importacion de cupones calendarizada.'
+        else
+          flash[:alert] = 'La tarea solicitada no ha sido reconocida por el sistema'
+        end
+      rescue Redis::CannotConnectError
+        flash[:error] = 'El servico Redis no se esta ejecutando, los tareas de importación no se pueden realizar'
       end
 
     end

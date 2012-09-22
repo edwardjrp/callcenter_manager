@@ -26,6 +26,16 @@
   throw "Missing arguments" if !el?
   el.remove() if el.length > 0
   
+
+@getParameterByName = (name)->
+  name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]")
+  regexS = "[\\?&]" + name + "=([^&#]*)"
+  regex = new RegExp(regexS)
+  results = regex.exec(window.location.search)
+  if (results == null)
+    return ""
+  else
+    return decodeURIComponent(results[1].replace(/\+/g, " "))
   
 @strip = (string) ->
   if _.isString(string)

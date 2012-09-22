@@ -9,7 +9,7 @@
       = submit_tag 'Cargar Numeros Fiscales', class: 'btn'
 
 = will_paginate @import_logs
-%table.table.table-striped.table-bordered.table-condensed#import_logs_list
+%table.table.table-striped.table-bordered.table-condensed
   %thead
     %tr
       %th Typo de tarea
@@ -17,12 +17,6 @@
       %th Iniciada hace
       %th Iniciada en
       %td
-  %tbody
-    - @import_logs.each do |import_log| 
-      %tr.import_logs{ :id => dom_id(import_log), :data=> { 'import-log-id'=> import_log.id}}
-        %td= humanize_import_type import_log.log_type
-        %td= import_log.state
-        %td= time_ago_in_words import_log.created_at
-        %td= l import_log.created_at, format: :long
-        %td=link_to 'Ver log', [:admin, import_log]
+  %tbody#import_logs_list
+    = render 'import_logs_list', import_logs: @import_logs
 = will_paginate @import_logs
