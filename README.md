@@ -14,17 +14,15 @@
 
 - cart is missing items edit
 
-- back links missing in most admin sections
-
 - Implementar dicontinuado/borrado store, coupons and products/ have to add discontinued to products to allow reimporting
 
 - socket.io sometimes return 'transport end (undefined)' and ignores messages
 
 - request.js crashes when destination host is unreachable
 
-- settings section is missing
+- add olo url to settings section
 
-- agents section is missing
+- add settings load in node
 
 - add resports section
 

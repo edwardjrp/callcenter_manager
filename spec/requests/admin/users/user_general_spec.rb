@@ -44,7 +44,7 @@ describe 'Users general' do
       fill_in 'Cedula', with: '00113574334'
       fill_in 'Password', with: 'please'
       fill_in 'Password confirmation', with: 'please'
-      check 'operator'
+      choose 'operator'
       check 'Active'
       click_button 'Crear Agente'
       page.should have_content('Agente creado.')
@@ -58,7 +58,7 @@ describe 'Users general' do
       fill_in 'Nombre', with: 'testname2'
       fill_in 'Apellido', with: 'test2'
       fill_in 'Cedula', with: '00113574334'
-      check 'operator'
+      choose 'operator'
       check 'Active'
       click_button 'Crear Agente'
       page.should have_content('no puede')

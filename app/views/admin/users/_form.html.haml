@@ -6,5 +6,5 @@
   =f.input :idnumber
   =f.input :password
   =f.input :password_confirmation
-  =f.input :roles, :as => :check_boxes, :collection =>User.valid_roles
+  =f.input :roles, :as => :radio_buttons, :collection =>User.valid_roles
   =f.input :active, as: :boolean
