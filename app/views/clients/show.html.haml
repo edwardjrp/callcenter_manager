@@ -28,7 +28,7 @@
     .well#phones_list
       .row
         .span4        
-          %h3 Telefonos
+          %h3 Teléfonos
           %a#add_phone{href: '#'}
             Agregar
           =render 'modal', :modal_id => 'add_phone_modal', :title=>'Agregar Telefono'
@@ -96,7 +96,7 @@
             -if address.unit_number
               .row
                 .span4
-                  %strong Numero de unidad:
+                  %strong No. de apartamento:
                   =address.unit_number
             -if address.postal_code
               .row
@@ -145,9 +145,9 @@
               -cart.cart_products.each do |cart_product|
                 %tr
                   %td= cart_product.quantity
-                  %td= cart_product.product.productname
+                  %td.span3= cart_product.product.productname.html_safe
                   %td= cart_product.product.niffty_options
-                  %td= cart_product.priced_at
+                  %td.span2= number_to_currency cart_product.priced_at
         %hr 
       =will_paginate @carts
     -else

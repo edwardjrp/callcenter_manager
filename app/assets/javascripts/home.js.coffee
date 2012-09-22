@@ -9,6 +9,10 @@ jQuery ->
   assign_service_method($('#service_method_pickup'))
   $('#client_search_first_name').restric('numeric')
   $('#client_search_last_name').restric('numeric')
+  $('#client_search').on 'keypress', '#client_search_idnumber', (event) ->
+    if (event.which >= 97 && event.which <= 122)
+      $("<div class='purr'>Solo se aceptan números en esta campo<div>").purr()
+
 
 
 

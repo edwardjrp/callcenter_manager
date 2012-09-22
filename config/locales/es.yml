@@ -205,7 +205,24 @@ es:
       client: 'Cliente'
       user: 'Agente'
       category: 'Categoría'
+      phone: 'Telefono'
+      address: 'Dirección'
+      city: 'Ciudad'
+      area: 'Zona'
+      street: 'Calle'
+      cart: 'Orden'
+      coupon: 'Cupón'
+      import_log: 'Log de Importación'
+      product: 'Producto'
+      product: 'Tienda'
     attributes:
+      client:
+        first_name: 'Nombre'
+        last_name: 'Apellido'
+        idnumber: 'Cedula'
+      phone:
+        number: 'Número'
+        ext: 'Extensión'
       user:
         first_name: 'Nombre'
         last_name: 'Apellido'

@@ -24,7 +24,7 @@ class ApplicationController < ActionController::Base
    end
    
    def current_cart
-     if user_signed_in?
+     if user_signed_in? and !current_user.is?(:admin)
        if  session[:current_cart_id] && current_user.carts.exists?(session[:current_cart_id]) && !current_user.carts.find(session[:current_cart_id]).completed?
           cart =  current_user.carts.find(session[:current_cart_id])
        else

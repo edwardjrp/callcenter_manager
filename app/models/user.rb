@@ -28,6 +28,8 @@ class User < ActiveRecord::Base
   attr_accessible :first_name, :last_name, :idnumber, :username, :password, :password_confirmation, :roles, :active
   before_create :generate_auth_token
   before_destroy :ensure_has_no_carts
+  before_destroy :there_is_one_admin
+  scope :admins, where('role_mask = ? ', 1)
   
   def self.authenticate(username, password)
       user = find_by_username(username)
@@ -40,10 +42,6 @@ class User < ActiveRecord::Base
   
   def generate_auth_token
     self.auth_token = SecureRandom.hex(10)
-  end
-
-  def ensure_has_no_carts
-    self.carts.count.zero?
   end
 
   def roles=(sent_roles)
@@ -74,4 +72,19 @@ class User < ActiveRecord::Base
     normal_roles.push sent_roles.to_s if sent_roles.is_a? Symbol
     normal_roles
   end
+
+  def there_is_one_admin
+    if self.is?('admin') && self.class.admins.count == 1
+      self.errors.add(:base, 'No puede eliminar todos los administradores') 
+      false
+    end
+  end
+
+  def ensure_has_no_carts
+    if self.carts.completed.count.nonzero?
+      self.errors.add(:base, 'Algunas ordenes hacen referencia a este agente') 
+      false
+    end
+  end
+
 end

@@ -26,6 +26,7 @@ class Client < ActiveRecord::Base
   has_many :addresses, dependent: :destroy#, :inverse_of => :client
   has_many :carts
   before_validation :fix_blanks
+  before_destroy :ensure_no_carts
   accepts_nested_attributes_for :phones
   accepts_nested_attributes_for :addresses, :reject_if => proc { |address| address['street_id'].blank? || address['number'].blank? }
   attr_accessible :active, :email, :first_name, :idnumber, :last_name, :phones_attributes, :addresses_attributes
@@ -101,6 +102,13 @@ class Client < ActiveRecord::Base
   end
 
   private
+    def ensure_no_carts
+      if self.carts.completed.count.nonzero?
+        self.errors.add(:base, 'Algunas ordenes hacen referencia a este cliente') 
+        false
+      end
+    end
+
     def fix_blanks
       self.idnumber = nil if self.idnumber == ''
       self.email = nil if self.email == ''

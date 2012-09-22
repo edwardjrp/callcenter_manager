@@ -51,6 +51,13 @@ describe User do
     end
   end
   
+  describe '#there_is_one_admin' do
+    let!(:admin) { create :user, roles: :admin }
+    it "should not allow the deletion of the last admin" do
+      expect{ admin.destroy }.to_not change{ User.admins.count }.from(1).to(0)
+    end
+  end
+
   
   describe "roles behavior" do
     before(:each) do

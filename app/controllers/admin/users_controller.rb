@@ -1,3 +1,4 @@
+# encoding: utf-8
 class Admin::UsersController < ApplicationController
   before_filter {|c| c.accessible_by([:admin], root_path)}
   def index
@@ -25,7 +26,7 @@ class Admin::UsersController < ApplicationController
   def update
     @user = User.find(params[:id])
     if @user.update_attributes(params[:user])
-      flash[:success]='Agente actializado.'
+      flash[:success]='Agente actualizado.'
       redirect_to admin_users_path
     else
       render action: :edit
@@ -34,10 +35,11 @@ class Admin::UsersController < ApplicationController
 
   def destroy 
     @user = User.find(params[:id])
-    if @user.destroy
-      flash[:success]='Agente eliminado.'
+    @user.errors.add(:base, 'No puede eliminar al usuario con que inicio sesión') if @user == current_user
+    if (@user != current_user) && @user.destroy
+      flash[:success] = 'Agente eliminado.'
     else
-      flash[:success]=@user.errors.full_messaged.to_sentence
+      flash[:error] = @user.errors.full_messages.to_sentence
     end
     redirect_to admin_users_path
   end

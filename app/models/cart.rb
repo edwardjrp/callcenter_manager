@@ -81,12 +81,12 @@ class Cart < ActiveRecord::Base
 
   def self.detailed_report#(start_time, end_time)
     CSV.generate do |csv|
-      csv << ['No. Orden', 'Tienda', 'Nueno cliente', 'Cliente', 'Fecha', 'Modo de servicio', 'Agente', 'Tiempo de toma', 'Monto de la order', 'Pago efectivo', 'Typo de factura', 'Estado en pulse']
+      csv << ['No. Orden', 'Tienda', 'Nuevo cliente', 'Cliente', 'Fecha', 'Modo de servicio', 'Agente', 'Tiempo de toma', 'Monto de la order', 'Pago efectivo', 'Typo de factura', 'Estado en pulse']
       all.each do |cart|
         csv << [
           cart.id,
           cart.store.storeid,
-          '*',
+          (cart.client && cart.client.carts.count.nonzero?),
           "#{cart.client.first_name} #{cart.client.last_name} - #{cart.client.last_phone.number.gsub(/([0-9]{3})([0-9]{3})([0-9]{4})/,'\\1-\\2-\\3')}",
           cart.created_at.strftime('%Y-%m-%d %H:%M:%S'), # there has to be a completed_on field
           cart.service_method,

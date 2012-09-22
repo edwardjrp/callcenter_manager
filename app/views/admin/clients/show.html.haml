@@ -31,7 +31,7 @@
     .well#phones_list
       .row
         .span4        
-          %h3 Telefonos
+          %h3 Teléfonos
           %a#add_phone{href: '#'}
             Agregar
           =render 'modal', :modal_id => 'add_phone_modal', :title=>'Agregar Telefono'
@@ -99,7 +99,7 @@
             -if address.unit_number
               .row
                 .span4
-                  %strong Numero de unidad:
+                  %strong No. de apartamento:
                   =address.unit_number
             -if address.postal_code
               .row

@@ -19,15 +19,15 @@ jQuery ->
         beforeSend: (xhr) ->
           xhr.setRequestHeader("Accept", "application/json")
         success: ()->
-          console.log 'HELLO'
           for order_row in $('.tab-pane.active').find('input.select_for_move:checked').closest('tr')
             $(order_row).appendTo($("#cart_#{target.val()}").find('tbody'))
           $("##{target.val()}").trigger('click')
         error: (response)->
           console.log 'response'
 
-        complete: (response)->
-          console.log response
+    $('#clear_cart_search').on 'click', (event) ->
+      $(this).closest('form')[0].reset()
+      $(this).closest('form').find("input[type='text']").val('')
 
 
   $('#q_created_at_gteq').datepicker

@@ -36,7 +36,7 @@
   </div>
 </div>
 <div class="control-group" id="client_address_unit_number_controls_<%=@address.id%>">
-  <label class="control-label" for="client_address_unit_number_<%=@address.id%>">No. apartamento</label>
+  <label class="control-label" for="client_address_unit_number_<%=@address.id%>">No. de apartamento</label>
   <div class="controls">
     <input type="text" id="client_address_unit_number_<%=@address.id%>" name="address[unit_number]" value='<%=@address.unit_number%>'>
   </div>

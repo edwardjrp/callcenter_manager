@@ -13,7 +13,6 @@
       =f.text_field :created_at_lteq, :class=> 'input-medium search-query', :placeholder=>'Creado antes de '
       =f.submit 'Buscar', :name=>nil, :class=> 'btn'
       %a.btn#clear_cart_search{ href: '#'} Limpiar
-    =link_to 'Reporte detallado', admin_carts_path(format: :csv)
     - if @carts.any?
       =will_paginate @carts
       .tabbable.tabs-left

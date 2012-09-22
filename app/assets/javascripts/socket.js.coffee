@@ -14,9 +14,7 @@ jQuery ->
       $(this).closest('li').addClass('active')
       
   socket.on 'chat', (data)->
-    message(data)
-    
-
+    message(data)    
     
   socket.on 'reconnect', () ->
     $('#lines').remove();
@@ -30,11 +28,13 @@ jQuery ->
       
   $('#chat_send').submit (event)->
     event.preventDefault()
-    socket.emit('chat', {user: me(), msg: $('#chat_message').val()})
-    $('#chat_message').val('')
+    unless $('#chat_message').val() == ''
+      socket.emit('chat', {user: me(), msg: $('#chat_message').val()})
+      $('#chat_message').val('')
   
 message = (data) ->
   $('#chatdisplay').append($('<p>').append($('<b>').text(data.user), window.truncate(data.msg, 30)))
+  $('#chatdisplay').children().first().remove() if $('#chatdisplay').children().size() > 50
   $("#chatdisplay").scrollTop($("#chatdisplay")[0].scrollHeight);
 
 me = ()->

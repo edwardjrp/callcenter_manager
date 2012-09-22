@@ -30,7 +30,7 @@ describe "Client::New" do
          fill_in 'client_search_address_unit_number', with: '1'
          fill_in 'client_search_address_postal_code', with: '1'
          fill_in 'client_search_address_delivery_instructions', with: '1'
-         click_button 'Agregar usuario'
+         click_button 'Agregar cliente'
          page.should have_content('Cliente creado')
          page.should_not have_css('#client_search_email')
        end
@@ -40,7 +40,7 @@ describe "Client::New" do
          fill_in "client_search_ext", with: '45'
          fill_in "client_search_first_name", with: 'Tester'
          fill_in "client_search_last_name", with: 'Last'
-         click_button 'Agregar usuario'
+         click_button 'Agregar cliente'
          page.should have_content('Cliente creado')
          page.should_not have_css('#client_search_email')
        end
@@ -58,7 +58,7 @@ describe "Client::New" do
           fill_in 'client_search_address_unit_number', with: '1'
           fill_in 'client_search_address_postal_code', with: '1'
           fill_in 'client_search_address_delivery_instructions', with: '1'
-          click_button 'Agregar usuario'
+          click_button 'Agregar cliente'
           page.should have_content('Cliente creado')
           page.should_not have_css('#client_search_email')
         end
@@ -79,7 +79,7 @@ describe "Client::New" do
          fill_in 'client_search_address_unit_number', with: '1'
          fill_in 'client_search_address_postal_code', with: '1'
          fill_in 'client_search_address_delivery_instructions', with: '1'
-         click_button 'Agregar usuario'
+         click_button 'Agregar cliente'
          page.should have_content('Cliente creado')
          fill_in "client_search_phone", with: '8095431234'
          fill_in "client_search_ext", with: '42'
@@ -93,7 +93,7 @@ describe "Client::New" do
          fill_in 'client_search_address_unit_number', with: '1'
          fill_in 'client_search_address_postal_code', with: '1'
          fill_in 'client_search_address_delivery_instructions', with: '1'
-         click_button 'Agregar usuario'
+         click_button 'Agregar cliente'
          page.should have_content('Cliente creado')
           fill_in "client_search_phone", with: '8095341234'
           fill_in "client_search_ext", with: '43'
@@ -107,7 +107,7 @@ describe "Client::New" do
           fill_in 'client_search_address_unit_number', with: '1'
           fill_in 'client_search_address_postal_code', with: '1'
           fill_in 'client_search_address_delivery_instructions', with: '1'
-          click_button 'Agregar usuario'
+          click_button 'Agregar cliente'
          page.should have_content('Cliente creado')
          page.should_not have_css('#client_search_email')
        end
@@ -150,7 +150,7 @@ describe "Client::New" do
            fill_in 'client_search_address_unit_number', with: '1'
            fill_in 'client_search_address_postal_code', with: '1'
            fill_in 'client_search_address_delivery_instructions', with: '1'        
-           click_button 'Agregar usuario'
+           click_button 'Agregar cliente'
            page.should have_content('en blanco')
          end
 
@@ -160,7 +160,7 @@ describe "Client::New" do
             fill_in "client_search_first_name", with: 'rad'
             fill_in "client_search_last_name", with: 'Last'
             fill_in "client_search_email", with: 'test@mail.com'
-            click_button 'Agregar usuario'
+            click_button 'Agregar cliente'
             page.should_not have_content('Addresses')
             page.should_not have_content('en blanco')
           end                          

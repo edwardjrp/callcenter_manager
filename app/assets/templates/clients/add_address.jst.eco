@@ -36,7 +36,7 @@
   </div>
 </div>
 <div class="control-group" id="client_address_unit_number_controls">
-  <label class="control-label" for="client_address_unit_number">No. apartamento</label>
+  <label class="control-label" for="client_address_unit_number">No. de apartamento</label>
   <div class="controls">
     <input type="text" id="client_address_unit_number" name="address[unit_number]">
   </div>

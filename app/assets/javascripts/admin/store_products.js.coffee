@@ -27,8 +27,8 @@ jQuery ->
 change_state = (target)->
   $.ajax
     type: 'PUT'
-    url: $(event.currentTarget).attr('href')
-    data: {store_product: {product_id: $(event.currentTarget).closest('tr').data('product-id'), store_id: $(event.currentTarget).closest('table').data('store-id')}}
+    url: $(target).attr('href')
+    data: {store_product: {product_id: $(target).closest('tr').data('product-id'), store_id: $(target).closest('table').data('store-id')}}
     beforeSend: (xhr) ->
       xhr.setRequestHeader("Accept", "application/json")
     success: (data)->

@@ -3,7 +3,7 @@ class Admin::ClientsController < ApplicationController
   
   def index
     @search = Client.search(params[:q])
-    @clients= @search.result(:distinct => true).page(params[:page])
+    @clients= @search.result(:distinct => true).order('created_at DESC').page(params[:page])
   end
 
   def show
@@ -41,7 +41,7 @@ class Admin::ClientsController < ApplicationController
     else
       flash[:error]=@client.errors.full_messages.to_sentence
     end
-    redirect_to admin_client_path
+    redirect_to admin_clients_path
   end
 
   def merge_clients
