@@ -11,6 +11,7 @@ jQuery ->
     $('#chatbox').find('.operator_pane').remove()
     console.log operators
     console.log 'hello'
+    operators.length
     for operator in operators
       console.log operator
       $('#chatbox').find('.nav-tabs').append("<li class='operator_tab'><a href ='##{operator.idnumber}' data-toggle = 'tab'>#{operator.username}</a></li>")

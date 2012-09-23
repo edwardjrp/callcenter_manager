@@ -39,40 +39,45 @@ app.configure('production', function() {
   return app.use(express.errorHandler());
 });
 
-operators = {};
+operators = [];
 
-administrators = {};
+administrators = [];
 
 io.sockets.on("connection", function(socket) {
   socket.on('register', function(data, responder) {
-    var admin_socket, _i, _len, _results;
+    var admin, admin_socket, _i, _len;
     socket.join('system');
     if (data.role === 'admin') {
-      if (administrators[data.idnumber]) {
-        return responder(true);
+      if (_.find(administrators, function(admin) {
+        return admin.idnumber === data.idnumber;
+      })) {
+        responder(true);
       } else {
         responder(false);
         socket.idnumber = data.idnumber;
-        administrators[data.idnumber] = data;
-        return socket.join('admins');
+        administrators.push(data);
+        socket.join('admins');
       }
     } else if (data.role === 'operator') {
-      if (operators[data.idnumber]) {
-        return responder(true);
+      if (_.find(operators, function(op) {
+        return op.idnumber === data.idnumber;
+      })) {
+        responder(true);
       } else {
         responder(false);
         socket.idnumber = data.idnumber;
-        operators[data.idnumber] = data;
+        operators.push(data);
         socket.join("admins-" + data.idnumber);
-        io.sockets["in"]('admins').emit('register_client', operators);
-        _results = [];
         for (_i = 0, _len = administrators.length; _i < _len; _i++) {
-          admin_socket = administrators[_i];
-          _results.push(admin_socket.join("admins-" + data.idnumber));
+          admin = administrators[_i];
+          admin_socket = _.find(io.sockets.clients(), function(skt) {
+            return skt.idnumber === admin.idnumber;
+          });
+          admin_socket.join("admins-" + data.idnumber);
         }
-        return _results;
       }
     }
+    return io.sockets["in"]('admins').emit('register_client', operators);
   });
   socket.on('chat', function(data) {
     return io.sockets.emit('chat', data);

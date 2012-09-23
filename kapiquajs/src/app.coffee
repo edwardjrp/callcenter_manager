@@ -32,8 +32,8 @@ app.configure 'production', ->
   app.use(express.errorHandler())
 
 
-operators = {}
-administrators = {}
+operators = []
+administrators = []
 # Routes
 
 io.sockets.on "connection", (socket) ->
@@ -41,24 +41,26 @@ io.sockets.on "connection", (socket) ->
   socket.on 'register', (data, responder) ->
     socket.join('system')
     if data.role == 'admin'
-      if administrators[data.idnumber]
+      if _.find(administrators, ( admin ) -> admin.idnumber == data.idnumber)
         responder(true)
       else
         responder(false)
         socket.idnumber = data.idnumber
-        administrators[data.idnumber] = data
+        administrators.push data
         socket.join('admins')
     else if data.role == 'operator'
-      if operators[data.idnumber]
+      if _.find(operators, ( op ) -> op.idnumber == data.idnumber)
         responder(true)
       else
         responder(false)
         socket.idnumber = data.idnumber
-        operators[data.idnumber] = data
+        operators.push data
         socket.join("admins-#{data.idnumber}")
-        io.sockets.in('admins').emit('register_client', operators)
-        for admin_socket in administrators
+        for admin in administrators
+          admin_socket = _.find( io.sockets.clients(), (skt) -> skt.idnumber == admin.idnumber )
           admin_socket.join("admins-#{data.idnumber}")
+    io.sockets.in('admins').emit('register_client', operators)
+
 
   socket.on 'chat', (data)->
     io.sockets.emit('chat', data);
