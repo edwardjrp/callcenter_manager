@@ -48,10 +48,12 @@ jQuery ->
     if $('#chatbox').find("##{data.idnumber}")
       $('#chatbox').find("##{data.idnumber}").closest('.tab-content').prev('ul').find("a[href=##{data.idnumber}]").addClass('blink') unless $('#chatbox').find("##{data.idnumber}").is(':visible') 
       $('#chatbox').find("##{data.idnumber}").find('.chatdisplay').append($('<p>').append(window.truncate(data.msg, 30)))
+      $('#chatbox').find("##{data.idnumber}").find('.chatdisplay').scrollTop($('#chatbox').find("##{data.idnumber}").find('.chatdisplay')[0].scrollHeight);
       $('#chatbox').find("##{data.idnumber}").find('.chatdisplay').children().first().remove() if $('#chatbox').find("##{data.idnumber}").find('.chatdisplay').children().size() > 50
 
     if  $('#chatbox').find("#admin_pane")
       $('#chatbox').find("#admin_pane").find('.chatdisplay').append($('<p>').append(window.truncate(data.msg, 30)))
+      $('#chatbox').find("#admin_pane").find('.chatdisplay').scrollTop($('#chatbox').find("#admin_pane").find('.chatdisplay')[0].scrollHeight);
       $('#chatbox').find("#admin_pane").find('.chatdisplay').children().first().remove() if $('#chatbox').find("#admin_pane").find('.chatdisplay').children().size() > 50
 
   $('#chatbox').on 'submit', 'form', (event)->
@@ -59,6 +61,7 @@ jQuery ->
     target = $(event.currentTarget)
     socket.emit 'send_message', { msg: target.find('.send_message').val(), to: target.closest('.active').attr('id'), idnumber: $('#chatbox').data('idnumber'), role: $('#chatbox').data('role') } , (data) ->
       target.prev('.chatdisplay').append($('<p class="my_msg">').append(window.truncate(data.msg, 30)))
+      target.prev('.chatdisplay').scrollTop(target.prev('.chatdisplay')[0].scrollHeight);
 
     target[0].reset()
     target.find("input[type='text']").val('')
