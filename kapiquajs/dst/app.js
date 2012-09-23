@@ -56,8 +56,8 @@ io.sockets.on("connection", function(socket) {
         responder(false);
         socket.idnumber = data.idnumber;
         administrators.push(data);
-        socket.join('admins');
       }
+      socket.join('admins');
     } else if (data.role === 'operator') {
       if (_.find(operators, function(op) {
         return op.idnumber === data.idnumber;
@@ -67,14 +67,15 @@ io.sockets.on("connection", function(socket) {
         responder(false);
         socket.idnumber = data.idnumber;
         operators.push(data);
-        socket.join("admins-" + data.idnumber);
-        for (_i = 0, _len = administrators.length; _i < _len; _i++) {
-          admin = administrators[_i];
-          admin_socket = _.find(io.sockets.clients(), function(skt) {
-            return skt.idnumber === admin.idnumber;
-          });
-          admin_socket.join("admins-" + data.idnumber);
-        }
+      }
+      socket.join("admins-" + data.idnumber);
+      socket.emit('set_admin', 'connected');
+      for (_i = 0, _len = administrators.length; _i < _len; _i++) {
+        admin = administrators[_i];
+        admin_socket = _.find(io.sockets.clients(), function(skt) {
+          return skt.idnumber === admin.idnumber;
+        });
+        admin_socket.join("admins-" + data.idnumber);
       }
     }
     return io.sockets["in"]('admins').emit('register_client', operators);

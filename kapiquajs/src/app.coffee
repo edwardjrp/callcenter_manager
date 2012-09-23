@@ -47,7 +47,7 @@ io.sockets.on "connection", (socket) ->
         responder(false)
         socket.idnumber = data.idnumber
         administrators.push data
-        socket.join('admins')
+      socket.join('admins')
     else if data.role == 'operator'
       if _.find(operators, ( op ) -> op.idnumber == data.idnumber)
         responder(true)
@@ -55,10 +55,11 @@ io.sockets.on "connection", (socket) ->
         responder(false)
         socket.idnumber = data.idnumber
         operators.push data
-        socket.join("admins-#{data.idnumber}")
-        for admin in administrators
-          admin_socket = _.find( io.sockets.clients(), (skt) -> skt.idnumber == admin.idnumber )
-          admin_socket.join("admins-#{data.idnumber}")
+      socket.join("admins-#{data.idnumber}")
+      socket.emit('set_admin', 'connected')
+      for admin in administrators
+        admin_socket = _.find( io.sockets.clients(), (skt) -> skt.idnumber == admin.idnumber )
+        admin_socket.join("admins-#{data.idnumber}")
     io.sockets.in('admins').emit('register_client', operators)
 
 

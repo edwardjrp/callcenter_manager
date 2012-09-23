@@ -17,7 +17,8 @@ jQuery ->
       $('#chatbox').find('.nav-tabs').append("<li class='operator_tab'><a href ='##{operator.idnumber}' data-toggle = 'tab'>#{operator.username}</a></li>")
       $('#chatbox').find('.tab-content').append(JST['chat/operator_tab'](operator: operator))
 
-
+  socket.on 'set_admin', (data) ->
+    console.log data
   
   $('#utils .top-tabs a').on 'click', (event)->
     event.preventDefault()
