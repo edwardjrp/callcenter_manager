@@ -65,7 +65,7 @@ jQuery ->
     
     
   socket.on 'reconnect', () ->
-    $("<div class='purr'>Reconnetado con Web el server<div>").purr()
+    $("<div class='purr'>Conexión con Webserver reestablecida<div>").purr()
     
   socket.on 'error', (err)->
     $("<div class='purr'>Ser perdio lo conexión al servidor<div>").purr() 
