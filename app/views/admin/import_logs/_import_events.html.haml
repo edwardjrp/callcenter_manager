@@ -1,0 +1,16 @@
+= will_paginate import_events
+%table.table.table-striped.table-bordered.table-condensed
+  %thead
+    %tr
+      %th name
+      %th Elemento
+      %th Mensaje
+      %th fecha
+  %tbody
+    - import_events.each do |import_event| 
+      %tr{ id: dom_id(import_event)}
+        %td= import_event.name
+        %td= import_event.subject
+        %td= import_event.message
+        %td= l import_event.created_at, format: :long  
+= will_paginate import_events

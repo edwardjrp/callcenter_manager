@@ -6,12 +6,25 @@ jQuery ->
     setInterval (->
       refresh()
     ), 10000
+  if $('#import_events_list').size() > 0
+    setInterval (->
+      refresh_events()
+    ), 10000
 
 refresh = () ->
   $.ajax
     type: 'GET'
     url: '/admin/import_logs'
     datatype: 'script'
-    data: data: { page: ( window.getParameterByName('page') || 1 ) }
+    data: { page: ( window.getParameterByName('page') || 1 ) }
+    success: (script) ->
+      eval(script)
+
+refresh_events = () ->
+  $.ajax
+    type: 'GET'
+    url: $('#import_events_list').data('url')
+    datatype: 'script'
+    data: { page: ( window.getParameterByName('page') || 1 ) }
     success: (script) ->
       eval(script)

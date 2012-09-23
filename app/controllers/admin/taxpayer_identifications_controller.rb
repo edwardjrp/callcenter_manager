@@ -1,3 +1,4 @@
+#encoding: utf-8
 class Admin::TaxpayerIdentificationsController < ApplicationController
   def index
   end

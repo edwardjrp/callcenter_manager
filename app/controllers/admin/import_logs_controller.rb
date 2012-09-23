@@ -11,6 +11,10 @@ class Admin::ImportLogsController < ApplicationController
   def show
     @import_log = ImportLog.find(params[:id])
     @import_events = @import_log.import_events.order('created_at DESC').page(params[:page])
+    respond_to do |format|
+      format.js
+      format.html
+    end
   end
 
   def create
