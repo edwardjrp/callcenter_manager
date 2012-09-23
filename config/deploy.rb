@@ -17,7 +17,7 @@ set :deploy_via, :remote_cache
 set :scm, 'git'
 set :branch, 'master'
 set :scm_verbose, true
-set :use_sudo, false
+# set :use_sudo, false
 set :deploy_via, :remote_cache
 
 default_run_options[:pty] = true

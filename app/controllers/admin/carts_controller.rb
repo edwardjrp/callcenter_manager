@@ -4,7 +4,7 @@ class Admin::CartsController < ApplicationController
   def index
     @search = Cart.completed.search(params[:q])
     @carts= @search.result(:distinct => true).paginate(:page => params[:page], :per_page => 30)
-    flash['alert'] = 'No se ha encontrado ningún récord que coincida con los criterios de búsqueda' if @search.result(:distinct => true).count.zero?
+    flash['alert'] = 'No se ha encontrado ningún récord que coincida con los criterios de búsqueda' if @search.result(:distinct => true).count.zero? && params[:q].present?
   end
 
   def show
