@@ -1,0 +1,15 @@
+.row
+  .span11#chatbox{data: { idnumber: current_user.idnumber, role: current_user.roles.first , username: current_user.username}}
+    .span11
+      .tabbable.tabs-left
+        %ul.nav.nav-tabs
+          %li
+            %a#system{:href=>"#system_wide", :data=>{:toggle=>"tab"}}
+              Sistema
+        .tab-content
+          .tab-pane{id: "system_wide"}
+            .chatdisplay
+            %form.form-inline.spen6.top-margin-1
+              %input{type:"text", class:"input-large search-query", id:"chat_message"}
+              %button{type:"submit", class:"btn"} Enviar
+    

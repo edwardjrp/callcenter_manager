@@ -48,17 +48,10 @@
         .row#utils
           .span12
             .row#utils_labels
-              %ul.nav.nav-tabs
+              %ul.nav.nav-tabs.top-tabs
                 %li
                   %a{href: '#chat'} Ayuda
               .tab-content
                 .tab-pane{id:'chat'}
-                  .row
-                    .span11
-                      .span11#chatdisplay
-                  .row
-                    .span6
-                      %form.well.form-search#chat_send
-                        %input{type:"text", class:"input-large search-query", id:"chat_message"}
-                        %button{type:"submit", class:"btn"} Enviar
+                  = render 'chat'
     #footer.bottom-margin-3

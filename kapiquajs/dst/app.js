@@ -1,4 +1,4 @@
-var CartProducts, Carts, Clients, app, express, io, pg, util, _;
+var CartProducts, Carts, Clients, administrators, app, express, io, operators, pg, util, _;
 
 express = require('express');
 
@@ -39,7 +39,44 @@ app.configure('production', function() {
   return app.use(express.errorHandler());
 });
 
+operators = {};
+
+administrators = {};
+
 io.sockets.on("connection", function(socket) {
+  socket.on('register', function(data, responder) {
+    var admin_socket, _i, _len, _results;
+    socket.join('system');
+    if (data.role === 'admin') {
+      if (administrators[data.idnumber]) {
+        return responder(true);
+      } else {
+        responder(false);
+        socket.idnumber = data.idnumber;
+        administrators[data.idnumber] = data;
+        return socket.join('admins');
+      }
+    } else if (data.role === 'operator') {
+      if (operators[data.idnumber]) {
+        return responder(true);
+      } else {
+        responder(false);
+        socket.idnumber = data.idnumber;
+        operators[data.idnumber] = data;
+        socket.join("admins-" + data.idnumber);
+        io.sockets["in"]('admins').emit('register_client', operators);
+        _results = [];
+        for (_i = 0, _len = administrators.length; _i < _len; _i++) {
+          admin_socket = administrators[_i];
+          _results.push(admin_socket.join("admins-" + data.idnumber));
+        }
+        return _results;
+      }
+    }
+  });
+  socket.on('chat', function(data) {
+    return io.sockets.emit('chat', data);
+  });
   socket.on("cart_products:create", function(data, responder) {
     return CartProducts.create(data, responder, socket);
   });
@@ -48,9 +85,6 @@ io.sockets.on("connection", function(socket) {
   });
   socket.on("cart_products:delete", function(data, responder) {
     return CartProducts.destroy(data, responder, socket);
-  });
-  socket.on('chat', function(data) {
-    return io.sockets.emit('chat', data);
   });
   socket.on("clients:olo:phone", function(data, responder) {
     return Clients.olo_with_phone(data, responder, socket);

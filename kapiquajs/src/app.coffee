@@ -32,10 +32,37 @@ app.configure 'production', ->
   app.use(express.errorHandler())
 
 
-
+operators = {}
+administrators = {}
 # Routes
 
 io.sockets.on "connection", (socket) ->
+
+  socket.on 'register', (data, responder) ->
+    socket.join('system')
+    if data.role == 'admin'
+      if administrators[data.idnumber]
+        responder(true)
+      else
+        responder(false)
+        socket.idnumber = data.idnumber
+        administrators[data.idnumber] = data
+        socket.join('admins')
+    else if data.role == 'operator'
+      if operators[data.idnumber]
+        responder(true)
+      else
+        responder(false)
+        socket.idnumber = data.idnumber
+        operators[data.idnumber] = data
+        socket.join("admins-#{data.idnumber}")
+        io.sockets.in('admins').emit('register_client', operators)
+        for admin_socket in administrators
+          admin_socket.join("admins-#{data.idnumber}")
+
+  socket.on 'chat', (data)->
+    io.sockets.emit('chat', data);
+
   socket.on "cart_products:create", (data, responder) ->
     CartProducts.create(data, responder, socket)
     
@@ -44,9 +71,6 @@ io.sockets.on "connection", (socket) ->
     
   socket.on "cart_products:delete", (data, responder) ->
     CartProducts.destroy(data, responder, socket)
-  
-  socket.on 'chat', (data)->
-    io.sockets.emit('chat', data);
 
   socket.on "clients:olo:phone", (data, responder) ->
     Clients.olo_with_phone(data, responder, socket)  

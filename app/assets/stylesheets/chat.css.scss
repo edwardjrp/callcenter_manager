@@ -6,11 +6,16 @@
   @include border-radius(4px);
   z-index:10000;
   background-color:white;
-  
-  #chatdisplay{
-    border: 1px solid whiteSmoke;
+
+  #chatbox{
+    height: 370px;
+    padding:0px;
+  }
+
+  .chatdisplay{
     height: 300px;
     padding:10px;
+    border: 1px solid grey;
     overflow: auto;
     overflow-x: hidden;
     overflow-y: auto;
