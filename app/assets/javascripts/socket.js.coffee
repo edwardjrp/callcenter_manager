@@ -1,24 +1,23 @@
 jQuery ->
   socket = window.socket
-  socket.on 'connect', () ->
-    # $('#chatdisplay').append($('<p>').append($('<em>').text(prepare("connected"))))
-    socket.emit 'register', { idnumber: $('#chatbox').data('idnumber'), role: $('#chatbox').data('role'), username: $('#chatbox').data('username') }, (response)->
+  socket.on 'connect', () -> 
+    socket.emit 'register', { full_name: $('#chatbox').data('full_name'), idnumber: $('#chatbox').data('idnumber'), role: $('#chatbox').data('role') }, (response)->
       console.log response
 
 
   socket.on 'register_client', (operators) ->  
     $('#chatbox').find('.operator_tab').remove()
     $('#chatbox').find('.operator_pane').remove()
-    console.log operators
-    console.log 'hello'
-    operators.length
     for operator in operators
-      console.log operator
-      $('#chatbox').find('.nav-tabs').append("<li class='operator_tab'><a href ='##{operator.idnumber}' data-toggle = 'tab'>#{operator.username}</a></li>")
+      $('#chatbox').find('.nav-tabs').append("<li class='operator_tab'><a href ='##{operator.idnumber}' data-toggle = 'tab'>#{operator.full_name}</a></li>")
       $('#chatbox').find('.tab-content').append(JST['chat/operator_tab'](operator: operator))
 
   socket.on 'set_admin', (data) ->
-    console.log data
+    $('#chatbox').find('#admin_tab').remove()
+    $('#chatbox').find('#admin_pane').remove()
+    $('#chatbox').find('.nav-tabs').append("<li id='admin_tab' ><a href ='#admin_pane' data-toggle = 'tab'>administradores</a></li>")
+    $('#chatbox').find('.tab-content').append(JST['chat/admin_tab']())
+    $('#admin_pane').find('.chatdisplay').append($('<p>').append($('<b>').text(data.full_name), window.truncate(data, 30)))
   
   $('#utils .top-tabs a').on 'click', (event)->
     event.preventDefault()
@@ -30,6 +29,21 @@ jQuery ->
       target.addClass('active').show()
       $(this).closest('li').addClass('active')
       
+
+  socket.on 'server_message', (data) ->
+    console.log data
+    $('#chatbox').find("##{data.idnumber}").find('.chatdisplay').append($('<p>').append($('<b>').text(data.full_name), window.truncate(data.msg, 30))) if $('#chatbox').find("##{data.to}")
+    $('#chatbox').find("#admin_pane").find('.chatdisplay').append($('<p>').append($('<b>').text(data.full_name), window.truncate(data.msg, 30))) if $('#chatbox').find("#admin_pane")
+
+  $('#chatbox').on 'submit', 'form', (event)->
+    event.preventDefault()
+    target = $(event.currentTarget)
+    socket.emit 'send_message', { msg: target.find('.send_message').val(), to: target.closest('.active').attr('id'), idnumber: $('#chatbox').data('idnumber'), role: $('#chatbox').data('role') } , (data) ->
+      target.prev('.chatdisplay').append($('<p>').append($('<b>').text(data.full_name), window.truncate(data.msg, 30)))
+
+    target[0].reset()
+    target.find("input[type='text']").val('')
+    
 #   socket.on 'chat', (data)->
 #     message(data)    
     

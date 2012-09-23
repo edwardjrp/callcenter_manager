@@ -80,6 +80,32 @@ io.sockets.on("connection", function(socket) {
     }
     return io.sockets["in"]('admins').emit('register_client', operators);
   });
+  socket.on('disconnect', function() {
+    var admin_to_remove, operator_to_remove;
+    if (!socket.idnumber) {
+      return;
+    }
+    operator_to_remove = _.find(operators, function(op) {
+      return op.idnumber === socket.idnumber;
+    });
+    admin_to_remove = _.find(administrators, function(admin) {
+      return admin.idnumber === socket.idnumber;
+    });
+    if (operator_to_remove != null) {
+      operators = _.without(operators, operator_to_remove);
+    } else if (admin_to_remove != null) {
+      administrators = _.without(administrators, admin_to_remove);
+    }
+    return io.sockets["in"]('admins').emit('register_client', operators);
+  });
+  socket.on('send_message', function(data, responder) {
+    if (data.role === 'admin') {
+      io.sockets["in"]("admins-" + data.to).emit('server_message', data);
+    } else if (data.role === 'operator') {
+      io.sockets["in"]('admins').emit('server_message', data);
+    }
+    return responder(data);
+  });
   socket.on('chat', function(data) {
     return io.sockets.emit('chat', data);
   });

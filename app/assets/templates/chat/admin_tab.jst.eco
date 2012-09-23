@@ -1,0 +1,7 @@
+<div class= 'tab-pane' id = "admin_pane">
+  <div class= 'chatdisplay'></div>
+  <form class = 'form-inline spen6 top-margin-1'>
+    <input type ='text' class = 'input-large search-query send_message'>
+    <button type = 'submit' class = 'btn'>Enviar</button>
+  </form>
+</div>

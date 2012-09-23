@@ -62,6 +62,22 @@ io.sockets.on "connection", (socket) ->
         admin_socket.join("admins-#{data.idnumber}")
     io.sockets.in('admins').emit('register_client', operators)
 
+  socket.on 'disconnect', () ->
+    return unless socket.idnumber
+    operator_to_remove = _.find(operators, ( op ) -> op.idnumber == socket.idnumber)
+    admin_to_remove = _.find(administrators, ( admin ) -> admin.idnumber == socket.idnumber)
+    if operator_to_remove?
+      operators = _.without(operators, operator_to_remove)
+    else if admin_to_remove?
+      administrators = _.without(administrators, admin_to_remove)
+    io.sockets.in('admins').emit('register_client', operators)
+
+  socket.on 'send_message', (data, responder) ->
+    if data.role == 'admin'
+      io.sockets.in("admins-#{data.to}").emit('server_message',data)
+    else if data.role == 'operator'
+      io.sockets.in('admins').emit('server_message',data)
+    responder(data)
 
   socket.on 'chat', (data)->
     io.sockets.emit('chat', data);
