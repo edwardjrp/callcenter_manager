@@ -65,10 +65,7 @@ jQuery ->
     
     
   socket.on 'reconnect', () ->
-    message({user:'System', msg:' Reconnected to the server'});
+    $("<div class='purr'>Reconnetado con Web el server<div>").purr()
     
   socket.on 'error', (err)->
-    console.log err
-    window.show_alert(err, 'error')
-    err_data = {user: 'System', msg:  (err ? err : 'Se ha perdido la conexion')}
-    message(err_data);  
+    $("<div class='purr'>Ser perdio lo conexión al servidor<div>").purr() 
