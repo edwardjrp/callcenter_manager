@@ -49,6 +49,7 @@ Kapiqua25::Application.routes.draw do
         post 'change_has_sides'
       end
     end
+    resources :reports, only: [:index, :create, :destroy]
     resources :users
     resources :coupons, except: [:new, :create]
     resources :taxpayer_identifications, only: [:index, :create]

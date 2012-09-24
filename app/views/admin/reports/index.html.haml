@@ -1,0 +1,42 @@
+.row
+  .span12#carts_list
+    = search_form_for [:admin,@search], :url => admin_reports_path, :html=>{:class=>'well form-search top-margin-1 filter'} do |f|
+      =f.text_field :user_first_name_cont, :class=> 'input-medium search-query', :placeholder=>'Nombre del agente'
+      =f.text_field :user_last_name_cont, :class=> 'input-medium search-query', :placeholder=>'Apellido del agente'
+      =f.text_field :user_idnumber_cont, :class=> 'input-medium search-query', :placeholder=>'Cédula del agente'
+      =f.text_field :created_at_gteq, :class=> 'input-medium search-query', :placeholder=>'Creado después de '
+      =f.text_field :created_at_lteq, :class=> 'input-medium search-query', :placeholder=>'Creado antes de '
+      =f.submit 'Buscar', :name=>nil, :class=> 'btn'
+      %a.btn#report_clear_search{ href: "#{admin_reports_path}"} Limpiar
+    =link_to "CSV", admin_reports_path(format: "csv", params: params)
+    =will_paginate @carts
+    %table.table.table-striped.table-bordered.table-condensed
+      %thead
+        %th No. Orden
+        %th Tienda
+        %th Nuevo cliente
+        %th Cliente
+        %th Fecha
+        %th Modo de servicio
+        %th Agente
+        %th Tiempo de toma
+        %th Monto de la order
+        %th Pago efectivo
+        %th Tipo de factura
+        %th Estado en pulse
+      %tbody
+        -@carts.each do |cart|          
+          %tr{:data=>{'cart-id'=> cart.id}, :id=>dom_id(cart)}
+            %td= cart.id
+            %td= cart.store.name
+            %td= (cart.client && cart.client.carts.count == 1) 
+            %td= "#{cart.client.first_name} #{cart.client.last_name} - #{cart.client.last_phone.number.gsub(/([0-9]{3})([0-9]{3})([0-9]{4})/,'\\1-\\2-\\3')}" if cart.client
+            %td= 'Pendiente de implementación'
+            %td= cart.try(:service_method)
+            %td= number_to_cedula cart.user.idnumber
+            %td= 'Pendiente de implementación'
+            %td= number_to_currency cart.try(:payment_amount)
+            %td= cart.try(:payment_type)
+            %td= cart.try(:fiscal_type)
+            %td= cart.try(:order_progress)
+    =will_paginate @carts

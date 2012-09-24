@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120922143621) do
+ActiveRecord::Schema.define(:version => 20120923213901) do
 
   create_table "addresses", :force => true do |t|
     t.integer  "client_id"
@@ -183,6 +183,14 @@ ActiveRecord::Schema.define(:version => 20120922143621) do
 
   add_index "products", ["options"], :name => "index_products_on_options"
   add_index "products", ["productcode"], :name => "index_products_on_productcode"
+
+  create_table "reports", :force => true do |t|
+    t.string   "name"
+    t.string   "csv_file"
+    t.string   "pdf_file"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "settings", :force => true do |t|
     t.string   "var",                      :null => false
