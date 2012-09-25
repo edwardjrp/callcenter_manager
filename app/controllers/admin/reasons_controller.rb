@@ -1,3 +1,4 @@
+#encoding: utf-8
 class Admin::ReasonsController < ApplicationController
   def index
     @reasons = Reason.order('created_at DESC').page(params[:page])
@@ -12,6 +13,16 @@ class Admin::ReasonsController < ApplicationController
         format.json{ respond_with_bip(@reason)}
       end
     end
+  end
+
+  def create
+    @reason = Reason.new(params[:reason])
+    if @reason.save
+      flash['success'] = 'Nueva razón creada'
+    else
+      flash['error'] = @reason.errors.full_messages.to_sentence
+    end
+    redirect_to admin_reasons_path
   end
 
   def show

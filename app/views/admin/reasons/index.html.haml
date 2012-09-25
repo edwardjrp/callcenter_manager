@@ -1,7 +1,11 @@
 = render 'administration'
 .row
   %h3.bottom-margin-1 Razones
-.row    
+.row
+  =form_for [:admin, Reason.new],  html: { class: "form-inline" } do  |f|
+    =f.text_field :description , class: "input-xxlarge ", placeholder: 'Descripción'
+    =f.submit "Crear", name: nil, class: 'btn'
+  %hr
   =will_paginate @reasons
   %table.table.table-striped.table-bordered.table-condensed#reasons_list
     %thead

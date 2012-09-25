@@ -2,12 +2,9 @@
 .row
   %h3.bottom-margin-1 Números Fiscales
 .row 
-  = search_form_for [:admin,@search], url: admin_taxpayer_identifications_path, :html=>{:class=>'well form-search top-margin-1 filter'} do |f|
-    =f.text_field :idnumber_start, :class=> 'input-medium search-query', :placeholder=>'Cédula'
-    =f.text_field :full_name_cont, :class=> 'input-medium search-query', :placeholder=>'Nombre'
-    =f.text_field :company_name_cont, :class=> 'input-medium search-query', :placeholder=>'Compañía'
-    =f.submit 'Buscar', :name=>nil, :class=> 'btn'
-    %a.btn#clear_tax_ids_search{ href: '#'} Limpiar
+  =form_for :q , url: admin_taxpayer_identifications_path,  html: { class: "form-search" }, method: :get do  |f|
+    =f.text_field :idnumber , class: "input-medium search-query", placeholder: 'RNC/Cédula'
+    =f.submit "Buscar", name: nil, class: 'btn'
   =will_paginate @tax_ids
   %table.table.table-striped.table-bordered.table-condensed#tax_ids_list
     %thead

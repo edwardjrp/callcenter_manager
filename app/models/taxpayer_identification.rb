@@ -31,4 +31,10 @@ class TaxpayerIdentification < ActiveRecord::Base
     File.open(original_full_path, "wb") { |f| f.write(sent_file['datafile'].read)}
     RncImporter.perform_async(original_full_path)
   end
+
+  def self.find_tax_id(q)
+    tax_ids = self.scoped
+    tax_ids = tax_ids.merge(self.where('idnumber like ?', "#{q[:idnumber].downcase}%")) if q && q[:idnumber].present?
+    tax_ids
+  end
 end
