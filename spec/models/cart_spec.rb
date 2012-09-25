@@ -33,6 +33,7 @@
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
 #  message_mask              :integer
+#  reason_id                 :integer
 #
 
 require 'spec_helper'

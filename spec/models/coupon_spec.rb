@@ -7,7 +7,7 @@
 #  description           :text
 #  custom_description    :text
 #  generated_description :text
-#  minimum_price         :string(255)
+#  minimum_price         :decimal(, )
 #  hidden                :boolean
 #  secure                :boolean
 #  effective_days        :string(255)

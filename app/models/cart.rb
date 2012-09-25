@@ -1,4 +1,3 @@
-require 'csv'
 # == Schema Information
 #
 # Table name: carts
@@ -34,8 +33,10 @@ require 'csv'
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
 #  message_mask              :integer
+#  reason_id                 :integer
 #
 
+require 'csv'
 class Cart < ActiveRecord::Base
   # attr_accessible :title, :body
   scope :completed, where(:completed=>true)
@@ -44,6 +45,7 @@ class Cart < ActiveRecord::Base
   belongs_to :user
   belongs_to :client
   belongs_to :store
+  belongs_to :reason
   has_many :cart_products
   has_many :products, :through=> :cart_products
   before_create :set_default_mailbox
