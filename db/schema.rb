@@ -186,9 +186,9 @@ ActiveRecord::Schema.define(:version => 20120925005119) do
   add_index "products", ["productcode"], :name => "index_products_on_productcode"
 
   create_table "reasons", :force => true do |t|
-    t.text     "content"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.text     "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "reports", :force => true do |t|

@@ -4,6 +4,10 @@ require "admin_constraint"
 Kapiqua25::Application.routes.draw do
   
   
+  get "reasons/index"
+
+  get "reasons/show"
+
   mount Sidekiq::Web => 'admin/tasks', :constraints => AdminConstraint.new
 
   resources :users , :only =>:index
@@ -49,6 +53,7 @@ Kapiqua25::Application.routes.draw do
         post 'change_has_sides'
       end
     end
+    resources :reasons, except: [:new, :edit]
     resources :reports, only: [:index, :create, :destroy]
     resources :users
     resources :coupons, except: [:new, :create]

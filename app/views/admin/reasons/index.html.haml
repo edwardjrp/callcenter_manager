@@ -1,0 +1,17 @@
+= render 'administration'
+.row
+  %h3.bottom-margin-1 Razones
+.row    
+  =will_paginate @reasons
+  %table.table.table-striped.table-bordered.table-condensed#reasons_list
+    %thead
+      %th Descripción
+      %th 
+    %tbody
+      -@reasons.each do |reason|
+        %tr{:data=>{'reason-id'=> reason.id}, :id=>dom_id(reason)}
+          %td= best_in_place reason, :description, path: admin_reason_path(reason, method: :put)
+          %td
+            .btn-group
+              = link_to 'Ordenes', [:admin, reason], class: 'btn'
+  =will_paginate @reasons

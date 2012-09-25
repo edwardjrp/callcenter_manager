@@ -1,0 +1,15 @@
+= render 'administration'
+.row
+  %h3.bottom-margin-1 Razones
+.row    
+  =will_paginate @carts
+  %table.table.table-striped.table-bordered.table-condensed#reason_carts_list
+    %thead
+      %th Agente
+      %th Abandonado en 
+    %tbody
+      -@carts.each do |cart|
+        %tr{:data=>{'cart-id'=> cart.id}, :id=>dom_id(cart)}
+          %td= cart.user.full_name
+          %td Fecha de abandono
+  =will_paginate @carts

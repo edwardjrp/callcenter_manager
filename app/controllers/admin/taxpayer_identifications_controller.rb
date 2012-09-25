@@ -1,6 +1,8 @@
 #encoding: utf-8
 class Admin::TaxpayerIdentificationsController < ApplicationController
   def index
+    @search = TaxpayerIdentification.search(params[:q])
+    @tax_ids = @search.result(:distinct => true).order(:idnumber).page(params[:page])
   end
 
   def create

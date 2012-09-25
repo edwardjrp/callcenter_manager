@@ -2,6 +2,6 @@
 
 FactoryGirl.define do
   factory :reason do
-    sequence(:content) { |r| "reason_#{r}" }
+    sequence(:description) { |r| "reason_#{r}" }
   end
 end

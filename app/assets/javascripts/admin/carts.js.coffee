@@ -7,6 +7,7 @@ jQuery ->
     $('#clear_cart_search').on 'click', (event)->
       event.preventDefault()
       $('#clear_cart_search').closest('form')[0].reset()
+      $(this).closest('form').find("input[type='text']").val('')
 
     $('#mailboxes').on 'change', (event)->
       target = $(event.currentTarget)
@@ -24,11 +25,6 @@ jQuery ->
           $("##{target.val()}").trigger('click')
         error: (response)->
           console.log 'response'
-
-    $('#clear_cart_search').on 'click', (event) ->
-      $(this).closest('form')[0].reset()
-      $(this).closest('form').find("input[type='text']").val('')
-
 
   $('#q_created_at_gteq').datepicker
     dateFormat: 'yy-mm-dd'

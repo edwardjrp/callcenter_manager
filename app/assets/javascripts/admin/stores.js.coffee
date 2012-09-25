@@ -4,4 +4,5 @@
 jQuery ->
   $('#clear_product_search').on 'click', (event)->
     event.preventDefault()
-    $('#clear_product_search').closest('form')[0].reset()
+    $(this).closest('form')[0].reset()
+    $(this).closest('form').find("input[type='text']").val('')

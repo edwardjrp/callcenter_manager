@@ -1,2 +1,23 @@
-%h1 Admin::TaxpayerIdentifications#index
-%p Find me in app/views/admin/taxpayer_identifications/index.html.haml
+= render 'administration'
+.row
+  %h3.bottom-margin-1 Números Fiscales
+.row 
+  = search_form_for [:admin,@search], url: admin_taxpayer_identifications_path, :html=>{:class=>'well form-search top-margin-1 filter'} do |f|
+    =f.text_field :idnumber_start, :class=> 'input-medium search-query', :placeholder=>'Cédula'
+    =f.text_field :full_name_cont, :class=> 'input-medium search-query', :placeholder=>'Nombre'
+    =f.text_field :company_name_cont, :class=> 'input-medium search-query', :placeholder=>'Compañía'
+    =f.submit 'Buscar', :name=>nil, :class=> 'btn'
+    %a.btn#clear_tax_ids_search{ href: '#'} Limpiar
+  =will_paginate @tax_ids
+  %table.table.table-striped.table-bordered.table-condensed#tax_ids_list
+    %thead
+      %th Cedula/RNC
+      %th Nombre
+      %th Compañía
+    %tbody
+      -@tax_ids.each do |tax_id|
+        %tr{:data=>{'tax_id-id'=> tax_id.id}, :id=>dom_id(tax_id)}
+          %td= tax_id.idnumber
+          %td= tax_id.full_name
+          %td= tax_id.company_name
+  =will_paginate @tax_ids

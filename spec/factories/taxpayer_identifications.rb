@@ -2,16 +2,16 @@
 
 FactoryGirl.define do
   factory :taxpayer_identification do
-    idnumber "MyString"
-    full_name "MyString"
-    company_name "MyString"
-    ocupation "MyString"
-    street "MyString"
-    street_number "MyString"
-    zone "MyString"
-    other "MyString"
-    start_time "MyString"
-    state "MyString"
-    kind "MyString"
+    sequence(:idnumber) { |tid| "87687#{tid}" }
+    sequence(:full_name) { |tid| "tax_id_#{tid}"}
+    company_name { Faker::Lorem.words }
+    ocupation { Faker::Lorem.words }
+    street { Faker::Lorem.words }
+    street_number { Faker::Lorem.words }
+    zone { Faker::Lorem.words }
+    other { Faker::Lorem.words }
+    start_time { Faker::Lorem.words }
+    state { Faker::Lorem.words }
+    kind { Faker::Lorem.words }
   end
 end
