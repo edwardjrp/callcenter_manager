@@ -3,16 +3,20 @@ require 'spec_helper'
 
 describe "Client::New" do
   describe "when creating a new client" do
-      before(:each) do
+      let(:street) { create :street }
+      let(:area) { street.area }
+      let(:city) { area.city }
+
+      before(:all) do
         Capybara.current_driver = :selenium_chrome
-        login(FactoryGirl.create(:user))
-        @street = FactoryGirl.create :street
-        @area = @street.area
-        @city = @area.city
+      end
+
+      before do
+        login(create(:user))
         visit root_path 
       end
       
-      after(:each)do
+      after(:all)do
          Capybara.use_default_driver
       end
        
@@ -23,8 +27,8 @@ describe "Client::New" do
          fill_in "client_search_last_name", with: 'Last'
          fill_in "client_search_idnumber", with: '00113574388'
          fill_in "client_search_email", with: 'test@mail.com'
-         # select  @city.name, from:  'client_search_address_city'
-         page.execute_script "$('#client_search_address_street').val('#{@street.id}')"
+         # select  city.name, from:  'client_search_address_city'
+         page.execute_script "$('#client_search_address_street').val('#{street.id}')"
          fill_in 'client_search_address_number', with: '1'
          select 'Casa', from: 'client_search_address_unit_type'
          fill_in 'client_search_address_unit_number', with: '1'
@@ -51,8 +55,8 @@ describe "Client::New" do
           fill_in "client_search_first_name", with: 'tester'
           fill_in "client_search_last_name", with: 'Last'
           fill_in "client_search_email", with: 'test2@mail.com'
-          # select  @city.name, from:  'client_search_address_city'
-          page.execute_script "$('#client_search_address_street').val('#{@street.id}')"
+          # select  city.name, from:  'client_search_address_city'
+          page.execute_script "$('#client_search_address_street').val('#{street.id}')"
           fill_in 'client_search_address_number', with: '1'
           select 'Casa', from: 'client_search_address_unit_type'
           fill_in 'client_search_address_unit_number', with: '1'
@@ -72,8 +76,8 @@ describe "Client::New" do
          fill_in "client_search_first_name", with: 'Tester'
          fill_in "client_search_last_name", with: 'Last'
          fill_in "client_search_email", with: 'test1@mail.com'
-         # select  @city.name, from:  'client_search_address_city'
-         page.execute_script "$('#client_search_address_street').val('#{@street.id}')"
+         # select  city.name, from:  'client_search_address_city'
+         page.execute_script "$('#client_search_address_street').val('#{street.id}')"
          fill_in 'client_search_address_number', with: '1'
          select 'Casa', from: 'client_search_address_unit_type'
          fill_in 'client_search_address_unit_number', with: '1'
@@ -86,8 +90,8 @@ describe "Client::New" do
          fill_in "client_search_first_name", with: 'iester'
          fill_in "client_search_last_name", with: 'Last'
          fill_in "client_search_email", with: 'test2@mail.com'
-         # select  @city.name, from:  'client_search_address_city'
-         page.execute_script "$('#client_search_address_street').val('#{@street.id}')"
+         # select  city.name, from:  'client_search_address_city'
+         page.execute_script "$('#client_search_address_street').val('#{street.id}')"
          fill_in 'client_search_address_number', with: '1'
          select 'Casa', from: 'client_search_address_unit_type'
          fill_in 'client_search_address_unit_number', with: '1'
@@ -100,8 +104,8 @@ describe "Client::New" do
           fill_in "client_search_first_name", with: 'iester'
           fill_in "client_search_last_name", with: 'Last'
           fill_in "client_search_email", with: 'test3@mail.com'
-          # select  @city.name, from:  'client_search_address_city'
-          page.execute_script "$('#client_search_address_street').val('#{@street.id}')"
+          # select  city.name, from:  'client_search_address_city'
+          page.execute_script "$('#client_search_address_street').val('#{street.id}')"
           fill_in 'client_search_address_number', with: '1'
           select 'Casa', from: 'client_search_address_unit_type'
           fill_in 'client_search_address_unit_number', with: '1'
@@ -143,8 +147,8 @@ describe "Client::New" do
            fill_in "client_search_first_name", with: ''
            fill_in "client_search_last_name", with: 'Last'
            fill_in "client_search_email", with: 'test@mail.com'
-           # select  @city.name, from:  'client_search_address_city'
-           page.execute_script "$('#client_search_address_street').val('#{@street.id}')"
+           # select  city.name, from:  'client_search_address_city'
+           page.execute_script "$('#client_search_address_street').val('#{street.id}')"
            fill_in 'client_search_address_number', with: '1'
            select 'Casa', from: 'client_search_address_unit_type'
            fill_in 'client_search_address_unit_number', with: '1'
