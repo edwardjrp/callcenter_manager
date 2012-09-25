@@ -44,13 +44,10 @@ gem "zip"
 gem "cancan"
 gem "simple-navigation"
 gem 'simple-navigation-bootstrap'
-gem "transitions", :require => ["transitions", "active_record/transitions"]
 gem 'exception_notification'
 gem 'acts_as_list'
 gem 'simple_form'
-gem "formtastic"
 gem 'nokogiri'
-gem 'yard' 
 gem "haml-rails"
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
@@ -72,6 +69,7 @@ end
 # gem 'ruby-debug19', :require => 'ruby-debug'
 group :development do
   gem "thin"
+  gem 'yard'
   gem 'capistrano'
   gem 'letter_opener'
   gem 'awesome_print'

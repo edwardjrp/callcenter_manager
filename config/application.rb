@@ -28,7 +28,7 @@ module Kapiqua25
 
     config.generators do |g|
        g.integration_tool :rspec
-       g.test_framework :rspec, :view_specs => false, :helper_specs => false, :controller_specs => false, :routing_specs => true, :fixture => true
+       g.test_framework :rspec, :view_specs => false, :helper_specs => false, :controller_specs => false, :routing_specs => false, :fixture => true
        g.template_engine :haml
        g.form_builder :simple_form
        g.fixture_replacement :factory_girl, :dir => 'spec/factories'
