@@ -32,23 +32,21 @@ describe CartProduct do
     
       let!(:category) { create :category }
       let!(:product_holder) { create :product, productcode: 'TEST', category: category, options: 'X' }
-      let!(:options_item_x) { create :product, :productcode => 'X', :category=>category, :options => 'OPTION' }
-      let!(:options_item_sidble) { create :product, :productcode => 'SIDBLE', :category=>category, :options => 'OPTION' }
+      let!(:options_item_x) { create :product, productcode: 'X', category: category, options: 'OPTION' }
+      let!(:options_item_sidble) { create :product, productcode: 'SIDBLE', category: category, options: 'OPTION' }
     
 
     ['','0.75','1.5','2','3'].each do |q|
       ['X','SIDBLE'].each do |p|
         it "should parse a #{p} with #{q} as quantity" do
-          q = Float(q) unless q.blank?
-          cart_product = attributes_for :cart_product, :options => "#{q}#{p}", :product => product_holder
-          q = '1.0' if q.blank?
-          save_without_massasignment(CartProduct, cart_product).parsed_options.should include(quantity: Float(q), code: p, part: 'W')
+          q = 1 if q == ''
+          q = (q.to_f == q.to_i) ? q.to_i : q.to_f
+          build( :cart_product, :options => "#{q.to_f}#{p}", :product => product_holder).parsed_options.should include(quantity: q, code: p, part: 'W')
         end
 
         it "should show niffty #{p} with #{q} as quantity" do
-          cart_product = attributes_for :cart_product, :options => "#{q.to_f}#{p}", :product => product_holder
-          q = '1' if q == ''
-          save_without_massasignment(CartProduct, cart_product).niffty_options.should match("#{q}#{Product.find_by_productcode(p).productname}")
+          q = ''
+          build(:cart_product, :options => "#{q}#{p}", :product => product_holder).niffty_options.should match("#{q}#{Product.find_by_productcode(p).productname}")
         end
 
       end

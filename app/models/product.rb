@@ -42,9 +42,10 @@ class Product < ActiveRecord::Base
   end
   
   def niffty_options
-    if parsed_options.present?
-      options.split(',').each do |opt|
-        options_result.push(Option.new(category, opt).to_s)
+    return [] if category.nil?
+    if options.present? and options.split(',').any?
+      options.split(',').map do |opt|
+        Option.new(category, opt).to_s
       end.to_sentence
     end
   end

@@ -26,20 +26,21 @@ class CartProduct < ActiveRecord::Base
 
 
   def parsed_options
-    return [] if category.nil?
+    return [] if product && product.category.nil?
     if options.present? and options.split(',').any?
       options_result = []
       options.split(',').each do |opt|
         options_result.push(Option.new(product.category, opt).to_hash)
       end
-      return options_result
+      options_result
     end
   end
   
   def niffty_options
-    if parsed_options.present?
-      options.split(',').each do |opt|
-        options_result.push(Option.new(product.category, opt).to_s)
+    return [] if product && product.category.nil?
+    if options.present? and options.split(',').any?
+      options.split(',').map do |opt|
+        Option.new(product.category, opt).to_s
       end.to_sentence
     end
   end
