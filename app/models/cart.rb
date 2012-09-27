@@ -159,6 +159,11 @@ class Cart < ActiveRecord::Base
     end
   end
 
+  def communication_fail!
+    self.communication_failed = true
+    self.critical!
+  end
+
   def set_default_mailbox
     self.mailboxes = ['nuevos']
   end
