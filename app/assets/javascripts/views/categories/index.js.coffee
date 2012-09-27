@@ -60,13 +60,13 @@ class Kapiqua25.Views.CategoriesIndex extends Backbone.View
       _.each @group_by_options(products), (group, key) =>
           name = @get_presentation_name(group)
           parsed_options =  @parse_options(key,options)
-          niffty_options =  @niffty_opions(parsed_options)
+          niffty_options =  @niffty_opions(key,options)
           matchups.add {name:  name, options: key, niffty_options: niffty_options, parsed_options:parsed_options, valid_sizes: @get_valid_sizes(group), valid_flavors: @get_valid_flavors(group), is_base: @get_base_matchup(group)?} if name !='' and key != 'null'
     else if _.any(options) and category.get('has_options') == true and category.get('type_unit') == true
       _.each products, (product) =>
           name = product.get('productname')
           parsed_options =  @parse_options(product.get('options'),options)
-          niffty_options =  @niffty_opions(parsed_options)
+          niffty_options =  @niffty_opions(product.get('options'),options)
           matchups.add {name:  name, options: product.get('options'), niffty_options: niffty_options, parsed_options:parsed_options, valid_sizes: [ product.get('sizecode') ], valid_flavors: [ product.get('flavorcode') ], is_base: null} if name !=''
     else
       _.each @group_by_flavorcode(products), (group, key) =>
@@ -85,26 +85,17 @@ class Kapiqua25.Views.CategoriesIndex extends Backbone.View
   parse_options: (recipe, options)->
     product_options = []
     if recipe? and _.any(recipe.split(','))
-      _.each _.compact(recipe.split(',')), (code) ->
-        core_match = code.match(/^([0-9]{0,2}\.?[0|7|5]{0,2})([A-Z]{1,}[a-z]{0,})(?:\-([L12]))?/)
-        if core_match?
-          core_match[1] = '1' if not core_match[1]? or core_match[1] == ''
-          current_quantity = core_match[1]
-          current_product = _.find(options, (op)-> op.get('productcode') == core_match[2])
-          current_part =  core_match[3] || ''
-          product_option = {quantity: Number(current_quantity), product: current_product, part: current_part}
-          product_options.push product_option
+      _.each _.compact(recipe.split(',')), (recipe) ->
+        product_options.push(new Option(recipe, options).toJSON())
     product_options
     
     
-  niffty_opions: (parser_option) ->
-    presentation = _.map parser_option, (option) ->
-      option.quantity = '' if option.quantity == '1'
-      presenter = option.quantity
-      presenter += " #{option.product.get('productname')} "
-      presenter += option.part.replace(/1/,'Izquierada').replace(/2/, 'Derecha').replace(/W/,'Completa')
-      window.strip(presenter)
-    to_sentence presentation
+  niffty_opions: (recipe, options) ->
+    product_options = []
+    if recipe? and _.any(recipe.split(','))
+      _.each _.compact(recipe.split(',')), (recipe) ->
+        product_options.push(new Option(recipe, options).toString())
+    to_sentence product_options
       
       
       

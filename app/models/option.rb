@@ -10,7 +10,7 @@ class Option
   end 
 
   def regexp
-    /^([0-9]{0,2}\.?[0|7|5]{0,2})([A-Z]{1,}[a-z]{0,})(?:\-([L12]))?/
+    /^([0-9]{0,2}\.?[0|7|5]{0,2})([A-Z]{1,}[a-z]{0,})(?:\-([W12]))?/
   end
 
   def quantity
@@ -28,11 +28,22 @@ class Option
   def to_s
     return '' if product.nil?
     q = '' if quantity == 0
-    part == 'W' ? "#{q}#{product.productname}" : "#{q}#{product.productname}-#{part}"
+    part == 'W' ? "#{q}#{product.productname}" : "#{q}#{product.productname} a la #{part_map}"
   end
 
   def to_hash
     { quantity: quantity , code: code, part: part }
+  end
+
+
+  def part_map
+    case part
+      when '1' then
+        'Izquierda'
+      when '2' then
+        'Derecha'
+      else
+        'Completa'
   end
 
 
