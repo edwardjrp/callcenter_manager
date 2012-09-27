@@ -17,13 +17,15 @@
 require 'spec_helper'
 
 describe Address do
+
   describe "Validation" do
-    before(:each)do
-      FactoryGirl.create :address
-    end
+
+    before { create :address }
+
     it{should belong_to :client}
     it{should belong_to :street}
     it{should validate_presence_of :street_id}
-    # it{should validate_presence_of :client_id}
+
   end
+  
 end

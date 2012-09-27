@@ -22,62 +22,65 @@ require 'spec_helper'
 
 describe User do
   describe 'Validations' do
-    before(:each) do
-      FactoryGirl.create :user, :username=> 'test', :password=>'please'
-    end
+    before { create :user, :username=> 'test', :password=>'please' }
     
-    it{ should validate_presence_of :username}
-    it{ should validate_uniqueness_of :username}
-    it{ should validate_presence_of :first_name}
-    it{ should validate_presence_of :last_name}
-    it{ should validate_presence_of :idnumber}
-    it{ should_not validate_presence_of :role_mask}
-    it{ should validate_uniqueness_of :idnumber}
-    it{ should validate_confirmation_of :password}
-    it{ should allow_mass_assignment_of :active}
-    it{ should_not allow_mass_assignment_of :role_mask}
-    it{ should_not allow_mass_assignment_of :last_action_at}
-    it{ should_not allow_mass_assignment_of :login_count}
-    it{ should_not allow_mass_assignment_of :password_digest}
-    it{ should_not allow_mass_assignment_of :auth_token}
+    it { should validate_presence_of :username }
+    it { should validate_uniqueness_of :username }
+    it { should validate_presence_of :first_name }
+    it { should validate_presence_of :last_name }
+    it { should validate_presence_of :idnumber }
+    it { should_not validate_presence_of :role_mask }
+    it { should validate_uniqueness_of :idnumber }
+    it { should validate_confirmation_of :password }
+    it { should allow_mass_assignment_of :active }
+    it { should_not allow_mass_assignment_of :role_mask }
+    it { should_not allow_mass_assignment_of :last_action_at }
+    it { should_not allow_mass_assignment_of :login_count }
+    it { should_not allow_mass_assignment_of :password_digest }
+    it { should_not allow_mass_assignment_of :auth_token }
+
   end
   
   describe "generate auth_token" do
+    let!(user) { User.new(username: 'test', first_name: 'tester', last_name:'test_last', password: 'please', idnumber: '00113574339') }
+
     it "should generate the auth token for a new user" do
-      @user = User.new(username: 'test', first_name: 'tester', last_name:'test_last', password: 'please', idnumber: '00113574339')
-      @user.should be_valid
-      @user.save
-      @user.auth_token.should_not be_nil
+      user.should be_valid
+      user.run_callbacks(:save)
+      user.auth_token.should_not be_nil
     end
+
   end
   
   describe '#there_is_one_admin' do
     let!(:admin) { create :user, roles: :admin }
+
     it "should not allow the deletion of the last admin" do
       expect{ admin.destroy }.to_not change{ User.admins.count }.from(1).to(0)
     end
+
   end
 
   
   describe "roles behavior" do
-    before(:each) do
-      @user = FactoryGirl.create :user, :username=> 'test2', :password=>'please', :roles=>[:operator]
-      @admin = FactoryGirl.create :user, :username=> 'admin', :password=>'please', :roles=>[:admin]
-    end
+    
+    let!(:user) { build :user, :operator }
+    let!(:admin) { build :user,  :admin }
+  
     it "should respond to role" do
       User.should respond_to(:valid_roles)
     end
     
     it "should respond to role" do
-      @user.should respond_to(:roles)
+      user.should respond_to(:roles)
     end
     
     it "should be an admin" do
-      @admin.roles.should include('admin')
+      admin.roles.should include('admin')
     end
     
     it "should be an operator" do
-      @user.roles.should include('operator')
+      user.roles.should include('operator')
     end
     
   end

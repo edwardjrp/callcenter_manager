@@ -11,13 +11,16 @@
 require 'spec_helper'
 
 describe City do
+
   describe "Validations" do
-    before(:each) do
-      @address = FactoryGirl.create :city
-    end
-    it{should validate_presence_of :name}
-    it{should validate_uniqueness_of :name}
-    it{should have_many :stores}
-    it{should have_many :areas}    
+
+    before { create :city }
+    
+    it { should validate_presence_of :name }
+    it { should validate_uniqueness_of :name }
+    it { should have_many :stores }
+    it { should have_many :areas }    
+
   end
+
 end

@@ -13,10 +13,14 @@
 require 'spec_helper'
 
 describe Area do
+
   describe "Validation" do
+
     it{should validate_presence_of :name}
     it{should belong_to :city}
     it{should belong_to :store}
     it{should have_many :streets}
+
   end
+  
 end

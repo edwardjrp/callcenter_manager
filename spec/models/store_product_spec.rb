@@ -14,8 +14,12 @@
 require 'spec_helper'
 
 describe StoreProduct do
+
   describe "Validations" do
-    it{should belong_to :product}
-    it{should belong_to :store}
+
+    it { should belong_to :product }
+    it { should belong_to :store }
+     
   end
+
 end

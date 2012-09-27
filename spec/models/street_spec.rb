@@ -12,13 +12,16 @@
 require 'spec_helper'
 
 describe Street do
+
   describe "Validations" do
-    before(:each) do
-      FactoryGirl.create :street
-    end
-    it{should validate_presence_of :name}
-    it{should validate_uniqueness_of(:name).scoped_to(:area_id)}
-    it{should belong_to :area}
-    it{should have_many :addresses}
+
+    before { create :street }
+    
+    it { should validate_presence_of :name }
+    it { should validate_uniqueness_of(:name).scoped_to(:area_id) }
+    it { should belong_to :area }
+    it { should have_many :addresses }
+    
   end
+
 end
