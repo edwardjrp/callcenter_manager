@@ -65,7 +65,7 @@ describe "Client::New" do
         page.should_not have_css('#client_search_email')
       end
 
-     # this test does not pass when phones are the same
+     # this test fails when phones are the same
      it "should create clients in sequence", js: true do
        page.execute_script "$('.subnav-fixed').css('display', 'none')"
        page.execute_script "$('#utils').css('display', 'none')"

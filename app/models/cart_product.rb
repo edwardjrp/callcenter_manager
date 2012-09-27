@@ -23,16 +23,14 @@ class CartProduct < ActiveRecord::Base
   attr_accessible :bind_id, :cart_id, :options, :product_id, :quantity
   
   
+
+
   def parsed_options
-    return [] if product.nil? || product.category.nil?
+    return [] if category.nil?
     if options.present? and options.split(',').any?
       options_result = []
       options.split(',').each do |opt|
-        code_match = opt.match(/^([0-9]{0,2}\.?[0|7|5]{0,2})([A-Z]{1,}[a-z]{0,})(?:\-([L12]))?/)
-        code_match[1].blank? ? (quantity = 1) : (quantity = code_match[1].to_f)
-        code = code_match[2]
-        part = code_match[3] || 'W'
-        options_result.push({ quantity: quantity, code: code, part: part })
+        options_result.push(Option.new(product.category, opt).to_hash)
       end
       return options_result
     end
@@ -40,13 +38,10 @@ class CartProduct < ActiveRecord::Base
   
   def niffty_options
     if parsed_options.present?
-      parsed_options.map do |opt|
-       if opt[:part] != 'W'
-         "#{opt[:quantity]}#{Product.find_by_productcode(opt[:code]).try(:productname)}-#{opt[:part]}"
-       else
-         "#{opt[:quantity]}#{Product.find_by_productcode(opt[:code]).try(:productname)}"       
-       end
+      options.split(',').each do |opt|
+        options_result.push(Option.new(product.category, opt).to_s)
       end.to_sentence
     end
   end
+
 end
