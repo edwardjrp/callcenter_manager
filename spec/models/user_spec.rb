@@ -42,11 +42,11 @@ describe User do
   end
   
   describe "generate auth_token" do
-    let!(user) { User.new(username: 'test', first_name: 'tester', last_name:'test_last', password: 'please', idnumber: '00113574339') }
+    let!(:user) { build(:user, username: 'test', first_name: 'tester', last_name:'test_last', password: 'please', idnumber: '00113574339') }
 
     it "should generate the auth token for a new user" do
       user.should be_valid
-      user.run_callbacks(:save)
+      user.save
       user.auth_token.should_not be_nil
     end
 

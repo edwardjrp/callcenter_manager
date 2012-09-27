@@ -2,7 +2,8 @@ jQuery ->
   socket = window.socket
   socket.on 'connect', () -> 
     socket.emit 'register', { full_name: $('#chatbox').data('full_name'), idnumber: $('#chatbox').data('idnumber'), role: $('#chatbox').data('role') }, (response)->
-      console.log response
+      # console.log response
+      
 
   if $(".chatdisplay").size() > 0
     setInterval (->

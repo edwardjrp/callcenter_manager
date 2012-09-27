@@ -4,7 +4,7 @@ require 'spec_helper'
 describe 'Clients general' do
   let!(:user) { create :user, :admin }
   let!(:client) { create :client }
-  let!(:cart) { create :cart, :client_id=> @client.id, :user_id=> @user.id }
+  let!(:cart) { create :cart, :client_id=> client.id, :user_id=> user.id }
 
   subject { page }
   before { login(user) }

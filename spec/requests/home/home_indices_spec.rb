@@ -40,17 +40,17 @@ describe "Home::Indices" do
       let!(:client) { create(:client, first_name: 'tester') }
       let!(:client2) { create(:client, first_name: 'another') }
       let!(:phone) { create :phone, client: client, number: '8095551234', ext: nil }
-      let!(:phone) { create :phone, client: client2, number: '8095551234', ext: '2' }
+      let!(:phone2) { create :phone, client: client2, number: '8095551234', ext: '2' }
 
       subject { page }
 
-      before(:each)do
+      before do
         Capybara.current_driver = :selenium_chrome
-        login( user 
+        login( user )
         visit root_path
       end
 
-      after(:each)do
+      after do
         Capybara.use_default_driver
       end
        
@@ -103,6 +103,9 @@ describe "Home::Indices" do
       let!(:client) { create(:client, first_name: 'tester') }
       let!(:phone) { create :phone, client: client, number: '8095551234', ext: '99' }
 
+      subject { page }
+
+
       before(:each) do
         Capybara.current_driver = :selenium_chrome
         login( user )
@@ -138,7 +141,7 @@ describe "Home::Indices" do
       subject { page }
 
       before(:each) do
-        login(  )
+        login( user )
         visit root_path 
       end
 
@@ -173,6 +176,9 @@ describe "Home::Indices" do
      
 
     context 'when user is not logged' do
+
+      subject { page }
+
 
       it "should redirect_to the login" do
         visit root_path

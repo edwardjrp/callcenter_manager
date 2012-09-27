@@ -70,14 +70,14 @@ describe Cart do
 
     it "should move to eliminados" do
       cart.trash!
-      mailboxes.should_not include('nuevos')
-      mailboxes.should include('eliminados')
+      should_not include('nuevos')
+      should include('eliminados')
     end
 
     it "should mark as criticos" do
       cart.critical!
-      mailboxes.should include('nuevos')
-      mailboxes.should include('criticos')
+      should include('nuevos')
+      should include('criticos')
     end
 
   end

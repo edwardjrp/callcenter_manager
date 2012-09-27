@@ -78,19 +78,13 @@ end
 
 
 group :development, :test do
-  # gem 'ruby-debug19', :require => 'ruby-debug'
   gem 'jasminerice'
-  gem 'guard-jasmine'
-  gem 'growl'
   gem 'pry-rails'
-  #   gem 'vcr', '~> 2.0.0'
+  # gem 'vcr', '~> 2.0.0'
   # gem 'webmock', '~> 1.8.3'
-  gem 'guard-rspec'
   gem 'capybara'
   gem "poltergeist"
   gem "shoulda-matchers"
-  gem 'guard-livereload'
-  gem "guard-spork"
 	gem "chromedriver-helper"
 	gem 'database_cleaner'
 	gem 'launchy'
@@ -98,5 +92,4 @@ group :development, :test do
 	gem "simplecov", :require => false
   gem 'rspec-rails'
   gem 'factory_girl_rails'
-  gem 'spork'
 end

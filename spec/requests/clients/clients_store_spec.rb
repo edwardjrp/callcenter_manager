@@ -16,7 +16,7 @@ describe "Client store" do
     let!(:address2) { create :address, street: street, client: client }
 
     before(:each) do
-      area.store) { store }
+      area.store = store
       area.save
       login( user )
       visit root_path 

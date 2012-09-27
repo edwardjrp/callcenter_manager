@@ -50,13 +50,13 @@ describe Client do
     let!(:client) { create :client,  first_name: 'test' }
     let!(:client_source) { create :client, first_name: 'test source' }
     let!(:phone) { create :phone, client: client_source }
-    let!(:client_attr) { first_name: client_source.first_name, last_name: client_source.last_name, email: client_source.email, idnumber: client_source.idnumber, phones_attributes: { 0: phone.attributes } }
+    let!(:client_attr) { { 'first_name' => client_source.first_name, 'last_name' => client_source.last_name, 'email' => client_source.email, 'idnumber' => client_source.idnumber, 'phones_attributes' => { '0' => phone.attributes } } }
     
 
     it "should merge the 2 clients " do
       client.first_name.should == 'test'
       expect { client.merge( client_attr, client_source.id) }.to change{ Client.count }.by(-1)
-      client.first_name.should == 'test source'
+      client.reload.first_name.should == 'test source'
     end
 
     it "should delete the source client" do

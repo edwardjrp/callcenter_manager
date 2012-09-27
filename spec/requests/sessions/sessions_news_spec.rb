@@ -3,8 +3,8 @@ require 'spec_helper'
 
 describe "Sessions::News" do
   describe "when login in" do
-    let!(:user) { create :user, { username: 'testname', :password: "please" } , :operator } 
-    let!(:user) { create :user, { username: 'testadmin', :password=> "please" } , :admin } 
+    let!(:user) { create :user, username: 'testname', password: "please"  , roles:[ :operator ]} 
+    let!(:admin) { create :user, username: 'testadmin', password: "please" , roles: [:admin ]} 
 
     subject { page }
 
