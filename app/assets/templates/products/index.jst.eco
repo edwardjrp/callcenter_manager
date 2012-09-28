@@ -2,12 +2,35 @@
   <input type='text' class='cart_product_quantity left-margin-1' value='1'></input>
   <input class="btn btn-success" type="button" value="Agregar">
 </div>
+
 <%if _.any(@model.matchups().models):%>
   <div class='specialties_container'>
     <h3>Especialidades</h3>
     <%for matchup in @model.matchups().models:%>
-      <%console.log matchup%>
-      <a id = '<%=matchup.cid%>' class ='btn bottom-margin-1 specialties' data-options="<%=matchup.nifftyOptions()%>"  href='#'><%-matchup.name()%></a>
+      <a id = '<%=matchup.cid%>' class ='btn bottom-margin-1 specialties' data-base-product="<%=matchup.hasProduct(@model.baseProduct())%>"  href='#'><%-matchup.name()%></a>
+    <%end%>
+  </div>
+<%end%>
+
+
+<%if _.any(@model.availableFlavors()):%>
+  <div class='flavors_container'>
+    <%if @model.availableFlavors().length > 1:%>
+      <h3>Sabores</h3>
+      <%for flavor in @model.availableFlavors():%>
+        <a class ='btn bottom-margin-1 flavors <%=flavor%>' data-flavorcode='<%=flavor%>' href='#'><%=flavor%></a>
+      <%end%>
+    <%end%>
+  </div>
+<%end%>
+
+<%if _.any(@model.availableSizes()):%>
+  <div class='sizes_container'>
+    <%if @model.availableSizes().length > 1:%>
+        <h3>Tamaños</h3>
+        <%for size in @model.availableSizes():%>
+          <a class ='btn bottom-margin-1 sizes <%=size%>' data-sizecode='<%=size%>' href='#'><%=size%></a>
+        <%end%>
     <%end%>
   </div>
 <%end%>

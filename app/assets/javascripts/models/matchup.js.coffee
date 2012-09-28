@@ -13,3 +13,6 @@ class Kapiqua25.Models.Matchup extends Backbone.Model
 
   nifftyOptions: ()->
     window.to_sentence(_.map @defaultOptions(), (option)-> option.toString())
+
+  hasProduct: (product)->
+    _.include(@get('products'), product[0])

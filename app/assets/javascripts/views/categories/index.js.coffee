@@ -6,7 +6,7 @@ class Kapiqua25.Views.CategoriesIndex extends Backbone.View
     @product_views = {}
     _.each @collection.models, (category) =>
       unless category.isHidden()
-        @product_views["#{category.get('name')}"] = new Kapiqua25.Views.ProductsIndex(model: category, cart: @model)
+        @product_views["#{category.get('name')}"] = new Kapiqua25.Views.ProductsIndex(model: category, cart: @options.cart, cart_product: new Kapiqua25.Models.CartProduct() )
   
   events: ->
     'click .nav-tabs a': 'mark_base'

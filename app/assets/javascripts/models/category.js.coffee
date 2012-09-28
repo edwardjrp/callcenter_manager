@@ -36,7 +36,7 @@ class Kapiqua25.Models.Category extends Backbone.RelationalModel
   availableFlavors: ()->
     _.uniq(@mainProducts().pluck('flavorcode'))
 
-  base_product: ()->
+  baseProduct: ()->
     @mainProducts().where( {id: @get('base_product')} )
 
   productsByOptions: ()->
@@ -49,6 +49,10 @@ class Kapiqua25.Models.Category extends Backbone.RelationalModel
     _.groupBy( @mainProducts().models, (product)-> product.get('sizecode') )
 
   matchups: ()->
+    @category_matchups ?= @load_matchup()
+
+
+  load_matchup: ()->
     category_matchups = new Kapiqua25.Collections.Matchups()
     if @hasOptions() and not @typeUnit()
       for recipe in _.keys(@productsByOptions())
