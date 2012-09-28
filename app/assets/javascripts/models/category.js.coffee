@@ -60,7 +60,7 @@ class Kapiqua25.Models.Category extends Backbone.RelationalModel
 
     else if @hasOptions() and @typeUnit()
       for product in @mainProducts().models
-        category_matchups.add new Kapiqua25.Models.Matchup().set(recipe: recipe, products: [product], avalable_options: @optionProducts() )
+        category_matchups.add new Kapiqua25.Models.Matchup().set(recipe: product.get('options'), products: [product], avalable_options: @optionProducts() )
 
     else if not @hasOptions()
       for recipe in _.keys(@productsByFlavor())

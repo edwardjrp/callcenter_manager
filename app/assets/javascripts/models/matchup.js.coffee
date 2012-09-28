@@ -1,7 +1,7 @@
 class Kapiqua25.Models.Matchup extends Backbone.Model
   
   defaultOptions: ()->
-    if @get('recipe') and _.any(@get('recipe').split(','))
+    if @get('recipe')? and _.any(@get('recipe').split(','))
       _.map @get('recipe').split(','), (option) =>
         new Option(option, @get('avalable_options'))
 
@@ -12,7 +12,7 @@ class Kapiqua25.Models.Matchup extends Backbone.Model
     _.map @defaultOptions(), (option)-> option.toJSON()
 
   nifftyOptions: ()->
-    window.to_sentence(_.map @defaultOptions(), (option)-> option.toString())
+    if @defaultOptions()? then window.to_sentence(_.map @defaultOptions(), (option)-> option.toString()) else ''
 
   hasProduct: (product)->
     _.include(@get('products'), product[0])

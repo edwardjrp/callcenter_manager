@@ -3,7 +3,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
   template: JST['products/index']
   
   initialize: ->
-    _.bindAll(this, 'render', 'show_popover', 'select_specialty', 'colorize_specialty')
+    _.bindAll(this, 'render', 'show_popover', 'select_specialty', 'colorize_button', 'decolorize_button')
     @selected_matchups = []
     @max_selectable_matchups = 1
     if @model.isMulti() then @max_selectable_matchups = 2 else @max_selectable_matchups = 1
@@ -32,23 +32,22 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     if _.include(@selected_matchups, matchup)
       if @selected_matchups.length > 0
         @selected_matchups = _.without(@selected_matchups, matchup)
-        @decolorize_specialty(matchup)
+        @decolorize_button(matchup.cid)
     else
       if @selected_matchups.length < @max_selectable_matchups
         @selected_matchups.push matchup
-        @colorize_specialty(matchup)
-    console.log @selected_matchups
+        @colorize_button(matchup.cid, 'specialties_container')
 
 
-  decolorize_specialty: (matchup)->    
-    $("##{matchup.cid}").removeClass('btn-primary') if $("##{matchup.cid}").hasClass('btn-primary')
-    $("##{matchup.cid}").removeClass('btn-danger')if $("##{matchup.cid}").hasClass('btn-danger')
+  decolorize_button: (id)->    
+    $("##{id}").removeClass('btn-primary') if $("##{id}").hasClass('btn-primary')
+    $("##{id}").removeClass('btn-danger')if $("##{id}").hasClass('btn-danger')
 
-  colorize_specialty: (matchup)->    
-    if $(@el).find('.specialties_container').find('.btn-primary').size() == 0
-      $("##{matchup.cid}").addClass('btn-primary')
-    else if $(@el).find('.specialties_container').find('.btn-primary').size() == 1
-      $("##{matchup.cid}").addClass('btn-danger')
+  colorize_button: (id, scope_class)->    
+    if $(@el).find(".#{scope_class}").find('.btn-primary').size() == 0
+      $("##{id}").addClass('btn-primary')
+    else if $(@el).find(".#{scope_class}").find('.btn-primary').size() == 1
+      $("##{id}").addClass('btn-danger')
 
 
   resetCartProduct: ()->
@@ -58,7 +57,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     if @model.hasOptions()
       target = $(event.currentTarget)
       matchup = @model.matchups().getByCid(target.attr('id'))
-      if matchup?
+      if matchup? and matchup.nifftyOptions() != ''
         options = { animate: true, title:'Opciones', content: matchup.nifftyOptions() }
         target.popover(options)
         target.popover('show')  
