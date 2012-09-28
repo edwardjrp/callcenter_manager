@@ -1,73 +1,46 @@
-<div class='adder'>
-  <input type='text' class='cart_product_quantity left-margin-1' value='1'></input>
-  <input class="btn btn-success" type="button" value="Agregar">
-</div>
-<%if _.any(@options.matchups.models):%>
-  <div class='specialties_container'>
-    <h3>Especialidades</h3>
-    <%for matchup in @options.matchups.models:%>
-      <a id = '<%=matchup.cid%>' class ='btn bottom-margin-1 specialties' data-options="<%=matchup.get('niffty_options')%>" data-bproduct="<%=matchup.get('is_base')%>"  href='#'><%-matchup.get('name')%></a>
-    <%end%>
-  </div>
-<%end%>
+<div class='row'>
+  <div class= 'span4'>
+    <h3>Prodiedades de la categoria</h3>
 
+    <ul>
+      <li>Oculta ? <%=@model.isHidden()%></li>
+      <li>Tiene opciones ? <%=@model.hasOptions()%></li>
+      <li>Tipo unidad ? <%=@model.typeUnit()%></li>
+      <li>Seleccion Multiple ? <%=@model.isMulti()%></li>
+      <li>Tiene lados ? <%=@model.hasSides()%></li>
+    </ul>
 
-<%if _.any(@options.flavors):%>
-  <div class='flavors_container'>
+    <h3>Productos principales</h3>
 
-    <%if @options.flavors.length > 1:%>
-      <h3>Sabores</h3>
-      <%for flavor in @options.flavors:%>
-        <a class ='btn bottom-margin-1 flavors <%=flavor%>' data-flavorcode='<%=flavor%>' href='#'><%=flavor%></a>
+    <ul>
+      <% for product in @model.mainProducts().models:%>
+        <li>Producto <%=product.get('productname')%></li>
       <%end%>
-    <%else:%>
-        <a class ='btn bottom-margin-1 flavors <%=_.first(@options.flavors)%> btn-primary hidden' data-flavorcode='<%=_.first(@options.flavors)%>' href='#'><%=_.first(@options.flavors)%></a>
-    <%end%>
-  </div>
-<%end%>
+    </ul>
 
-
-<%if _.any(@options.sizes):%>
-  <div class='sizes_container'>
-    <%if @options.sizes.length > 1:%>
-        <h3>Tamaños</h3>
-        <%for size in @options.sizes:%>
-          <a class ='btn bottom-margin-1 sizes <%=size%>' data-sizecode='<%=size%>' href='#'><%=size%></a>
+    <h3>Opciones del Producto</h3>
+    <%if @model.hasOptions():%>
+      <ul>
+        <% for option_product in @model.optionProducts():%>
+          <li>Producto opcion <%=option_product.get('productname')%></li>
         <%end%>
-    <%else:%>
-      <a class ='btn bottom-margin-1 sizes <%=_.first(@options.sizes)%> btn-primary hidden' data-sizecode='<%=_.first(@options.sizes)%>' href='#'><%=_.first(@options.sizes)%></a>
+      </ul>
     <%end%>
   </div>
-<%end%>
+  <div class= 'span4'>
 
-
-<%if _.any(@options.sides):%>
-  <h3>Opciones</h3>
-  <div class='options_container left-margin-1'>
-    <%for side in @options.sides:%>
-      <div class='outbox'>
-         <div class ='option_box bottom-margin-1 options' id="<%=side.get('category').get('name')%>_<%=side.get('productcode')%>" data-productcode="<%=side.get('productcode')%>">
-           <div class='option_name'><%=side.get('productname')%></div>
-             <%unless @options.category.get('type_unit') == true:%>
-               <table class='option_table'>
-                 <tbody>
-                  <% for i in [0..4]:%>
-                    <tr>
-                       <% if @options.category.get('has_sides') == true :%>
-                         <td class='options_left'></td>
-                         <td class='options_rigth'></td>
-                      <%else:%>
-                         <td class='options_whole'></td>
-                      <%end%>
-                    </tr>
-                  <%end%>
-                 </tbody>
-               </table>
-             <%else:%>
-                <input type='text' class='unit_option_setter' value='0'></input>
-             <%end%>
-         </div>
-      </div>
+    <h4>Productos por options</h4>
+    <%if @model.hasOptions():%>
+      <%console.log _.keys(@model.productsByOptions())%>
+      <%for recipe in _.keys(@model.productsByOptions()):%>
+        <strong>Receta <%=recipe%></strong>
+        <ul>
+          <% for product in @model.productsByOptions()[recipe]:%>
+            <li>Producto <%=product.get('productname')%></li>
+          <%end%>
+        </ul>
+      <%end%>
     <%end%>
+
   </div>
-<%end%>
+</div>
