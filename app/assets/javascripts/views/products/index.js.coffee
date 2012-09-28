@@ -16,6 +16,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
   #   'mouseleave .option_box': 'option_scale_down'
     
   render: ->
+    # model = current category
     $(@el).html(@template(model: @model))
     $(@el).find('input').restric('alpha').restric('spaces')
     this

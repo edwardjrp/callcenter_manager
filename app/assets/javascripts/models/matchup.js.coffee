@@ -5,8 +5,8 @@ class Kapiqua25.Models.Matchup extends Backbone.Model
       _.map @get('recipe').split(','), (option) =>
         new Option(option, @get('avalable_options'))
 
-  # name: ()->
-  #   (_.intersection.apply(_, _.map(@option_groups, (product)-> product.get('productname').split(' ') ))).join(' ') 
+  name: ()->
+    (_.intersection.apply(_, _.map(@get('products'), (product)-> product.get('productname').split(' ') ))).join(' ') 
 
   parsedOptions: ()->
     _.map @defaultOptions(), (option)-> option.toJSON()
