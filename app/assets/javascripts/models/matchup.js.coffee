@@ -16,3 +16,9 @@ class Kapiqua25.Models.Matchup extends Backbone.Model
 
   hasProduct: (product)->
     _.include(@get('products'), product[0])
+
+  acceptedFlavors: ()->
+    _.uniq(_.map(@get('products'), (product)-> product.get('flavorcode')))
+
+  acceptedSizes: ()->
+    _.uniq(_.map(@get('products'), (product)-> product.get('sizecode')))

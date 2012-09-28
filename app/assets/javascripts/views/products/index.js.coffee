@@ -3,10 +3,21 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
   template: JST['products/index']
   
   initialize: ->
-    _.bindAll(this, 'render', 'show_popover', 'select_specialty', 'colorize_button', 'decolorize_button', 'select_flavor', 'select_size')
+    _.bindAll(this,
+      'render',
+      'show_popover',
+      'select_specialty',
+      'colorize_button',
+      'decolorize_button',
+      'select_flavor',
+      'select_size',
+      'gray_out_flavors',
+      'gray_out_sizes')
     @selected_matchups = []
     @selected_flavor = null
+    @selected_flavor = @model.availableFlavors()[0] if @model.availableFlavors().length == 1
     @selected_size = null
+    @selected_size = @model.availableSizes()[0] if @model.availableSizes().length == 1
     @max_selectable_matchups = 1
     if @model.isMulti() then @max_selectable_matchups = 2 else @max_selectable_matchups = 1
   
@@ -30,14 +41,45 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     event.preventDefault()
     target = $(event.currentTarget)
     matchup = @model.matchups().getByCid(target.attr('id'))
-    if _.include(@selected_matchups, matchup)
-      if @selected_matchups.length > 0
-        @selected_matchups = _.without(@selected_matchups, matchup)
-        @decolorize_button(matchup.cid)
+    unless @selected_flavor? and not _.include(matchup.acceptedFlavors(), @selected_flavor)
+      unless @selected_size? and not _.include(matchup.acceptedSizes(), @selected_size)
+        if _.include(@selected_matchups, matchup)
+          if @selected_matchups.length > 0
+            @selected_matchups = _.without(@selected_matchups, matchup)
+            @decolorize_button(matchup.cid)
+        else
+          if @selected_matchups.length < @max_selectable_matchups
+            @selected_matchups.push matchup
+            @colorize_button(matchup.cid, 'specialties_container')
+      else
+        $("<div class='purr'>El producto no esta disponible en el tamaño seleccionado<div>").purr()  
     else
-      if @selected_matchups.length < @max_selectable_matchups
-        @selected_matchups.push matchup
-        @colorize_button(matchup.cid, 'specialties_container')
+      $("<div class='purr'>El producto no esta disponible en el sabor seleccionado<div>").purr()
+    @gray_out_flavors()
+    @gray_out_sizes()
+
+  gray_out_flavors: () ->
+    if _.isEmpty(@selected_matchups)
+      $(@el).find(".flavors_container").find('.flavors').removeClass('disabled') 
+    else
+      allowed_flavors =  _.intersection.apply(_, _.map(@selected_matchups, (matchup)-> matchup.acceptedFlavors()))
+      for button in $(@el).find(".flavors_container").find('.flavors')
+        if _.isEmpty(allowed_flavors) or _.include(allowed_flavors,  $(button).data('flavorcode'))
+          $(button).removeClass('disabled')
+        else
+          $(button).addClass('disabled')
+
+  gray_out_sizes: () ->
+    if _.isEmpty(@selected_matchups)
+      $(@el).find(".sizes_container").find('.sizes').removeClass('disabled') 
+    else
+      allowed_sizes =  _.intersection.apply(_, _.map(@selected_matchups, (matchup)-> matchup.acceptedSizes()))
+      for button in $(@el).find(".sizes_container").find('.sizes')
+        if _.isEmpty(allowed_sizes) or _.include(allowed_sizes,  $(button).data('sizecode').toString())
+          $(button).removeClass('disabled')
+        else
+          $(button).addClass('disabled')
+
 
   select_flavor: (event)->
     event.preventDefault()
@@ -67,7 +109,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
 
   colorize_button: (id, scope_class)->    
     if $(@el).find(".#{scope_class}").find('.btn-primary').size() == 0
-      $("##{id}").addClass('btn-primary')
+      $("##{id}").addClass('btn-primary') unless $("##{id}").hasClass('disabled')
     else if $(@el).find(".#{scope_class}").find('.btn-primary').size() == 1
       $("##{id}").addClass('btn-danger')
 
