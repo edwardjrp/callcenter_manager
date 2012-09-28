@@ -1,5 +1,7 @@
 class Option
+
   attr_reader :part, :code, :quantity, :category, :recipe
+
   def initialize(category, recipe)
     @category = category
     @recipe = recipe
@@ -44,6 +46,7 @@ class Option
         'Derecha'
       else
         'Completa'
+    end
   end
 
 
