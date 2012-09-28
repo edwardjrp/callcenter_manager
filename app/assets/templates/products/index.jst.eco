@@ -31,7 +31,12 @@
 
     <h4>Matchups</h4>
     <%if @model.matchups():%>
-      <%console.log @model.matchups()%>
+      <ul>
+        <%for matchup in @model.matchups().models:%>
+            <li><%= matchup%></li>
+            <% console.log matchup.nifftyOptions()%>
+        <%end%>
+      </ul>
     <%end%>
 
   </div>
