@@ -3,16 +3,18 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
   template: JST['products/index']
   
   initialize: ->
-    _.bindAll(this, 'render', 'show_popover', 'select_specialty', 'colorize_button', 'decolorize_button')
+    _.bindAll(this, 'render', 'show_popover', 'select_specialty', 'colorize_button', 'decolorize_button', 'select_flavor', 'select_size')
     @selected_matchups = []
+    @selected_flavor = null
+    @selected_size = null
     @max_selectable_matchups = 1
     if @model.isMulti() then @max_selectable_matchups = 2 else @max_selectable_matchups = 1
   
   events: ->
     'mouseenter .specialties': 'show_popover'
     'click .specialties':'select_specialty'
-  #   'click .flavors':'select_flavor'
-  #   'click .sizes':'select_size'
+    'click .flavors':'select_flavor'
+    'click .sizes':'select_size'
   #   'click .btn-success':'add_to_cart'
   #   "click table.option_table td":'modify_option'
   #   'mouseenter .option_box': 'option_scale_up'
@@ -27,7 +29,6 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
   select_specialty: (event)->
     event.preventDefault()
     target = $(event.currentTarget)
-    console.log @max_selectable_matchups
     matchup = @model.matchups().getByCid(target.attr('id'))
     if _.include(@selected_matchups, matchup)
       if @selected_matchups.length > 0
@@ -37,6 +38,27 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
       if @selected_matchups.length < @max_selectable_matchups
         @selected_matchups.push matchup
         @colorize_button(matchup.cid, 'specialties_container')
+
+  select_flavor: (event)->
+    event.preventDefault()
+    target = $(event.currentTarget)
+    if @selected_flavor?
+      @selected_flavor = null
+      @decolorize_button(target.attr('id'))
+    else
+      @selected_flavor = target.data('flavorcode')
+      @colorize_button(target.attr('id'), 'flavors_container')
+
+  select_size: (event)->
+    event.preventDefault()
+    target = $(event.currentTarget)
+    if @selected_size?
+      @selected_size = null
+      @decolorize_button(target.attr('id'))
+    else
+      @selected_size = target.data('sizecode')
+      @colorize_button(target.attr('id'), 'sizes_container')
+
 
 
   decolorize_button: (id)->    
