@@ -29,17 +29,9 @@
   </div>
   <div class= 'span4'>
 
-    <h4>Productos por options</h4>
-    <%if @model.hasOptions():%>
-      <%console.log _.keys(@model.productsByOptions())%>
-      <%for recipe in _.keys(@model.productsByOptions()):%>
-        <strong>Receta <%=recipe%></strong>
-        <ul>
-          <% for product in @model.productsByOptions()[recipe]:%>
-            <li>Producto <%=product.get('productname')%></li>
-          <%end%>
-        </ul>
-      <%end%>
+    <h4>Matchups</h4>
+    <%if @model.matchups():%>
+      <%console.log @model.matchups()%>
     <%end%>
 
   </div>

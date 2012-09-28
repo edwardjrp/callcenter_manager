@@ -49,9 +49,11 @@ class Kapiqua25.Models.Category extends Backbone.RelationalModel
     _.groupBy( @mainProducts().models, (product)-> product.get('sizecode') )
 
   matchups: ()->
+    category_matchups = new Kapiqua25.Collections.Matchups()
     if @hasOptions()
-      for recipe in @productsByOptions()
-        conosle.log recipe
+      for recipe in _.keys(@productsByOptions())
+        category_matchups.add new Kapiqua25.Models.Matchup().set(recipe: recipe, products: @productsByOptions()[recipe], avalable_options: @optionProducts() )
+    category_matchups
 
 
 Kapiqua25.Models.Category.setup()
