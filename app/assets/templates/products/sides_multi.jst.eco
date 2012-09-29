@@ -1,0 +1,23 @@
+<li class="span2 option_box_sides ">
+  <span class="label label-info "><%=@side.get('productname')%></span>
+  <div class="btn-group btn-group-vertical options_list options_list_first">
+    <button class="btn span1"></button>
+    <button class="btn span1"></button> 
+  </div>
+  <div class="btn-group btn-group-vertical options_list ">
+    <button class="btn span1"></button>
+    <button class="btn span1"></button> 
+  </div>
+  <div class="btn-group btn-group-vertical options_list ">
+    <button class="btn span1"></button>
+    <button class="btn span1"></button> 
+  </div>
+  <div class="btn-group btn-group-vertical options_list ">
+    <button class="btn span1"></button>
+    <button class="btn span1"></button> 
+  </div>
+  <div class="btn-group btn-group-vertical options_list ">
+    <button class="btn span1"></button>
+    <button class="btn span1"></button> 
+  </div>
+</li>

@@ -34,3 +34,22 @@
     <%end%>
   </div>
 <%end%>
+
+
+<%if @model.hasOptions():%>
+  <h3>Opciones</h3>
+  <div class='options_container left-margin-1'>
+    <ul class="thumbnails">
+      <%for side in @model.optionProducts():%>
+        <% if not @model.typeUnit():%>
+          <% if @model.isMulti():%>
+            <%-JST['products/sides_multi'](side: side)%>
+          <%else:%>
+            <%-JST['products/opt_no_unit'](side: side)%>
+          <%end%>
+        <%else:%>
+        <%end%>
+      <%end%>
+    </ul>
+  </div>
+<%end%>

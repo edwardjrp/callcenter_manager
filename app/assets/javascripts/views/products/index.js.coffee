@@ -26,6 +26,8 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     'click .specialties':'select_specialty'
     'click .flavors':'select_flavor'
     'click .sizes':'select_size'
+    'mouseenter .option_box_sides':'show_options'
+    'mouseleave .option_box_sides':'hide_options'
   #   'click .btn-success':'add_to_cart'
   #   "click table.option_table td":'modify_option'
   #   'mouseenter .option_box': 'option_scale_up'
@@ -37,6 +39,14 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     $(@el).find('input').restric('alpha').restric('spaces')
     this
   
+  show_options: (event)->
+    target = $(event.currentTarget)
+    target.find('.options_list').show()
+
+  hide_options: (event)->
+    target = $(event.currentTarget)
+    target.find('.options_list').hide()
+
   select_specialty: (event)->
     event.preventDefault()
     target = $(event.currentTarget)
@@ -44,9 +54,6 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
 
     $("<div class='purr'>El producto no esta disponible en el sabor seleccionado<div>").purr() unless @current_flavor_compatible(matchup)
     $("<div class='purr'>El producto no esta disponible en el tamaño seleccionado<div>").purr()   unless @current_size_compatible(matchup)
-
-    console.log @current_flavor_compatible(matchup)
-    console.log _.include(matchup.acceptedFlavors(), @selected_flavor)
 
     unless not @current_flavor_compatible(matchup) or not @current_size_compatible(matchup)
       @apply_selection(matchup)

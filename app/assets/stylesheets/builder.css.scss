@@ -12,68 +12,117 @@
     text-align:center;
   }
 }
-.tab-content .option_box {
-    display: block;
-    position:absolute;
-    top:0;
-    left:0;
-    width: 80px;
-    height: 50px;
-//    line-height: 50px;
-    text-align: center;
-    background-color: #f4faff;
-    border: 1px solid #e0eeff;
-    overflow:hidden;
-    &:hover {
-    background-color: white;
-    border: 1px solid black;
+.option_box{
+  text-align: center;
+  border: 1px solid #DDD;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  // height: 85px;
+  .btn-group + .btn-group {
+    margin-left: 47px;
+  }
+
+  .options_list{
+    display: none;
+    margin-left: 15px; 
+    .btn{
+      height:10px;
     }
-    
-    .option_name{
-      margin:0 auto;
-      line-height: 20px;
-      text-align: center;
-      max-width: 110px;
-      height: 20px;
-      overflow:hidden;
-      background-color: #f4faff;
-    }
-    input.unit_option_setter{
-      width:30px;
-      margin:0px;
-       text-align:center;
-    }
-    table.option_table{
-      border-collapse:separate;
-      border-spacing: 1px;
-      border-style:none;
-      border-color:black;
-      margin:0 auto;
-      tr{
-        height: 5px;
-        td.options_left, td.options_rigth{
-          border-style:solid;
-          width: 35px;
-        }
-        td.options_whole{
-          border-style:solid;
-          width: 70px;
-        }
-      }
-    }
+  }
+  .options_list_first{
+      display: none;
+      margin-top: 5px;
+      margin-left: 47px;
+  }
 }
 
-.tab-content .outbox{
-  display:block;
-  position:relative;
-  width: 85px;
-  height: 55px;
-  float:left;
-  z-index:1;
+.option_box_sides{
+  text-align: center;
+  border: 1px solid #DDD;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  // height: 85px;
+  .btn-group + .btn-group {
+    margin-left: 15px;
+  }
+
+  .options_list{
+    display: none;
+    margin-left: 15px; 
+    .btn{
+      height:10px;
+    }
+  }
+  .options_list_first{
+    display: none;
+    margin-top: 5px;
+  }
 }
+
+
+// .tab-content .option_box {
+//     display: block;
+//     position:absolute;
+//     top:0;
+//     left:0;
+//     // width: 80px;
+//     height: 50px;
+// //    line-height: 50px;
+//     text-align: center;
+//     background-color: #f4faff;
+//     border: 1px solid #DDD;
+//     overflow:hidden;
+//     &:hover {
+//     background-color: white;
+//     }
     
-.tab-content .options_container{
-  padding:30px;
-  height: 300px;
-  position:relative;
-}
+//     // .option_name{
+//     //   margin:0 auto;
+//     //   line-height: 20px;
+//     //   text-align: center;
+//     //   max-width: 110px;
+//     //   height: 20px;
+//     //   overflow:hidden;
+//     //   background-color: #f4faff;
+//     // }
+//     input.unit_option_setter{
+//       width:30px;
+//       margin:0px;
+//        text-align:center;
+//     }
+//     table.option_table{
+//       border-collapse:separate;
+//       border-spacing: 1px;
+//       border-style:none;
+//       border-color:black;
+//       margin:0 auto;
+//       tr{
+//         height: 5px;
+//         td.options_left, td.options_rigth{
+//           border-style:solid;
+//           width: 35px;
+//         }
+//         td.options_whole{
+//           border-style:solid;
+//           width: 70px;
+//         }
+//       }
+//     }
+// }
+
+// .tab-content .outbox{
+//   display:block;
+//   position:relative;
+//   // width: 85px;
+//   // height: 55px;
+//   float:left;
+//   z-index:1;
+// }
+    
+// .tab-content .options_container{
+//   // padding:30px;
+//   height: 300px;
+//   position:relative;
+// }
