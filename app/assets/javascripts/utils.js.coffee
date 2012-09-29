@@ -24,7 +24,12 @@
 # del 
 @del = (el)->
   throw "Missing arguments" if !el?
-  el.remove() if el.length > 0
+  el.remove() if el.length > 0  
+
+@objectWithoutVal = (obj, val) ->
+  for key in _.keys(obj)
+    delete obj[key] if obj[key] == val
+  return obj
   
 
 @getParameterByName = (name)->

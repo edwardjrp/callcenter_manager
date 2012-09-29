@@ -13,7 +13,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
       'select_size',
       'gray_out_flavors',
       'gray_out_sizes')
-    @selected_matchups = []
+    @selected_matchups = {}
     @selected_flavor = null
     @selected_flavor = @model.availableFlavors()[0] if @model.availableFlavors().length == 1
     @selected_size = null
@@ -52,7 +52,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     target = $(event.currentTarget)
     matchup = @model.matchups().getByCid(target.attr('id'))
     $("<div class='purr'>El producto no esta disponible en el sabor seleccionado<div>").purr() unless @current_flavor_compatible(matchup)
-    $("<div class='purr'>El producto no esta disponible en el tamaño seleccionado<div>").purr()   unless @current_size_compatible(matchup)
+    $("<div class='purr'>El producto no esta disponible en el tamaño seleccionado<div>").purr() unless @current_size_compatible(matchup)
 
     unless not @current_flavor_compatible(matchup) or not @current_size_compatible(matchup)
       @apply_selection(matchup)
@@ -61,33 +61,41 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
 
 
   apply_selection: (matchup)->
-    if _.include(@selected_matchups, matchup)
-      if @selected_matchups.length > 0
-        @selected_matchups = _.without(@selected_matchups, matchup)
+    if _.include(_.values(@selected_matchups), matchup)
+      if _.values(@selected_matchups).length > 0
+        @selected_matchups = window.objectWithoutVal(@selected_matchups, matchup)
         @deassign_options(matchup)
-        @decolorize_button(matchup.cid) 
+        @decolorize_button(matchup.cid)
     else
-      if @selected_matchups.length < @max_selectable_matchups
-        @selected_matchups.push matchup
+      if _.values(@selected_matchups).length < @max_selectable_matchups
+        if @selected_matchups['first']? then  @selected_matchups['second'] = matchup else @selected_matchups['first'] = matchup
         @colorize_button(matchup.cid, 'specialties_container')
         @assign_options(matchup)
         
 
   assign_options: (matchup) ->
-    if @selected_matchups.length < 2
+    if _.values(@selected_matchups).length < 2 and _.any(matchup.defaultOptions())
       for opt in matchup.defaultOptions()
-        target = $(@el).find('.options_container').find("#product_#{opt.product().get('id')}")
-        opt.configure(target, @model.configurableType())
-    else
+        if opt.product()?
+          target = $(@el).find('.options_container').find("#product_#{opt.product().get('id')}")
+          opt.configure(target, @model.configurableType())
+    else if _.values(@selected_matchups).length == 2 and _.any(matchup.defaultOptions())
       @prepare_multi()
+    #   for matchup in @selected_matchups
+    #     for opt in matchup.defaultOptions()
+    #       target = $(@el).find('.options_container').find("#product_#{opt.product().get('id')}")
+    #       opt.configureHalf(target)
 
   deassign_options: (matchup) ->
-    if @selected_matchups.length == 0
+    console.log _.values(@selected_matchups).length
+    if _.values(@selected_matchups).length == 0 and _.any(matchup.defaultOptions())
+      $(@el).find('.dropdown').css('background-color', 'white')
       for opt in matchup.defaultOptions()
-        target = $(@el).find('.options_container').find("#product_#{opt.product().get('id')}")
-        opt.teardown(target, @model.configurableType())
-    else if @selected_matchups.length == 1
-      @rollback_multi(@selected_matchups[0])
+        if opt.product()?
+          target = $(@el).find('.options_container').find("#product_#{opt.product().get('id')}")
+          opt.teardown(target, @model.configurableType())
+    else if _.values(@selected_matchups).length == 1 and _.any(matchup.defaultOptions())
+      @rollback_multi()
 
 
   prepare_multi: () ->
@@ -117,10 +125,10 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
 
 
   gray_out_flavors: () ->
-    if _.isEmpty(@selected_matchups)
+    if _.isEmpty(_.values(@selected_matchups))
       $(@el).find(".flavors_container").find('.flavors').removeClass('disabled') 
     else
-      allowed_flavors =  _.intersection.apply(_, _.map(@selected_matchups, (matchup)-> matchup.acceptedFlavors()))
+      allowed_flavors =  _.intersection.apply(_, _.map(_.values(@selected_matchups), (matchup)-> matchup.acceptedFlavors()))
       for button in $(@el).find(".flavors_container").find('.flavors')
         if _.isEmpty(allowed_flavors) or _.include(allowed_flavors,  $(button).data('flavorcode'))
           $(button).removeClass('disabled')
@@ -128,10 +136,10 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
           $(button).addClass('disabled')
 
   gray_out_sizes: () ->
-    if _.isEmpty(@selected_matchups)
+    if _.isEmpty(_.values(@selected_matchups))
       $(@el).find(".sizes_container").find('.sizes').removeClass('disabled') 
     else
-      allowed_sizes =  _.intersection.apply(_, _.map(@selected_matchups, (matchup)-> matchup.acceptedSizes()))
+      allowed_sizes =  _.intersection.apply(_, _.map(_.values(@selected_matchups), (matchup)-> matchup.acceptedSizes()))
       for button in $(@el).find(".sizes_container").find('.sizes')
         if _.isEmpty(allowed_sizes) or _.include(allowed_sizes,  $(button).data('sizecode').toString())
           $(button).removeClass('disabled')

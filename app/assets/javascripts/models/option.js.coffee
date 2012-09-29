@@ -27,6 +27,11 @@ class Kapiqua25.Models.Option extends Backbone.RelationalModel
     if @get('recipe').match(Option.regexp)[1] == '' then  1 else @get('recipe').match(Option.regexp)[1]
 
 
+
+
+  configureHalf: (el)->
+    console.log 'revert'
+
   configure: (el, configurable_type) ->
     switch configurable_type
       when 'with_units'
