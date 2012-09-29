@@ -73,6 +73,17 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
         @assign_options(matchup)
         
 
+  reset: ()->
+    scope = $(@el).find('.option_box_sides')
+    scope.css('background-color', 'white')
+    scope.find('a.left_selection').html("Nada<b class='caret'></b>").css('background-color', 'transparent')
+    scope.find('a.right_selection').hide()
+    scope.find('a.right_selection').hide()
+    scope.find('.btn-group').find('button').removeClass('active')
+    scope.find('.dropdown').css('background-color', 'white')
+
+
+
   assign_options: (matchup) ->
     if _.values(@selected_matchups).length < 2 and _.any(matchup.defaultOptions())
       for opt in matchup.defaultOptions()
@@ -81,13 +92,13 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
           opt.configure(target, @model.configurableType())
     else if _.values(@selected_matchups).length == 2 and _.any(matchup.defaultOptions())
       @prepare_multi()
-    #   for matchup in @selected_matchups
-    #     for opt in matchup.defaultOptions()
-    #       target = $(@el).find('.options_container').find("#product_#{opt.product().get('id')}")
-    #       opt.configureHalf(target)
+      for position in _.keys(@selected_matchups)
+        for opt in @selected_matchups[position].defaultOptions()
+          if opt.product()?
+            target = $(@el).find('.options_container').find("#product_#{opt.product().get('id')}")
+            opt.configureHalf(target, position)
 
   deassign_options: (matchup) ->
-    console.log _.values(@selected_matchups).length
     if _.values(@selected_matchups).length == 0 and _.any(matchup.defaultOptions())
       $(@el).find('.dropdown').css('background-color', 'white')
       for opt in matchup.defaultOptions()
@@ -96,21 +107,26 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
           opt.teardown(target, @model.configurableType())
     else if _.values(@selected_matchups).length == 1 and _.any(matchup.defaultOptions())
       @rollback_multi()
+      @reset()
+      @shift() if @selected_matchups['second']?
+      @colorize_button(@selected_matchups['first'].cid, 'specialties_container')
+      @assign_options(@selected_matchups['first'])
 
+  shift: ()->
+    console.log @selected_matchups
+    @selected_matchups['first'] = @selected_matchups['second']
+    console.log @selected_matchups
+    delete @selected_matchups['second']
 
   prepare_multi: () ->
-    $(@el).find('.btn-group').find("button.Completa").addClass('disabled')
-    $(@el).find('.btn-group').find("button.Izquierda").css('background-color', '#A9C4F5')
-    $(@el).find('.btn-group').find("button.Derecha").css('background-color', '#F2DEDE')
+    $(@el).find('.btn-group').hide()
     $(@el).find('.dropdown').css('background-color', 'white')
     $(@el).find('a.right_selection').removeClass('hidden')
     $(@el).find('ul.right_selection').removeClass('hidden')
 
 
   rollback_multi: ()->
-    $(@el).find('.btn-group').find("button.Completa").removeClass('disabled')
-    $(@el).find('.btn-group').find("button.Izquierda").css('background-color', 'whiteSmoke')
-    $(@el).find('.btn-group').find("button.Derecha").css('background-color', 'whiteSmoke')
+    $(@el).find('.btn-group').show()
     $(@el).find('.dropdown').css('background-color', '#A9C4F5')
     $(@el).find('a.right_selection').addClass('hidden')
     $(@el).find('ul.right_selection').addClass('hidden')
@@ -173,11 +189,15 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     $("##{id}").removeClass('btn-primary') if $("##{id}").hasClass('btn-primary')
     $("##{id}").removeClass('btn-danger')if $("##{id}").hasClass('btn-danger')
 
-  colorize_button: (id, scope_class)->    
-    if $(@el).find(".#{scope_class}").find('.btn-primary').size() == 0
-      $("##{id}").addClass('btn-primary') unless $("##{id}").hasClass('disabled')
-    else if $(@el).find(".#{scope_class}").find('.btn-primary').size() == 1 and scope_class == 'specialties_container'
-      $("##{id}").addClass('btn-danger')
+  colorize_button: (id, scope_class)-> 
+    if scope_class == 'specialties_container'
+      if @selected_matchups['first']?
+        $("##{@selected_matchups['first'].cid}").addClass('btn-primary') unless $("##{@selected_matchups['first'].cid}").hasClass('disabled')
+      if @selected_matchups['second']?
+        $("##{@selected_matchups['second'].cid}").addClass('btn-danger')
+    else
+      if $(@el).find(".#{scope_class}").find('.btn-primary').size() == 0
+        $("##{id}").addClass('btn-primary') unless $("##{id}").hasClass('disabled')
 
 
   resetCartProduct: ()->
