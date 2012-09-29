@@ -31,14 +31,18 @@ class Kapiqua25.Models.Option extends Backbone.RelationalModel
     switch configurable_type
       when 'with_units'
         el.find('input').val(@quantity())
-        console.log el.find('input')
         el.data('quantity',@quantity() )
       when 'amount'
         el.find('a.amount_selection').html("#{@amountMap()}<b class='caret'></b>")
         el.find('.dropdown').css('background-color', '#A9C4F5')
         el.data('quantity',@quantity() )
       when 'multi_and_sides'
-        console.log 'pending'
+        el.find('.btn-group').find("button.#{@partMap()}").trigger('click')
+        el.find('a.left_selection').html("#{@amountMap()}<b class='caret'></b>")
+        el.find('.dropdown').css('background-color', '#A9C4F5')
+        el.data('part',@part() )
+        el.data('quantity',@quantity() )
+        
 
   teardown: (el, configurable_type) ->
     switch configurable_type
@@ -48,9 +52,13 @@ class Kapiqua25.Models.Option extends Backbone.RelationalModel
       when 'amount'
         el.find('a.amount_selection').html("Nada<b class='caret'></b>")
         el.find('.dropdown').css('background-color', 'white')
-        el.data('quantity','' )
+        el.data('quantity',0 )
       when 'multi_and_sides'
-        console.log 'pending'
+        el.find('.btn-group').find("button.#{@partMap()}").trigger('click').removeClass('active')
+        el.find('a.left_selection').html("Nada<b class='caret'></b>")
+        el.find('.dropdown').css('background-color', 'white')
+        el.data('part','' )
+        el.data('quantity', 0 )
 
 
   amountMap: ()->

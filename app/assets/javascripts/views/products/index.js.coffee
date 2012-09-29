@@ -64,8 +64,8 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     if _.include(@selected_matchups, matchup)
       if @selected_matchups.length > 0
         @selected_matchups = _.without(@selected_matchups, matchup)
+        @deassign_options(matchup)
         @decolorize_button(matchup.cid) 
-        @deassign_options(matchup) # deassign options
     else
       if @selected_matchups.length < @max_selectable_matchups
         @selected_matchups.push matchup
@@ -74,14 +74,39 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
         
 
   assign_options: (matchup) ->
-    for opt in matchup.defaultOptions()
-      target = $(@el).find('.options_container').find("#product_#{opt.product().get('id')}")
-      opt.configure(target, @model.configurableType())
+    if @selected_matchups.length < 2
+      for opt in matchup.defaultOptions()
+        target = $(@el).find('.options_container').find("#product_#{opt.product().get('id')}")
+        opt.configure(target, @model.configurableType())
+    else
+      @prepare_multi()
 
   deassign_options: (matchup) ->
-    for opt in matchup.defaultOptions()
-      target = $(@el).find('.options_container').find("#product_#{opt.product().get('id')}")
-      opt.teardown(target, @model.configurableType())
+    if @selected_matchups.length == 0
+      for opt in matchup.defaultOptions()
+        target = $(@el).find('.options_container').find("#product_#{opt.product().get('id')}")
+        opt.teardown(target, @model.configurableType())
+    else if @selected_matchups.length == 1
+      @rollback_multi(@selected_matchups[0])
+
+
+  prepare_multi: () ->
+    $(@el).find('.btn-group').find("button.Completa").addClass('disabled')
+    $(@el).find('.btn-group').find("button.Izquierda").css('background-color', '#A9C4F5')
+    $(@el).find('.btn-group').find("button.Derecha").css('background-color', '#F2DEDE')
+    $(@el).find('.dropdown').css('background-color', 'white')
+    $(@el).find('a.right_selection').removeClass('hidden')
+    $(@el).find('ul.right_selection').removeClass('hidden')
+
+
+  rollback_multi: ()->
+    $(@el).find('.btn-group').find("button.Completa").removeClass('disabled')
+    $(@el).find('.btn-group').find("button.Izquierda").css('background-color', 'whiteSmoke')
+    $(@el).find('.btn-group').find("button.Derecha").css('background-color', 'whiteSmoke')
+    $(@el).find('.dropdown').css('background-color', '#A9C4F5')
+    $(@el).find('a.right_selection').addClass('hidden')
+    $(@el).find('ul.right_selection').addClass('hidden')
+
 
   current_flavor_compatible: (matchup)->
     not @selected_flavor?  or (@selected_flavor? and _.include(matchup.acceptedFlavors(), @selected_flavor))
