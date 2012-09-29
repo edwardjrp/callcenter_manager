@@ -26,8 +26,8 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     'click .specialties':'select_specialty'
     'click .flavors':'select_flavor'
     'click .sizes':'select_size'
-    'mouseenter .option_box_sides':'show_options'
-    'mouseleave .option_box_sides':'hide_options'
+    # 'mouseenter .option_box_sides':'show_options'
+    # 'mouseleave .option_box_sides':'hide_options'
   #   'click .btn-success':'add_to_cart'
   #   "click table.option_table td":'modify_option'
   #   'mouseenter .option_box': 'option_scale_up'
@@ -51,7 +51,6 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     event.preventDefault()
     target = $(event.currentTarget)
     matchup = @model.matchups().getByCid(target.attr('id'))
-
     $("<div class='purr'>El producto no esta disponible en el sabor seleccionado<div>").purr() unless @current_flavor_compatible(matchup)
     $("<div class='purr'>El producto no esta disponible en el tamaño seleccionado<div>").purr()   unless @current_size_compatible(matchup)
 
@@ -65,12 +64,24 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     if _.include(@selected_matchups, matchup)
       if @selected_matchups.length > 0
         @selected_matchups = _.without(@selected_matchups, matchup)
-        @decolorize_button(matchup.cid)
+        @decolorize_button(matchup.cid) 
+        @deassign_options(matchup) # deassign options
     else
       if @selected_matchups.length < @max_selectable_matchups
         @selected_matchups.push matchup
         @colorize_button(matchup.cid, 'specialties_container')
+        @assign_options(matchup)
+        
 
+  assign_options: (matchup) ->
+    for opt in matchup.defaultOptions()
+      target = $(@el).find('.options_container').find("#product_#{opt.product().get('id')}")
+      opt.configure(target, @model.configurableType())
+
+  deassign_options: (matchup) ->
+    for opt in matchup.defaultOptions()
+      target = $(@el).find('.options_container').find("#product_#{opt.product().get('id')}")
+      opt.teardown(target, @model.configurableType())
 
   current_flavor_compatible: (matchup)->
     not @selected_flavor?  or (@selected_flavor? and _.include(matchup.acceptedFlavors(), @selected_flavor))

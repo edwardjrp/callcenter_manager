@@ -48,6 +48,7 @@
             <%-JST['products/opt_no_unit'](side: side)%>
           <%end%>
         <%else:%>
+          <%-JST['products/unit'](side: side)%>
         <%end%>
       <%end%>
     </ul>

@@ -1,0 +1,5 @@
+<li class="span2 option_box "  id="product_<%= @side.get('id')%>">
+  <span class="label label-info"><%=@side.get('productname')%></span>
+  <br/>
+  <input type="number" min="0" max="99" value="0">
+</li>

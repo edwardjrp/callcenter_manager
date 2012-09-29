@@ -1,18 +1,14 @@
-<li class="span2 option_box ">
+<li class="span2 option_box " id="product_<%= @side.get('id')%>">
   <span class="label label-info "><%=@side.get('productname')%></span>
-  <div class="btn-group btn-group-vertical options_list options_list_first">
-    <button class="btn span1"></button>
-  </div>
-  <div class="btn-group btn-group-vertical options_list ">
-    <button class="btn span1"></button>
-  </div>
-  <div class="btn-group btn-group-vertical options_list ">
-    <button class="btn span1"></button>
-  </div>
-  <div class="btn-group btn-group-vertical options_list ">
-    <button class="btn span1"></button>
-  </div>
-  <div class="btn-group btn-group-vertical options_list ">
-    <button class="btn span1"></button>
+  <div class="dropdown">
+    <a class="dropdown-toggle amount_selection" data-toggle="dropdown" href="#">Nada<b class="caret"></b></a>
+    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+      <li><a href= '#'>Nada</a></li>
+      <li><a href= '#'>Poco</a></li>
+      <li><a href= '#'>Normal</a></li>
+      <li><a href= '#'>Extra</a></li>
+      <li><a href= '#'>Doble</a></li>
+      <li><a href= '#'>Tripple</a></li>
+    </ul>
   </div>
 </li>

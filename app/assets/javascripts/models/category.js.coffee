@@ -24,6 +24,18 @@ class Kapiqua25.Models.Category extends Backbone.RelationalModel
   typeUnit: ()->
     @get('type_unit')
 
+  configurableType: ()->
+    if @hasOptions()
+      if @typeUnit()
+        'with_units'
+      else
+        if @isMulti() and @hasSides()
+          'multi_and_sides'
+        else
+          'amount'
+    else
+      'No'
+
   optionProducts: ()->
     @get('products').where({options: 'OPTION'})
 
