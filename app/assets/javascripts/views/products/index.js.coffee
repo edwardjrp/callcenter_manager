@@ -26,8 +26,6 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     'click .specialties':'select_specialty'
     'click .flavors':'select_flavor'
     'click .sizes':'select_size'
-    # 'mouseenter .option_box_sides':'show_options'
-    # 'mouseleave .option_box_sides':'hide_options'
   #   'click .btn-success':'add_to_cart'
   #   "click table.option_table td":'modify_option'
   #   'mouseenter .option_box': 'option_scale_up'
@@ -39,14 +37,6 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     $(@el).find('input').restric('alpha').restric('spaces')
     this
   
-  show_options: (event)->
-    target = $(event.currentTarget)
-    target.find('.options_list').show()
-
-  hide_options: (event)->
-    target = $(event.currentTarget)
-    target.find('.options_list').hide()
-
   select_specialty: (event)->
     event.preventDefault()
     target = $(event.currentTarget)
@@ -77,10 +67,11 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     scope = $(@el).find('.option_box_sides')
     scope.css('background-color', 'white')
     scope.find('a.left_selection').html("Nada<b class='caret'></b>").css('background-color', 'transparent')
-    scope.find('a.right_selection').hide()
-    scope.find('a.right_selection').hide()
+    scope.find('a.right_selection').addClass('hidden').html("Nada<b class='caret'></b>").css('background-color', 'transparent')
+    scope.find('ul.right_selection').addClass('hidden')
     scope.find('.btn-group').find('button').removeClass('active')
     scope.find('.dropdown').css('background-color', 'white')
+    @shift() if @selected_matchups['second']?
 
 
 
@@ -108,15 +99,14 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     else if _.values(@selected_matchups).length == 1 and _.any(matchup.defaultOptions())
       @rollback_multi()
       @reset()
-      @shift() if @selected_matchups['second']?
+      console.log 'SHOULD RESET'
       @colorize_button(@selected_matchups['first'].cid, 'specialties_container')
       @assign_options(@selected_matchups['first'])
 
   shift: ()->
-    console.log @selected_matchups
     @selected_matchups['first'] = @selected_matchups['second']
-    console.log @selected_matchups
     delete @selected_matchups['second']
+    @selected_matchups['first']
 
   prepare_multi: () ->
     $(@el).find('.btn-group').hide()
@@ -192,7 +182,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
   colorize_button: (id, scope_class)-> 
     if scope_class == 'specialties_container'
       if @selected_matchups['first']?
-        $("##{@selected_matchups['first'].cid}").addClass('btn-primary') unless $("##{@selected_matchups['first'].cid}").hasClass('disabled')
+        $("##{@selected_matchups['first'].cid}").addClass('btn-primary').removeClass('btn-danger') unless $("##{@selected_matchups['first'].cid}").hasClass('disabled')
       if @selected_matchups['second']?
         $("##{@selected_matchups['second'].cid}").addClass('btn-danger')
     else
