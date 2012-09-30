@@ -24,8 +24,8 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
   events: ->
     'mouseenter .specialties': 'show_popover'
     'click .specialties':'select_specialty'
-    'click .flavors':'select_flavor'
-    'click .sizes':'select_size'
+    'click a.flavors':'select_flavor'
+    'click a.sizes':'select_size'
     'click .amount_control .dropdown-menu a' : 'set_amount'
     'click .option_box_sides button' : 'set_side'
     'click .amount_control_multi_sides_first ul.left_selection li a' : 'set_first_amount'
@@ -53,7 +53,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     target = $(event.currentTarget)
     item = new ItemFactory(@el, @model, @options.cart, {selected_matchups: @selected_matchups, selected_flavor: @selected_flavor, selected_size: @selected_size, item_quantity: $(@el).find('.cart_product_quantity').val()})
     # console.log @options.cart
-    item.build()
+    console.log item.build()
 
   set_unit_amounts: (event)->
     event.preventDefault()

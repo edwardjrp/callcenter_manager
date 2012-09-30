@@ -42,10 +42,14 @@ class @ItemFactory
       options_second= []
       options_first = _.filter($(@el).find('.option_box_sides'), (option)=> @multi_presence_first(option))
       options_second = _.filter($(@el).find('.option_box_sides'), (option)=> @multi_presence_second(option))
-      console.log options_first
-      console.log options_second
+      @merge_options(options_first, options_second)
     else
       _.map(@scan(), (opt) -> { quantity: $(opt).data('quantity'), code: $(opt).data('code'), part: $(opt).data('part')} )
+
+  merge_options: (options_first, options_second) ->
+    options_first_hash = _.map(options_first, (opt)-> { code: $(opt).data('code'), quantity: $(opt).data('quantity-first'), part: $(opt).data('part-first') })
+    options_second_hash = _.map(options_second, (opt)-> { code: $(opt).data('code'), quantity: $(opt).data('quantity-second'), part: $(opt).data('part-second') })
+    _.flatten([options_first_hash, options_second_hash])
 
   multi_presence_first: (opt) ->
     $(opt).data('quantity-first')? and  $(opt).data('part-first')?
@@ -66,12 +70,10 @@ class @ItemFactory
   build: ->
     cart_product = new Kapiqua25.Models.CartProduct()
     if @validate()
-      if @category.isMulti() and @category.hasSides()
-        @build_options()
-      else
-        product = _.values(@options['selected_matchups'])[0].get('products')[0]
-        quantity = @options['item_quantity']
-        options = @build_options()
-        cart = @cart
-        cart_product.set({product: product, quantity: quantity, options: options, cart: cart})
+      product = _.find(_.values(@options['selected_matchups'])[0].get('products'), (product)=> product.get('flavorcode') == @options['selected_flavor'] and  product.get('sizecode').toString() == @options['selected_size'].toString()) || @category.baseProduct()
+      quantity = @options['item_quantity']
+      bind_id = _.find(_.values(@options['selected_matchups'])[1].get('products'), (product)=> product.get('flavorcode') == @options['selected_flavor'] and  product.get('sizecode').toString() == @options['selected_size'].toString()).id if _.values(@options['selected_matchups'])[1]?
+      options = @build_options()
+      cart = @cart
+      cart_product.set({product: product, quantity: quantity, options: options, cart: cart})
     cart_product
