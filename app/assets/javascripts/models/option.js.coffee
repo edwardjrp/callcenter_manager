@@ -33,46 +33,46 @@ class Kapiqua25.Models.Option extends Backbone.RelationalModel
     if position == 'first'
       el.find('.dropdown').find('a.left_selection').css('background-color', '#A9C4F5')
       el.find('a.left_selection').html("#{@amountMap()}<b class='caret'></b>")
-      el.data('part-first', 1)
-      el.data('quantity-first',@quantity() )
+      el.closest('.option_box_sides').data('part-first', 1)
+      el.closest('.option_box_sides').data('quantity-first',@quantity() )
     if position == 'second'
       el.find('.dropdown').find('a.right_selection').css('background-color', '#EED3D7')
       el.find('a.right_selection').html("#{@amountMap()}<b class='caret'></b>")
-      el.data('part-second', 2)
-      el.data('quantity-second',@quantity())
+      el.closest('.option_box_sides').data('part-second', 2)
+      el.closest('.option_box_sides').data('quantity-second',@quantity())
 
   configure: (el, configurable_type) ->
     switch configurable_type
       when 'with_units'
         el.find('input').val(@quantity())
-        el.data('quantity',@quantity() )
+        el.closest('.option_box').data('quantity',@quantity() )
       when 'amount'
         el.find('a.amount_selection').html("#{@amountMap()}<b class='caret'></b>")
         el.find('.dropdown').css('background-color', '#A9C4F5')
-        el.data('quantity',@quantity() )
+        el.closest('.option_box').data('quantity',@quantity() )
       when 'multi_and_sides'
         el.find('.btn-group').find("button.#{@partMap()}").trigger('click')
         el.find('a.left_selection').html("#{@amountMap()}<b class='caret'></b>")
         el.find('.dropdown').css('background-color', '#A9C4F5')
-        el.data('part-first',@part() )
-        el.data('quantity-first',@quantity() )
+        el.closest('.option_box_sides').data('part-first',@part() )
+        el.closest('.option_box_sides').data('quantity-first',@quantity() )
         
 
   teardown: (el, configurable_type) ->
     switch configurable_type
       when 'with_units'
         el.find('input').val('0')
-        el.data('quantity', 0)
+        el.closest('.option_box').data('quantity', 0)
       when 'amount'
         el.find('a.amount_selection').html("Nada<b class='caret'></b>")
         el.find('.dropdown').css('background-color', 'white')
-        el.data('quantity',0 )
+        el.closest('.option_box').data('quantity',0 )
       when 'multi_and_sides'
         el.find('.btn-group').find("button.#{@partMap()}").trigger('click').removeClass('active')
         el.find('a.left_selection').html("Nada<b class='caret'></b>")
         el.find('.dropdown').css('background-color', 'white')
-        el.data('part-first','' )
-        el.data('quantity', 0 )
+        el.closest('.option_box_sides').data('part-first', null )
+        el.closest('.option_box_sides').data('quantity', null )
 
 
   amountMap: ()->
