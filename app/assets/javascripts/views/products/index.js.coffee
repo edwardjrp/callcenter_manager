@@ -31,6 +31,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     'click .amount_control_multi_sides_first ul.left_selection li a' : 'set_first_amount'
     'click .amount_control_multi_sides_second ul.right_selection li a' : 'set_second_amount'
     'click .adder input[type=button]' : 'add_to_cart'
+    'change .unit_amounts' : 'set_unit_amounts'
 
   #   'click .btn-success':'add_to_cart'
   #   "click table.option_table td":'modify_option'
@@ -52,6 +53,11 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     target = $(event.currentTarget)
     item = new ItemFactory(@el, @model, {selected_matchups: @selected_matchups, selected_flavor: @selected_flavor, selected_size: @selected_size})
     item.validate()
+
+  set_unit_amounts: (event)->
+    event.preventDefault()
+    target = $(event.currentTarget)
+    target.closest('.option_box').data('quantity', target.val())
 
   set_side: (event)->
     event.preventDefault()

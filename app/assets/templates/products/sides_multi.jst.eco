@@ -1,4 +1,4 @@
-<li class="span2 option_box_sides"  id="product_<%= @side.get('id')%>">
+<li class="span2 option_box_sides"  id="product_<%= @side.get('id')%>"  data-code="<%=@side.get('productcode')%>">
   <span class="label label-info "><%=@side.get('productname')%></span>
   <div class="btn-toolbar">
     <div class="btn-group" >

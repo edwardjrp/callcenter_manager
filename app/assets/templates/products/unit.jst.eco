@@ -1,5 +1,5 @@
-<li class="span2 option_box "  id="product_<%= @side.get('id')%>">
+<li class="span2 option_box "  id="product_<%= @side.get('id')%>"  data-code="<%=@side.get('productcode')%>">
   <span class="label label-info"><%=@side.get('productname')%></span>
   <br/>
-  <input type="number" min="0" max="99" value="0">
+  <input class='unit_amounts' type="number" min="0" max="99" value="0">
 </li>
