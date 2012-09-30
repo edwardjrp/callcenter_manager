@@ -76,4 +76,6 @@ class @ItemFactory
       options = @build_options()
       cart = @cart
       cart_product.set({product: product, quantity: quantity, options: options, cart: cart,bind_id: bind_id })
-    cart_product
+      cart_product
+    else
+      null

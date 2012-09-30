@@ -98,6 +98,25 @@ Cart = DB.define("Cart",
     type: Boolean
     default: false
 
+  message_mask:
+    type: Number
+
+  reason_id:
+    type: Number
+
+  complete_on:
+    type: Date
+
+  placed_at:
+    type: Date
+
+  exonerated:
+    type: Boolean
+    default: false
+
+  started_on:
+    type: Date
+
   created_at:
     type: Date
     default: Date.now

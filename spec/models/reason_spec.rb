@@ -1,3 +1,13 @@
+# == Schema Information
+#
+# Table name: reasons
+#
+#  id          :integer          not null, primary key
+#  description :text
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#
+
 require 'spec_helper'
 
 describe Reason do

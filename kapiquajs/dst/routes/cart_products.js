@@ -19,34 +19,7 @@ CartProducts = (function() {
   function CartProducts() {}
 
   CartProducts.create = function(data, respond, socket) {
-    var search_hash;
-    search_hash = {
-      cart_id: data.cart,
-      product_id: data.product.id,
-      options: data.options
-    };
-    if ((data.bind_id != null) && typeof data.bind_id !== void 0) {
-      search_hash['bind_id'] = data.bind_id;
-    }
-    return CartProduct.all({
-      where: search_hash
-    }, function(cp_err, cart_products) {
-      var cart_product;
-      if (_.isEmpty(cart_products)) {
-        cart_product = new CartProduct({
-          cart_id: data.cart,
-          product_id: data.product.id,
-          options: data.options,
-          bind_id: data.bind_id,
-          quantity: Number(data.quantity),
-          created_at: new Date()
-        });
-      } else {
-        cart_product = _.first(cart_products);
-        cart_product.quantity = cart_product.quantity + Number(data.quantity);
-      }
-      return CartProducts.save_item(cart_product, respond, socket);
-    });
+    return CartProduct.add(data, respond, socket);
   };
 
   CartProducts.update = function(data, respond, socket) {

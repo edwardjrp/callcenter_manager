@@ -10,16 +10,7 @@ class CartProducts
   
   
   @create: (data, respond, socket) =>
-    search_hash = {cart_id: data.cart, product_id: data.product.id, options: data.options }
-    search_hash['bind_id']= data.bind_id if data.bind_id? and typeof data.bind_id != undefined
-    CartProduct.all {where: search_hash}, (cp_err, cart_products) ->
-      if _.isEmpty(cart_products)
-        cart_product = new CartProduct({cart_id: data.cart, product_id: data.product.id, options: data.options, bind_id: data.bind_id, quantity: Number(data.quantity), created_at: new Date()})
-      else
-        cart_product = _.first(cart_products)
-        cart_product.quantity = cart_product.quantity + Number(data.quantity)
-      CartProducts.save_item(cart_product, respond, socket)
-
+    CartProduct.add(data, respond, socket)
 
   @update: (data, respond, socket) ->
     CartProduct.find data.id, (cp_err, cart_product) ->

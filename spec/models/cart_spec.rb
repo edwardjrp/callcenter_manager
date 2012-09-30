@@ -34,6 +34,10 @@
 #  updated_at                :datetime         not null
 #  message_mask              :integer
 #  reason_id                 :integer
+#  complete_on               :datetime
+#  placed_at                 :datetime
+#  exonerated                :boolean
+#  started_on                :datetime
 #
 
 require 'spec_helper'

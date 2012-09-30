@@ -2,12 +2,6 @@ class Kapiqua25.Models.CartProduct extends Backbone.RelationalModel
   url: ()->
     "/cart_products"
   
-  
-  # validate: (attributes)->
-  #   return 'La catidad debe ser un numero mayo a 1' unless _.isNumber(attributes.quantity)
-    
-  # secondary: ()->
-  #   _.first(this.get('product').get('category').get('products').where({id: this.get('bind_id')})) if this.get('bind_id')?
     
     
   parsed_options: ()->
@@ -49,19 +43,6 @@ class Kapiqua25.Models.CartProduct extends Backbone.RelationalModel
         presenter += option.part.replace(/1/,'Izquierda').replace(/2/, 'Derecha').replace(/W/,'Completa')
         window.strip(presenter)
     to_sentence presentation
-    
-  
-  # sync: (method, model, options)=>
-  #   namespace = _.last(model.url().split('/'))
-  #   current_cart = this.get('cart')
-  #   window.socket.emit "#{namespace}:#{method}", this.toJSON(), (response) ->
-  #     if response?
-  #       if response.type? and response.type == 'success'
-  #         current_cart.set(response.data)
-  #       else
-  #         window.show_alert(response.data, response.type)
-  #     else
-  #       window.show_alert('No hubo respuesta del servidor', 'alert')
   
   
   relations:[

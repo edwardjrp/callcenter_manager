@@ -33,12 +33,6 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     'click .adder input[type=button]' : 'add_to_cart'
     'change .unit_amounts' : 'set_unit_amounts'
 
-  #   'click .btn-success':'add_to_cart'
-  #   "click table.option_table td":'modify_option'
-  #   'mouseenter .option_box': 'option_scale_up'
-  #   'mouseleave .option_box': 'option_scale_down'
-
-
     
   render: ->
     # model = current category
@@ -53,7 +47,8 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     target = $(event.currentTarget)
     item = new ItemFactory(@el, @model, @options.cart, {selected_matchups: @selected_matchups, selected_flavor: @selected_flavor, selected_size: @selected_size, item_quantity: $(@el).find('.cart_product_quantity').val()})
     # console.log @options.cart
-    console.log item.build()
+    cart_product = item.build()
+    cart_product.save() if cart_product?
 
   set_unit_amounts: (event)->
     event.preventDefault()

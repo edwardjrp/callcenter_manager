@@ -34,6 +34,10 @@
 #  updated_at                :datetime         not null
 #  message_mask              :integer
 #  reason_id                 :integer
+#  complete_on               :datetime
+#  placed_at                 :datetime
+#  exonerated                :boolean
+#  started_on                :datetime
 #
 
 require 'csv'
@@ -64,6 +68,7 @@ class Cart < ActiveRecord::Base
   end
 
   def reset_for_new_client!
+    self.started_on = Time.now
     clear_store!
     clear_discount!
     clear_prices!

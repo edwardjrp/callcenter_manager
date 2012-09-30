@@ -1,5 +1,5 @@
 class Kapiqua25.Models.Cart extends Backbone.RelationalModel
-  url: '/to_node'
+  url: '/carts'
   relations:[
       type: Backbone.HasMany
       key: 'cart_products'
