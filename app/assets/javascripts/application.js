@@ -26,6 +26,8 @@
 //= require underscore
 //= require jquery.smartWizard-2.0
 //= require backbone
+//= backbone.iosync.min
+//= backbone.iobind.min
 //= require backbone-relational
 //= require ./kapiqua25
 //= require_tree ../templates/
