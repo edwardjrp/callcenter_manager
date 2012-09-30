@@ -7,7 +7,7 @@
       <button class="btn Derecha" data-part-first= 2 ><i class="icon-circle-arrow-right"></i></button>
     </div>
   </div>
-  <div class="dropdown amount_control_multi_sides">
+  <div class="dropdown amount_control_multi_sides_first">
     <a class="dropdown-toggle left_selection " data-toggle="dropdown" href="#">Nada<b class="caret"></b></a>
     <ul class="dropdown-menu left_selection" role="menu" aria-labelledby="dLabel">
       <li><a href= '#' data-quantity-first= 0 >Nada</a></li>
@@ -17,8 +17,10 @@
       <li><a href= '#' data-quantity-first= 2 >Doble</a></li>
       <li><a href= '#' data-quantity-first= 3 >Tripple</a></li>
     </ul>
-    <a class="dropdown-toggle hidden right_selection" data-toggle="dropdown" href="#">Nada<b class="caret"></b></a>
-    <ul class="dropdown-menu hidden right_selection" role="menu" aria-labelledby="dLabel">
+  </div>
+  <div class="dropdown amount_control_multi_sides_second hidden">
+  <a class="dropdown-toggle  right_selection" data-toggle="dropdown" href="#">Nada<b class="caret"></b></a>
+    <ul class="dropdown-menu  right_selection" role="menu" aria-labelledby="dLabel">
       <li><a href= '#' data-quantity-first= 0 >Nada</a></li>
       <li><a href= '#' data-quantity-first= 0.75 >Poco</a></li>
       <li><a href= '#' data-quantity-first= 1.5 >Normal</a></li>
@@ -26,5 +28,5 @@
       <li><a href= '#' data-quantity-first= 2 >Doble</a></li>
       <li><a href= '#' data-quantity-first= 3 >Tripple</a></li>
     </ul>
-  </div>
+    </div>
 </li>

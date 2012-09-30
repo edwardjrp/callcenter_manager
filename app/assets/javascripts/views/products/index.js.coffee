@@ -28,11 +28,16 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     'click .sizes':'select_size'
     'click .amount_control .dropdown-menu a' : 'set_amount'
     'click .option_box_sides button' : 'set_side'
-    'click .amount_control_multi_sides ul.left_selection li a' : 'set_first_amount'
+    'click .amount_control_multi_sides_first ul.left_selection li a' : 'set_first_amount'
+    'click .amount_control_multi_sides_second ul.right_selection li a' : 'set_second_amount'
+    'click .adder input[type=button]' : 'add_to_cart'
+
   #   'click .btn-success':'add_to_cart'
   #   "click table.option_table td":'modify_option'
   #   'mouseenter .option_box': 'option_scale_up'
   #   'mouseleave .option_box': 'option_scale_down'
+
+
     
   render: ->
     # model = current category
@@ -40,6 +45,13 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     $(@el).find('input').restric('alpha').restric('spaces')
     $(@el).find('.dropdown-toggle.left_selection').dropdown()
     this
+
+
+  add_to_cart:  (event)->
+    event.preventDefault()
+    target = $(event.currentTarget)
+    item = new ItemFactory(@el, @model, {selected_matchups: @selected_matchups, selected_flavor: @selected_flavor, selected_size: @selected_size})
+    item.validate()
 
   set_side: (event)->
     event.preventDefault()
@@ -51,18 +63,27 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
   set_first_amount: (event)->
     event.preventDefault()
     target = $(event.currentTarget)
-    target.closest('.amount_control_multi_sides').find('a.left_selection').html("#{target.html()}<b class='caret'></b>")
-    console.log _.values(@selected_matchups).length
+    target.closest('.amount_control_multi_sides_first').find('a.left_selection').html("#{target.html()}<b class='caret'></b>")
     if  _.values(@selected_matchups).length  == 2 
-      scope_class = target.closest(".amount_control_multi_sides").find('a.left_selection')
+      scope_class = target.closest(".amount_control_multi_sides_first").find('a.left_selection')
     else
-      scope_class = target.closest(".amount_control_multi_sides")
-
+      scope_class = target.closest(".amount_control_multi_sides_first")
+    console.log scope_class
     if target.html().match(/Nada/)
       scope_class.css('background-color', 'transparent')
     else
       scope_class.css('background-color', '#A9C4F5')
     target.closest('.option_box_sides').data('quantity-first', target.data('quantity'))
+
+  set_second_amount: (event)->
+    event.preventDefault()
+    target = $(event.currentTarget)
+    target.closest('.amount_control_multi_sides_second').find('a.right_selection').html("#{target.html()}<b class='caret'></b>")
+    if target.html().match(/Nada/)
+      target.closest(".amount_control_multi_sides_second").find('a.right_selection').css('background-color', 'transparent')
+    else
+      target.closest(".amount_control_multi_sides_second").find('a.right_selection').css('background-color', '#EED3D7')
+    target.closest('.option_box_sides').data('quantity-second', target.data('quantity'))
 
   set_amount: (event)->
     event.preventDefault()
@@ -99,21 +120,6 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
         if @selected_matchups['first']? then  @selected_matchups['second'] = matchup else @selected_matchups['first'] = matchup
         @colorize_button(matchup.cid, 'specialties_container')
         @assign_options(matchup)
-        
-
-  reset: ()->
-    scope = $(@el).find('.option_box_sides')
-    scope.css('background-color', 'white')
-    scope.find('a.left_selection').html("Nada<b class='caret'></b>").css('background-color', 'transparent')
-    scope.find('a.right_selection').addClass('hidden').html("Nada<b class='caret'></b>").css('background-color', 'transparent')
-    scope.find('ul.right_selection').addClass('hidden')
-    scope.find('.btn-group').find('button').removeClass('active')
-    scope.find('.dropdown').css('background-color', 'white')
-    $(@el).find('.option_box_sides').data('part-first', null )
-    $(@el).find('.option_box_sides').data('quantity', null )
-    @shift() if @selected_matchups['second']?
-
-
 
   assign_options: (matchup) ->
     if _.values(@selected_matchups).length < 2 and _.any(matchup.defaultOptions())
@@ -147,18 +153,32 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     delete @selected_matchups['second']
     @selected_matchups['first']
 
+
+
   prepare_multi: () ->
     $(@el).find('.btn-group').hide()
-    $(@el).find('.dropdown').css('background-color', 'white')
-    $(@el).find('a.right_selection').removeClass('hidden')
-    $(@el).find('ul.right_selection').removeClass('hidden')
+    for dropdown in $(@el).find('.dropdown')
+      if $(dropdown).css('background-color') != 'white'
+        $(dropdown).find('a.left_selection').css('background-color', $(dropdown).css('background-color'))
+        $(dropdown).css('background-color', 'white')
+    $(@el).find('.amount_control_multi_sides_second').removeClass('hidden')
 
+  reset: ()->
+    scope = $(@el).find('.option_box_sides')
+    scope.css('background-color', 'white')
+    scope.find('a.left_selection').html("Nada<b class='caret'></b>").css('background-color', 'transparent')
+    scope.find('a.right_selection').html("Nada<b class='caret'></b>").css('background-color', 'transparent')
+    scope.find('.amount_control_multi_sides_second').addClass('hidden')
+    scope.find('.btn-group').find('button').removeClass('active')
+    scope.find('.dropdown').css('background-color', 'white')
+    $(@el).find('.option_box_sides').data('part-first', null )
+    $(@el).find('.option_box_sides').data('quantity', null )
+    @shift() if @selected_matchups['second']?
 
   rollback_multi: ()->
     $(@el).find('.btn-group').show()
     $(@el).find('.dropdown').css('background-color', '#A9C4F5')
-    $(@el).find('a.right_selection').addClass('hidden')
-    $(@el).find('ul.right_selection').addClass('hidden')
+    $(@el).find('.amount_control_multi_sides_second').addClass('hidden')
 
 
   current_flavor_compatible: (matchup)->

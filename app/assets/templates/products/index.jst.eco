@@ -1,5 +1,5 @@
 <div class='adder'>
-  <input type='text' class='cart_product_quantity left-margin-1' value='1'></input>
+  <input type='number' min="1" max="99" class='cart_product_quantity left-margin-1' value='1'></input>
   <input class="btn btn-success" type="button" value="Agregar">
 </div>
 
