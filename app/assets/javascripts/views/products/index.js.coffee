@@ -51,8 +51,9 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
   add_to_cart:  (event)->
     event.preventDefault()
     target = $(event.currentTarget)
-    item = new ItemFactory(@el, @model, {selected_matchups: @selected_matchups, selected_flavor: @selected_flavor, selected_size: @selected_size})
-    item.validate()
+    item = new ItemFactory(@el, @model, @options.cart, {selected_matchups: @selected_matchups, selected_flavor: @selected_flavor, selected_size: @selected_size, item_quantity: $(@el).find('.cart_product_quantity').val()})
+    # console.log @options.cart
+    item.build()
 
   set_unit_amounts: (event)->
     event.preventDefault()

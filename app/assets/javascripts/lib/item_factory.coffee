@@ -1,5 +1,5 @@
 class @ItemFactory
-  constructor: (@el, @category, @options = {})->
+  constructor: (@el, @category, @cart, @options = {})->
 
 
   validate: ->
@@ -9,10 +9,11 @@ class @ItemFactory
     errors.push 'No ha seleccionado un tamaño' unless @options['selected_size']?
     errors.push 'No ha establecido opciones' unless @scan()? and _.any(@scan())
     errors.push 'Ha seleccionado deben ser mayores a cero' unless @validate_quantities()
+    errors.push 'La catidad a agregar al carrito no es valida' unless @options['item_quantity'] > 0 
     result = errors
     errors = []
     $("<div class='purr'>#{window.to_sentence(result)}<div>").purr() if _.any(result)
-    return _.any(result)
+    _.isEmpty(result)
 
   scan: ->
     if @category.isMulti() and @category.hasSides()
@@ -35,6 +36,12 @@ class @ItemFactory
         ), 0
     sum > 0
 
+  build_options: ->
+    if @category.isMulti() and @category.hasSides()
+      console.log 'pizza options build'
+    else
+      _.map(@scan(), (opt) -> { quantity: $(opt).data('quantity'), code: $(opt).data('code'), part: $(opt).data('part')} )
+
   multi_conditions: (opt)->
     $(opt).data('quantity-first')? or $(opt).data('quantity-second')? or $(opt).data('part-first')? or $(opt).data('part-second')?
 
@@ -43,3 +50,20 @@ class @ItemFactory
 
   multi_part_check: (opt)->
     $(opt).data('part-first')? or $(opt).data('part-second')?
+
+
+  build: ->
+    cart_product = new Kapiqua25.Models.CartProduct()
+    if @validate()
+      if @category.isMulti() and @category.hasSides()
+        console.log 'build for pizza'
+      else
+        product = _.values(@options['selected_matchups'])[0].get('products')[0]
+        quantity = @options['item_quantity']
+        options = @build_options()
+        cart = @cart
+        console.log @cart
+        console.log _.values(@options['selected_matchups'])[0]
+        cart_product.set({product: product, quantity: quantity, options: options, cart: cart})
+        console.log cart_product.attributes
+    cart_product

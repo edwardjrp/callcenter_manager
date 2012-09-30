@@ -26,9 +26,6 @@ class Kapiqua25.Models.Option extends Backbone.RelationalModel
   value_or_default: ()->
     if @get('recipe').match(Option.regexp)[1] == '' then  1 else @get('recipe').match(Option.regexp)[1]
 
-
-
-
   configureHalf: (el, position)->
     if position == 'first'
       el.find('.dropdown').find('a.left_selection').css('background-color', '#A9C4F5')

@@ -3,8 +3,8 @@ class Kapiqua25.Models.CartProduct extends Backbone.RelationalModel
     "/cart_products"
   
   
-  validate: (attributes)->
-    return 'La catidad debe ser un numero mayo a 1' unless _.isNumber(attributes.quantity)
+  # validate: (attributes)->
+  #   return 'La catidad debe ser un numero mayo a 1' unless _.isNumber(attributes.quantity)
     
   secondary: ()->
     _.first(this.get('product').get('category').get('products').where({id: this.get('bind_id')})) if this.get('bind_id')?
