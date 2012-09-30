@@ -1,14 +1,14 @@
 <li class="span2 option_box " id="product_<%= @side.get('id')%>">
   <span class="label label-info "><%=@side.get('productname')%></span>
-  <div class="dropdown">
+  <div class="dropdown amount_control">
     <a class="dropdown-toggle amount_selection" data-toggle="dropdown" href="#">Nada<b class="caret"></b></a>
     <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-      <li><a href= '#'>Nada</a></li>
-      <li><a href= '#'>Poco</a></li>
-      <li><a href= '#'>Normal</a></li>
-      <li><a href= '#'>Extra</a></li>
-      <li><a href= '#'>Doble</a></li>
-      <li><a href= '#'>Tripple</a></li>
+      <li><a href= '#' data-quantity= 0 >Nada</a></li>
+      <li><a href= '#' data-quantity= 0.75 >Poco</a></li>
+      <li><a href= '#' data-quantity= 1 >Normal</a></li>
+      <li><a href= '#' data-quantity= 1.5 >Extra</a></li>
+      <li><a href= '#' data-quantity= 2 >Doble</a></li>
+      <li><a href= '#' data-quantity= 3 >Tripple</a></li>
     </ul>
   </div>
 </li>

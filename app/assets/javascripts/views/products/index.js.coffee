@@ -26,6 +26,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     'click .specialties':'select_specialty'
     'click .flavors':'select_flavor'
     'click .sizes':'select_size'
+    'click .amount_control .dropdown-menu a' : 'set_amount'
   #   'click .btn-success':'add_to_cart'
   #   "click table.option_table td":'modify_option'
   #   'mouseenter .option_box': 'option_scale_up'
@@ -36,6 +37,17 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     $(@el).html(@template(model: @model))
     $(@el).find('input').restric('alpha').restric('spaces')
     this
+
+  set_amount: (event)->
+    event.preventDefault()
+    target = $(event.currentTarget)
+    target.closest('.amount_control').find('a.amount_selection').html("#{target.html()}<b class='caret'></b>")
+    if target.html().match(/Nada/)
+      target.closest('.amount_control').css('background-color', 'transparent')
+    else
+      target.closest('.amount_control').css('background-color', '#A9C4F5')
+    target.closest('.option_box').data('quantity', target.data('quantity'))
+
   
   select_specialty: (event)->
     event.preventDefault()
@@ -139,7 +151,8 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
         if _.isEmpty(allowed_flavors) or _.include(allowed_flavors,  $(button).data('flavorcode'))
           $(button).removeClass('disabled')
         else
-          $(button).addClass('disabled')
+          $(button).addClass('disabled').removeClass('btn-primary')
+
 
   gray_out_sizes: () ->
     if _.isEmpty(_.values(@selected_matchups))
