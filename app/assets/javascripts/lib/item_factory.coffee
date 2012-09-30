@@ -75,5 +75,5 @@ class @ItemFactory
       bind_id = _.find(_.values(@options['selected_matchups'])[1].get('products'), (product)=> product.get('flavorcode') == @options['selected_flavor'] and  product.get('sizecode').toString() == @options['selected_size'].toString()).id if _.values(@options['selected_matchups'])[1]?
       options = @build_options()
       cart = @cart
-      cart_product.set({product: product, quantity: quantity, options: options, cart: cart})
+      cart_product.set({product: product, quantity: quantity, options: options, cart: cart,bind_id: bind_id })
     cart_product
