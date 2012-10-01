@@ -57,11 +57,13 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     item = new ItemFactory(@el, @model, @options.cart, {selected_matchups: @selected_matchups, selected_flavor: @selected_flavor, selected_size: @selected_size, item_quantity: $(@el).find('.cart_product_quantity').val()})
     # console.log @options.cart
     cart_product = item.build()
-    cart_product.save() if cart_product?
-    @selected_matchups = {}
-    @selected_flavor = null
-    @selected_size = null
-    @render()
+    console.log cart_product
+    if cart_product?
+      cart_product.save() 
+      @selected_matchups = {}
+      @selected_flavor = null unless @model.availableFlavors().length == 1
+      @selected_size = null unless @model.availableSizes().length == 1
+      @render()
 
   set_unit_amounts: (event)->
     event.preventDefault()

@@ -7,9 +7,10 @@ class @ItemFactory
     errors.push 'No ha seleccionado un producto' unless _.values(@options['selected_matchups']).length > 0 and _.values(@options['selected_matchups']).length <=2
     errors.push 'No ha seleccionado un sabor' unless @options['selected_flavor']?
     errors.push 'No ha seleccionado un tamaño' unless @options['selected_size']?
-    errors.push 'No ha establecido opciones' unless @scan()? and _.any(@scan())
-    # errors.push 'Ha seleccionado deben ser mayores a cero' unless @validate_quantities()
-    errors.push 'La catidad a agregar al carrito no es valida' unless @options['item_quantity'] > 0 
+    if @category.hasOptions()
+      errors.push 'No ha establecido opciones' unless @scan()? and _.any(@scan())
+      errors.push 'La catidad a agregar al carrito no es valida' unless @options['item_quantity'] > 0 
+      errors.push 'Ha seleccionado deben ser mayores a cero' unless @validate_quantities()
     result = errors
     errors = []
     $("<div class='purr'>#{window.to_sentence(result)}<div>").purr() if _.any(result)
@@ -28,7 +29,9 @@ class @ItemFactory
   validate_quantities: ->
     if @category.isMulti() and @category.hasSides()
       sum = _.inject @multi_quantity_scan(), ((memo, opt) ->
-        memo + Number($(opt).data('quantity-first')) + Number($(opt).data('quantity-second') || 0)
+        if _.isNaN(Number($(opt).data('quantity-first'))) then first = 0 else first = Number($(opt).data('quantity-first'))
+        if _.isNaN(Number($(opt).data('quantity-second'))) then second = 0 else second = Number($(opt).data('quantity-second'))
+        memo + Number(first + second)
         ), 0
     else
       sum = _.inject @scan(), ((memo, opt) ->
