@@ -4,6 +4,7 @@ jQuery ->
     socket.emit 'register', { full_name: $('#chatbox').data('full_name'), idnumber: $('#chatbox').data('idnumber'), role: $('#chatbox').data('role') }, (response)->
       # console.log response
       
+  $('.item_remove, .show_options, .edit_options').tooltip({placement: 'bottom'})
 
   if $(".chatdisplay").size() > 0
     setInterval (->
