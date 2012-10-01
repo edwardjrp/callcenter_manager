@@ -47,12 +47,37 @@ class @ItemFactory
       options_second = _.filter($(@el).find('.option_box_sides'), (option)=> @multi_presence_second(option))
       @merge_options(options_first, options_second)
     else
-      _.map(@scan(), (opt) -> { quantity: $(opt).data('quantity'), code: $(opt).data('code'), part: $(opt).data('part')} )
+      recipe = _.map @scan(), (opt) ->
+        if _.isNaN($(opt).data('quantity')) or $(opt).data('quantity') == 1 then q = '' else q = $(opt).data('quantity')
+        if $(opt).data('part')? and not _.isUndefined($(opt).data('part')) and not $(opt).data('part') == 'W'
+          "#{q}#{$(opt).data('code')}-#{$(opt).data('part')}"
+        else
+          "#{q}#{$(opt).data('code')}"
+      recipe.join(',')
 
   merge_options: (options_first, options_second) ->
-    options_first_hash = _.map(options_first, (opt)-> { code: $(opt).data('code'), quantity: $(opt).data('quantity-first'), part: $(opt).data('part-first') })
-    options_second_hash = _.map(options_second, (opt)-> { code: $(opt).data('code'), quantity: $(opt).data('quantity-second'), part: $(opt).data('part-second') })
-    _.flatten([options_first_hash, options_second_hash])
+    result = []
+    if _.any(options_second)
+      for opt1 in options_first
+        for opt2 in options_second
+          if $(opt1).data('code') == $(opt2).data('code') and $(opt1).data('quantity-first') == $(opt2).data('quantity-second')
+            if _.isNaN($(opt1).data('quantity-first')) or $(opt1).data('quantity-first') == 1 then q = '' else q = $(opt1).data('quantity-first')
+            result.push "#{q}#{$(opt1).data('code')}" unless _.include(result, "#{q}#{$(opt1).data('code')}")
+          else
+            if _.isNaN($(opt1).data('quantity-first')) or $(opt1).data('quantity-first') == 1 then q = '' else q = $(opt1).data('quantity-first')
+            if _.isNaN($(opt2).data('quantity-second')) or $(opt2).data('quantity-second') == 1 then q = '' else q = $(opt2).data('quantity-second')
+            result.push "#{q}#{$(opt1).data('code')}-1" unless _.include(result, "#{q}#{$(opt1).data('code')}-1")
+            result.push "#{q}#{$(opt2).data('code')}-2" unless _.include(result, "#{q}#{$(opt2).data('code')}-2")
+    else
+      for opt1 in options_first
+        if _.isNaN($(opt1).data('quantity-first')) or $(opt1).data('quantity-first') == 1 then q = '' else q = $(opt1).data('quantity-first')
+        if $(opt1).data('part-first')? and not _.isUndefined($(opt1).data('part-first')) and not $(opt1).data('part-first') == 'W'
+          result.push "#{q}#{$(opt1).data('code')}-#{p}" unless _.include(result, "#{q}#{$(opt1).data('code')}-#{p}") 
+        else
+          result.push "#{q}#{$(opt1).data('code')}" unless _.include(result, "#{q}#{$(opt1).data('code')}")
+    result.join(',')
+
+    
 
   multi_presence_first: (opt) ->
     $(opt).data('quantity-first')? and  $(opt).data('part-first')?
@@ -73,6 +98,8 @@ class @ItemFactory
   build: ->
     cart_product = new Kapiqua25.Models.CartProduct()
     if @validate()
+      console.log @build_options()
+      console.log " from factory"
       product = _.find(_.values(@options['selected_matchups'])[0].get('products'), (product)=> product.get('flavorcode') == @options['selected_flavor'] and  product.get('sizecode').toString() == @options['selected_size'].toString()) || @category.baseProduct()
       quantity = @options['item_quantity']
       bind_id = _.find(_.values(@options['selected_matchups'])[1].get('products'), (product)=> product.get('flavorcode') == @options['selected_flavor'] and  product.get('sizecode').toString() == @options['selected_size'].toString()).id if _.values(@options['selected_matchups'])[1]?

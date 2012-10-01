@@ -9,11 +9,10 @@ CartProduct.validatesNumericalityOf('quantity')
 
 
 CartProduct.addItem = (data, respond, socket) ->
-  options = Option.pulseCollection(data.options)
-  search_hash = {cart_id: data.cart, product_id: data.product.id, options: options }
+  search_hash = {cart_id: data.cart, product_id: data.product.id, options: data.options }
   CartProduct.all {where: search_hash}, (cp_err, cart_products) ->
     if _.isEmpty(cart_products)
-      cart_product = new CartProduct({cart_id: data.cart, product_id: data.product.id, options: options, bind_id: data.bind_id, quantity: Number(data.quantity), created_at: new Date()})
+      cart_product = new CartProduct({cart_id: data.cart, product_id: data.product.id, options: data.options, bind_id: data.bind_id, quantity: Number(data.quantity), created_at: new Date()})
     else
       cart_product = _.first(cart_products)
       cart_product.quantity = cart_product.quantity + Number(data.quantity)
@@ -32,13 +31,14 @@ CartProduct.updateItem =  (data, respond, socket) ->
       if cp_err?
         respond(err)
       else
-        cart_product.updateAttributes { quantity: Number(data.quantity), updated_at: new Date()}, (err, updated_cart_product)->
-          if err?
-             respond(err)
-           else
-              updated_cart_product.cart (err, cart) ->
-                socket.emit('cart_products:saved', cart.toJSON())
-              respond(err,updated_cart_product)
+        if cart_product?
+          cart_product.updateAttributes { quantity: Number(data.quantity), options: data.options, updated_at: new Date()}, (err, updated_cart_product)->
+            if err?
+               respond(err)
+             else
+                updated_cart_product.cart (err, cart) ->
+                  socket.emit('cart_products:saved', cart.toJSON())
+                respond(err,updated_cart_product)
 
 CartProduct.removeItem = (data, respond, socket) ->
   CartProduct.find data.id, (cp_err, cart_product) ->

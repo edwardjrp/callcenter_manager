@@ -3,7 +3,7 @@ class Kapiqua25.Models.Matchup extends Backbone.Model
   defaultOptions: ()->
     if @get('recipe')? and _.any(@get('recipe').split(','))
       _.map @get('recipe').split(','), (option) =>
-        new Kapiqua25.Models.Option().set(recipe: option, products: @get('avalable_options'))
+        new Kapiqua25.Models.Option().set(recipe: option, products: @get('available_options'))
 
   name: ()->
     (_.intersection.apply(_, _.map(@get('products'), (product)-> product.get('productname').split(' ') ))).join(' ') 

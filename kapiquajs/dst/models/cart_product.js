@@ -17,12 +17,11 @@ CartProduct.validatesPresenceOf('quantity');
 CartProduct.validatesNumericalityOf('quantity');
 
 CartProduct.addItem = function(data, respond, socket) {
-  var options, search_hash;
-  options = Option.pulseCollection(data.options);
+  var search_hash;
   search_hash = {
     cart_id: data.cart,
     product_id: data.product.id,
-    options: options
+    options: data.options
   };
   return CartProduct.all({
     where: search_hash
@@ -32,7 +31,7 @@ CartProduct.addItem = function(data, respond, socket) {
       cart_product = new CartProduct({
         cart_id: data.cart,
         product_id: data.product.id,
-        options: options,
+        options: data.options,
         bind_id: data.bind_id,
         quantity: Number(data.quantity),
         created_at: new Date()
@@ -59,19 +58,22 @@ CartProduct.updateItem = function(data, respond, socket) {
     if (cp_err != null) {
       return respond(err);
     } else {
-      return cart_product.updateAttributes({
-        quantity: Number(data.quantity),
-        updated_at: new Date()
-      }, function(err, updated_cart_product) {
-        if (err != null) {
-          return respond(err);
-        } else {
-          updated_cart_product.cart(function(err, cart) {
-            return socket.emit('cart_products:saved', cart.toJSON());
-          });
-          return respond(err, updated_cart_product);
-        }
-      });
+      if (cart_product != null) {
+        return cart_product.updateAttributes({
+          quantity: Number(data.quantity),
+          options: data.options,
+          updated_at: new Date()
+        }, function(err, updated_cart_product) {
+          if (err != null) {
+            return respond(err);
+          } else {
+            updated_cart_product.cart(function(err, cart) {
+              return socket.emit('cart_products:saved', cart.toJSON());
+            });
+            return respond(err, updated_cart_product);
+          }
+        });
+      }
     }
   });
 };

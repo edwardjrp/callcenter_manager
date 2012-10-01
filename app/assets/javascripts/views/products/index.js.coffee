@@ -23,6 +23,8 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     Backbone.pubSub.on('editing', @onEditing, this)
     @editing = false
     @edit_item = null
+    @edit_cart_product = null
+    @matchup_original_recipe = null
   
   events: ->
     'mouseenter .specialties': 'show_popover'
@@ -39,9 +41,23 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
 
   onEditing: (data) ->
     if data.category == @model
+      @editing = true
       target_matchup = _.find data.category.matchups().models, (matchup)=>
         _.include(matchup.get('products'), data.product)
-      @edit_item = target_matchup
+      @edit_cart_product = data.cart_product
+      @matchup_original_recipe = target_matchup.get('recipe')
+      console.log target_matchup.get('recipe')
+      console.log data.cart_product.get('options')
+      console.log data.cart_product.cid
+      @edit_item = target_matchup.set(recipe: data.cart_product.get('options'))
+      console.log @edit_item.get('recipe')
+      @apply_selection(@edit_item)
+      @selected_flavor = data.product.get('flavorcode')
+      $(@el).find('.flavors_container').find(".#{data.product.get('flavorcode')}").addClass('btn-primary')
+      @selected_size = data.product.get('sizecode')
+      $(@el).find('.sizes_container').find(".#{data.product.get('sizecode')}").addClass('btn-primary')
+
+
     
   render: ->
     # model = current category
@@ -56,14 +72,30 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     target = $(event.currentTarget)
     item = new ItemFactory(@el, @model, @options.cart, {selected_matchups: @selected_matchups, selected_flavor: @selected_flavor, selected_size: @selected_size, item_quantity: $(@el).find('.cart_product_quantity').val()})
     # console.log @options.cart
-    cart_product = item.build()
+    if @editing
+      cart_product = @edit_cart_product.set({options: item.build().get('options')})
+    else 
+      cart_product = item.build()
     console.log cart_product
     if cart_product?
+      cart_product.set({id: @edit_cart_product.get('id')}) if @editing
       cart_product.save() 
-      @selected_matchups = {}
-      @selected_flavor = null unless @model.availableFlavors().length == 1
-      @selected_size = null unless @model.availableSizes().length == 1
+      @clear()
+      @clear_edit() if @editing
       @render()
+
+  clear: ->
+    @selected_matchups = {}
+    @selected_flavor = null
+    @selected_flavor = @model.availableFlavors()[0] if @model.availableFlavors().length == 1
+    @selected_size = null
+    @selected_size = @model.availableSizes()[0] if @model.availableSizes().length == 1
+
+  clear_edit: ->
+    @editing = false
+    @edit_cart_product =  null
+    @edit_item.set({recipe: @matchup_original_recipe})
+    @edit_item = null
 
   set_unit_amounts: (event)->
     event.preventDefault()
@@ -85,12 +117,12 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
       scope_class = target.closest(".amount_control_multi_sides_first").find('a.left_selection')
     else
       scope_class = target.closest(".amount_control_multi_sides_first")
-    console.log scope_class
     if target.html().match(/Nada/)
       scope_class.css('background-color', 'transparent')
     else
       scope_class.css('background-color', '#A9C4F5')
-    target.closest('.option_box_sides').data('quantity-first', target.data('quantity'))
+    target.closest('.option_box_sides').data('quantity-first', target.data('quantity-first'))
+
 
   set_second_amount: (event)->
     event.preventDefault()
@@ -100,7 +132,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
       target.closest(".amount_control_multi_sides_second").find('a.right_selection').css('background-color', 'transparent')
     else
       target.closest(".amount_control_multi_sides_second").find('a.right_selection').css('background-color', '#EED3D7')
-    target.closest('.option_box_sides').data('quantity-second', target.data('quantity'))
+    target.closest('.option_box_sides').data('quantity-second', target.data('quantity-second'))
 
   set_amount: (event)->
     event.preventDefault()

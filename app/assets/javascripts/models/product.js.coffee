@@ -3,7 +3,7 @@ class Kapiqua25.Models.Product extends Backbone.RelationalModel
   defaultOptions: ()->
     if @get('options')? and _.any(@get('options').split(','))
       _.map @get('options').split(','), (option) =>
-        new Kapiqua25.Models.Option().set(recipe: option, products: @get('avalable_options'))
+        new Kapiqua25.Models.Option().set(recipe: option, products: @get('available_options'))
 
   parsedOptions: ()->
     _.map @defaultOptions(), (option)-> option.toJSON()
