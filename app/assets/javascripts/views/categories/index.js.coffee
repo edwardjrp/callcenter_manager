@@ -4,6 +4,7 @@ class Kapiqua25.Views.CategoriesIndex extends Backbone.View
   
   initialize: ->
     @product_views = {}
+    Backbone.pubSub.on('editing', @onEditing, this)
     _.each @collection.models, (category) =>
       unless category.isHidden()
         @product_views["#{category.get('name')}"] = new Kapiqua25.Views.ProductsIndex(model: category, cart: @options.cart, cart_product: new Kapiqua25.Models.CartProduct() )
@@ -16,6 +17,8 @@ class Kapiqua25.Views.CategoriesIndex extends Backbone.View
     @render_product_views()
     this
 
+  onEditing: (data)->
+    $(@el).find('.nav-tabs').find("li a[href='##{data.category.get('name')}']").trigger('click')
 
   render_product_views: ->
     _.each _.keys(@product_views), (key)=>

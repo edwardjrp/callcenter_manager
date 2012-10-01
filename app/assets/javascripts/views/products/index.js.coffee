@@ -20,6 +20,9 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     @selected_size = @model.availableSizes()[0] if @model.availableSizes().length == 1
     @max_selectable_matchups = 1
     if @model.isMulti() then @max_selectable_matchups = 2 else @max_selectable_matchups = 1
+    Backbone.pubSub.on('editing', @onEditing, this)
+    @editing = false
+    @edit_item = null
   
   events: ->
     'mouseenter .specialties': 'show_popover'
@@ -33,6 +36,12 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     'click .adder input[type=button]' : 'add_to_cart'
     'change .unit_amounts' : 'set_unit_amounts'
 
+
+  onEditing: (data) ->
+    if data.category == @model
+      target_matchup = _.find data.category.matchups().models, (matchup)=>
+        _.include(matchup.get('products'), data.product)
+      @edit_item = target_matchup
     
   render: ->
     # model = current category

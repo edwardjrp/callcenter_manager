@@ -9,6 +9,7 @@ class Kapiqua25.Routers.Categories extends Backbone.Router
     @cart = new Kapiqua25.Models.Cart()
     @cart.set($('#cart').data('cart'))
     window.socket.on('cart_products:saved', @reloadCart)
+    Backbone.pubSub = _.extend({}, Backbone.Events)
 
 
   builder: ->

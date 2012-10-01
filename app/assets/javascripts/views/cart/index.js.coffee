@@ -9,6 +9,7 @@ class Kapiqua25.Views.CartIndex extends Backbone.View
   events: ->
     'click .remove_options_and_pricing>span.item_remove':'remove_cart_product'
     'click .remove_options_and_pricing>span.show_options':'show_options'
+    'click .remove_options_and_pricing>span.edit_options':'edit_options'
     'change .item>input':'update_quantity'
     'focus .item>input':'colorize'
     'blur .item>input':'normalize'
@@ -19,6 +20,14 @@ class Kapiqua25.Views.CartIndex extends Backbone.View
     $(@el).find('input').restric('alpha').restric('spaces')
     this
 
+
+  edit_options: (event)->
+    target = $(event.currentTarget)
+    item_to_edit_cid = target.closest('.item').data('cart-product-cid')
+    item_to_edit = @model.get('cart_products').getByCid(item_to_edit_cid)
+    product_for_edit = item_to_edit.get('product')
+    category_for_edit = product_for_edit.get('category')
+    Backbone.pubSub.trigger('editing', { cart_product: item_to_edit, product: product_for_edit, category: category_for_edit } )
 
   remove_cart_product: (event)->
     target = $(event.currentTarget)
