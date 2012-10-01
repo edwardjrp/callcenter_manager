@@ -58,6 +58,9 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     # console.log @options.cart
     cart_product = item.build()
     cart_product.save() if cart_product?
+    @selected_matchups = {}
+    @selected_flavor = null
+    @selected_size = null
     @render()
 
   set_unit_amounts: (event)->
