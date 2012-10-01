@@ -16,7 +16,7 @@ CartProduct.validatesPresenceOf('quantity');
 
 CartProduct.validatesNumericalityOf('quantity');
 
-CartProduct.add = function(data, respond, socket) {
+CartProduct.addItem = function(data, respond, socket) {
   var options, search_hash;
   options = Option.pulseCollection(data.options);
   search_hash = {
@@ -32,7 +32,7 @@ CartProduct.add = function(data, respond, socket) {
       cart_product = new CartProduct({
         cart_id: data.cart,
         product_id: data.product.id,
-        options: '',
+        options: options,
         bind_id: data.bind_id,
         quantity: Number(data.quantity),
         created_at: new Date()
@@ -41,13 +41,56 @@ CartProduct.add = function(data, respond, socket) {
       cart_product = _.first(cart_products);
       cart_product.quantity = cart_product.quantity + Number(data.quantity);
     }
-    return cart_product.save(function(err, model) {
+    return cart_product.save(function(err, result_cart_product) {
       if (err) {
         return respond(err);
       } else {
-        return respond(err, model);
+        result_cart_product.cart(function(err, cart) {
+          return socket.emit('cart_products:saved', cart.toJSON());
+        });
+        return respond(err, result_cart_product);
       }
     });
+  });
+};
+
+CartProduct.updateItem = function(data, respond, socket) {
+  return CartProduct.find(data.id, function(cp_err, cart_product) {
+    if (cp_err != null) {
+      return respond(err);
+    } else {
+      return cart_product.updateAttributes({
+        quantity: Number(data.quantity),
+        updated_at: new Date()
+      }, function(err, updated_cart_product) {
+        if (err != null) {
+          return respond(err);
+        } else {
+          updated_cart_product.cart(function(err, cart) {
+            return socket.emit('cart_products:saved', cart.toJSON());
+          });
+          return respond(err, updated_cart_product);
+        }
+      });
+    }
+  });
+};
+
+CartProduct.removeItem = function(data, respond, socket) {
+  return CartProduct.find(data.id, function(cp_err, cart_product) {
+    if (cp_err) {
+      return respond(cp_err);
+    } else {
+      return cart_product.cart(function(err, cart) {
+        return cart_product.destroy(function(del_err) {
+          if (del_err != null) {
+            return respond(del_err);
+          } else {
+            return socket.emit('cart_products:saved', cart.toJSON());
+          }
+        });
+      });
+    }
   });
 };
 

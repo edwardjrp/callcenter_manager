@@ -49,6 +49,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     # console.log @options.cart
     cart_product = item.build()
     cart_product.save() if cart_product?
+    @render()
 
   set_unit_amounts: (event)->
     event.preventDefault()

@@ -82,6 +82,9 @@ io.sockets.on "connection", (socket) ->
   socket.on 'chat', (data)->
     io.sockets.emit('chat', data);
 
+  # socket.on "carts:read", (data, responder) ->
+  #   Carts.read(data, responder, socket)
+
   socket.on "cart_products:create", (data, responder) ->
     CartProducts.create(data, responder, socket)
     
