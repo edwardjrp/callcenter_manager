@@ -82,7 +82,14 @@ CartProduct.updateItem = function(data, respond, socket) {
               return respond(err);
             } else {
               socket.emit('cart_products:updated', updated_cart_product.toJSON());
-              return respond(err, updated_cart_product);
+              respond(err, updated_cart_product);
+              return updated_cart_product.cart(function(err, cart_to_price) {
+                if (err) {
+                  return socket.emit('cart:pricing:error', 'No se pudo leer la orden actual');
+                } else {
+                  return cart_to_price.price(socket);
+                }
+              });
             }
           });
         }
@@ -109,6 +116,10 @@ CartProduct.removeItem = function(data, respond, socket) {
       }
     });
   }
+};
+
+CartProduct.prototype.simplified = function() {
+  return JSON.parse(JSON.stringify(this));
 };
 
 module.exports = CartProduct;

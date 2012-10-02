@@ -52,7 +52,6 @@ class Kapiqua25.Models.Option extends Backbone.RelationalModel
       el.closest('.option_box_sides').removeData('quantity-second')
 
   configure: (el, configurable_type) ->
-    console.log 'CONFIGURE'
     switch configurable_type
       when 'with_units'
         el.find('input').val(@quantity())
@@ -70,7 +69,6 @@ class Kapiqua25.Models.Option extends Backbone.RelationalModel
         
 
   teardown: (el, configurable_type) ->
-    console.log 'TEARDOWN'
     switch configurable_type
       when 'with_units'
         el.find('input').val('0')
@@ -85,7 +83,6 @@ class Kapiqua25.Models.Option extends Backbone.RelationalModel
         el.find('.dropdown').css('background-color', 'white')
         el.closest('.option_box_sides').removeData('part-first')
         el.closest('.option_box_sides').removeData('quantity-first')
-        console.log el.closest('.option_box_sides').data('quantity-first')
 
 
   amountMap: ()->

@@ -29,8 +29,6 @@ CartProduct.addItem = (data, respond, socket) ->
            else
               socket.emit('cart_products:updated', updated_cart_product.toJSON())
               respond(err,updated_cart_product)
-      
-
 
 CartProduct.updateItem =  (data, respond, socket) ->
   if data?
@@ -45,6 +43,12 @@ CartProduct.updateItem =  (data, respond, socket) ->
                else
                   socket.emit('cart_products:updated', updated_cart_product.toJSON())
                   respond(err,updated_cart_product)
+                  # mode to after callback
+                  updated_cart_product.cart (err, cart_to_price)->
+                    if err
+                      socket.emit 'cart:pricing:error', 'No se pudo leer la orden actual'
+                    else
+                      cart_to_price.price(socket)
 
 CartProduct.removeItem = (data, respond, socket) ->
   if data?
@@ -59,5 +63,8 @@ CartProduct.removeItem = (data, respond, socket) ->
             else
               socket.emit('cart_products:deleted', data.id)
               
+CartProduct.prototype.simplified = ->
+  JSON.parse(JSON.stringify(this))
 
+  
 module.exports = CartProduct

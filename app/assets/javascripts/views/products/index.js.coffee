@@ -46,11 +46,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
         _.include(matchup.get('products'), data.product)
       @edit_cart_product = data.cart_product
       @matchup_original_recipe = target_matchup.get('recipe')
-      console.log target_matchup.get('recipe')
-      console.log data.cart_product.get('options')
-      console.log data.cart_product.cid
       @edit_item = target_matchup.set(recipe: data.cart_product.get('options'))
-      console.log @edit_item.get('recipe')
       @apply_selection(@edit_item)
       @selected_flavor = data.product.get('flavorcode')
       $(@el).find('.flavors_container').find(".#{data.product.get('flavorcode')}").addClass('btn-primary')
@@ -76,8 +72,6 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
       cart_product = @edit_cart_product.set({options: item.build().get('options'), quantity: $(@el).find('.cart_product_quantity').val()})
     else 
       cart_product = item.build()
-    console.log cart_product
-    console.log cart_product.isNew()
     if cart_product?
       if @editing
         cart_product.set({id: @edit_cart_product.get('id')}) 

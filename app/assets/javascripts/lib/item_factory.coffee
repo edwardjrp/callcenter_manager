@@ -79,10 +79,7 @@ class @ItemFactory
       _.flatten([commons, lefties, righties]).join(',')
 
     else
-      console.log 'ALONE'
       recipe = _.map options_first, (opt) ->
-        console.log $(opt).data('part-first')
-        console.log $(opt).data('code')
         if _.isNaN($(opt).data('quantity-first')) or $(opt).data('quantity-first') == 1 then q = '' else q = $(opt).data('quantity-first')
         unless $(opt).data('part-first') == 'W'
           "#{q}#{$(opt).data('code')}-#{$(opt).data('part-first')}"
@@ -112,8 +109,6 @@ class @ItemFactory
   build: ->
     cart_product = new Kapiqua25.Models.CartProduct()
     if @validate()
-      console.log @build_options()
-      console.log " from factory"
       product = _.find(_.values(@options['selected_matchups'])[0].get('products'), (product)=> product.get('flavorcode') == @options['selected_flavor'] and  product.get('sizecode').toString() == @options['selected_size'].toString()) || @category.baseProduct()
       quantity = @options['item_quantity']
       bind_id = _.find(_.values(@options['selected_matchups'])[1].get('products'), (product)=> product.get('flavorcode') == @options['selected_flavor'] and  product.get('sizecode').toString() == @options['selected_size'].toString()).id if _.values(@options['selected_matchups'])[1]?
