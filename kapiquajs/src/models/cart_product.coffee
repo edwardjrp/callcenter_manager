@@ -14,16 +14,22 @@ CartProduct.addItem = (data, respond, socket) ->
     CartProduct.all {where: search_hash}, (cp_err, cart_products) ->
       if _.isEmpty(cart_products)
         cart_product = new CartProduct({cart_id: data.cart, product_id: data.product.id, options: data.options, bind_id: data.bind_id, quantity: Number(data.quantity), created_at: new Date()})
+        cart_product.save (err, result_cart_product) ->
+          if (err)
+            respond(err)
+          else
+            result_cart_product.cart (err, cart) ->
+              socket.emit('cart_products:saved', cart.toJSON())
+            respond(err, result_cart_product)
       else
         cart_product = _.first(cart_products)
-        cart_product.quantity = cart_product.quantity + Number(data.quantity)
-      cart_product.save (err, result_cart_product) ->
-        if (err)
-          respond(err)
-        else
-          result_cart_product.cart (err, cart) ->
-            socket.emit('cart_products:saved', cart.toJSON())
-          respond(err, result_cart_product)
+        cart_product.updateAttributes { quantity: (cart_product.quantity + Number(data.quantity)), options: data.options, updated_at: new Date()}, (err, updated_cart_product)->
+          if err?
+             respond(err)
+           else
+              socket.emit('cart_products:updated', updated_cart_product.toJSON())
+              respond(err,updated_cart_product)
+      
 
 
 CartProduct.updateItem =  (data, respond, socket) ->
@@ -37,8 +43,7 @@ CartProduct.updateItem =  (data, respond, socket) ->
               if err?
                  respond(err)
                else
-                  updated_cart_product.cart (err, cart) ->
-                    socket.emit('cart_products:saved', cart.toJSON())
+                  socket.emit('cart_products:updated', updated_cart_product.toJSON())
                   respond(err,updated_cart_product)
 
 CartProduct.removeItem = (data, respond, socket) ->

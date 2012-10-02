@@ -81,7 +81,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     if cart_product?
       if @editing
         cart_product.set({id: @edit_cart_product.get('id')}) 
-        cart_product.save({wait: true}) 
+        cart_product.save({silent: true}) 
       else
         cart_product.save() 
       @clear()
