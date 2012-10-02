@@ -57,7 +57,7 @@ CartProduct.removeItem = (data, respond, socket) ->
             if del_err?
               respond(del_err)
             else
-              socket.emit('cart_products:saved', cart.toJSON())
+              socket.emit('cart_products:deleted', data.id)
               
 
 module.exports = CartProduct

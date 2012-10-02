@@ -102,7 +102,7 @@ CartProduct.removeItem = function(data, respond, socket) {
             if (del_err != null) {
               return respond(del_err);
             } else {
-              return socket.emit('cart_products:saved', cart.toJSON());
+              return socket.emit('cart_products:deleted', data.id);
             }
           });
         });

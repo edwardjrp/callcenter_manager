@@ -3,8 +3,9 @@ class Kapiqua25.Views.CartIndex extends Backbone.View
   template: JST['cart/index']
   
   initialize: ->
-      _.bindAll(this, 'reloadCartProduct')
+      _.bindAll(this, 'reloadCartProduct', 'removeCartProduct')
       window.socket.on('cart_products:updated', @reloadCartProduct)
+      window.socket.on('cart_products:deleted', @removeCartProduct)
   #   @model.on('change', @render, this)
   #   @model.on('change', @highlight, this)
   
@@ -25,11 +26,16 @@ class Kapiqua25.Views.CartIndex extends Backbone.View
 
   reloadCartProduct: (data)->
     item = @model.get('cart_products').get(data.id)
-    item_cid = @model.get('cart_products').get(data.id).cid
-    target = $(@el).find("[data-cart-product-cid='#{item_cid}']")
+    target = $(@el).find("[data-cart-product-id='#{data.id}']")
     target.find("input[name='quantity']").val(data.quantity)
     target.next().html(item.niffty_opions())
     target.effect('highlight')
+
+  removeCartProduct: (id)->
+    @model.get('cart_products')
+    target = $(@el).find("[data-cart-product-id='#{id}']")
+    target.remove()
+    $(@el).effect('highlight')
 
   edit_options: (event)->
     target = $(event.currentTarget)
