@@ -23,8 +23,8 @@
     <ul class="dropdown-menu  right_selection" role="menu" aria-labelledby="dLabel">
       <li><a href= '#' data-quantity-first= 0 >Nada</a></li>
       <li><a href= '#' data-quantity-first= 0.75 >Poco</a></li>
-      <li><a href= '#' data-quantity-first= 1.5 >Normal</a></li>
-      <li><a href= '#' data-quantity-first= 1 >Extra</a></li>
+      <li><a href= '#' data-quantity-first= 1 >Normal</a></li>
+      <li><a href= '#' data-quantity-first= 1.5 >Extra</a></li>
       <li><a href= '#' data-quantity-first= 2 >Doble</a></li>
       <li><a href= '#' data-quantity-first= 3 >Tripple</a></li>
     </ul>

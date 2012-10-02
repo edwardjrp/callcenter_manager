@@ -56,26 +56,49 @@ class @ItemFactory
       recipe.join(',')
 
   merge_options: (options_first, options_second) ->
-    result = []
     if _.any(options_second)
-      for opt1 in options_first
-        for opt2 in options_second
-          if $(opt1).data('code') == $(opt2).data('code') and $(opt1).data('quantity-first') == $(opt2).data('quantity-second')
-            if _.isNaN($(opt1).data('quantity-first')) or $(opt1).data('quantity-first') == 1 then q = '' else q = $(opt1).data('quantity-first')
-            result.push "#{q}#{$(opt1).data('code')}" unless _.include(result, "#{q}#{$(opt1).data('code')}")
-          else
-            if _.isNaN($(opt1).data('quantity-first')) or $(opt1).data('quantity-first') == 1 then q = '' else q = $(opt1).data('quantity-first')
-            if _.isNaN($(opt2).data('quantity-second')) or $(opt2).data('quantity-second') == 1 then q = '' else q = $(opt2).data('quantity-second')
-            result.push "#{q}#{$(opt1).data('code')}-1" unless _.include(result, "#{q}#{$(opt1).data('code')}-1")
-            result.push "#{q}#{$(opt2).data('code')}-2" unless _.include(result, "#{q}#{$(opt2).data('code')}-2")
+      first_build = _.map options_first, (opt1) ->
+        if _.isNaN($(opt1).data('quantity-first')) or $(opt1).data('quantity-first') == 1 then q1 = '' else q1 = $(opt1).data('quantity-first')
+        {code:$(opt1).data('code'), quantity: q1 }
+        
+
+      second_build = _.map options_second, (opt2) ->
+        if _.isNaN($(opt2).data('quantity-second')) or $(opt2).data('quantity-second') == 1 then q2 = '' else q2 = $(opt2).data('quantity-second')
+        {code:$(opt2).data('code'), quantity: q2 }
+        
+      console.log first_build
+      console.log second_build
+      common_options = window.objectIntersection(first_build, second_build)
+
+      # common_options =  _.intersection(first_build.toString(), second_build.toString())
+
+
+      console.log 'showing common_options'
+      console.log common_options
+      left_option = window.objectDifference(first_build, second_build)
+      console.log 'showing left_option'
+      console.log common_options
+      rigth_option = window.objectDifference(second_build, first_build)
+      console.log 'showing rigth_option'
+      console.log common_options
+      commons = _.map common_options, (copt)->
+        "#{copt.quantity}#{copt.code}"
+      lefties = _.map left_option, (lopt)->
+        "#{lopt.quantity}#{lopt.code}-1"
+      righties = _.map rigth_option, (ropt)->
+        "#{ropt.quantity}#{ropt.code}-2"
+
+      _.flatten([commons, lefties, righties]).join(',')
+
     else
-      for opt1 in options_first
-        if _.isNaN($(opt1).data('quantity-first')) or $(opt1).data('quantity-first') == 1 then q = '' else q = $(opt1).data('quantity-first')
-        if $(opt1).data('part-first')? and not _.isUndefined($(opt1).data('part-first')) and not $(opt1).data('part-first') == 'W'
-          result.push "#{q}#{$(opt1).data('code')}-#{p}" unless _.include(result, "#{q}#{$(opt1).data('code')}-#{p}") 
+      recipe = _.map options_first, (opt) ->
+        if _.isNaN($(opt).data('quantity-first')) or $(opt).data('quantity-first') == 1 then q = '' else q = $(opt).data('quantity-first')
+        if $(opt).data('part')? and not _.isUndefined($(opt).data('part-first')) and not $(opt).data('part-first') == 'W'
+          "#{q}#{$(opt).data('code')}-#{$(opt).data('part')}"
         else
-          result.push "#{q}#{$(opt1).data('code')}" unless _.include(result, "#{q}#{$(opt1).data('code')}")
-    result.join(',')
+          "#{q}#{$(opt).data('code')}"
+      recipe.join(',')
+    
 
     
 

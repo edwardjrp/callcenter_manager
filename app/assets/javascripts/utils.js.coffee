@@ -32,6 +32,27 @@
   return obj
   
 
+@objectIntersection = (array, rest) ->
+  result = []
+  for i1 in array
+    for i2 in rest
+      result.push i1 if _.isEqual(i1,i2)
+  _.uniq(result)
+
+@objectInclude = (array, target) ->
+  found = false
+  found = _.find(array, (value) ->_.isEqual value, target)
+  found?
+
+
+@objectDifference = (array, rest) ->
+  result = []
+  for i1 in array
+    result.push i1 unless @objectInclude(rest,i1)
+  _.uniq(result)
+
+
+
 @getParameterByName = (name)->
   name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]")
   regexS = "[\\?&]" + name + "=([^&#]*)"
