@@ -18,9 +18,14 @@ class @ItemFactory
 
   scan: ->
     if @category.isMulti() and @category.hasSides()
-      set_options = _.filter($(@el).find('.option_box_sides'), (option) => @multi_conditions(option))
+      set_options = _.filter $(@el).find('.option_box_sides'), (option) =>
+        if @multi_conditions(option)
+          console.log option
+          console.log $(option).data('quantity-first')
+          console.log $(option).data('quantity-second')
+          @multi_conditions(option)
     else
-      set_options = _.filter($(@el).find('.option_box'), (option) -> $(option).data('quantity')?)
+      set_options = _.filter($(@el).find('.option_box'), (option) => $(option).data('quantity')? and not _.isUndefined($(option).data('quantity')))
     set_options
 
   multi_quantity_scan: ->
@@ -66,21 +71,9 @@ class @ItemFactory
         if _.isNaN($(opt2).data('quantity-second')) or $(opt2).data('quantity-second') == 1 then q2 = '' else q2 = $(opt2).data('quantity-second')
         {code:$(opt2).data('code'), quantity: q2 }
         
-      console.log first_build
-      console.log second_build
       common_options = window.objectIntersection(first_build, second_build)
-
-      # common_options =  _.intersection(first_build.toString(), second_build.toString())
-
-
-      console.log 'showing common_options'
-      console.log common_options
       left_option = window.objectDifference(first_build, second_build)
-      console.log 'showing left_option'
-      console.log common_options
       rigth_option = window.objectDifference(second_build, first_build)
-      console.log 'showing rigth_option'
-      console.log common_options
       commons = _.map common_options, (copt)->
         "#{copt.quantity}#{copt.code}"
       lefties = _.map left_option, (lopt)->
@@ -109,7 +102,7 @@ class @ItemFactory
     $(opt).data('quantity-second')? and  $(opt).data('part-second')?
 
   multi_conditions: (opt)->
-    $(opt).data('quantity-first')? or $(opt).data('quantity-second')? or $(opt).data('part-first')? or $(opt).data('part-second')?
+    (not _.isUndefined($(opt).data('quantity-first')))  or (not _.isUndefined($(opt).data('quantity-second')))
 
   multi_quantity_check: (opt)->
     $(opt).data('quantity-first')? or $(opt).data('part-first')?

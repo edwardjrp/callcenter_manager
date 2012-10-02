@@ -194,6 +194,11 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     else if _.values(@selected_matchups).length == 1 and _.any(matchup.defaultOptions())
       @rollback_multi()
       @reset()
+      for position in _.keys(@selected_matchups)
+        for opt in @selected_matchups[position].defaultOptions()
+          if opt.product()?
+            target = $(@el).find('.options_container').find("#product_#{opt.product().get('id')}")
+            opt.teardownHalf(target, position)
       @colorize_button(@selected_matchups['first'].cid, 'specialties_container')
       @assign_options(@selected_matchups['first'])
 
@@ -220,8 +225,8 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     scope.find('.amount_control_multi_sides_second').addClass('hidden')
     scope.find('.btn-group').find('button').removeClass('active')
     scope.find('.dropdown').css('background-color', 'white')
-    $(@el).find('.option_box_sides').data('part-first', null )
-    $(@el).find('.option_box_sides').data('quantity', null )
+    $(@el).find('.option_box_sides').removeData('part-first')
+    $(@el).find('.option_box_sides').removeData('quantity-first')
     @shift() if @selected_matchups['second']?
 
   rollback_multi: ()->

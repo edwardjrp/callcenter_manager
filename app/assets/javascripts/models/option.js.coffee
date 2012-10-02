@@ -38,7 +38,21 @@ class Kapiqua25.Models.Option extends Backbone.RelationalModel
       el.closest('.option_box_sides').data('part-second', 2)
       el.closest('.option_box_sides').data('quantity-second',@quantity())
 
+
+  teardownHalf: (el, position)->
+    if position == 'first'
+      el.find('.dropdown').find('a.left_selection').css('background-color', 'transparent')
+      el.find('a.left_selection').html("Nada<b class='caret'></b>")
+      el.closest('.option_box_sides').removeData('part-first')
+      el.closest('.option_box_sides').removeData('quantity-first')
+    if position == 'second'
+      el.find('.dropdown').find('a.right_selection').css('background-color', 'transparent')
+      el.find('a.right_selection').html("Nada<b class='caret'></b>")
+      el.closest('.option_box_sides').removeData('part-second')
+      el.closest('.option_box_sides').removeData('quantity-second')
+
   configure: (el, configurable_type) ->
+    console.log 'CONFIGURE'
     switch configurable_type
       when 'with_units'
         el.find('input').val(@quantity())
@@ -56,20 +70,22 @@ class Kapiqua25.Models.Option extends Backbone.RelationalModel
         
 
   teardown: (el, configurable_type) ->
+    console.log 'TEARDOWN'
     switch configurable_type
       when 'with_units'
         el.find('input').val('0')
-        el.closest('.option_box').data('quantity', 0)
+        el.closest('.option_box').removeData('quantity')
       when 'amount'
         el.find('a.amount_selection').html("Nada<b class='caret'></b>")
         el.find('.dropdown').css('background-color', 'white')
-        el.closest('.option_box').data('quantity',0 )
+        el.closest('.option_box').removeData('quantity')
       when 'multi_and_sides'
         el.find('.btn-group').find("button.#{@partMap()}").trigger('click').removeClass('active')
         el.find('a.left_selection').html("Nada<b class='caret'></b>")
         el.find('.dropdown').css('background-color', 'white')
-        el.closest('.option_box_sides').data('part-first', null )
-        el.closest('.option_box_sides').data('quantity', null )
+        el.closest('.option_box_sides').removeData('part-first')
+        el.closest('.option_box_sides').removeData('quantity-first')
+        console.log el.closest('.option_box_sides').data('quantity-first')
 
 
   amountMap: ()->
