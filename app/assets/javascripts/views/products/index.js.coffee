@@ -77,6 +77,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     else 
       cart_product = item.build()
     console.log cart_product
+    console.log cart_product.isNew()
     if cart_product?
       if @editing
         cart_product.set({id: @edit_cart_product.get('id')}) 
