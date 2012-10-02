@@ -22,6 +22,9 @@ class Kapiqua25.Models.CartProduct extends Backbone.RelationalModel
           product_options.push product_option
     product_options
 
+
+  price: ->
+    if _.isUndefined(@get('priced_at')) or _.isNull(@get('priced_at'))  then 0.0 else Number(@get('priced_at')).toFixed(2)
   
   options_array: ()->
     return '' if this.get('product').get('category').get('has_options') == false

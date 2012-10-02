@@ -30,12 +30,12 @@ class Kapiqua25.Models.Option extends Backbone.RelationalModel
     if position == 'first'
       el.find('.dropdown').find('a.left_selection').css('background-color', '#A9C4F5')
       el.find('a.left_selection').html("#{@amountMap()}<b class='caret'></b>")
-      el.closest('.option_box_sides').data('part-first', 1)
+      el.closest('.option_box_sides').data('part-first', @part())
       el.closest('.option_box_sides').data('quantity-first',@quantity() )
     if position == 'second'
       el.find('.dropdown').find('a.right_selection').css('background-color', '#EED3D7')
       el.find('a.right_selection').html("#{@amountMap()}<b class='caret'></b>")
-      el.closest('.option_box_sides').data('part-second', 2)
+      el.closest('.option_box_sides').data('part-second', @part())
       el.closest('.option_box_sides').data('quantity-second',@quantity())
 
 

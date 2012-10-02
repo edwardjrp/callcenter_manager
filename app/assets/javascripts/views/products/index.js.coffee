@@ -107,7 +107,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     target = $(event.currentTarget)
     target.siblings('button').removeClass('active')
     target.addClass('active')
-    $(@el).find('.option_box_sides').data('part-first', target.data('part-first'))
+    target.closest('.option_box_sides').data('part-first', target.data('part-first'))
 
   set_first_amount: (event)->
     event.preventDefault()

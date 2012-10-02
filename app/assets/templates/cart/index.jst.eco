@@ -22,7 +22,7 @@
                 <span class='item_remove' rel='tooltip' title='Eliminar'><i class="icon-trash icon-white"></i></span>
                 <span class='show_options' rel='tooltip' title='Monstrar opciones'><i class="icon-list icon-white left-margin-1"></i></span>
                   <span class='edit_options' rel='tooltip' title='Editar opciones'><i class="icon-edit icon-white left-margin-1"></i></span>
-                <span class='pricing' data-options='<%=cart_product.options_array()%>'>$ <%=Number(cart_product.get('priced_at')).toFixed(2)%></span>
+                <span class='pricing' data-options='<%=cart_product.options_array()%>'>$ <%=cart_product.price()%></span>
               </div>
             </div>
             <p><%=cart_product.niffty_opions()%></p>

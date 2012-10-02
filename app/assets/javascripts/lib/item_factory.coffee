@@ -18,12 +18,7 @@ class @ItemFactory
 
   scan: ->
     if @category.isMulti() and @category.hasSides()
-      set_options = _.filter $(@el).find('.option_box_sides'), (option) =>
-        if @multi_conditions(option)
-          console.log option
-          console.log $(option).data('quantity-first')
-          console.log $(option).data('quantity-second')
-          @multi_conditions(option)
+      set_options = _.filter($(@el).find('.option_box_sides'), (option) => @multi_conditions(option))
     else
       set_options = _.filter($(@el).find('.option_box'), (option) => $(option).data('quantity')? and not _.isUndefined($(option).data('quantity')))
     set_options
@@ -84,10 +79,13 @@ class @ItemFactory
       _.flatten([commons, lefties, righties]).join(',')
 
     else
+      console.log 'ALONE'
       recipe = _.map options_first, (opt) ->
+        console.log $(opt).data('part-first')
+        console.log $(opt).data('code')
         if _.isNaN($(opt).data('quantity-first')) or $(opt).data('quantity-first') == 1 then q = '' else q = $(opt).data('quantity-first')
-        if $(opt).data('part')? and not _.isUndefined($(opt).data('part-first')) and not $(opt).data('part-first') == 'W'
-          "#{q}#{$(opt).data('code')}-#{$(opt).data('part')}"
+        unless $(opt).data('part-first') == 'W'
+          "#{q}#{$(opt).data('code')}-#{$(opt).data('part-first')}"
         else
           "#{q}#{$(opt).data('code')}"
       recipe.join(',')
