@@ -1,5 +1,5 @@
 Setting = require('./schema').Setting
-
+YAML = require('libyaml')
 
 Setting.node_url = (cb)->
   @all {var: 'node_url'}, (err, result) ->
@@ -7,7 +7,7 @@ Setting.node_url = (cb)->
       console.error(err)
       cb(err)
     else
-      cb(result)
+      cb(err, YAML.parse(result.value)[0])
 
 
 Setting.priceStoreId = (cb)->
@@ -16,7 +16,7 @@ Setting.priceStoreId = (cb)->
       console.error(err)
       cb(err)
     else
-      cb(result)
+      cb(err, YAML.parse(result.value)[0])
 
 
 
@@ -26,9 +26,7 @@ Setting.priceStoreIp = (cb)->
       console.error(err)
       cb(err)
     else
-      cb(result)
-
-
+      cb(err, YAML.parse(result.value)[0])
 
 Setting.pulsePort = (cb)->
   @all {var: 'pulse_port'}, (err, result) ->
@@ -36,8 +34,19 @@ Setting.pulsePort = (cb)->
       console.error(err)
       cb(err)
     else
-      cb(result)
+      cb(err, YAML.parse(result.value)[0])
 
+
+Setting.kapiqua = (cb)->
+  Setting.all {}, (err, results) ->
+    if err
+      console.error(err)
+      cb(err)
+    else
+      kapiquaConfig = {}
+      for result in results
+        kapiquaConfig[result.var] = YAML.parse(result.value)[0]
+      cb(err, kapiquaConfig)
 
 # olo2 url
 # Setting.node_url = (cb)->
@@ -50,4 +59,4 @@ Setting.pulsePort = (cb)->
 
 
 
-module.exports = Address
+module.exports = Setting

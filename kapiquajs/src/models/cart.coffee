@@ -3,6 +3,7 @@ async = require('async')
 _ = require('underscore')
 PulseBridge = require('../pulse_bridge/pulse_bridge')
 OrderReply = require('../pulse_bridge/order_reply')
+Setting = require('../models/setting')
 Cart.validatesPresenceOf('user_id')
 
 # Cart.read = (data, respond, socket)->
@@ -41,8 +42,6 @@ Cart.prototype.price = (socket)->
         else
           updated_cart_products = _.map current_cart_products, (current_cart_product)-> 
             current_cart_product.product = _.find products, (product)->
-              # console.log product
-              # console.log current_cart_product.product_id
               product.id == current_cart_product.product_id
           callback(null, current_cart_products, updated_cart_products)
 
@@ -58,11 +57,18 @@ Cart.prototype.price = (socket)->
         pulse_com_error = (comm_err) ->
           console.log comm_err
           socket.emit 'cart:price:error', {error: JSON.stringify(comm_err)} if socket?
+        Setting.kapiqua (err, settings) ->
+          if err
+            console.error err
+          else
+            cart_request = new  PulseBridge(current_cart, settings.price_store_id, settings.price_store_ip,  settings.pulse_port)
+            cart_request.price pulse_com_error, (res_data)->
+              # order_reply = new OrderReply(res_data)              
+              console.log res_data
+        # PulseBridge.price current_cart, pulse_com_error, (res_data) ->
 
-        PulseBridge.price current_cart, pulse_com_error, (res_data) ->
-
-          order_reply = new OrderReply(res_data)
-          console.log order_reply
+        #   order_reply = new OrderReply(res_data)
+        #   console.log order_reply
 
 
 Cart.prototype.simplified = ->

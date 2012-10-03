@@ -1,4 +1,4 @@
-var Cart, OrderReply, PulseBridge, async, _;
+var Cart, OrderReply, PulseBridge, Setting, async, _;
 
 Cart = require('./schema').Cart;
 
@@ -9,6 +9,8 @@ _ = require('underscore');
 PulseBridge = require('../pulse_bridge/pulse_bridge');
 
 OrderReply = require('../pulse_bridge/order_reply');
+
+Setting = require('../models/setting');
 
 Cart.validatesPresenceOf('user_id');
 
@@ -75,10 +77,16 @@ Cart.prototype.price = function(socket) {
           });
         }
       };
-      return PulseBridge.price(current_cart, pulse_com_error, function(res_data) {
-        var order_reply;
-        order_reply = new OrderReply(res_data);
-        return console.log(order_reply);
+      return Setting.kapiqua(function(err, settings) {
+        var cart_request;
+        if (err) {
+          return console.error(err);
+        } else {
+          cart_request = new PulseBridge(current_cart, settings.price_store_id, settings.price_store_ip, settings.pulse_port);
+          return cart_request.price(pulse_com_error, function(res_data) {
+            return console.log(res_data);
+          });
+        }
       });
     }
   });

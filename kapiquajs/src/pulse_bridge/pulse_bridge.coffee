@@ -4,50 +4,48 @@ libxml = require("libxmljs")
 Cart = require('../models/cart')
 Product = require('../models/product')
 Category = require('../models/category')
-Setting = require('../models/setting')
 async = require('async')
 util = require('util')
 
 
 class PulseBridge
-  @debug = false
-  @target = 'http://192.168.85.60:59101/RemotePulseAPI/RemotePulseAPI.WSDL'    
-  @headers = {"User-Agent": "kapiqua-node" , "Connection": "close","Accept" : "text/html,application/xhtml+xml,application/xml","Accept-Charset": "utf-8", "Content-Type":"text/xml;charset=UTF-8"}
+
+  constructor: (@cart, @storeid, @target_ip, @target_port) ->
+
+  # @debug = false
+  target: ->
+   "http://#{@target_ip}:#{@target_port}/RemotePulseAPI/RemotePulseAPI.WSDL"
   
-  
-  @make: (action, data) ->
-    doc = new libxml.Document()
+  # @make: (action, data) ->
+  #   doc = new libxml.Document()
 
 
-  @fallback_values: (action, value, fallback) ->
+  fallback_values: (action, value, fallback) ->
     if action == 'PlaceOrder'
       value || fallback
     else
       fallback
     
-  @send: (action, data, err_cb, cb) ->
-    # TestConnection
-    # <Value>Hello there</Value>
-    body = data
-    # console.log body
-    @headers["Content-Length"] =  body.length
-    @headers["SOAPAction"]= "http://www.dominos.com/action/#{action}"
-    if @debug == true
-      console.log @headers
-    request {method: 'POST', headers: @headers, uri: @target, body: body }, (err, res, res_data) ->
+  send: (action, data, err_cb, cb) ->
+    headers = { "User-Agent": "kapiqua-node","SOAPAction": "http://www.dominos.com/action/#{action}"  , "Content-Length": data.length, "Connection": "close","Accept" : "text/html,application/xhtml+xml,application/xml","Accept-Charset": "utf-8", "Content-Type":"text/xml;charset=UTF-8" }
+    console.info headers
+    # console.info @storeid
+    # console.info @target()
+    # console.info data
+    request {method: 'POST', headers: headers, uri: @target(), body: data }, (err, res, res_data) ->
       if err
-        console.log 'Before the request handling'
+        console.error err
         err_cb(err)
       else
         cb(res_data)
   
-  @price: (cart, err_cb, cb) ->
-    PulseBridge.send('PriceOrder', PulseBridge.body('PriceOrder', cart), err_cb, cb)
+  price: (err_cb, cb) ->
+    @send('PriceOrder', @body('PriceOrder'), err_cb, cb)
 
-  @place: (cart, err_cb, cb) ->
-    PulseBridge.send('PriceOrder', PulseBridge.body('PlaceOrder', cart), err_cb, cb)      
+  place: (err_cb, cb) ->
+    @send('PlaceOrder', @body('PlaceOrder'), err_cb, cb)
      
-  @body: (action, cart) =>
+  body: (action) =>
     doc = new libxml.Document()
     envelope = new libxml.Element(doc,'env:Envelope').attr
       'xmlns:xsd':"http://www.w3.org/2001/XMLSchema"
@@ -62,12 +60,13 @@ class PulseBridge
     auth.addChild(new libxml.Element(doc,'Password', 'supp0rtivemeasures'))
     auth.addChild(new libxml.Element(doc,'TimeStamp',''))
     header.addChild(auth)
-     
-    order = new libxml.Element(doc,'Order').attr({orderid:"Order##{new Date().getTime()}", currency:"en-USD", language:"en-USA"})
-    order.addChild(new libxml.Element(doc,'StoreID', @fallback_values(action, cart.store?.storeid,'99998')))   # store
-    order.addChild(new libxml.Element(doc,'ServiceMethod', @fallback_values(action, cart.service_method,'PickUp')))  # service method
+    # #{new Date().getTime()}
+    # 1349230038
+    order = new libxml.Element(doc,'Order').attr({orderid:"Order#1349230038", currency:"en-USD", language:"en-USA"})
+    order.addChild(new libxml.Element(doc,'StoreID', "#{@storeid}" ))   # store @storeid 
+    order.addChild(new libxml.Element(doc,'ServiceMethod', @fallback_values(action, @cart.service_method,'PickUp')))  # service method
     order.addChild(new libxml.Element(doc,'OrderTakeSeconds', '60'))
-    order.addChild(new libxml.Element(doc,'DeliveryInstructions', @fallback_values(action, cart.delivery_instructions,'Asking for price')))  # delivery instructions
+    order.addChild(new libxml.Element(doc,'DeliveryInstructions', @fallback_values(action, @cart.delivery_instructions,'Asking for price')))  # delivery instructions
     #order source
     order_source  = new libxml.Element(doc,'OrderSource')
     order_source.addChild(new libxml.Element(doc,'OrganizationURI', 'proteus.dominos.com.do'))
@@ -80,19 +79,19 @@ class PulseBridge
     customer_address = new libxml.Element(doc,'CustomerAddress').attr({ 'type':"Address-US"})
     customer_address.addChild(new libxml.Element(doc,'City', 'Santo Domingo')) # city
     customer_address.addChild(new libxml.Element(doc,'Region', ''))
-    customer_address.addChild(new libxml.Element(doc,'PostalCode', '99998'))
+    customer_address.addChild(new libxml.Element(doc,'PostalCode', "#{@storeid}"))
     customer_address.addChild(new libxml.Element(doc,'StreetNumber', '99'))
     customer_address.addChild(new libxml.Element(doc,'StreetName', 'Princing'))
     customer_address.addChild(new libxml.Element(doc,'AddressLine2').attr({'xsi:nil':"true"}))
     customer_address.addChild(new libxml.Element(doc,'AddressLine3').attr({'xsi:nil':"true"}))
     customer_address.addChild(new libxml.Element(doc,'AddressLine4').attr({'xsi:nil':"true"}))
-    customer_address.addChild(new libxml.Element(doc,'UnitType', 'Apartment'))
+    customer_address.addChild(new libxml.Element(doc,'UnitType', 'Apartment').attr({"xsi:type":"xsd:string"}))
     customer_address.addChild(new libxml.Element(doc,'UnitNumber', '202').attr({"xsi:type":"xsd:string"}))
     customer.addChild(customer_address)
      
     customer_name = new libxml.Element(doc,'Name').attr({ 'type':"Name-US"})
-    customer_name.addChild(new libxml.Element(doc,'FirstName', @fallback_values(action, cart.client?.first_name,'dummy_pricing')))  # user  name
-    customer_name.addChild(new libxml.Element(doc,'LastName', @fallback_values(action, cart.client?.last_name,'dummy_pricing')))  # user last name
+    customer_name.addChild(new libxml.Element(doc,'FirstName', @fallback_values(action, @cart.client?.first_name,'dummy_pricing')))  # user  name
+    customer_name.addChild(new libxml.Element(doc,'LastName', @fallback_values(action, @cart.client?.last_name,'dummy_pricing')))  # user last name
     customer.addChild(customer_name)
      
     customer_type_info = new libxml.Element(doc,'CustomerTypeInfo')
@@ -101,9 +100,9 @@ class PulseBridge
     customer_type_info.addChild(new libxml.Element(doc,'Department').attr('xsi:nil':"true"))
     customer.addChild(customer_type_info)
      
-    customer.addChild(new libxml.Element(doc,'Phone', @fallback_values(action, cart.client?.phones?.first?.number,'8095555555')))  # user current phone
-    customer.addChild(new libxml.Element(doc,'Extension', @fallback_values(action, cart.client?.phones?.first?.ext,'99'))) # user current extention - have to check olo for fallback value
-    customer.addChild(new libxml.Element(doc,'Email', @fallback_values(action, cart.client?.email,'none@email.com'))) # user current extention - have to check olo for fallback value
+    customer.addChild(new libxml.Element(doc,'Phone', @fallback_values(action, @cart.client?.phones?.first?.number,'8095555555')))  # user current phone
+    customer.addChild(new libxml.Element(doc,'Extension', @fallback_values(action, @cart.client?.phones?.first?.ext,'99'))) # user current extention - have to check olo for fallback value
+    customer.addChild(new libxml.Element(doc,'Email', @fallback_values(action, @cart.client?.email,'none@email.com'))) # user current extention - have to check olo for fallback value
     customer.addChild(new libxml.Element(doc,'DeliveryInstructions').attr('xsi:nil':"true"))
     customer.addChild(new libxml.Element(doc,'CustomerTax').attr('xsi:nil':"true"))
      
@@ -117,10 +116,10 @@ class PulseBridge
     #items
     order_items = new libxml.Element(doc,'OrderItems')
     # iteration here
-    console.log cart if action == 'PlaceOrder'
+    console.log @cart if action == 'PlaceOrder'
 
-    if _.any(cart.cart_products)
-      for cart_product in cart.cart_products
+    if _.any(@cart.cart_products)
+      for cart_product in @cart.cart_products
         # console.log cart_product
         # console.log cart_product
         order_item = new libxml.Element(doc,'OrderItem')
@@ -150,25 +149,25 @@ class PulseBridge
     #payment   # this whole section depends on the payment menthod - check olo2 cc for handling
     payment = new libxml.Element(doc,'Payment')
     cash_payment = new libxml.Element(doc,'CashPayment')
-    cash_payment.addChild(new libxml.Element(doc,'PaymentAmmount', @fallback_values(action, cart.payment_amount,'1000000')))  # current order for place
+    cash_payment.addChild(new libxml.Element(doc,'PaymentAmmount', @fallback_values(action, @cart.payment_amount,'1000000')))  # current order for place
     payment.addChild(cash_payment)
     order.addChild(payment)
     #end payment
 
     orde_info_collection = new libxml.Element(doc,'OrderInfoCollection')
     order_info_1  = new libxml.Element(doc,'OrderInfo')
-    order_info_1.addChild(new libxml.Element(doc,'KeyCode',@fallback_values(action, cart.fiscal_type, 'FinalConsumer')))
-    order_info_1.addChild(new libxml.Element(doc,'Response',@fallback_values(action, cart.fiscal_type, 'FinalConsumer')))
+    order_info_1.addChild(new libxml.Element(doc,'KeyCode',@fallback_values(action, @cart.fiscal_type, 'FinalConsumer')))
+    order_info_1.addChild(new libxml.Element(doc,'Response',@fallback_values(action, @cart.fiscal_type, 'FinalConsumer')))
     orde_info_collection.addChild(order_info_1)
 
     order_info_2  = new libxml.Element(doc,'OrderInfo')
     order_info_2.addChild(new libxml.Element(doc,'KeyCode','TaxID'))
-    order_info_2.addChild(new libxml.Element(doc,'Response',@fallback_values(action, cart.fiscal_number, '')))
+    order_info_2.addChild(new libxml.Element(doc,'Response',@fallback_values(action, @cart.fiscal_number, '')))
     orde_info_collection.addChild(order_info_2)
 
     order_info_3  = new libxml.Element(doc,'OrderInfo')
     order_info_3.addChild(new libxml.Element(doc,'KeyCode','CompanyName'))
-    order_info_3.addChild(new libxml.Element(doc,'Response',@fallback_values(action, cart.company_name, '')))
+    order_info_3.addChild(new libxml.Element(doc,'Response',@fallback_values(action, @cart.company_name, '')))
     orde_info_collection.addChild(order_info_3)
 
     order.addChild(orde_info_collection)

@@ -15,8 +15,11 @@ recursive_compile_file = (dir_to_build, destination_build)->
       else
         if file.match(/.coffee$/)
           if fs.existsSync("#{dir_to_build}/#{file}")
-            appsrc = coffee.compile(fs.readFileSync("#{dir_to_build}/#{file}").toString('utf-8'), { bare: true })
-            fs.writeFileSync("#{destination_build}/#{file.replace(/.coffee$/, '.js')}", appsrc)
+            try
+              appsrc = coffee.compile(fs.readFileSync("#{dir_to_build}/#{file}").toString('utf-8'), { bare: true })
+              fs.writeFileSync("#{destination_build}/#{file.replace(/.coffee$/, '.js')}", appsrc)
+            catch error
+              console.error "cant compile #{file} error : #{error}"
           else
             console.log "#{dir_to_build}/#{file} does not exists"
         else

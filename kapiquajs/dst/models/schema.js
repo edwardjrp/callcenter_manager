@@ -1,4 +1,4 @@
-var Address, Area, Cart, CartProduct, Category, City, Client, Config, DB, Phone, Product, Schema, Store, Street, User, jugglingdb;
+var Address, Area, Cart, CartProduct, Category, City, Client, Config, DB, Phone, Product, Schema, Setting, Store, Street, User, jugglingdb;
 
 Config = require('../config');
 
@@ -313,6 +313,33 @@ User = DB.define("User", {
   table: "users"
 });
 
+Setting = DB.define("Setting", {
+  "var": {
+    type: String,
+    length: 255
+  },
+  value: {
+    type: Schema.Text
+  },
+  thing_id: {
+    type: Number
+  },
+  thing_type: {
+    type: String,
+    length: 30
+  },
+  created_at: {
+    type: Date,
+    "default": Date.now
+  },
+  updated_at: {
+    type: Date,
+    "default": Date.now
+  }
+}, {
+  table: "settings"
+});
+
 Phone = DB.define("Phone", {
   number: {
     type: String,
@@ -617,6 +644,8 @@ CartProduct.belongsTo(Cart, {
   as: 'cart',
   foreignKey: 'cart_id'
 });
+
+exports.Setting = Setting;
 
 exports.Cart = Cart;
 
