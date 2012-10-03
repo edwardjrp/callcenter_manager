@@ -19,6 +19,7 @@ CartProduct.addItem = (data, respond, socket) ->
           else
             result_cart_product.cart (err, cart) ->
               socket.emit('cart_products:saved', cart.toJSON())
+              cart.price(socket)
             respond(err, result_cart_product)
       else
         cart_product = _.first(cart_products)
@@ -28,6 +29,12 @@ CartProduct.addItem = (data, respond, socket) ->
            else
               socket.emit('cart_products:updated', updated_cart_product.toJSON())
               respond(err,updated_cart_product)
+              if trigger_pricing? and trigger_pricing == true
+                updated_cart_product.cart (err, cart_to_price)->
+                  if err
+                    socket.emit 'cart:pricing:error', 'No se pudo leer la orden actual'
+                  else
+                    cart_to_price.price(socket)
 
 CartProduct.updateItem =  (data, respond, socket, trigger_pricing) ->
   if data?
@@ -62,6 +69,7 @@ CartProduct.removeItem = (data, respond, socket) ->
               respond(del_err)
             else
               socket.emit('cart_products:deleted', data.id)
+              cart.price(socket)
               
 CartProduct.prototype.simplified = ->
   JSON.parse(JSON.stringify(this))

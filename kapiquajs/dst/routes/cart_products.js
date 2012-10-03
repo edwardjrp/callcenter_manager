@@ -19,7 +19,7 @@ CartProducts = (function() {
   function CartProducts() {}
 
   CartProducts.create = function(data, respond, socket) {
-    return CartProduct.addItem(data, respond, socket);
+    return CartProduct.addItem(data, respond, socket, true);
   };
 
   CartProducts.update = function(data, respond, socket) {
@@ -27,7 +27,7 @@ CartProducts = (function() {
   };
 
   CartProducts.destroy = function(data, respond, socket) {
-    return CartProduct.removeItem(data, respond, socket);
+    return CartProduct.removeItem(data, respond, socket, true);
   };
 
   return CartProducts;
