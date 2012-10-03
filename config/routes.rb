@@ -16,6 +16,7 @@ Kapiqua25::Application.routes.draw do
   get 'logout', to: "sessions#destroy", as: :logout
   get 'builder', to: "builder#index", as: :builder
   post 'sessions', to: "sessions#create"
+  resources :payments, only: :index
   resources :clients do
     collection do 
       post 'import'

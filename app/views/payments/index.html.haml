@@ -1,0 +1,124 @@
+= render 'administration'
+
+=link_to '<i class="icon-arrow-left"></i> Cancelar'.html_safe, '#', class: 'btn bottom-margin-1'
+.row
+  .span4
+    .well
+      .row.bottom-margin-1
+        .span4
+          %h3 Información del cliente
+      .row
+        .span4
+          %strong Nombre:
+          = @cart.client.first_name
+      .row
+        .span4
+          %strong Apellido:
+          = @cart.client.last_name
+      .row
+        .span4
+          %strong Cedula:
+          = number_to_cedula @cart.client.idnumber
+      .row
+        .span4
+          %strong Correo:
+          = @cart.client.email
+    .well#phones_list
+      .row
+        .span4        
+          %h3 Teléfonos
+      %hr
+      #client_phone_list
+        .client_phone{:id=> dom_id(@cart.client.last_phone), :data=> {'phone'=> @cart.client.last_phone.to_json}}
+          .row
+            .span4
+              %strong Numero:
+              =number_to_phone @cart.client.last_phone.number
+          - if @cart.client.last_phone.ext.present?
+            .row
+              .span4
+                %strong extensión:
+                = @cart.client.last_phone.ext
+          %hr 
+    .well#addresses_list
+      .row
+        .span4        
+          %h3 Direcciones
+      %hr
+      #client_address_list
+        -if @cart.client.last_address
+          .client_address{:id=> dom_id(@cart.client.last_address)}
+            .row
+              .span4
+                %strong Ciudad:
+                = @cart.client.last_address.street_area.city.name
+            .row
+              .span4
+                %strong Sector:
+                = @cart.client.last_address.street_area.name
+            .row
+              .span4
+                %strong Calle:
+                = @cart.client.last_address.street.name
+            .row
+              .span4
+                %strong Numero:
+                = @cart.client.last_address.number
+            .row
+              .span4
+                %strong Tipo:
+                = @cart.client.last_address.unit_type
+            -if @cart.client.last_address.unit_number
+              .row
+                .span4
+                  %strong No. de apartamento:
+                  = @cart.client.last_address.unit_number
+            -if @cart.client.last_address.postal_code
+              .row
+                .span4
+                  %strong Codigo postal:
+                  =@cart.client.last_address.postal_code
+
+            -if @cart.client.last_address.delivery_instructions
+              .row
+                .span3
+                  %strong instrucciones de entrega:
+              .row
+                .span4
+                  = @cart.client.last_address.delivery_instructions
+            %hr 
+      
+  .span8#carts_list
+    - if @cart
+      %h3 Orden
+      %hr 
+      .row
+        .span2
+          %strong Agente:
+          =@cart.user.full_name
+        .span2.offset2
+          =l @cart.created_at, format: :short
+      .row
+        .span2
+          %strong Monto de la orden:
+          =number_to_currency(@cart.payment_amount) || 'N/A'
+        .span2.offset2
+          %strong Modo de servicio:
+          =@cart.service_method || 'N/A'
+
+      .row{:data=>{'cart-id'=> @cart.id}, :id=>dom_id(@cart)}
+        %table.table.table-striped.table-bordered.table-condensed.span8
+          %thead
+            %tr
+              %th Cantidad
+              %th product
+              %th Optiones
+              %th Precio              
+          %tbody
+            - @cart.cart_products.each do |cart_product|
+              %tr
+                %td= cart_product.quantity
+                %td= cart_product.product.productname
+                %td= cart_product.product.niffty_options
+                %td= cart_product.priced_at
+      %hr 

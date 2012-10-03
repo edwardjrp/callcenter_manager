@@ -13,26 +13,6 @@
       %meta{:content => "#{current_user.auth_token}", :name => "user"}
     %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}
   %body{id: controller_name}
-    .navbar.navbar-fixed-top
-      .navbar-inner
-        .container
-          %a.btn.btn-navbar{"data-target" => ".nav-collapse", "data-toggle" => "collapse"}
-            %span.icon-bar
-            %span.icon-bar
-            %span.icon-bar
-          .brand Domino's
-          .nav-collapse
-            -if user_signed_in?
-              =render_navigation :expand_all => true, :renderer => :bootstrap
-            %ul.nav.pull-right
-              -if user_signed_in?
-                %li#current_username= link_to current_user.full_name, '#'
-                %li.divider-vertical
-                %li= link_to "Cerrar Sesión", logout_path, :id=>'end_session'
-              -else
-                %li= link_to "Iniciar sesión", login_path
-    = render :partial => 'cart_info' if user_signed_in? && (!current_user.is? :admin)
-    = yield :subnav if user_signed_in? && (current_user.is? :admin)
     .container.bottom-margin-1
       .row
         .span12
