@@ -65,13 +65,7 @@ Backbone.sync = function (method, model, options) {
   }
 
   // If your socket.io connection exists on a different var, change here:
-  var io = model.socket || window.socket || Backbone.socket;
-  console.log('EMITING MODEL DATA')
-  console.log(io)
-  console.log(namespace)
-  console.log(method)
-  console.log(namespace + ':' + method)
-  io.emit('chat', params.data, function(data){console.log('CONIASO')})
+  var io = model.socket || window.socket || Backbone.socket;:wq
   io.emit(namespace + ':' + method, params.data, function (err, data) {
     if (err) {
       console.log(err)
