@@ -4,6 +4,7 @@ libxml = require("libxmljs")
 Cart = require('../models/cart')
 Product = require('../models/product')
 Category = require('../models/category')
+Setting = require('../models/setting')
 async = require('async')
 util = require('util')
 
@@ -117,8 +118,10 @@ class PulseBridge
     order_items = new libxml.Element(doc,'OrderItems')
     # iteration here
     console.log cart if action == 'PlaceOrder'
+
     if _.any(cart.cart_products)
       for cart_product in cart.cart_products
+        # console.log cart_product
         # console.log cart_product
         order_item = new libxml.Element(doc,'OrderItem')
         order_item.addChild(new libxml.Element(doc,'ProductCode', cart_product.product.productcode))

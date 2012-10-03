@@ -1,10 +1,14 @@
-var Cart, async, _;
+var Cart, OrderReply, PulseBridge, async, _;
 
 Cart = require('./schema').Cart;
 
 async = require('async');
 
 _ = require('underscore');
+
+PulseBridge = require('../pulse_bridge/pulse_bridge');
+
+OrderReply = require('../pulse_bridge/order_reply');
 
 Cart.validatesPresenceOf('user_id');
 
@@ -49,12 +53,12 @@ Cart.prototype.price = function(socket) {
               return product.id === current_cart_product.product_id;
             });
           });
-          return callback(null, updated_cart_products, products);
+          return callback(null, current_cart_products, updated_cart_products);
         }
       });
     }
-  ], function(final_error, updated_cart_products, products) {
-    var current_cart;
+  ], function(final_error, updated_cart_products, current_cart_products) {
+    var current_cart, pulse_com_error;
     if (final_error != null) {
       console.log(final_error);
       if (socket != null) {
@@ -63,7 +67,19 @@ Cart.prototype.price = function(socket) {
     } else {
       current_cart = me.simplified();
       current_cart.cart_products = updated_cart_products;
-      return console.log(current_cart);
+      pulse_com_error = function(comm_err) {
+        console.log(comm_err);
+        if (socket != null) {
+          return socket.emit('cart:price:error', {
+            error: JSON.stringify(comm_err)
+          });
+        }
+      };
+      return PulseBridge.price(current_cart, pulse_com_error, function(res_data) {
+        var order_reply;
+        order_reply = new OrderReply(res_data);
+        return console.log(order_reply);
+      });
     }
   });
 };

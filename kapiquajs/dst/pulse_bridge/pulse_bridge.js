@@ -164,6 +164,7 @@ PulseBridge = (function() {
     if (action === 'PlaceOrder') {
       console.log(cart);
     }
+    console.log('GOT HERE');
     if (_.any(cart.cart_products)) {
       _ref10 = cart.cart_products;
       for (_i = 0, _len = _ref10.length; _i < _len; _i++) {

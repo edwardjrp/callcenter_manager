@@ -1,6 +1,8 @@
 Cart = require('./schema').Cart
 async = require('async')
 _ = require('underscore')
+PulseBridge = require('../pulse_bridge/pulse_bridge')
+OrderReply = require('../pulse_bridge/order_reply')
 Cart.validatesPresenceOf('user_id')
 
 # Cart.read = (data, respond, socket)->
@@ -37,20 +39,30 @@ Cart.prototype.price = (socket)->
         if(c_p_err)
           socket.emit 'cart:price:error', 'No se pudo acceder a la lista de productos para esta orden' if socket?
         else
-          updated_cart_products = _.map(current_cart_products, (current_cart_product)-> current_cart_product.product = _.find(products, (product)-> product.id == current_cart_product.product_id))
-          callback(null, updated_cart_products, products)
+          updated_cart_products = _.map current_cart_products, (current_cart_product)-> 
+            current_cart_product.product = _.find products, (product)->
+              # console.log product
+              # console.log current_cart_product.product_id
+              product.id == current_cart_product.product_id
+          callback(null, current_cart_products, updated_cart_products)
 
     ]
     ,
-    (final_error, updated_cart_products, products) ->
-      # coupones are pending
+    (final_error, updated_cart_products, current_cart_products) ->
       if final_error?
         console.log final_error
         socket.emit 'cart:price:error', 'Un error impidio solitar el precio de esta orden' if socket?  
       else
         current_cart  = me.simplified()
         current_cart.cart_products = updated_cart_products
-        console.log current_cart
+        pulse_com_error = (comm_err) ->
+          console.log comm_err
+          socket.emit 'cart:price:error', {error: JSON.stringify(comm_err)} if socket?
+
+        PulseBridge.price current_cart, pulse_com_error, (res_data) ->
+
+          order_reply = new OrderReply(res_data)
+          console.log order_reply
 
 
 Cart.prototype.simplified = ->
