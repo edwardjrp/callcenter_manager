@@ -4,6 +4,7 @@ libxml = require("libxmljs")
 Cart = require('../models/cart')
 Product = require('../models/product')
 Category = require('../models/category')
+Option = require('./option')
 async = require('async')
 util = require('util')
 
@@ -31,7 +32,7 @@ class PulseBridge
     console.info headers
     # console.info @storeid
     # console.info @target()
-    # console.info data
+    console.info data
     request {method: 'POST', headers: headers, uri: @target(), body: data }, (err, res, res_data) ->
       if err
         console.error err
@@ -131,13 +132,14 @@ class PulseBridge
         order_item.addChild(new libxml.Element(doc,'CookingInstructions').attr('xsi:nil':"true"))
         
         item_modifiers = new libxml.Element(doc,'ItemModifiers')
-        
-        if _.any(cart_product.product_options)
-          for product_option in cart_product.product_options             
-            item_modifier = new libxml.Element(doc,'ItemModifier').attr({code: product_option.product.productcode})
+        product_options = Option.collection(cart_product.options)
+        console.log product_options
+        if _.any(product_options)
+          for product_option in product_options             
+            item_modifier = new libxml.Element(doc,'ItemModifier').attr({code: product_option.code()})
             item_modifier.addChild(new libxml.Element(doc,'ItemModifierName').attr('xsi:nil':"true"))
-            item_modifier.addChild(new libxml.Element(doc,'ItemModifierQuantity', product_option.quantity.toString()))
-            item_modifier.addChild(new libxml.Element(doc,'ItemModifierPart', product_option.part))
+            item_modifier.addChild(new libxml.Element(doc,'ItemModifierQuantity', product_option.quantity().toString()))
+            item_modifier.addChild(new libxml.Element(doc,'ItemModifierPart', product_option.part()))
             item_modifiers.addChild(item_modifier)
         order_item.addChild(item_modifiers)
         order_items.addChild(order_item)

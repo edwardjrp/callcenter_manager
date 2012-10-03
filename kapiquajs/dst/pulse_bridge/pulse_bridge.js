@@ -1,4 +1,4 @@
-var Cart, Category, Product, PulseBridge, async, libxml, request, util, _,
+var Cart, Category, Option, Product, PulseBridge, async, libxml, request, util, _,
   __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 _ = require('underscore');
@@ -12,6 +12,8 @@ Cart = require('../models/cart');
 Product = require('../models/product');
 
 Category = require('../models/category');
+
+Option = require('./option');
 
 async = require('async');
 
@@ -52,6 +54,7 @@ PulseBridge = (function() {
       "Content-Type": "text/xml;charset=UTF-8"
     };
     console.info(headers);
+    console.info(data);
     return request({
       method: 'POST',
       headers: headers,
@@ -76,7 +79,7 @@ PulseBridge = (function() {
   };
 
   PulseBridge.prototype.body = function(action) {
-    var auth, body, cart_product, cash_payment, customer, customer_address, customer_name, customer_type_info, doc, envelope, header, item_modifier, item_modifiers, orde_info_collection, order, order_info_1, order_info_2, order_info_3, order_item, order_items, order_source, payment, product_option, _i, _j, _len, _len1, _ref, _ref1, _ref10, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
+    var auth, body, cart_product, cash_payment, customer, customer_address, customer_name, customer_type_info, doc, envelope, header, item_modifier, item_modifiers, orde_info_collection, order, order_info_1, order_info_2, order_info_3, order_item, order_items, order_source, payment, product_option, product_options, _i, _j, _len, _len1, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
     doc = new libxml.Document();
     envelope = new libxml.Element(doc, 'env:Envelope').attr({
       'xmlns:xsd': "http://www.w3.org/2001/XMLSchema",
@@ -183,18 +186,19 @@ PulseBridge = (function() {
           'xsi:nil': "true"
         }));
         item_modifiers = new libxml.Element(doc, 'ItemModifiers');
-        if (_.any(cart_product.product_options)) {
-          _ref10 = cart_product.product_options;
-          for (_j = 0, _len1 = _ref10.length; _j < _len1; _j++) {
-            product_option = _ref10[_j];
+        product_options = Option.collection(cart_product.options);
+        console.log(product_options);
+        if (_.any(product_options)) {
+          for (_j = 0, _len1 = product_options.length; _j < _len1; _j++) {
+            product_option = product_options[_j];
             item_modifier = new libxml.Element(doc, 'ItemModifier').attr({
-              code: product_option.product.productcode
+              code: product_option.code()
             });
             item_modifier.addChild(new libxml.Element(doc, 'ItemModifierName').attr({
               'xsi:nil': "true"
             }));
-            item_modifier.addChild(new libxml.Element(doc, 'ItemModifierQuantity', product_option.quantity.toString()));
-            item_modifier.addChild(new libxml.Element(doc, 'ItemModifierPart', product_option.part));
+            item_modifier.addChild(new libxml.Element(doc, 'ItemModifierQuantity', product_option.quantity().toString()));
+            item_modifier.addChild(new libxml.Element(doc, 'ItemModifierPart', product_option.part()));
             item_modifiers.addChild(item_modifier);
           }
         }

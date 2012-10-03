@@ -84,7 +84,9 @@ Cart.prototype.price = function(socket) {
         } else {
           cart_request = new PulseBridge(current_cart, settings.price_store_id, settings.price_store_ip, settings.pulse_port);
           return cart_request.price(pulse_com_error, function(res_data) {
-            return console.log(res_data);
+            var order_reply;
+            order_reply = new OrderReply(res_data);
+            return console.log(order_reply);
           });
         }
       });
