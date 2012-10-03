@@ -1,11 +1,12 @@
 libxmljs = require("libxmljs")
 util = require('util')
+Option = require('./option')
 _ = require('underscore')
 
 class OrderReply
-  constructor: (body) ->
-    unless typeof body == 'undefined' or not body?
-      doc = libxmljs.parseXmlString(body)
+  constructor: (@body, @cart_products) ->
+    unless typeof @body == 'undefined' or not @body?
+      doc = libxmljs.parseXmlString(@body)
       @reply_id = doc.get('//OrderReply').attr('orderreplyid').value()
       @status = doc.get('//Status').text()
       @status_text = doc.get('//StatusText').text()
@@ -25,6 +26,43 @@ class OrderReply
       @payment_amount = doc.get('//PaymentAmount').text()
       
 
+  products: ->
+    results = []
+    # console.log @order_items
+    # console.log @cart_products
+    for order_item in @order_items
+      for cart_product in @cart_products
+        # console.log objectDifference(Option.pulseCollection(cart_product.options), order_item.options)
+        console.log typeof cart_product.quantity
+        console.log typeof order_item.quantity
+        console.log order_item.quantity == cart_product.quantity
+        # console.log cart_product.options
+        if order_item.code == cart_product.product.productcode and order_item.quantity == cart_product.quantity.toString() and _.isEmpty(objectDifference(Option.pulseCollection(cart_product.options), order_item.options))
+          build_result = { cart_product_id: cart_product.id, product_id: cart_product.product.id, priced_at: order_item.priced_at }
+          console.log { cart_product_id: cart_product.id, product_id: cart_product.product.id, priced_at: order_item.priced_at }
+          results.push build_result unless objectInclude(results, build_result)
+    results
+
+
+objectIntersection = (array, rest) ->
+  result = []
+  for i1 in array
+    for i2 in rest
+      result.push i1 if _.isEqual(i1,i2)
+  _.uniq(result)
+
+objectInclude = (array, target) ->
+  found = false
+  found = _.find(array, (value) ->_.isEqual value, target)
+  found?
+
+
+objectDifference = (array, rest) ->
+  result = []
+  for i1 in array
+    result.push i1 unless objectInclude(rest,i1)
+  _.uniq(result)
+
 
 class ReplyItem
   constructor: (order_item)->
@@ -33,8 +71,9 @@ class ReplyItem
     @priced_at = order_item.childNodes()[3].text()
     if order_item.childNodes()[4]?
       @options = _.map order_item.childNodes()[4].childNodes(), (item_modifier)->
-        if (item_modifier.childNodes()[1].text() == '1') then quantity = '' else quantity = item_modifier.childNodes()[1].text()
-        if (item_modifier.childNodes()[2]? and item_modifier.childNodes()[2].text().match(/1|2/)) then part = "-#{item_modifier.childNodes()[2].text()}" else part = ''
-        "#{quantity}#{item_modifier.attr('code').value()}#{part}"
+        quantity = item_modifier.childNodes()[1].text()
+        part = item_modifier.childNodes()[2].text()
+        code = item_modifier.attr('code').value()
+        { quantity: quantity, code: code, part: part }
       
 module.exports = OrderReply

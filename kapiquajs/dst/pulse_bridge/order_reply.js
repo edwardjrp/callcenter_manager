@@ -1,17 +1,21 @@
-var OrderReply, ReplyItem, libxmljs, util, _;
+var Option, OrderReply, ReplyItem, libxmljs, objectDifference, objectInclude, objectIntersection, util, _;
 
 libxmljs = require("libxmljs");
 
 util = require('util');
 
+Option = require('./option');
+
 _ = require('underscore');
 
 OrderReply = (function() {
 
-  function OrderReply(body) {
+  function OrderReply(body, cart_products) {
     var doc;
-    if (!(typeof body === 'undefined' || !(body != null))) {
-      doc = libxmljs.parseXmlString(body);
+    this.body = body;
+    this.cart_products = cart_products;
+    if (!(typeof this.body === 'undefined' || !(this.body != null))) {
+      doc = libxmljs.parseXmlString(this.body);
       this.reply_id = doc.get('//OrderReply').attr('orderreplyid').value();
       this.status = doc.get('//Status').text();
       this.status_text = doc.get('//StatusText').text();
@@ -35,9 +39,77 @@ OrderReply = (function() {
     }
   }
 
+  OrderReply.prototype.products = function() {
+    var build_result, cart_product, order_item, results, _i, _j, _len, _len1, _ref, _ref1;
+    results = [];
+    _ref = this.order_items;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      order_item = _ref[_i];
+      _ref1 = this.cart_products;
+      for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+        cart_product = _ref1[_j];
+        console.log(typeof cart_product.quantity);
+        console.log(typeof order_item.quantity);
+        console.log(order_item.quantity === cart_product.quantity);
+        if (order_item.code === cart_product.product.productcode && order_item.quantity === cart_product.quantity.toString() && _.isEmpty(objectDifference(Option.pulseCollection(cart_product.options), order_item.options))) {
+          build_result = {
+            cart_product_id: cart_product.id,
+            product_id: cart_product.product.id,
+            priced_at: order_item.priced_at
+          };
+          console.log({
+            cart_product_id: cart_product.id,
+            product_id: cart_product.product.id,
+            priced_at: order_item.priced_at
+          });
+          if (!objectInclude(results, build_result)) {
+            results.push(build_result);
+          }
+        }
+      }
+    }
+    return results;
+  };
+
   return OrderReply;
 
 })();
+
+objectIntersection = function(array, rest) {
+  var i1, i2, result, _i, _j, _len, _len1;
+  result = [];
+  for (_i = 0, _len = array.length; _i < _len; _i++) {
+    i1 = array[_i];
+    for (_j = 0, _len1 = rest.length; _j < _len1; _j++) {
+      i2 = rest[_j];
+      if (_.isEqual(i1, i2)) {
+        result.push(i1);
+      }
+    }
+  }
+  return _.uniq(result);
+};
+
+objectInclude = function(array, target) {
+  var found;
+  found = false;
+  found = _.find(array, function(value) {
+    return _.isEqual(value, target);
+  });
+  return found != null;
+};
+
+objectDifference = function(array, rest) {
+  var i1, result, _i, _len;
+  result = [];
+  for (_i = 0, _len = array.length; _i < _len; _i++) {
+    i1 = array[_i];
+    if (!objectInclude(rest, i1)) {
+      result.push(i1);
+    }
+  }
+  return _.uniq(result);
+};
 
 ReplyItem = (function() {
 
@@ -47,18 +119,15 @@ ReplyItem = (function() {
     this.priced_at = order_item.childNodes()[3].text();
     if (order_item.childNodes()[4] != null) {
       this.options = _.map(order_item.childNodes()[4].childNodes(), function(item_modifier) {
-        var part, quantity;
-        if (item_modifier.childNodes()[1].text() === '1') {
-          quantity = '';
-        } else {
-          quantity = item_modifier.childNodes()[1].text();
-        }
-        if ((item_modifier.childNodes()[2] != null) && item_modifier.childNodes()[2].text().match(/1|2/)) {
-          part = "-" + (item_modifier.childNodes()[2].text());
-        } else {
-          part = '';
-        }
-        return "" + quantity + (item_modifier.attr('code').value()) + part;
+        var code, part, quantity;
+        quantity = item_modifier.childNodes()[1].text();
+        part = item_modifier.childNodes()[2].text();
+        code = item_modifier.attr('code').value();
+        return {
+          quantity: quantity,
+          code: code,
+          part: part
+        };
       });
     }
   }

@@ -29,10 +29,10 @@ class PulseBridge
     
   send: (action, data, err_cb, cb) ->
     headers = { "User-Agent": "kapiqua-node","SOAPAction": "http://www.dominos.com/action/#{action}"  , "Content-Length": data.length, "Connection": "close","Accept" : "text/html,application/xhtml+xml,application/xml","Accept-Charset": "utf-8", "Content-Type":"text/xml;charset=UTF-8" }
-    console.info headers
+    # console.info headers
     # console.info @storeid
     # console.info @target()
-    console.info data
+    # console.info data
     request {method: 'POST', headers: headers, uri: @target(), body: data }, (err, res, res_data) ->
       if err
         console.error err
@@ -133,7 +133,7 @@ class PulseBridge
         
         item_modifiers = new libxml.Element(doc,'ItemModifiers')
         product_options = Option.collection(cart_product.options)
-        console.log product_options
+        # console.log product_options
         if _.any(product_options)
           for product_option in product_options             
             item_modifier = new libxml.Element(doc,'ItemModifier').attr({code: product_option.code()})

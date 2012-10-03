@@ -1,5 +1,4 @@
 CartProduct = require('./schema').CartProduct
-Option = require('./option')
 async = require('async')
 _ = require('underscore')
 CartProduct.validatesPresenceOf('cart_id')
@@ -66,5 +65,6 @@ CartProduct.removeItem = (data, respond, socket) ->
 CartProduct.prototype.simplified = ->
   JSON.parse(JSON.stringify(this))
 
-  
+
+
 module.exports = CartProduct

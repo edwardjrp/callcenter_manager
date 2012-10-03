@@ -53,8 +53,6 @@ PulseBridge = (function() {
       "Accept-Charset": "utf-8",
       "Content-Type": "text/xml;charset=UTF-8"
     };
-    console.info(headers);
-    console.info(data);
     return request({
       method: 'POST',
       headers: headers,
@@ -187,7 +185,6 @@ PulseBridge = (function() {
         }));
         item_modifiers = new libxml.Element(doc, 'ItemModifiers');
         product_options = Option.collection(cart_product.options);
-        console.log(product_options);
         if (_.any(product_options)) {
           for (_j = 0, _len1 = product_options.length; _j < _len1; _j++) {
             product_option = product_options[_j];

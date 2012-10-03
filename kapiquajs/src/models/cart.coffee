@@ -61,10 +61,12 @@ Cart.prototype.price = (socket)->
           if err
             console.error err
           else
+            # console.log updated_cart_products
             cart_request = new  PulseBridge(current_cart, settings.price_store_id, settings.price_store_ip,  settings.pulse_port)
             cart_request.price pulse_com_error, (res_data)->
-              order_reply = new OrderReply(res_data)              
-              console.log order_reply
+              # console.log res_data
+              order_reply = new OrderReply(res_data, updated_cart_products)              
+              console.log order_reply.products()
         # PulseBridge.price current_cart, pulse_com_error, (res_data) ->
 
         #   order_reply = new OrderReply(res_data)

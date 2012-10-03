@@ -1,8 +1,6 @@
-var CartProduct, Option, async, _;
+var CartProduct, async, _;
 
 CartProduct = require('./schema').CartProduct;
-
-Option = require('./option');
 
 async = require('async');
 

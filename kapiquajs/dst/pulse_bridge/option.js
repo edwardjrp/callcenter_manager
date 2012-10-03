@@ -34,6 +34,14 @@ Option = (function() {
     }
   };
 
+  Option.prototype.toPulse = function() {
+    return {
+      quantity: this.quantity().toString(),
+      code: this.code(),
+      part: this.part()
+    };
+  };
+
   Option.collection = function(recipe_list) {
     var recipe, recipes, results, _i, _len;
     results = [];
@@ -42,6 +50,19 @@ Option = (function() {
       recipe = recipes[_i];
       if (recipe != null) {
         results.push(new Option(recipe));
+      }
+    }
+    return results;
+  };
+
+  Option.pulseCollection = function(recipe_list) {
+    var recipe, recipes, results, _i, _len;
+    results = [];
+    recipes = recipe_list.split(',') || recipe_list;
+    for (_i = 0, _len = recipes.length; _i < _len; _i++) {
+      recipe = recipes[_i];
+      if (recipe != null) {
+        results.push(new Option(recipe).toPulse());
       }
     }
     return results;

@@ -18,11 +18,21 @@ class Option
     if @recipe.match(Option.regexp)[1] == '' then  1 else @recipe.match(Option.regexp)[1]
 
 
+  toPulse: ->
+    { quantity: @quantity().toString(), code: @code(), part: @part()}
+
   @collection: (recipe_list)->
     results = []
     recipes = recipe_list.split(',') || recipe_list
     for recipe in recipes
       results.push new Option(recipe) if recipe?
+    results
+
+  @pulseCollection: (recipe_list)->
+    results = []
+    recipes = recipe_list.split(',') || recipe_list
+    for recipe in recipes
+      results.push new Option(recipe).toPulse() if recipe?
     results
 
 module.exports = Option
