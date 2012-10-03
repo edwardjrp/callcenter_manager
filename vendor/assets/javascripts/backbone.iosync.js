@@ -71,6 +71,7 @@ Backbone.sync = function (method, model, options) {
   console.log(namespace)
   console.log(method)
   console.log(namespace + ':' + method)
+  io.emit('chat', params.data, function(data){console.log('CONIASO')})
   io.emit(namespace + ':' + method, params.data, function (err, data) {
     if (err) {
       console.log(err)
