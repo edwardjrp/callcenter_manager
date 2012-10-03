@@ -26,7 +26,7 @@
     .well#phones_list
       .row
         .span4        
-          %h3 Teléfonos
+          %h3 Teléfono
       %hr
       #client_phone_list
         .client_phone{:id=> dom_id(@cart.client.last_phone), :data=> {'phone'=> @cart.client.last_phone.to_json}}
@@ -43,7 +43,7 @@
     .well#addresses_list
       .row
         .span4        
-          %h3 Direcciones
+          %h3 Dirección
       %hr
       #client_address_list
         -if @cart.client.last_address

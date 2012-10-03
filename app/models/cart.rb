@@ -67,6 +67,16 @@ class Cart < ActiveRecord::Base
     %w( delivery pickup carryout )
   end
 
+  def placeable?
+    errors.add :base, 'No ha seleccionado un cliente' if self.client.nil?
+    errors.add :base, 'No ha seleccionado una tienda' if self.store.nil?
+    errors.add :base, 'No ha seleccionado un modo de servicio' if self.service_method.blank?
+    errors.add :base, 'El cliente no tiene numero asignado' if self.client.nil? and self.client.phones.empty?
+    errors.add :base, 'No ha introducido productos a la orden' if self.cart_products.empty?
+    errors.empty?
+  end
+
+
   def reset_for_new_client!
     self.started_on = Time.now
     clear_store!
