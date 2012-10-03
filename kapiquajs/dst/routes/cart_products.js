@@ -23,7 +23,7 @@ CartProducts = (function() {
   };
 
   CartProducts.update = function(data, respond, socket) {
-    return CartProduct.updateItem(data, respond, socket);
+    return CartProduct.updateItem(data, respond, socket, true);
   };
 
   CartProducts.destroy = function(data, respond, socket) {

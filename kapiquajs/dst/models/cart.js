@@ -1,4 +1,4 @@
-var Cart, OrderReply, PulseBridge, Setting, async, _;
+var Cart, CartProduct, OrderReply, PulseBridge, Setting, async, _;
 
 Cart = require('./schema').Cart;
 
@@ -9,6 +9,8 @@ _ = require('underscore');
 PulseBridge = require('../pulse_bridge/pulse_bridge');
 
 OrderReply = require('../pulse_bridge/order_reply');
+
+CartProduct = require('../models/cart_product');
 
 Setting = require('../models/setting');
 
@@ -72,9 +74,7 @@ Cart.prototype.price = function(socket) {
       pulse_com_error = function(comm_err) {
         console.log(comm_err);
         if (socket != null) {
-          return socket.emit('cart:price:error', {
-            error: JSON.stringify(comm_err)
-          });
+          return socket.emit('cart:price:error', 'Un error impidio solitar el precio de esta orden');
         }
       };
       return Setting.kapiqua(function(err, settings) {
@@ -83,13 +83,54 @@ Cart.prototype.price = function(socket) {
           return console.error(err);
         } else {
           cart_request = new PulseBridge(current_cart, settings.price_store_id, settings.price_store_ip, settings.pulse_port);
-          return cart_request.price(pulse_com_error, function(res_data) {
-            var order_reply;
-            order_reply = new OrderReply(res_data, updated_cart_products);
-            return console.log(order_reply.products());
-          });
+          try {
+            return cart_request.price(pulse_com_error, function(res_data) {
+              var order_reply;
+              order_reply = new OrderReply(res_data, updated_cart_products);
+              socket.emit('cart:priced', {
+                order_reply: order_reply,
+                items: order_reply.products()
+              });
+              return me.updatePrices(order_reply);
+            });
+          } catch (err_pricing) {
+            return console.error(err_pricing);
+          }
         }
       });
+    }
+  });
+};
+
+Cart.prototype.updatePrices = function(order_reply) {
+  return this.updateAttributes({
+    net_amount: order_reply.netamount,
+    tax_amount: order_reply.taxamount,
+    tax1_amount: order_reply.tax1amount,
+    tax2_amount: order_reply.tax2amount,
+    payment_amount: order_reply.payment_amount
+  }, function(err, updated_cart) {
+    var pricing, _i, _len, _ref, _results;
+    if (err) {
+      return console.error(err);
+    } else {
+      _ref = order_reply.products();
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        pricing = _ref[_i];
+        _results.push(CartProduct.find(pricing.cart_product_id, function(cp_err, cart_product) {
+          if (!cp_err) {
+            return cart_product.updateAttributes({
+              priced_at: pricing.priced_at
+            }, function(update_err, updated_cart_product) {
+              if (update_err) {
+                return console.error(update_err);
+              }
+            });
+          }
+        }));
+      }
+      return _results;
     }
   });
 };

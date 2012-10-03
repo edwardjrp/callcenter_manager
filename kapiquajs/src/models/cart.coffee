@@ -3,6 +3,7 @@ async = require('async')
 _ = require('underscore')
 PulseBridge = require('../pulse_bridge/pulse_bridge')
 OrderReply = require('../pulse_bridge/order_reply')
+CartProduct = require('../models/cart_product')
 Setting = require('../models/setting')
 Cart.validatesPresenceOf('user_id')
 
@@ -56,21 +57,35 @@ Cart.prototype.price = (socket)->
         current_cart.cart_products = updated_cart_products
         pulse_com_error = (comm_err) ->
           console.log comm_err
-          socket.emit 'cart:price:error', {error: JSON.stringify(comm_err)} if socket?
+          socket.emit 'cart:price:error', 'Un error impidio solitar el precio de esta orden' if socket?
         Setting.kapiqua (err, settings) ->
           if err
             console.error err
           else
-            # console.log updated_cart_products
             cart_request = new  PulseBridge(current_cart, settings.price_store_id, settings.price_store_ip,  settings.pulse_port)
-            cart_request.price pulse_com_error, (res_data)->
-              # console.log res_data
-              order_reply = new OrderReply(res_data, updated_cart_products)              
-              console.log order_reply.products()
-        # PulseBridge.price current_cart, pulse_com_error, (res_data) ->
+            try
+              cart_request.price pulse_com_error, (res_data)->
+                order_reply = new OrderReply(res_data, updated_cart_products)              
+                socket.emit 'cart:priced', {order_reply: order_reply, items: order_reply.products()}
+                me.updatePrices(order_reply)
+            catch err_pricing
+              console.error err_pricing
 
-        #   order_reply = new OrderReply(res_data)
-        #   console.log order_reply
+
+
+Cart.prototype.updatePrices = (order_reply) ->
+  this.updateAttributes { net_amount: order_reply.netamount, tax_amount: order_reply.taxamount, tax1_amount: order_reply.tax1amount, tax2_amount: order_reply.tax2amount,  payment_amount: order_reply.payment_amount } , (err, updated_cart) ->
+    if err
+      console.error err
+    else
+      for pricing in order_reply.products()
+        CartProduct.find pricing.cart_product_id , (cp_err, cart_product)->
+          unless cp_err
+            cart_product.updateAttributes { priced_at: pricing.priced_at}, (update_err, updated_cart_product) ->
+              if update_err
+                console.error update_err
+
+
 
 
 Cart.prototype.simplified = ->

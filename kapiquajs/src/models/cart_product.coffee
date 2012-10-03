@@ -29,7 +29,7 @@ CartProduct.addItem = (data, respond, socket) ->
               socket.emit('cart_products:updated', updated_cart_product.toJSON())
               respond(err,updated_cart_product)
 
-CartProduct.updateItem =  (data, respond, socket) ->
+CartProduct.updateItem =  (data, respond, socket, trigger_pricing) ->
   if data?
     CartProduct.find data.id, (cp_err, cart_product) ->
         if cp_err?
@@ -43,11 +43,12 @@ CartProduct.updateItem =  (data, respond, socket) ->
                   socket.emit('cart_products:updated', updated_cart_product.toJSON())
                   respond(err,updated_cart_product)
                   # mode to after callback
-                  updated_cart_product.cart (err, cart_to_price)->
-                    if err
-                      socket.emit 'cart:pricing:error', 'No se pudo leer la orden actual'
-                    else
-                      cart_to_price.price(socket)
+                  if trigger_pricing? and trigger_pricing == true
+                    updated_cart_product.cart (err, cart_to_price)->
+                      if err
+                        socket.emit 'cart:pricing:error', 'No se pudo leer la orden actual'
+                      else
+                        cart_to_price.price(socket)
 
 CartProduct.removeItem = (data, respond, socket) ->
   if data?

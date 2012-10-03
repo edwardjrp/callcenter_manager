@@ -12,7 +12,7 @@ class CartProducts
     CartProduct.addItem(data, respond, socket)
 
   @update: (data, respond, socket) ->
-    CartProduct.updateItem(data, respond, socket)
+    CartProduct.updateItem(data, respond, socket, true)
 
   @destroy: (data, respond, socket) ->
     CartProduct.removeItem(data, respond, socket)

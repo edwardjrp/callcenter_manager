@@ -48,9 +48,6 @@ OrderReply = (function() {
       _ref1 = this.cart_products;
       for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
         cart_product = _ref1[_j];
-        console.log(typeof cart_product.quantity);
-        console.log(typeof order_item.quantity);
-        console.log(order_item.quantity === cart_product.quantity);
         if (order_item.code === cart_product.product.productcode && order_item.quantity === cart_product.quantity.toString() && _.isEmpty(objectDifference(Option.pulseCollection(cart_product.options), order_item.options))) {
           build_result = {
             cart_product_id: cart_product.id,

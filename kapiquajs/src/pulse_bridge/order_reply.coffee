@@ -27,16 +27,9 @@ class OrderReply
       
 
   products: ->
-    results = []
-    # console.log @order_items
-    # console.log @cart_products
+    results = []   
     for order_item in @order_items
       for cart_product in @cart_products
-        # console.log objectDifference(Option.pulseCollection(cart_product.options), order_item.options)
-        console.log typeof cart_product.quantity
-        console.log typeof order_item.quantity
-        console.log order_item.quantity == cart_product.quantity
-        # console.log cart_product.options
         if order_item.code == cart_product.product.productcode and order_item.quantity == cart_product.quantity.toString() and _.isEmpty(objectDifference(Option.pulseCollection(cart_product.options), order_item.options))
           build_result = { cart_product_id: cart_product.id, product_id: cart_product.product.id, priced_at: order_item.priced_at }
           console.log { cart_product_id: cart_product.id, product_id: cart_product.product.id, priced_at: order_item.priced_at }
