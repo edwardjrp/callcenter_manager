@@ -66,10 +66,10 @@ Backbone.sync = function (method, model, options) {
 
   // If your socket.io connection exists on a different var, change here:
   var io = model.socket || window.socket || Backbone.socket;
-  console.log 'EMITING MODEL DATA'
+  console.log('EMITING MODEL DATA')
   io.emit(namespace + ':' + method, params.data, function (err, data) {
     if (err) {
-      console.log err
+      console.log(err)
       options.error(err);
     } else {
       options.success(data);
