@@ -26,7 +26,14 @@ class Coupon < ActiveRecord::Base
   has_many :cart_coupons
   has_many :carts , through: :cart_coupons
   attr_accessible :code, :custom_description, :description, :discontinued, :effective_date, :effective_days, :enable, :expiration_date, :generated_description, :hidden, :minimum_price, :order_sources, :secure, :service_methods
+  scope :available, where(discontinued: false) 
+  # scope :efective, where(discontinued: true) 
+  EFFECTIVE_DAYS = %w[Sunday Monday Tuesday Wednesday Thursday Friday Saturday]
 
+
+  def effective_today?
+     effective_days.present? ? effective_days.split('|').include?(EFFECTIVE_DAYS[Time.now.wday]) : true
+  end
 
   def coupon_products
     ActiveSupport::JSON.decode(target_products).map{ |cp| { product: Product.find_by_productcode(cp['product_code']), quantity: cp['minimun_require'].to_i }}

@@ -35,16 +35,17 @@ jQuery ->
     $('#chatbox').find('.tab-content').append(JST['chat/admin_tab']())
     $('#admin_pane').find('.chatdisplay').append($('<p>').append(window.truncate(data, 30)))
   
-  $('#utils .top-tabs a').on 'click', (event)->
+  $('#utils_labels a').on 'click', (event)->
     event.preventDefault()
-    target = $(".tab-pane##{$(this).attr('href').replace(/#/,'')}")
-    if $(this).closest('li').hasClass('active')
-      target.removeClass('active').hide()
-      $(this).closest('li').removeClass('active')
-    else
-      target.addClass('active').show()
-      $(this).closest('li').addClass('active')
-      
+    $(this).tab('show')
+
+  if $('#desk').size() > 0
+    $('#quick_coupons').find('tr').append("<td><a class='btn add_coupon'>Agregar</a></td>")
+    $('#quick_coupons').prev('thead').find('tr').append('<th></th>')
+
+  $('#close_utils').on 'click', (event)->
+    for tab_contents in $('#utils_labels').next().find('.tab-pane')
+      $(tab_contents).removeClass('active')
 
   socket.on 'server_message', (data) ->
     if $('#chatbox').find("##{data.idnumber}")

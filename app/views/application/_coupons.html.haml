@@ -1,0 +1,15 @@
+.row
+  .span11#client_side_coupons_list
+    %table.table.table-condensed
+      %thead
+        %th Codigo
+        %th Description
+        %th Descripcion Generada
+        %th Precio minimo
+      %tbody#quick_coupons
+        - Coupon.available.each do |coupon|
+          %tr
+            %td= coupon.code
+            %td= coupon.description
+            %td= coupon.generated_description
+            %td= coupon.try(:minimum_price)
