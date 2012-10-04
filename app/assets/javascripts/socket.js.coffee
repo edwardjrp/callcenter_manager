@@ -45,8 +45,7 @@ jQuery ->
     $('#quick_coupons').on 'click' , '.add_coupon', (event) ->
       event.preventDefault()
       target = $(event.currentTarget).closest('tr')
-      socket.emit 'cart_coupons:create', {cart_id: target.data('cart-id'), coupon_code: target.data('coupon-code'), coupon_id: target.data('coupon-id'), target_products: target.data('coupon-products')}, (data) ->
-        console.log data
+      socket.emit 'cart_coupons:create', {cart_id: target.data('cart-id'), coupon_code: target.data('coupon-code'), coupon_id: target.data('coupon-id'), target_products: target.data('coupon-products')}
 
   $('#close_utils').on 'click', (event)->
     for tab_contents in $('#utils_labels').next().find('.tab-pane')
@@ -74,6 +73,8 @@ jQuery ->
     target[0].reset()
     target.find("input[type='text']").val('')
     
+  socket.on 'cart:price:error', (msg)->
+    $("<div class='purr'>#{msg}<div>").purr()
     
   socket.on 'reconnect', () ->
     $("<div class='purr'>Conexión con Webserver reestablecida<div>").purr()

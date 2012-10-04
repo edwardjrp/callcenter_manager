@@ -31,16 +31,14 @@ CartCoupon.addCoupon = function(data, respond, socket) {
           });
           return cart_coupon.save(function(s_cc_err, saved_cart_coupon) {
             if (s_cc_err) {
-              console.error(s_cc_err);
-              return respond(s_cc_err);
+              return console.error(s_cc_err);
             } else {
               saved_cart_coupon.cart(function(err, cart) {
                 if (!err) {
-                  socket.emit('cart_coupon:saved', saved_cart_coupon);
                   return cart.price(socket);
                 }
               });
-              return respond(s_cc_err, saved_cart_coupon);
+              return socket.emit('cart_coupon:saved', saved_cart_coupon);
             }
           });
         }

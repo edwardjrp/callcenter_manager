@@ -15,13 +15,12 @@ CartCoupon.addCoupon = (data, respond, socket) ->
           cart_coupon.save (s_cc_err, saved_cart_coupon) ->
             if s_cc_err
               console.error s_cc_err
-              respond(s_cc_err)
+              # emit error
             else
               saved_cart_coupon.cart (err, cart) ->
                 unless err
-                  socket.emit('cart_coupon:saved', saved_cart_coupon)
                   cart.price(socket)
-              respond(s_cc_err, saved_cart_coupon)
+              socket.emit('cart_coupon:saved', saved_cart_coupon)
 
 
 

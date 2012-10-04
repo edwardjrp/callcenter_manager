@@ -3,10 +3,11 @@ class Kapiqua25.Views.CartIndex extends Backbone.View
   template: JST['cart/index']
   
   initialize: ->
-      _.bindAll(this, 'reloadCartProduct', 'removeCartProduct', 'updatePrices')
+      _.bindAll(this, 'reloadCartProduct', 'removeCartProduct', 'updatePrices', 'addCartCoupon')
       window.socket.on('cart_products:updated', @reloadCartProduct)
       window.socket.on('cart_products:deleted', @removeCartProduct)
       window.socket.on('cart:priced', @updatePrices)
+      window.socket.on('cart_coupon:saved', @addCartCoupon)
   #   @model.on('change', @render, this)
   #   @model.on('change', @highlight, this)
   
@@ -23,6 +24,12 @@ class Kapiqua25.Views.CartIndex extends Backbone.View
     $(@el).html(@template(model: @model))
     $(@el).find('input').restric('alpha').restric('spaces')
     this
+
+  addCartCoupon: (data)->
+    if data?
+      @model.get('cart_coupons').add(data)
+      $(@el).find('ul#current_carts_coupons').prepend("<li id = 'cart_coupon_#{data.id}'>#{data.code}<a class='coupon_remove'><i class='icon-trash'></i></a></li>")
+      $(@el).find('ul#current_carts_coupons').find("#cart_coupon_#{data.id}").effect('highlight')
 
   updatePrices: (data)->
     @model.set 

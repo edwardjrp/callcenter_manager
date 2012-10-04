@@ -8,6 +8,11 @@
         <%if @model.get('tax_amount')?:%><div class='row'><div class='span2' id='order_tax_amount'><strong>Impuestos: </strong> RD$ <%=Number(@model.get('tax_amount')).toFixed(2)%></div></div><%end%>
         <%if @model.get('payment_amount')?:%><div class='row'><div class='span2' id='order_payment_amount'><strong>Total: </strong> RD$ <%=Number(@model.get('payment_amount')).toFixed(2)%></div></div><%end%>
       </div>
+      <ul id="current_carts_coupons">
+        <%for cart_coupon in _.sortBy(@model.get('cart_coupons').models, (model)-> -(model.get('id'))):%>
+          <li id = "cart_coupon_<%=cart_coupon.get('id')%>"><%=cart_coupon.get('code')%><a class='coupon_remove'><i class="icon-trash"></i></a></li>
+        <%end%>
+      </ul>
       <ul id="current_carts_items">
         <%for cart_product in _.sortBy(@model.get('cart_products').models, (model)-> -(model.get('id'))):%>
           <li>
