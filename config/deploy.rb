@@ -15,7 +15,7 @@ set :application, "kapiqua25"
 # set :repository,  "ssh://soporte@192.168.101.50/home/soporte/#{application}.git"
 
 # set :deploy_to, "/var/www/#{application}"
-set: :bin_folder, "#{current_path}/bin"
+set :bin_folder, "#{current_path}/bin"
 
 set :deploy_via, :remote_cache
 set :scm, 'git'
@@ -31,7 +31,7 @@ after "deploy", "deploy:cleanup"
 
 
 namespace :deploy do
-  
+
   task :setup_config, roles: :app do
    sudo "ln -nfs #{current_path}/deploy_configs/kapiqua.conf /etc/nginx/sites-enabled/#{application}"
    sudo "ln -nfs #{current_path}/deploy_configs/kapiqua_unicorn_init.sh /etc/init.d/unicorn_#{application}"
