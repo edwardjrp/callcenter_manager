@@ -1,4 +1,7 @@
 require "bundler/capistrano"
+set :stages, %w(production staging)
+set :default_stage, "staging"
+require 'capistrano/ext/multistage'
 require 'sidekiq/capistrano'
 
 load "config/recipes/nginx"
@@ -6,12 +9,13 @@ load "config/recipes/forever"
 load "config/recipes/nodejs"
 load 'deploy/assets'
 
-server '192.168.101.50', :web, :app, :db, primary: true
-set :user, 'soporte'
+# server '192.168.101.50', :web, :app, :db, primary: true
+# set :user, 'soporte'
 set :application, "kapiqua25"
-set :repository,  "ssh://soporte@192.168.101.50/home/soporte/#{application}.git"
+# set :repository,  "ssh://soporte@192.168.101.50/home/soporte/#{application}.git"
 
-set :deploy_to, "/var/www/#{application}"
+# set :deploy_to, "/var/www/#{application}"
+set: :bin_folder, "#{current_path}/bin"
 
 set :deploy_via, :remote_cache
 set :scm, 'git'
@@ -27,13 +31,7 @@ after "deploy", "deploy:cleanup"
 
 
 namespace :deploy do
-  %w[start stop restart].each do |command|
-    desc "#{command} unicorn server"
-    task command, roles: :app, except: {no_release: true} do
-      sudo "/etc/init.d/unicorn_#{application} #{command}"
-    end
-  end
-
+  
   task :setup_config, roles: :app do
    sudo "ln -nfs #{current_path}/deploy_configs/kapiqua.conf /etc/nginx/sites-enabled/#{application}"
    sudo "ln -nfs #{current_path}/deploy_configs/kapiqua_unicorn_init.sh /etc/init.d/unicorn_#{application}"
