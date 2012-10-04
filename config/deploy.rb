@@ -45,6 +45,8 @@ namespace :deploy do
 
   task :coffee_compile, roles: :app do
     puts "Compiling coffee files."
+    run("if ! [[ -d #{shared_path}/node_modules ]]; then mkdir #{shared_path}/node_modules; fi")
+    run("ln -s  #{current_path}/kapiquajs/node_modules #{shared_path}/node_modules")
     run "cd #{current_path}/kapiquajs && #{sudo} npm link coffee-script"
     run "cd #{current_path}/kapiquajs && #{sudo} npm install"
     run "/usr/bin/coffee #{current_path}/kapiquajs/build.coffee"
