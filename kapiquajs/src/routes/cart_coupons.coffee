@@ -8,9 +8,7 @@ class CartCoupons
 
 
   @destroy: (data, respond, socket) ->
-    console.log data
-    respond('DELETE IT')
-    # CartProduct.removeItem(data, respond, socket, true)
+    CartCoupon.removeItem(data, respond, socket)
           
 
 module.exports = CartCoupons

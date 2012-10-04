@@ -3,11 +3,12 @@ class Kapiqua25.Views.CartIndex extends Backbone.View
   template: JST['cart/index']
   
   initialize: ->
-      _.bindAll(this, 'reloadCartProduct', 'removeCartProduct', 'updatePrices', 'addCartCoupon')
+      _.bindAll(this, 'reloadCartProduct', 'removeCartProduct', 'updatePrices', 'addCartCoupon', 'removeCartCoupon', 'remove_coupon')
       window.socket.on('cart_products:updated', @reloadCartProduct)
       window.socket.on('cart_products:deleted', @removeCartProduct)
       window.socket.on('cart:priced', @updatePrices)
       window.socket.on('cart_coupon:saved', @addCartCoupon)
+      window.socket.on('cart_coupons:deleted', @removeCartCoupon)
   #   @model.on('change', @render, this)
   #   @model.on('change', @highlight, this)
   
@@ -15,6 +16,7 @@ class Kapiqua25.Views.CartIndex extends Backbone.View
     'click .remove_options_and_pricing>span.item_remove':'remove_cart_product'
     'click .remove_options_and_pricing>span.show_options':'show_options'
     'click .remove_options_and_pricing>span.edit_options':'edit_options'
+    'click ul#current_carts_coupons .coupon_remove' : 'remove_coupon'
     'change .item>input':'update_quantity'
     'focus .item>input':'colorize'
     'blur .item>input':'normalize'
@@ -28,8 +30,21 @@ class Kapiqua25.Views.CartIndex extends Backbone.View
   addCartCoupon: (data)->
     if data?
       @model.get('cart_coupons').add(data)
-      $(@el).find('ul#current_carts_coupons').prepend("<li id = 'cart_coupon_#{data.id}'>#{data.code}<a class='coupon_remove'><i class='icon-trash'></i></a></li>")
+      $(@el).find('ul#current_carts_coupons').prepend("<li id = 'cart_coupon_#{data.id}'>#{data.code}<a class='coupon_remove'  data-cart-coupon-id='data.id'  ><i class='icon-trash'></i></a></li>")
       $(@el).find('ul#current_carts_coupons').find("#cart_coupon_#{data.id}").effect('highlight')
+
+  removeCartCoupon: (data)->
+    if data?
+      $(@el).find('ul#current_carts_coupons').find("#cart_coupon_#{data}").remove()
+      $(@el).effect('highlight')
+
+  remove_coupon: (event)->
+    event.preventDefault()
+    target = $(event.currentTarget)
+    if confirm('Desea remover el cupón')
+      cart_coupon_to_remove = @model.get('cart_coupons').get(target.data('cart-coupon-id'))
+      cart_coupon_to_remove.destroy()
+
 
   updatePrices: (data)->
     @model.set 

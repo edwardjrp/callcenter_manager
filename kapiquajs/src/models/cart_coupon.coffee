@@ -3,7 +3,6 @@ _ = require('underscore')
 
 CartCoupon.addCoupon = (data, respond, socket) ->
   if data?
-    console.log data
     search_data = {cart_id : data.cart_id, coupon_id : data.coupon_id}
     CartCoupon.all {where:search_data}, (cc_err, cart_coupons) ->
       if cc_err
@@ -22,7 +21,18 @@ CartCoupon.addCoupon = (data, respond, socket) ->
                   cart.price(socket)
               socket.emit('cart_coupon:saved', saved_cart_coupon)
 
-
-
+CartCoupon.removeItem = (data, respond, socket) ->
+  if data?
+    CartCoupon.find data.id, (cc_err, cart_coupon) ->
+      if cc_err
+        respond(cc_err)
+      else 
+        cart_coupon.cart (err, cart) ->
+          cart_coupon.destroy (del_err) ->
+            if del_err?
+              respond(del_err)
+            else
+              socket.emit('cart_coupons:deleted', data.id)
+              cart.price(socket)
 
 module.exports = CartCoupon

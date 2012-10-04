@@ -10,7 +10,7 @@
       </div>
       <ul id="current_carts_coupons">
         <%for cart_coupon in _.sortBy(@model.get('cart_coupons').models, (model)-> -(model.get('id'))):%>
-          <li id = "cart_coupon_<%=cart_coupon.get('id')%>"><%=cart_coupon.get('code')%><a class='coupon_remove'><i class="icon-trash"></i></a></li>
+          <li id = "cart_coupon_<%=cart_coupon.get('id')%>"><%=cart_coupon.get('code')%><a class='coupon_remove' data-cart-coupon-id='<%=cart_coupon.get('id')%>'><i class="icon-trash"></i></a></li>
         <%end%>
       </ul>
       <ul id="current_carts_items">

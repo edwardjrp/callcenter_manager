@@ -7,7 +7,6 @@ _ = require('underscore');
 CartCoupon.addCoupon = function(data, respond, socket) {
   var search_data;
   if (data != null) {
-    console.log(data);
     search_data = {
       cart_id: data.cart_id,
       coupon_id: data.coupon_id
@@ -42,6 +41,27 @@ CartCoupon.addCoupon = function(data, respond, socket) {
             }
           });
         }
+      }
+    });
+  }
+};
+
+CartCoupon.removeItem = function(data, respond, socket) {
+  if (data != null) {
+    return CartCoupon.find(data.id, function(cc_err, cart_coupon) {
+      if (cc_err) {
+        return respond(cc_err);
+      } else {
+        return cart_coupon.cart(function(err, cart) {
+          return cart_coupon.destroy(function(del_err) {
+            if (del_err != null) {
+              return respond(del_err);
+            } else {
+              socket.emit('cart_coupons:deleted', data.id);
+              return cart.price(socket);
+            }
+          });
+        });
       }
     });
   }
