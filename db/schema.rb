@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121001002007) do
+ActiveRecord::Schema.define(:version => 20121003233802) do
 
   create_table "addresses", :force => true do |t|
     t.integer  "client_id"
@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(:version => 20121001002007) do
     t.integer  "cart_id"
     t.integer  "coupon_id"
     t.string   "code"
-    t.string   "target_products"
+    t.text     "target_products"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
   end
@@ -150,7 +150,7 @@ ActiveRecord::Schema.define(:version => 20121001002007) do
     t.boolean  "discontinued",          :default => false
     t.datetime "created_at",                               :null => false
     t.datetime "updated_at",                               :null => false
-    t.string   "target_products"
+    t.text     "target_products"
   end
 
   add_index "coupons", ["code"], :name => "index_coupons_on_code", :unique => true

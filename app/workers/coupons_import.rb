@@ -27,8 +27,7 @@ class CouponsImport
             coupon.code = coupon_xml.css("Code").inner_text
             coupon.description = coupon_xml.css("Description").inner_text
             coupon.generated_description = coupon_xml.css("GeneratedDescription").inner_text
-            coupon.minimum_price = coupon_xml.css("MinimumPrice").first.inner_text.to_f
-            # coupon.discount_value = coupon_xml.css("DiscountValue").inner_text
+            coupon.minimum_price = coupon_xml.css("MinimumPrice").first.inner_text.to_d
             coupon.hidden = coupon_xml.css("Hidden").inner_text
             coupon.secure = coupon_xml.css("Secure").inner_text
             coupon.effective_days = coupon_xml.css("EffectiveDays").inner_text
@@ -36,6 +35,7 @@ class CouponsImport
             coupon.service_methods = coupon_xml.css("ServiceMethods").css("ServiceMethod").map(&:inner_text).join('|')
             coupon.expiration_date = coupon_xml.css("ExpirationDate").inner_text
             coupon.effective_date = coupon_xml.css("AffectiveDate").inner_text
+            coupon.target_products = coupon_xml.css("CouponProduct").map { |cp| { product_code: cp.css('TargetProductCode').inner_text, minimun_require: cp.css('RequiredQuantity').inner_text } }.to_json
           end
           import_log.import_events.create(name: 'Nuevo cupón agregado', subject: coupon_xml.css("Code").inner_text , message: "Se agrego #{coupon_xml.css("Description").inner_text}")
         else

@@ -19,11 +19,14 @@
 #  discontinued          :boolean          default(FALSE)
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
-#  target_products       :string(255)
+#  target_products       :text
 #
 
 require 'spec_helper'
 
 describe Coupon do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe 'Validation' do
+    it { should have_many :cart_coupons }
+    it { should have_many(:carts).through(:cart_coupons) }
+  end
 end
