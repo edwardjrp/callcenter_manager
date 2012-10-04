@@ -1,7 +1,7 @@
 set :host , '10.10.0.50'
 server "#{host}", :web, :app, :db, primary: true
 set :user, 'proteus'
-set :repository,  "ssh://#{user}@#{server}/Users/#{user}/#{application}.git"
+set :repository,  "ssh://#{user}@#{host}/Users/#{user}/#{application}.git"
 set :deploy_to, "/Library/WebServer/#{application}"
 
 
