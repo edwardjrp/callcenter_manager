@@ -60,6 +60,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     $(@el).html(@template(model: @model))
     $(@el).find('input').restric('alpha').restric('spaces')
     $(@el).find('.dropdown-toggle.left_selection').dropdown()
+    @clear_edit()
     this
 
 
@@ -92,7 +93,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
   clear_edit: ->
     @editing = false
     @edit_cart_product =  null
-    @edit_item.set({recipe: @matchup_original_recipe})
+    @edit_item.set({recipe: @matchup_original_recipe}) if  @edit_item?
     @edit_item = null
 
   set_unit_amounts: (event)->
