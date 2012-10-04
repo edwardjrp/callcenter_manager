@@ -128,6 +128,101 @@ Cart = DB.define("Cart",
   table: "carts"
 )
 
+Coupon = DB.define("Coupon",
+  code:
+    type: String
+    length: 255
+
+  description:
+    type: Schema.Text
+
+  custom_description:
+    type: Schema.Text
+
+  generated_description:
+    type: Schema.Text
+
+  minimum_price:
+    type: Number
+    
+  hidden:
+    type: Boolean
+    default: false
+  
+  secure:
+    type: Boolean
+    default: false
+
+  effective_days:
+    type: String
+    length: 255
+
+  order_sources:
+    type: String
+    length: 255
+
+  service_methods:
+    type: String
+    length: 255
+
+  expiration_date:
+    type: Date
+
+  effective_date:
+    type: Date
+
+  enable:
+    type: Boolean
+    default: true
+
+  discontinued:
+    type: Boolean
+    default: false
+
+  target_products:
+    type: Schema.Text
+
+
+  created_at:
+    type: Date
+    default: Date.now
+
+  updated_at:
+    type: Date
+    default: Date.now
+,
+  table: "coupons"
+)
+
+
+
+CartCoupon = DB.define("CartCoupon",
+  cart_id:
+    type: Number
+    
+  coupon_id:
+    type: Number
+
+  code:
+    type: String
+    length: 255
+
+  target_products:
+    type: Schema.Text
+    
+  created_at:
+    type: Date
+    default: Date.now
+
+  updated_at:
+    type: Date
+    default: Date.now
+,
+  table: "cart_coupons"
+)
+
+
+
 Category = DB.define("Category",
   name:
     type: String
@@ -538,6 +633,7 @@ Client.hasMany(Address, {as: 'addresses',foreignKey: 'client_id' })
 Phone.belongsTo(Client, {as: 'client', foreignKey: 'client_id'})
 
 Cart.hasMany(CartProduct, {as: 'cart_products', foreignKey: 'cart_id'})
+Cart.hasMany(CartCoupon, {as: 'cart_coupons', foreignKey: 'cart_id'})
 Cart.belongsTo(Client, {as: 'client', foreignKey: 'client_id'})
 Cart.belongsTo(User, {as: 'user', foreignKey: 'user_id'})
 Cart.belongsTo(Store, {as: 'store', foreignKey: 'store_id'})
@@ -547,6 +643,12 @@ Category.hasMany(Product, {as: 'products', foreignKey: 'category_id'})
 
 Product.hasMany(CartProduct, {as: 'cart_products', foreignKey: 'product_id'})
 Product.belongsTo(Category, {as: 'category', foreignKey: 'category_id'})
+
+Coupon.hasMany(CartCoupon, {as: 'cart_coupons', foreignKey: 'coupon_id'})
+
+CartCoupon.belongsTo(Coupon, {as: 'coupon', foreignKey: 'coupon_id'})
+CartCoupon.belongsTo(Cart, {as: 'cart', foreignKey: 'cart_id'})
+
 
 CartProduct.belongsTo(Product, {as: 'product', foreignKey: 'product_id'})
 CartProduct.belongsTo(Cart, {as: 'cart', foreignKey: 'cart_id'})
@@ -563,4 +665,7 @@ exports.Client = Client
 exports.Phone = Phone
 exports.Product = Product
 exports.Category = Category
+exports.Coupon = Coupon
+exports.CartCoupon = CartCoupon
 exports.CartProduct = CartProduct
+

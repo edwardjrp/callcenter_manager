@@ -9,6 +9,14 @@ class Kapiqua25.Models.Cart extends Backbone.RelationalModel
       reverseRelation:
         key: 'cart'
         includeInJSON: 'id'
+    ,
+      type: Backbone.HasMany
+      key: 'cart_coupons'
+      relatedModel: 'Kapiqua25.Models.CartCoupon'
+      collectionType: 'Kapiqua25.Collections.CartCoupons'
+      reverseRelation:
+        key: 'cart'
+        includeInJSON: 'id'
     ]
     
 Kapiqua25.Models.Cart.setup()

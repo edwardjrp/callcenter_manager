@@ -8,7 +8,7 @@
         %th Precio minimo
       %tbody#quick_coupons
         - Coupon.available.each do |coupon|
-          %tr
+          %tr{ :data=> { 'cart-id'=> current_cart.id, 'coupon-code'=> coupon.code, 'coupon-id'=>coupon.id, 'coupon-products'=> coupon.target_products }}
             %td= coupon.code
             %td= coupon.description
             %td= coupon.generated_description

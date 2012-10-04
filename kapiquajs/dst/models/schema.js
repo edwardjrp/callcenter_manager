@@ -1,4 +1,4 @@
-var Address, Area, Cart, CartProduct, Category, City, Client, Config, DB, Phone, Product, Schema, Setting, Store, Street, User, jugglingdb;
+var Address, Area, Cart, CartCoupon, CartProduct, Category, City, Client, Config, Coupon, DB, Phone, Product, Schema, Setting, Store, Street, User, jugglingdb;
 
 Config = require('../config');
 
@@ -132,6 +132,98 @@ Cart = DB.define("Cart", {
   }
 }, {
   table: "carts"
+});
+
+Coupon = DB.define("Coupon", {
+  code: {
+    type: String,
+    length: 255
+  },
+  description: {
+    type: Schema.Text
+  },
+  custom_description: {
+    type: Schema.Text
+  },
+  generated_description: {
+    type: Schema.Text
+  },
+  minimum_price: {
+    type: Number
+  },
+  hidden: {
+    type: Boolean,
+    "default": false
+  },
+  secure: {
+    type: Boolean,
+    "default": false
+  },
+  effective_days: {
+    type: String,
+    length: 255
+  },
+  order_sources: {
+    type: String,
+    length: 255
+  },
+  service_methods: {
+    type: String,
+    length: 255
+  },
+  expiration_date: {
+    type: Date
+  },
+  effective_date: {
+    type: Date
+  },
+  enable: {
+    type: Boolean,
+    "default": true
+  },
+  discontinued: {
+    type: Boolean,
+    "default": false
+  },
+  target_products: {
+    type: Schema.Text
+  },
+  created_at: {
+    type: Date,
+    "default": Date.now
+  },
+  updated_at: {
+    type: Date,
+    "default": Date.now
+  }
+}, {
+  table: "coupons"
+});
+
+CartCoupon = DB.define("CartCoupon", {
+  cart_id: {
+    type: Number
+  },
+  coupon_id: {
+    type: Number
+  },
+  code: {
+    type: String,
+    length: 255
+  },
+  target_products: {
+    type: Schema.Text
+  },
+  created_at: {
+    type: Date,
+    "default": Date.now
+  },
+  updated_at: {
+    type: Date,
+    "default": Date.now
+  }
+}, {
+  table: "cart_coupons"
 });
 
 Category = DB.define("Category", {
@@ -605,6 +697,11 @@ Cart.hasMany(CartProduct, {
   foreignKey: 'cart_id'
 });
 
+Cart.hasMany(CartCoupon, {
+  as: 'cart_coupons',
+  foreignKey: 'cart_id'
+});
+
 Cart.belongsTo(Client, {
   as: 'client',
   foreignKey: 'client_id'
@@ -633,6 +730,21 @@ Product.hasMany(CartProduct, {
 Product.belongsTo(Category, {
   as: 'category',
   foreignKey: 'category_id'
+});
+
+Coupon.hasMany(CartCoupon, {
+  as: 'cart_coupons',
+  foreignKey: 'coupon_id'
+});
+
+CartCoupon.belongsTo(Coupon, {
+  as: 'coupon',
+  foreignKey: 'coupon_id'
+});
+
+CartCoupon.belongsTo(Cart, {
+  as: 'cart',
+  foreignKey: 'cart_id'
 });
 
 CartProduct.belongsTo(Product, {
@@ -668,5 +780,9 @@ exports.Phone = Phone;
 exports.Product = Product;
 
 exports.Category = Category;
+
+exports.Coupon = Coupon;
+
+exports.CartCoupon = CartCoupon;
 
 exports.CartProduct = CartProduct;

@@ -17,9 +17,10 @@ CartProduct.addItem = (data, respond, socket) ->
           if (err)
             respond(err)
           else
-            result_cart_product.cart (err, cart) ->
-              socket.emit('cart_products:saved', cart.toJSON())
-              cart.price(socket)
+            result_cart_product.cart (c_err, cart) ->
+              unless c_err
+                socket.emit('cart_products:saved', cart.toJSON())
+                cart.price(socket)
             respond(err, result_cart_product)
       else
         cart_product = _.first(cart_products)

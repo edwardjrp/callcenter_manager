@@ -1,4 +1,4 @@
-var CartProducts, Carts, Clients, administrators, app, express, io, operators, pg, util, _;
+var CartCoupons, CartProducts, Carts, Clients, administrators, app, express, io, operators, pg, util, _;
 
 express = require('express');
 
@@ -9,6 +9,8 @@ pg = require('pg');
 util = require('util');
 
 CartProducts = require('./routes/cart_products');
+
+CartCoupons = require('./routes/cart_coupons');
 
 Carts = require('./routes/carts');
 
@@ -117,6 +119,12 @@ io.sockets.on("connection", function(socket) {
   });
   socket.on("cart_products:delete", function(data, responder) {
     return CartProducts.destroy(data, responder, socket);
+  });
+  socket.on("cart_coupons:create", function(data, responder) {
+    return CartCoupons.create(data, responder, socket);
+  });
+  socket.on("cart_coupons:delete", function(data, responder) {
+    return CartCoupons.destroy(data, responder, socket);
   });
   socket.on("clients:olo:phone", function(data, responder) {
     return Clients.olo_with_phone(data, responder, socket);

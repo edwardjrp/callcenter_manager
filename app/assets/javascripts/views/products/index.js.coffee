@@ -60,6 +60,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     $(@el).html(@template(model: @model))
     $(@el).find('input').restric('alpha').restric('spaces')
     $(@el).find('.dropdown-toggle.left_selection').dropdown()
+    @clear()
     @clear_edit()
     this
 

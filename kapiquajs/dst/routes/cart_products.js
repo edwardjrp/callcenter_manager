@@ -1,18 +1,6 @@
-var Cart, CartProduct, CartProducts, OrderReply, Product, PulseBridge, async, _;
-
-Cart = require('../models/cart');
-
-Product = require('../models/product');
+var CartProduct, CartProducts;
 
 CartProduct = require('../models/cart_product');
-
-PulseBridge = require('../pulse_bridge/pulse_bridge');
-
-OrderReply = require('../pulse_bridge/order_reply');
-
-async = require('async');
-
-_ = require('underscore');
 
 CartProducts = (function() {
 

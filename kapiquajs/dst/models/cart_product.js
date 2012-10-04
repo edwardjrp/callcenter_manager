@@ -39,9 +39,11 @@ CartProduct.addItem = function(data, respond, socket) {
           if (err) {
             return respond(err);
           } else {
-            result_cart_product.cart(function(err, cart) {
-              socket.emit('cart_products:saved', cart.toJSON());
-              return cart.price(socket);
+            result_cart_product.cart(function(c_err, cart) {
+              if (!c_err) {
+                socket.emit('cart_products:saved', cart.toJSON());
+                return cart.price(socket);
+              }
             });
             return respond(err, result_cart_product);
           }

@@ -50,9 +50,9 @@ class Cart < ActiveRecord::Base
   belongs_to :client
   belongs_to :store
   belongs_to :reason
-  has_many :cart_coupons
+  has_many :cart_coupons, dependent: :destroy
   has_many :coupons, through: :cart_coupons
-  has_many :cart_products
+  has_many :cart_products, dependent: :destroy
   has_many :products, through: :cart_products
   before_create :set_default_mailbox
   

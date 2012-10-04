@@ -7,6 +7,7 @@ _ = require('underscore')
 pg = require('pg')
 util = require('util')
 CartProducts = require('./routes/cart_products')
+CartCoupons = require('./routes/cart_coupons')
 Carts = require('./routes/carts')
 Clients = require('./routes/clients')
 
@@ -93,6 +94,12 @@ io.sockets.on "connection", (socket) ->
     
   socket.on "cart_products:delete", (data, responder) ->
     CartProducts.destroy(data, responder, socket)
+
+  socket.on "cart_coupons:create", (data, responder) ->
+    CartCoupons.create(data, responder, socket)
+    
+  socket.on "cart_coupons:delete", (data, responder) ->
+    CartCoupons.destroy(data, responder, socket)
 
   socket.on "clients:olo:phone", (data, responder) ->
     Clients.olo_with_phone(data, responder, socket)  
