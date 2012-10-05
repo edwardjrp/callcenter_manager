@@ -8,18 +8,8 @@ set :templates_path, "config/recipes/templates"
 
 
 namespace :deploy do
-  desc "start unicorn server"
-  task :start, roles: :app do
-    sudo "launchctl load -w /Library/LaunchDaemons/unicorn.plist"
-  end
-  desc "stop unicorn server"
-  task :stop, roles: :app do
-    sudo "launchctl unload -w /Library/LaunchDaemons/unicorn.plist"
-  end
-  desc "restart unicorn server"
-  task :restart, roles: :app do
-    stop
-    start
+  task :restart, :roles => :app do
+    run "touch #{current_release}/tmp/restart.txt"
   end
 
   # task :setup_config, roles: :app do

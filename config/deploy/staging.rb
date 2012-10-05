@@ -14,11 +14,11 @@ namespace :deploy do
     end
   end
 
-  task :setup_config, roles: :app do
-   sudo "ln -nfs #{current_path}/deploy_configs/kapiqua.conf /etc/nginx/sites-enabled/#{application}"
-   sudo "ln -nfs #{current_path}/deploy_configs/kapiqua_unicorn_init.sh /etc/init.d/unicorn_#{application}"
-   sudo "chmod +x #{current_path}/deploy_configs/kapiqua_unicorn_init.sh"
-   run "mkdir -p #{shared_path}/config"
-  end
-  before "deploy:restart", "deploy:setup_config"
+  # task :setup_config, roles: :app do
+  #  sudo "ln -nfs #{current_path}/deploy_configs/kapiqua.conf /etc/nginx/sites-enabled/#{application}"
+  #  sudo "ln -nfs #{current_path}/deploy_configs/kapiqua_unicorn_init.sh /etc/init.d/unicorn_#{application}"
+  #  sudo "chmod +x #{current_path}/deploy_configs/kapiqua_unicorn_init.sh"
+  #  run "mkdir -p #{shared_path}/config"
+  # end
+  # before "deploy:restart", "deploy:setup_config"
 end
