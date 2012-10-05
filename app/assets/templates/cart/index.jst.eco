@@ -2,39 +2,18 @@
   <h3>Orden actual</h3>
   <div class='content'>
 	  <div class='row'><div class='span3' id='sync_message'></div></div>
-    <%if _.any(@model.get('cart_products').models):%>
+    <%if _.any(@cart.get('cart_products').models):%>
       <div id ='cart_price_data'>
-	      <%if @model.get('net_amount')?:%><div class='row'><div class='span2' id='order_net_amount'><strong>Neto: </strong> RD$ <%=Number(@model.get('net_amount')).toFixed(2)%></div></div><%end%>
-        <%if @model.get('tax_amount')?:%><div class='row'><div class='span2' id='order_tax_amount'><strong>Impuestos: </strong> RD$ <%=Number(@model.get('tax_amount')).toFixed(2)%></div></div><%end%>
-        <%if @model.get('payment_amount')?:%><div class='row'><div class='span2' id='order_payment_amount'><strong>Total: </strong> RD$ <%=Number(@model.get('payment_amount')).toFixed(2)%></div></div><%end%>
+	      <%if @cart.get('net_amount')?:%><div class='row'><div class='span2' id='order_net_amount'><strong>Neto: </strong> RD$ <%=Number(@cart.get('net_amount')).toFixed(2)%></div></div><%end%>
+        <%if @cart.get('tax_amount')?:%><div class='row'><div class='span2' id='order_tax_amount'><strong>Impuestos: </strong> RD$ <%=Number(@cart.get('tax_amount')).toFixed(2)%></div></div><%end%>
+        <%if @cart.get('payment_amount')?:%><div class='row'><div class='span2' id='order_payment_amount'><strong>Total: </strong> RD$ <%=Number(@cart.get('payment_amount')).toFixed(2)%></div></div><%end%>
       </div>
       <ul id="current_carts_coupons">
-        <%for cart_coupon in _.sortBy(@model.get('cart_coupons').models, (model)-> -(model.get('id'))):%>
+        <%for cart_coupon in _.sortBy(@cart.get('cart_coupons').models, (model)-> -(model.get('id'))):%>
           <li id = "cart_coupon_<%=cart_coupon.get('id')%>"><%=cart_coupon.get('code')%><a class='coupon_remove' data-cart-coupon-id='<%=cart_coupon.get('id')%>'><i class="icon-trash"></i></a></li>
         <%end%>
       </ul>
       <ul id="current_carts_items">
-        <%for cart_product in _.sortBy(@model.get('cart_products').models, (model)-> -(model.get('id'))):%>
-          <li>
-            <div class='item' data-cart-product-id="<%=cart_product.id%>" data-cart-product-cid="<%=cart_product.cid%>" data-cart-product-code="<%=cart_product.get('product').get('productcode')%>">
-              
-              <input name="quantity" type="text" value="<%=cart_product.get('quantity')%>">
-              
-              <%-cart_product.get('product')?.get('productname')%>
-              <%if cart_product.secondary()? and cart_product.secondary() != '':%>
-                <%-"/ #{cart_product.secondary().get('productname')}"%>
-              <%end%>
-              
-              <div class='remove_options_and_pricing'>
-                <span class='item_remove' rel='tooltip' title='Eliminar'><i class="icon-trash icon-white"></i></span>
-                <span class='show_options' rel='tooltip' title='Monstrar opciones'><i class="icon-list icon-white left-margin-1"></i></span>
-                  <span class='edit_options' rel='tooltip' title='Editar opciones'><i class="icon-edit icon-white left-margin-1"></i></span>
-                <span class='pricing' data-options='<%=cart_product.options_array()%>'>$ <%=cart_product.price()%></span>
-              </div>
-            </div>
-            <p><%=cart_product.niffty_opions()%></p>
-          </li>
-        <%end%>
       </ul>
     <%else:%>
       No hay productos en la orden
