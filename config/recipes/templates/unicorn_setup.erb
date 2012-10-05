@@ -1,0 +1,12 @@
+working_directory "<%=current_path%>"
+pid "<%=current_path%>/tmp/pids/unicorn.pid"
+stderr_path "<%=current_path%>/log/unicorn.log"
+stdout_path "<%=current_path%>/log/unicorn.log"
+
+listen "/tmp/unicorn.<%=application%>.sock"
+<%if stage == 'production'%>
+  worker_processes 25
+<%else%>
+  worker_processes 2
+<%end%>
+timeout 30

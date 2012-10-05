@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>Label</key>
+    <string>kapiqua.unicorn</string>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <false/>
+    <key>UserName</key>
+    <string>proteus</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string><%=bin_folder%>/unicorn</string>
+        <string>-c</string>
+        <string><%=current_path%>/deploy_configs/unicorn.rb</string>
+        <string>-E</string>
+        <string>production</string>
+    </array>
+    <key>WorkingDirectory</key>
+    <string><%=current_path%></string>
+  </dict>
+</plist>
