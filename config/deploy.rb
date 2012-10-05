@@ -35,17 +35,19 @@ namespace :deploy do
   task :coffee_compile, roles: :app do
     puts "Compiling coffee files."
     run "mkdir -p #{shared_path}/node_modules"
-    run("ln -s  #{current_path}/kapiquajs/node_modules #{shared_path}/node_modules")
+    run("ln -s #{shared_path}/node_modules #{current_path}/kapiquajs/node_modules")
     run "cd #{current_path}/kapiquajs && #{sudo} npm link coffee-script"
     run "cd #{current_path}/kapiquajs && #{sudo} npm install"
-    run "/usr/bin/coffee #{current_path}/kapiquajs/build.coffee"
+    run "coffee #{current_path}/kapiquajs/build.coffee"
     puts "done."
   end
   before "forever:restart", "deploy:coffee_compile"
   after "deploy:restart", "forever:restart" 
 
   task :db_config, roles: :app do
-   put File.read("config/database.#{stage}.yml"), "#{shared_path}/config/database.yml"
+    run "mkdir -p #{shared_path}/config"
+    run("ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml")
+    # put File.read("config/database.#{stage}.yml"), "#{shared_path}/config/database.yml"
   end
   after "deploy:finalize_update", "deploy:db_config"
 
