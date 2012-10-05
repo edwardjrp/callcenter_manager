@@ -5,7 +5,6 @@ set :repository,  "ssh://#{user}@#{host}/Users/#{user}/#{application}.git"
 set :deploy_to, "/Library/WebServer/#{application}"
 set :bin_folder, "#{current_path}/bin"
 set :templates_path, "#{current_path}/config/recipes/templates"
-set :deploy_configs, "#{current_path}/deploy_configs"
 
 
 namespace :deploy do
@@ -24,16 +23,14 @@ namespace :deploy do
   end
 
   task :setup_config, roles: :app do
-   sudo "ln -nfs #{current_path}/deploy_configs/kapiqua.conf /usr/local/etc/nginx/nginx.conf"
+   # sudo "ln -nfs #{current_path}/deploy_configs/kapiqua.conf /usr/local/etc/nginx/nginx.conf"
    sudo "ln -nfs #{current_path}/deploy_configs/kapiqua_unicorn_init.sh /etc/init.d/unicorn_#{application}"
    sudo "chmod +x #{current_path}/deploy_configs/kapiqua_unicorn_init.sh"
    run "mkdir -p #{shared_path}/config"
-   put File.read("config/database.production.yml"), "#{shared_path}/config/database.yml"
+   run "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
   end
   before "deploy:restart", "deploy:setup_config"
 end
-
-
 
 
 namespace :unicorn do
@@ -41,11 +38,12 @@ namespace :unicorn do
   task :generate, roles: :app do
     erb = File.read(File.expand_path("#{templates_path}/nginx_unicorn_#{stage}.erb"))
     result = ERB.new(erb).result(binding)
-    put result, File.expand_path("#{deploy_configs}/nginx.conf")
+    put result, '/tmp/nginx.conf'
   end
 
   desc "setup unicorn setup"
   task :setup, roles: :app do
-    run "#{sudo} mv #{deploy_configs}/nginx.conf /usr/local/etc/nginx/"
+    generate
+    run "#{sudo} mv /tmp/nginx.conf /usr/local/etc/nginx/"
   end
 end

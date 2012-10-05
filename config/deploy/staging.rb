@@ -19,7 +19,6 @@ namespace :deploy do
    sudo "ln -nfs #{current_path}/deploy_configs/kapiqua_unicorn_init.sh /etc/init.d/unicorn_#{application}"
    sudo "chmod +x #{current_path}/deploy_configs/kapiqua_unicorn_init.sh"
    run "mkdir -p #{shared_path}/config"
-   put File.read("config/database.production.yml"), "#{shared_path}/config/database.yml"
   end
   before "deploy:restart", "deploy:setup_config"
 end

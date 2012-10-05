@@ -1,0 +1,7 @@
+production:
+  adapter: postgresql
+  encoding: unicode
+  database: kapiqua_production
+  pool: 25
+  username: soporte
+  password: d0m1n0s

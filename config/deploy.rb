@@ -34,7 +34,7 @@ namespace :deploy do
 
   task :coffee_compile, roles: :app do
     puts "Compiling coffee files."
-    run("if ! [ -d #{shared_path}/node_modules ]; then mkdir #{shared_path}/node_modules; fi")
+    run "mkdir -p #{shared_path}/node_modules"
     run("ln -s  #{current_path}/kapiquajs/node_modules #{shared_path}/node_modules")
     run "cd #{current_path}/kapiquajs && #{sudo} npm link coffee-script"
     run "cd #{current_path}/kapiquajs && #{sudo} npm install"
@@ -44,10 +44,10 @@ namespace :deploy do
   before "forever:restart", "deploy:coffee_compile"
   after "deploy:restart", "forever:restart" 
 
-  task :symlink_config, roles: :app do
-    run "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
+  task :db_config, roles: :app do
+   put File.read("config/database.#{stage}.yml"), "#{shared_path}/config/database.yml"
   end
-  after "deploy:finalize_update", "deploy:symlink_config"
+  after "deploy:finalize_update", "deploy:db_config"
 
   desc "Make sure local git is in sync with remote."
   task :check_revision, roles: :web do
