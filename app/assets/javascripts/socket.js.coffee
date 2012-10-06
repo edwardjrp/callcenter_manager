@@ -25,8 +25,8 @@ jQuery ->
     $('#actions').on 'click', '#place_order_button', (event)->
       event.preventDefault()
       target = $(event.currentTarget)
-      # console.log 'place'
-      socket.emit 'cart:place',  $('#checkout_cart').data('id')
+      socket.emit('cart:place',  $('#checkout_cart').data('id')) unless target.hasClass('disabled')
+      target.addClass('disabled')
     socket.on 'cart:place:completed', (data)->
       console.log data 
       console.log 'talk to rails '

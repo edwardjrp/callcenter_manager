@@ -128,7 +128,8 @@
               %th Cantidad
               %th product
               %th Optiones
-              %th Precio              
+              %th Precio 
+              %th             
           %tbody
             - @cart.cart_products.each do |cart_product|
               %tr{id: dom_id(cart_product), class: availability_class(cart_product.available_in_store(@cart.store))}
@@ -141,4 +142,6 @@
                     = number_to_currency(cart_product.priced_at)
                   - else
                     pendiente
+                %td
+                  =link_to 'Remover', '#', class: 'btn'
       %hr 
