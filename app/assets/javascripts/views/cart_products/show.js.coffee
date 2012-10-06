@@ -17,5 +17,4 @@ class Kapiqua25.Views.CartProductsShow extends Backbone.View
   
   updatePrices: (data) ->
     edit_data = _.find(data.items, (item) => item.cart_product_id == @model.id)
-    console.log edit_data
-    @model.set({priced_at: edit_data.priced_at})
+    @model.set({priced_at: edit_data.priced_at}) if edit_data?

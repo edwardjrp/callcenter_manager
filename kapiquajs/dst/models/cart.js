@@ -116,13 +116,9 @@ Cart.prototype.updatePrices = function(order_reply) {
       return _.each(order_reply.products(), function(pricing) {
         return CartProduct.find(pricing.cart_product_id, function(cp_err, cart_product) {
           if (!cp_err) {
-            console.log(pricing);
-            console.log(JSON.stringify(cart_product));
-            console.log('updating');
             return cart_product.updateAttributes({
               priced_at: pricing.priced_at
             }, function(update_err, updated_cart_product) {
-              console.log(JSON.stringify(updated_cart_product));
               if (update_err) {
                 return console.error(update_err);
               }
