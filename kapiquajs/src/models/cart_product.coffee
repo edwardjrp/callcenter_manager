@@ -54,7 +54,8 @@ CartProduct.removeItem = (data, respond, socket) ->
             if del_err?
               respond(del_err)
             else
-              socket.emit('cart_products:deleted', data.id)
+              respond(del_err, data.id)
+              # socket.emit('cart_products:deleted', data.id)
               cart.price(socket)
               
 CartProduct.prototype.simplified = ->

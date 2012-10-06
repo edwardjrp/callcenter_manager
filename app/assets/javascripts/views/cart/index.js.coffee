@@ -3,13 +3,14 @@ class Kapiqua25.Views.CartIndex extends Backbone.View
   template: JST['cart/index']
   
   initialize: ->
-      _.bindAll(this, 'reloadCartProduct', 'removeCartProduct', 'updatePrices', 'addCartCoupon', 'removeCartCoupon', 'remove_coupon', 'addCartProduct')
-      # window.socket.on('cart_products:updated', @reloadCartProduct)
-      window.socket.on('cart_products:deleted', @removeCartProduct)
+      _.bindAll(this,'updatePrices', 'removeCartProduct', 'addCartCoupon', 'removeCartCoupon', 'remove_coupon', 'addCartProduct')
+      # window.socket.on('cart_products:deleted', @removeCartProduct)
       window.socket.on('cart:priced', @updatePrices)
       window.socket.on('cart_coupon:saved', @addCartCoupon)
       window.socket.on('cart_coupons:deleted', @removeCartCoupon)
       @model.get('cart_products').on('add', @addCartProduct)
+      @model.get('cart_products').on('remove', @removeCartProduct)
+      @model.on('change', @render, this)
   #   @model.on('change', @render, this)
   #   @model.on('change', @highlight, this)
   
@@ -59,24 +60,22 @@ class Kapiqua25.Views.CartIndex extends Backbone.View
       tax1_amount: data.order_reply.tax1amount
       tax2_amount: data.order_reply.tax2amount
       payment_amount: data.order_reply.payment_amount
-    cart_pricing = $("<div></div>")
-    .append("<div class='row'><div class = 'span2'><strong>Neto</strong> RD$ #{Number(data.order_reply.netamount).toFixed(2)}</div></div>")
-    .append("<div class='row'><div class = 'span2'><strong>Impuestos</strong> RD$ #{Number(data.order_reply.taxamount).toFixed(2)}</div></div>")
-    .append("<div class='row'><div class = 'span2'><strong>Total</strong> RD$ #{Number(data.order_reply.payment_amount).toFixed(2)}</div></div>")
-    $(@el).find('#cart_price_data').html(cart_pricing)
-    for item in data.items
-      $(@el).find("[data-cart-product-id='#{item.cart_product_id}']").find('.pricing').html("RD$ #{Number(item.priced_at).toFixed(2)}")
+    # cart_pricing = $("<div></div>")
+    # .append("<div class='row'><div class = 'span2'><strong>Neto</strong> RD$ #{Number(data.order_reply.netamount).toFixed(2)}</div></div>")
+    # .append("<div class='row'><div class = 'span2'><strong>Impuestos</strong> RD$ #{Number(data.order_reply.taxamount).toFixed(2)}</div></div>")
+    # .append("<div class='row'><div class = 'span2'><strong>Total</strong> RD$ #{Number(data.order_reply.payment_amount).toFixed(2)}</div></div>")
+    # $(@el).find('#cart_price_data').html(cart_pricing)
+    # for item in data.items
+    #   $(@el).find("[data-cart-product-id='#{item.cart_product_id}']").find('.pricing').html("RD$ #{Number(item.priced_at).toFixed(2)}")
 
-  reloadCartProduct: (data)->
-    item = @model.get('cart_products').get(data.id)
-    target = $(@el).find("[data-cart-product-id='#{data.id}']")
-    target.find("input[name='quantity']").val(data.quantity)
-    target.next().html(item.niffty_opions())
-    target.effect('highlight')
+  remove_cart_product: (event)->
+    target = $(event.currentTarget)
+    if confirm('¿Remover producto de la orden?')
+      item_to_remove_id = target.closest('.item').data('cart-product-id')
+      @model.get('cart_products').get(item_to_remove_id).destroy()
 
-  removeCartProduct: (id)->
-    @model.get('cart_products')
-    target = $(@el).find("[data-cart-product-id='#{id}']")
+  removeCartProduct: (cart_product)->
+    target = $(@el).find("[data-cart-product-id='#{cart_product.id}']")
     target.remove()
     $(@el).effect('highlight')
 
@@ -88,14 +87,6 @@ class Kapiqua25.Views.CartIndex extends Backbone.View
     category_for_edit = product_for_edit.get('category')
     # send the cart_product id instead of the cart product it self
     Backbone.pubSub.trigger('editing', { cart_product: item_to_edit, product: product_for_edit, category: category_for_edit } )
-
-  remove_cart_product: (event)->
-    target = $(event.currentTarget)
-    if confirm('¿Remover producto de la orden?')
-      item_to_remove_cid = target.closest('.item').data('cart-product-cid')
-      item_to_remove = @model.get('cart_products').getByCid(item_to_remove_cid)
-      item_to_remove.destroy()
-
     
   colorize: (event)->
     target = $(event.currentTarget)
@@ -112,8 +103,6 @@ class Kapiqua25.Views.CartIndex extends Backbone.View
     
   update_quantity: (event)->
     target = $(event.currentTarget)
-    item_to_update_cid = target.closest('.item').data('cart-product-cid')
-    item_to_update = @model.get('cart_products').getByCid(item_to_update_cid)
-    item_to_update.set({quantity: target.val()}, {silent: true})
-    item_to_update.save()
+    item_to_update_id = target.closest('.item').data('cart-product-id')
+    @model.get('cart_products').get(item_to_update_id).set({quantity: target.val()}, {silent: true}).set({quantity: target.val()}).save()
     
