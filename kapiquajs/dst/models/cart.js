@@ -94,7 +94,7 @@ Cart.prototype.price = function(socket) {
               return me.updatePrices(order_reply);
             });
           } catch (err_pricing) {
-            return console.error(err_pricing);
+            return console.error(err_pricing.stack);
           }
         }
       });

@@ -144,7 +144,7 @@ io.sockets.on("connection", function(socket) {
 });
 
 process.on('uncaughtException', function(err) {
-  return console.log(err);
+  return console.log(err.stack);
 });
 
 app.listen(3030, function() {

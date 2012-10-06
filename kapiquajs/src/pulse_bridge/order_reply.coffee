@@ -30,7 +30,8 @@ class OrderReply
     results = []   
     for order_item in @order_items
       for cart_product in @cart_products
-        if order_item.code == cart_product.product.productcode and order_item.quantity == cart_product.quantity.toString() and _.isEmpty(objectDifference(Option.pulseCollection(cart_product.options), order_item.options))
+        if cart_product.quantity? and not _.isUndefined(cart_product.quantity) then quantity = cart_product.quantity else quantity = null
+        if order_item.code == cart_product.product.productcode and order_item.quantity == quantity and _.isEmpty(objectDifference(Option.pulseCollection(cart_product.options), order_item.options))
           build_result = { cart_product_id: cart_product.id, product_id: cart_product.product.id, priced_at: order_item.priced_at }
           console.log { cart_product_id: cart_product.id, product_id: cart_product.product.id, priced_at: order_item.priced_at }
           results.push build_result unless objectInclude(results, build_result)

@@ -69,7 +69,7 @@ Cart.prototype.price = (socket)->
                 socket.emit 'cart:priced', {order_reply: order_reply, items: order_reply.products()}
                 me.updatePrices(order_reply)
             catch err_pricing
-              console.error err_pricing
+              console.error err_pricing.stack
 
 
 

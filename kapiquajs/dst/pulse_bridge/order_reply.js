@@ -40,7 +40,7 @@ OrderReply = (function() {
   }
 
   OrderReply.prototype.products = function() {
-    var build_result, cart_product, order_item, results, _i, _j, _len, _len1, _ref, _ref1;
+    var build_result, cart_product, order_item, quantity, results, _i, _j, _len, _len1, _ref, _ref1;
     results = [];
     _ref = this.order_items;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -48,7 +48,12 @@ OrderReply = (function() {
       _ref1 = this.cart_products;
       for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
         cart_product = _ref1[_j];
-        if (order_item.code === cart_product.product.productcode && order_item.quantity === cart_product.quantity.toString() && _.isEmpty(objectDifference(Option.pulseCollection(cart_product.options), order_item.options))) {
+        if ((cart_product.quantity != null) && !_.isUndefined(cart_product.quantity)) {
+          quantity = cart_product.quantity;
+        } else {
+          quantity = null;
+        }
+        if (order_item.code === cart_product.product.productcode && order_item.quantity === quantity && _.isEmpty(objectDifference(Option.pulseCollection(cart_product.options), order_item.options))) {
           build_result = {
             cart_product_id: cart_product.id,
             product_id: cart_product.product.id,

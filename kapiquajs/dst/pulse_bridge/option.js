@@ -1,4 +1,6 @@
-var Option;
+var Option, _;
+
+_ = require('underscore');
 
 Option = (function() {
 
@@ -43,11 +45,12 @@ Option = (function() {
   };
 
   Option.collection = function(recipe_list) {
-    var recipe, recipes, results, _i, _len;
+    var recipe, recipes, results, _i, _len, _ref;
     results = [];
     recipes = recipe_list.split(',') || recipe_list;
-    for (_i = 0, _len = recipes.length; _i < _len; _i++) {
-      recipe = recipes[_i];
+    _ref = _.compact(recipes);
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      recipe = _ref[_i];
       if (recipe != null) {
         results.push(new Option(recipe));
       }
@@ -56,11 +59,12 @@ Option = (function() {
   };
 
   Option.pulseCollection = function(recipe_list) {
-    var recipe, recipes, results, _i, _len;
+    var recipe, recipes, results, _i, _len, _ref;
     results = [];
     recipes = recipe_list.split(',') || recipe_list;
-    for (_i = 0, _len = recipes.length; _i < _len; _i++) {
-      recipe = recipes[_i];
+    _ref = _.compact(recipes);
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      recipe = _ref[_i];
       if (recipe != null) {
         results.push(new Option(recipe).toPulse());
       }
