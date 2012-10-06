@@ -134,7 +134,7 @@ class Cart < ActiveRecord::Base
     self.service_method.present? and (self.service_method == self.class.service_methods[1])
   end
   
-  def carry_out?
+  def dine_in?
     self.service_method.present? and (self.service_method == self.class.service_methods[2])
   end
   

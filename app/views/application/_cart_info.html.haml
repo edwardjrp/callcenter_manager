@@ -18,10 +18,10 @@
               %i.icon-ok
             Delivery
         %li
-          %a#service_method_carry_out{:href=> "#" , :data=> { "service-method"=> 'carryout' }}
-            -if current_cart.carry_out? 
+          %a#service_method_carry_out{:href=> "#" , :data=> { "service-method"=> 'dinein' }}
+            -if current_cart.dine_in? 
               %i.icon-ok
-            Carry Out
+            Dine in
         %li
           %a#service_method_pickup{:href=> "#" , :data=> { "service-method"=> 'pickup' }}
             -if current_cart.pickup? 
