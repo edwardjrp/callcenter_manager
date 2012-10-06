@@ -7,12 +7,14 @@ class PaymentsController < ApplicationController
 
   private
 
-  def placeable
-    @cart = current_cart
-    @cart.reload
-    unless  @cart.placeable?
-      flash['alert']= @cart.errors.full_messages.to_sentence
-      redirect_to builder_path
+    def placeable
+      @cart = current_cart
+      @cart.reload
+      if @cart.completed?
+        cart_reset
+      elsif  !@cart.placeable?
+        flash['alert']= @cart.errors.full_messages.to_sentence
+        redirect_to builder_path
+      end
     end
-  end
 end

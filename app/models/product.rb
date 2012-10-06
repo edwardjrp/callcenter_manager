@@ -21,6 +21,7 @@ class Product < ActiveRecord::Base
   has_many :cart_products
   has_many :carts, :through=> :cart_products
   has_many :store_products
+  has_many :stores, :through=> :store_products
   scope :are_option, where(:options=>'OPTION')
   scope :are_main, where('options != ?  or options is NULL', 'OPTION')
   # attr_accessible :title, :body

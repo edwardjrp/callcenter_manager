@@ -107,11 +107,11 @@ class Carts
                     # console.log res_data
                     order_reply = new OrderReply(res_data)
                     console.log order_reply
-                    # if order_reply.status == '0'
-                    #   cart.updateAttributes { store_order_id: order_reply.reply_id, completed: true }, (cart_update_err, updated_cart)->
-                    #     console.log updated_cart
-                    # else
-                    #   console.log "Notify of the pulse response here : #{order_reply.status_text}"
+                    if order_reply.status == '0'
+                      cart.updateAttributes { store_order_id: order_reply.order_id, complete_on: Date.now(), completed: true }, (cart_update_err, updated_cart)->
+                       socket.emit 'cart:place:completed', updated_cart
+                    else
+                      console.log "Notify of the pulse response here : #{order_reply.status_text}"
                 catch placing_error
                   console.error placing_error.stack
               else
@@ -133,17 +133,20 @@ class Carts
     recipe = cart_product.options || cart_product.product.options
     current_category_id = cart_product.product.category_id
     Product.all {where: {category_id: current_category_id, options: 'OPTION'}}, (cat_options_products_err, cat_options_products)->
-      if _.any(recipe.split(','))
-        _.each _.compact(recipe.split(',')), (code) ->
-          code_match = code.match(/^([0-9]{0,2}\.?[0|7|5]{0,2})([A-Z]{1,}[a-z]{0,})(?:\-([W12]))?/)
-          if code_match?
-            code_match[1] = '1' if not code_match[1]? or code_match[1] == ''
-            current_quantity = code_match[1]
-            current_product = _.find(cat_options_products, (op)-> op.productcode == code_match[2])
-            current_part =  code_match[3] || 'W'
-            product_option = {quantity: Number(current_quantity), product: Carts.to_json(current_product), part: current_part}
-            product_options.push product_option
-        cart_product.product_options = product_options
+      if recipe?
+        if _.any(recipe.split(','))
+          _.each _.compact(recipe.split(',')), (code) ->
+            code_match = code.match(/^([0-9]{0,2}\.?[0|7|5]{0,2})([A-Z]{1,}[a-z]{0,})(?:\-([W12]))?/)
+            if code_match?
+              code_match[1] = '1' if not code_match[1]? or code_match[1] == ''
+              current_quantity = code_match[1]
+              current_product = _.find(cat_options_products, (op)-> op.productcode == code_match[2])
+              current_part =  code_match[3] || 'W'
+              product_option = {quantity: Number(current_quantity), product: Carts.to_json(current_product), part: current_part}
+              product_options.push product_option
+          cart_product.product_options = product_options
+          callback(null, cart_product)
+      else
         callback(null, cart_product)
 
 module.exports  = Carts

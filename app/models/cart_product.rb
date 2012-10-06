@@ -23,7 +23,9 @@ class CartProduct < ActiveRecord::Base
   attr_accessible :bind_id, :cart_id, :options, :product_id, :quantity
   
   
-
+  def available_in_store(store)
+    store.products.include?(self.product)
+  end
 
   def parsed_options
     return [] if product && product.category.nil?

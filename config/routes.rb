@@ -29,6 +29,9 @@ Kapiqua25::Application.routes.draw do
       post 'discount'
       get 'current'
     end
+    member do 
+      post 'completed'
+    end
   end
   resources :categories
   resources :addresses do

@@ -27,6 +27,9 @@ jQuery ->
       target = $(event.currentTarget)
       # console.log 'place'
       socket.emit 'cart:place',  $('#checkout_cart').data('id')
+    socket.on 'cart:place:completed', (data)->
+      console.log data 
+      console.log 'talk to rails '
 
     socket.emit 'cart:price', $('#checkout_cart').data('id')
     socket.on 'cart:priced', (data)->

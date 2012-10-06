@@ -22,6 +22,16 @@ class CartsController < ApplicationController
       format.json{ render json: current_cart.to_json(include: [:store])}
     end
   end
+
+  def completed
+    @cart = Cart.find(params[:cart][:id])
+    if @cart
+      cart_reset
+      respond_to do | format|
+        format.json{render :nothing =>true, :status => 200}
+      end
+    end
+  end
   
   
   def discount

@@ -18,4 +18,12 @@ module ApplicationHelper
       return idnumber
     end
   end
+
+  def availability(value)
+    value == true ? '<span class="label label-info">Disponible</span>'.html_safe : '<span class="label label-warning">Agotado</span>'.html_safe
+  end
+
+  def availability_class(value)
+    value == true ? '' : 'unavailable'
+  end
 end

@@ -67,7 +67,7 @@ class Cart < ActiveRecord::Base
 
 
   def self.service_methods
-    %w( delivery pickup carryout )
+    %w( delivery pickup dinein )
   end
 
   def placeable?

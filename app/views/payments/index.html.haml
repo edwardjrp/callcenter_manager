@@ -2,7 +2,8 @@
 
 #actions
   =link_to '<i class="icon-arrow-left"></i> Atras'.html_safe, builder_path, class: 'btn bottom-margin-1'
-  =link_to '<i class="icon-trash"></i> Abandonar'.html_safe, '#', class: 'btn bottom-margin-1'
+  =link_to '<i class="icon-trash"></i> Anular'.html_safe, '#', class: 'btn bottom-margin-1'
+  =link_to '<i class="icon-share"></i> Dejar incompleta'.html_safe, '#', class: 'btn bottom-margin-1'
 .row
   .span4
     .well
@@ -114,19 +115,24 @@
         .span3#checkout_cart_total
           %strong Monto de la orden:
           =number_to_currency(@cart.payment_amount) || 'N/A'
-        
-
+      - unless @cart.cart_products.all? { | cart_product | cart_product.available_in_store(@cart.store) }
+        .row
+          .alert.span7
+            %strong advertencia 
+            Algunos productos no están disponible en esta tienda
       .row{:data=>{'cart-id'=> @cart.id}, :id=>dom_id(@cart)}
         %table.table.table-striped.table-bordered.table-condensed.span8
           %thead
             %tr
+              %th Disponibilidad
               %th Cantidad
               %th product
               %th Optiones
               %th Precio              
           %tbody
             - @cart.cart_products.each do |cart_product|
-              %tr[cart_product]
+              %tr{id: dom_id(cart_product), class: availability_class(cart_product.available_in_store(@cart.store))}
+                %td= availability(cart_product.available_in_store(@cart.store))
                 %td= cart_product.quantity
                 %td= cart_product.product.productname
                 %td= cart_product.product.niffty_options
