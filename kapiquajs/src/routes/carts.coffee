@@ -13,8 +13,12 @@ _ = require('underscore')
 class Carts
 
   @price: (data, respond, socket) =>
-    console.log 'need to reimplement'
-
+    if data?
+      Cart.find data, (cart_find_err, cart) ->
+        if cart_find_err?
+          socket.emit 'cart:price:error', 'No se pudo establecer la comunición con pulse' if socket?
+        else
+          cart.price(socket)
 
   @place: (data, respond, socket) =>
     # socket.emit 'cart:price:error', {error: 'La información requerida para colocar la orden no esta completa'} if socket?

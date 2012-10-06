@@ -44,11 +44,11 @@ class Client < ActiveRecord::Base
   end
   
   def last_address
-    Address.find_by_id(self.target_address_id) || self.addresses.first
+    Address.find_by_id(self.target_address_id) || self.addresses.first if self.addresses.any?
   end
 
   def last_phone
-    Phone.find_by_id(self.target_phone_id) || self.phones.first
+    Phone.find_by_id(self.target_phone_id) || self.phones.first if self.phones.any?
   end
 
 

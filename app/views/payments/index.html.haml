@@ -26,7 +26,7 @@
     .well#phones_list
       .row
         .span4        
-          %h3 Teléfono
+          %h3 Datos de contacto
       %hr
       #client_phone_list
         .client_phone{:id=> dom_id(@cart.client.last_phone), :data=> {'phone'=> @cart.client.last_phone.to_json}}
@@ -40,11 +40,6 @@
                 %strong extensión:
                 = @cart.client.last_phone.ext
           %hr 
-    .well#addresses_list
-      .row
-        .span4        
-          %h3 Dirección
-      %hr
       #client_address_list
         -if @cart.client.last_address
           .client_address{:id=> dom_id(@cart.client.last_address)}
@@ -88,23 +83,35 @@
                   = @cart.client.last_address.delivery_instructions
             %hr 
       
-  .span8#carts_list
+  .span8#checkout_cart{data: {id: @cart.id }}
     - if @cart
       %h3 Orden
       %hr 
       .row
-        .span2
+        .span3
           %strong Agente:
           =@cart.user.full_name
-        .span2.offset2
+        .span3
           =l @cart.created_at, format: :short
       .row
-        .span2
-          %strong Monto de la orden:
-          =number_to_currency(@cart.payment_amount) || 'N/A'
-        .span2.offset2
+        .span3#checkout_cart_net
+          %strong Monto neto:
+          =number_to_currency(@cart.net_amount) || 'N/A'
+        .span3
           %strong Modo de servicio:
           =@cart.service_method || 'N/A'
+      .row
+        .span3#checkout_cart_tax
+          %strong Impuestos:
+          =number_to_currency(@cart.tax_amount) || 'N/A'
+        .span3
+          %strong Tienda:
+          =@cart.store.name
+      .row
+        .span3#checkout_cart_total
+          %strong Monto de la orden:
+          =number_to_currency(@cart.payment_amount) || 'N/A'
+        
 
       .row{:data=>{'cart-id'=> @cart.id}, :id=>dom_id(@cart)}
         %table.table.table-striped.table-bordered.table-condensed.span8
@@ -116,9 +123,13 @@
               %th Precio              
           %tbody
             - @cart.cart_products.each do |cart_product|
-              %tr
+              %tr[cart_product]
                 %td= cart_product.quantity
                 %td= cart_product.product.productname
                 %td= cart_product.product.niffty_options
-                %td= cart_product.priced_at
+                %td.item_price
+                  - if cart_product.priced_at
+                    = number_to_currency(cart_product.priced_at)
+                  - else
+                    pendiente
       %hr 

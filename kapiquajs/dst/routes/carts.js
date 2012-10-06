@@ -27,7 +27,17 @@ Carts = (function() {
   function Carts() {}
 
   Carts.price = function(data, respond, socket) {
-    return console.log('need to reimplement');
+    if (data != null) {
+      return Cart.find(data, function(cart_find_err, cart) {
+        if (cart_find_err != null) {
+          if (socket != null) {
+            return socket.emit('cart:price:error', 'No se pudo establecer la comunición con pulse');
+          }
+        } else {
+          return cart.price(socket);
+        }
+      });
+    }
   };
 
   Carts.place = function(data, respond, socket) {

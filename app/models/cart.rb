@@ -1,3 +1,4 @@
+# encoding: utf-8
 # == Schema Information
 #
 # Table name: carts
@@ -70,11 +71,15 @@ class Cart < ActiveRecord::Base
   end
 
   def placeable?
-    errors.add :base, 'No ha seleccionado un cliente' if self.client.nil?
     errors.add :base, 'No ha seleccionado una tienda' if self.store.nil?
     errors.add :base, 'No ha seleccionado un modo de servicio' if self.service_method.blank?
-    errors.add :base, 'El cliente no tiene numero asignado' if self.client.nil? and self.client.phones.empty?
     errors.add :base, 'No ha introducido productos a la orden' if self.cart_products.empty?
+    if self.client.nil?
+      errors.add :base, 'No ha seleccionado un cliente'
+    else
+      errors.add :base, 'El cliente no tiene numero telefonico asignado' if self.client.last_phone.nil?
+      errors.add :base, 'El modo de servicio es delivery pero no hay una dirección asignada' if self.client.last_address.nil? and self.delivery?
+    end
     errors.empty?
   end
 
@@ -122,15 +127,15 @@ class Cart < ActiveRecord::Base
   end
   
   def delivery?
-    self.service_method == self.class.service_methods[0]
+    self.service_method.present? and (self.service_method == self.class.service_methods[0])
   end
   
   def pickup?
-      self.service_method == self.class.service_methods[1]
+    self.service_method.present? and (self.service_method == self.class.service_methods[1])
   end
   
   def carry_out?
-      self.service_method == self.class.service_methods[2]
+    self.service_method.present? and (self.service_method == self.class.service_methods[2])
   end
   
   def self.valid_mailboxes

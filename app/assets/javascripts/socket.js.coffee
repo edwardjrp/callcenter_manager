@@ -20,6 +20,16 @@ jQuery ->
     $(".blink").css("font-weight", 'normal')
     $(this).removeClass('blink')
 
+  if $('#payments').size() > 0
+    # console.log 'emit price'
+    socket.emit 'cart:price', $('#checkout_cart').data('id')
+    socket.on 'cart:priced', (data)->
+      console.log data.items
+      $('#checkout_cart_net').html("<strong> Monto neto: </strong>RD$ #{Number(data.order_reply.netamount).toFixed(2)}")
+      $('#checkout_cart_tax').html("<strong>  Impuestos: </strong>RD$ #{Number(data.order_reply.taxamount).toFixed(2)}")
+      $('#checkout_cart_total').html("<strong> Monto de la orden: </strong>RD$ #{Number(data.order_reply.payment_amount).toFixed(2)}")
+      _.each data.items, (item)->
+        $("#cart_product_#{item.cart_product_id}").find('.item_price').html("RD$ #{Number(item.priced_at).toFixed(2)}")
 
   socket.on 'register_client', (operators) ->  
     $('#chatbox').find('.operator_tab').remove()
@@ -48,6 +58,7 @@ jQuery ->
       socket.emit 'cart_coupons:create', {cart_id: target.data('cart-id'), coupon_code: target.data('coupon-code'), coupon_id: target.data('coupon-id'), target_products: target.data('coupon-products')}
 
   $('#close_utils').on 'click', (event)->
+    console.log $('#utils_labels').next()
     for tab_contents in $('#utils_labels').next().find('.tab-pane')
       $(tab_contents).removeClass('active')
 
