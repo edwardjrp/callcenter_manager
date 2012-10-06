@@ -41,8 +41,9 @@ Carts = (function() {
   };
 
   Carts.place = function(data, respond, socket) {
-    return Cart.find(data.cart_id, function(cart_find_err, cart) {
+    return Cart.find(data, function(cart_find_err, cart) {
       if (cart_find_err != null) {
+        console.error(cart_find_err.stack);
         if (socket != null) {
           return socket.emit('cart:place:error', {
             error: JSON.stringify(cart_find_err)
@@ -139,7 +140,7 @@ Carts = (function() {
             });
           }
         ], function(final_error, client, cart_products, phones, addresses, store) {
-          var assempled_cart, pulse_com_error;
+          var assempled_cart, cart_placer, pulse_com_error;
           if (final_error != null) {
             return console.log('Error at the end');
           } else {
@@ -153,21 +154,16 @@ Carts = (function() {
               assempled_cart.phones = phones;
               assempled_cart.addresses = addresses;
               assempled_cart.store = store;
-              if (assempled_cart.store && assempled_cart.client && assempled_cart.cart_products.length > 0 && assempled_cart.phones.length > 0) {
-                return PulseBridge.price(assempled_cart, pulse_com_error, function(res_data) {
-                  var order_reply;
-                  order_reply = new OrderReply(res_data);
-                  if (order_reply.status === '0') {
-                    return cart.updateAttributes({
-                      store_order_id: order_reply.reply_id,
-                      completed: true
-                    }, function(cart_update_err, updated_cart) {
-                      return console.log(updated_cart);
-                    });
-                  } else {
-                    return console.log("Notify of the pulse response here : " + order_reply.status_text);
-                  }
-                });
+              if ((assempled_cart.store != null) && (assempled_cart.client != null) && assempled_cart.cart_products.length > 0 && assempled_cart.phones.length > 0) {
+                try {
+                  console.log('dont forget to pull port from settings');
+                  cart_placer = new PulseBridge(assempled_cart, assempled_cart.store.storeid, assempled_cart.store.ip, '59101');
+                  return cart_placer.place(pulse_com_error, function(res_data) {
+                    return console.log(res_data);
+                  });
+                } catch (placing_error) {
+                  return console.error(placing_error.stack);
+                }
               } else {
                 return console.log('Princing conditions not met');
               }

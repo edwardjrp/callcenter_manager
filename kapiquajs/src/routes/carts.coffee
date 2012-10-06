@@ -22,8 +22,9 @@ class Carts
 
   @place: (data, respond, socket) =>
     # socket.emit 'cart:price:error', {error: 'La información requerida para colocar la orden no esta completa'} if socket?
-    Cart.find data.cart_id, (cart_find_err, cart) ->
+    Cart.find data, (cart_find_err, cart) ->
       if cart_find_err?
+        console.error cart_find_err.stack
         socket.emit 'cart:place:error', {error: JSON.stringify(cart_find_err)} if socket?
       else
         async.waterfall [
@@ -96,15 +97,22 @@ class Carts
               assempled_cart.phones = phones
               assempled_cart.addresses = addresses
               assempled_cart.store = store
-              if assempled_cart.store and assempled_cart.client and assempled_cart.cart_products.length > 0 and assempled_cart.phones.length > 0
+              # console.log assempled_cart
+              if assempled_cart.store? and assempled_cart.client? and assempled_cart.cart_products.length > 0 and assempled_cart.phones.length > 0
                 # stablish send time to avoid sending for the next 30 seconds or so
-                PulseBridge.price assempled_cart, pulse_com_error, (res_data) ->
-                  order_reply = new OrderReply(res_data)
-                  if order_reply.status == '0'
-                    cart.updateAttributes { store_order_id: order_reply.reply_id, completed: true }, (cart_update_err, updated_cart)->
-                      console.log updated_cart
-                  else
-                    console.log "Notify of the pulse response here : #{order_reply.status_text}"
+                try
+                  console.log 'dont forget to pull port from settings'
+                  cart_placer = new PulseBridge(assempled_cart, assempled_cart.store.storeid, assempled_cart.store.ip, '59101')
+                  cart_placer.place pulse_com_error, (res_data) ->
+                    console.log res_data
+                    # order_reply = new OrderReply(res_data)
+                    # if order_reply.status == '0'
+                    #   cart.updateAttributes { store_order_id: order_reply.reply_id, completed: true }, (cart_update_err, updated_cart)->
+                    #     console.log updated_cart
+                    # else
+                    #   console.log "Notify of the pulse response here : #{order_reply.status_text}"
+                catch placing_error
+                  console.error placing_error.stack
               else
                 console.log 'Princing conditions not met'
             else

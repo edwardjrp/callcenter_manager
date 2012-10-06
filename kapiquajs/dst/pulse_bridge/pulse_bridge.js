@@ -44,6 +44,8 @@ PulseBridge = (function() {
 
   PulseBridge.prototype.send = function(action, data, err_cb, cb) {
     var headers;
+    console.log(this.target());
+    console.log(data);
     headers = {
       "User-Agent": "kapiqua-node",
       "SOAPAction": "http://www.dominos.com/action/" + action,
@@ -53,6 +55,7 @@ PulseBridge = (function() {
       "Accept-Charset": "utf-8",
       "Content-Type": "text/xml;charset=UTF-8"
     };
+    console.info(headers);
     return request({
       method: 'POST',
       headers: headers,
@@ -60,7 +63,7 @@ PulseBridge = (function() {
       body: data
     }, function(err, res, res_data) {
       if (err) {
-        console.error(err);
+        console.error(err.stack);
         return err_cb(err);
       } else {
         return cb(res_data);
@@ -77,7 +80,7 @@ PulseBridge = (function() {
   };
 
   PulseBridge.prototype.body = function(action) {
-    var auth, body, cart_product, cash_payment, customer, customer_address, customer_name, customer_type_info, doc, envelope, header, item_modifier, item_modifiers, orde_info_collection, order, order_info_1, order_info_2, order_info_3, order_item, order_items, order_source, payment, product_option, product_options, _i, _j, _len, _len1, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
+    var auth, body, cart_product, cash_payment, customer, customer_address, customer_name, customer_type_info, doc, envelope, header, item_modifier, item_modifiers, orde_info_collection, order, order_info_1, order_item, order_items, order_source, payment, product_option, product_options, _i, _j, _len, _len1, _ref, _ref1, _ref2, _ref3, _ref4, _ref5;
     doc = new libxml.Document();
     envelope = new libxml.Element(doc, 'env:Envelope').attr({
       'xmlns:xsd': "http://www.w3.org/2001/XMLSchema",
@@ -94,14 +97,14 @@ PulseBridge = (function() {
     auth.addChild(new libxml.Element(doc, 'TimeStamp', ''));
     header.addChild(auth);
     order = new libxml.Element(doc, 'Order').attr({
-      orderid: "Order#1349230038",
+      orderid: "Order#" + (Date.now()),
       currency: "en-USD",
       language: "en-USA"
     });
     order.addChild(new libxml.Element(doc, 'StoreID', "" + this.storeid));
-    order.addChild(new libxml.Element(doc, 'ServiceMethod', this.fallback_values(action, this.cart.service_method, 'PickUp')));
+    order.addChild(new libxml.Element(doc, 'ServiceMethod', 'dinein'));
     order.addChild(new libxml.Element(doc, 'OrderTakeSeconds', '60'));
-    order.addChild(new libxml.Element(doc, 'DeliveryInstructions', this.fallback_values(action, this.cart.delivery_instructions, 'Asking for price')));
+    order.addChild(new libxml.Element(doc, 'DeliveryInstructions', 'Edf:;TC:N/A;AP:N/A;D_I.'));
     order_source = new libxml.Element(doc, 'OrderSource');
     order_source.addChild(new libxml.Element(doc, 'OrganizationURI', 'proteus.dominos.com.do'));
     order_source.addChild(new libxml.Element(doc, 'OrderMethod', 'Internet'));
@@ -114,19 +117,13 @@ PulseBridge = (function() {
       'type': "Address-US"
     });
     customer_address.addChild(new libxml.Element(doc, 'City', 'Santo Domingo'));
-    customer_address.addChild(new libxml.Element(doc, 'Region', ''));
+    customer_address.addChild(new libxml.Element(doc, 'Region', 'DR'));
     customer_address.addChild(new libxml.Element(doc, 'PostalCode', "" + this.storeid));
     customer_address.addChild(new libxml.Element(doc, 'StreetNumber', '99'));
     customer_address.addChild(new libxml.Element(doc, 'StreetName', 'Princing'));
-    customer_address.addChild(new libxml.Element(doc, 'AddressLine2').attr({
-      'xsi:nil': "true"
-    }));
-    customer_address.addChild(new libxml.Element(doc, 'AddressLine3').attr({
-      'xsi:nil': "true"
-    }));
-    customer_address.addChild(new libxml.Element(doc, 'AddressLine4').attr({
-      'xsi:nil': "true"
-    }));
+    customer_address.addChild(new libxml.Element(doc, 'AddressLine2'));
+    customer_address.addChild(new libxml.Element(doc, 'AddressLine3'));
+    customer_address.addChild(new libxml.Element(doc, 'AddressLine4'));
     customer_address.addChild(new libxml.Element(doc, 'UnitType', 'Apartment').attr({
       "xsi:type": "xsd:string"
     }));
@@ -152,8 +149,10 @@ PulseBridge = (function() {
     }));
     customer.addChild(customer_type_info);
     customer.addChild(new libxml.Element(doc, 'Phone', this.fallback_values(action, (_ref2 = this.cart.client) != null ? (_ref3 = _ref2.phones) != null ? (_ref4 = _ref3.first) != null ? _ref4.number : void 0 : void 0 : void 0, '8095555555')));
-    customer.addChild(new libxml.Element(doc, 'Extension', this.fallback_values(action, (_ref5 = this.cart.client) != null ? (_ref6 = _ref5.phones) != null ? (_ref7 = _ref6.first) != null ? _ref7.ext : void 0 : void 0 : void 0, '99')));
-    customer.addChild(new libxml.Element(doc, 'Email', this.fallback_values(action, (_ref8 = this.cart.client) != null ? _ref8.email : void 0, 'none@email.com')));
+    customer.addChild(new libxml.Element(doc, 'Extension').attr({
+      'xsi:nil': "true"
+    }));
+    customer.addChild(new libxml.Element(doc, 'Email', 'test@mail.com'));
     customer.addChild(new libxml.Element(doc, 'DeliveryInstructions').attr({
       'xsi:nil': "true"
     }));
@@ -161,22 +160,21 @@ PulseBridge = (function() {
       'xsi:nil': "true"
     }));
     order.addChild(customer);
-    order.addChild(new libxml.Element(doc, 'Coupons'));
+    order.addChild(new libxml.Element(doc, 'Coupons').attr({
+      'xsi:nil': "true"
+    }));
     order_items = new libxml.Element(doc, 'OrderItems');
-    if (action === 'PlaceOrder') {
-      console.log(this.cart);
-    }
     if (_.any(this.cart.cart_products)) {
-      _ref9 = this.cart.cart_products;
-      for (_i = 0, _len = _ref9.length; _i < _len; _i++) {
-        cart_product = _ref9[_i];
+      _ref5 = this.cart.cart_products;
+      for (_i = 0, _len = _ref5.length; _i < _len; _i++) {
+        cart_product = _ref5[_i];
         order_item = new libxml.Element(doc, 'OrderItem');
         order_item.addChild(new libxml.Element(doc, 'ProductCode', cart_product.product.productcode));
         order_item.addChild(new libxml.Element(doc, 'ProductName').attr({
           'xsi:nil': "true"
         }));
         order_item.addChild(new libxml.Element(doc, 'ItemQuantity', cart_product.quantity.toString() || '1'));
-        order_item.addChild(new libxml.Element(doc, 'PricedAt', this.fallback_values(action, cart_product.priced_at, '0')));
+        order_item.addChild(new libxml.Element(doc, 'PricedAt', '100'));
         order_item.addChild(new libxml.Element(doc, 'OverrideAmmount').attr({
           'xsi:nil': "true"
         }));
@@ -205,8 +203,7 @@ PulseBridge = (function() {
     }
     order.addChild(order_items);
     payment = new libxml.Element(doc, 'Payment');
-    cash_payment = new libxml.Element(doc, 'CashPayment');
-    cash_payment.addChild(new libxml.Element(doc, 'PaymentAmmount', this.fallback_values(action, this.cart.payment_amount, '1000000')));
+    cash_payment = new libxml.Element(doc, 'CashPayment', '360');
     payment.addChild(cash_payment);
     order.addChild(payment);
     orde_info_collection = new libxml.Element(doc, 'OrderInfoCollection');
@@ -214,14 +211,6 @@ PulseBridge = (function() {
     order_info_1.addChild(new libxml.Element(doc, 'KeyCode', this.fallback_values(action, this.cart.fiscal_type, 'FinalConsumer')));
     order_info_1.addChild(new libxml.Element(doc, 'Response', this.fallback_values(action, this.cart.fiscal_type, 'FinalConsumer')));
     orde_info_collection.addChild(order_info_1);
-    order_info_2 = new libxml.Element(doc, 'OrderInfo');
-    order_info_2.addChild(new libxml.Element(doc, 'KeyCode', 'TaxID'));
-    order_info_2.addChild(new libxml.Element(doc, 'Response', this.fallback_values(action, this.cart.fiscal_number, '')));
-    orde_info_collection.addChild(order_info_2);
-    order_info_3 = new libxml.Element(doc, 'OrderInfo');
-    order_info_3.addChild(new libxml.Element(doc, 'KeyCode', 'CompanyName'));
-    order_info_3.addChild(new libxml.Element(doc, 'Response', this.fallback_values(action, this.cart.company_name, '')));
-    orde_info_collection.addChild(order_info_3);
     order.addChild(orde_info_collection);
     body = new libxml.Element(doc, 'env:Body');
     action = new libxml.Element(doc, "ns1:" + action).attr({

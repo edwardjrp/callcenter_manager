@@ -23,6 +23,10 @@ Cart = DB.define("Cart", {
   communication_failed: {
     type: Boolean
   },
+  service_method: {
+    type: String,
+    length: 255
+  },
   status_text: {
     type: String,
     length: 255
