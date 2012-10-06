@@ -92,7 +92,8 @@
           %strong Agente:
           =@cart.user.full_name
         .span3
-          =l @cart.created_at, format: :short
+          %strong Inicio de toma de la orden:
+          =l @cart.started_on, format: :short
       .row
         .span3#checkout_cart_net
           %strong Monto neto:
