@@ -107,14 +107,13 @@ class @ItemFactory
 
 
   build: ->
-    cart_product = new Kapiqua25.Models.CartProduct()
     if @validate()
       product = _.find(_.values(@options['selected_matchups'])[0].get('products'), (product)=> product.get('flavorcode') == @options['selected_flavor'] and  product.get('sizecode').toString() == @options['selected_size'].toString()) || @category.baseProduct()
       quantity = @options['item_quantity']
       bind_id = _.find(_.values(@options['selected_matchups'])[1].get('products'), (product)=> product.get('flavorcode') == @options['selected_flavor'] and  product.get('sizecode').toString() == @options['selected_size'].toString()).id if _.values(@options['selected_matchups'])[1]?
+      bind_id = null if _.isUndefined(bind_id)
       options = @build_options()
       cart = @cart
-      cart_product.set({product: product, quantity: quantity, options: options, cart: cart,bind_id: bind_id })
-      cart_product
+      { product_id: product.id, product: product, quantity: quantity, options: options, cart_id: cart.id, bind_id: bind_id }
     else
       null

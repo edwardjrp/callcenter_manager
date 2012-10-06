@@ -2,6 +2,7 @@ class Kapiqua25.Models.CartProduct extends Backbone.RelationalModel
   url: ()->
     "/cart_products"
 
+
   secondary: ()->
     _.first(this.get('product').get('category').get('products').where({id: this.get('bind_id')})) if this.get('bind_id')?
     
@@ -61,6 +62,7 @@ class Kapiqua25.Models.CartProduct extends Backbone.RelationalModel
   defaults:
     options: ''
     quantity: 1
+    bind_id: null
     updated_at: new Date()
       
 Kapiqua25.Models.CartProduct.setup()

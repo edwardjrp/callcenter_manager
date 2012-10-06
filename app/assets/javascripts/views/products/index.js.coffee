@@ -68,21 +68,30 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
   add_to_cart:  (event)->
     event.preventDefault()
     target = $(event.currentTarget)
-    item = new ItemFactory(@el, @model, @options.cart, {selected_matchups: @selected_matchups, selected_flavor: @selected_flavor, selected_size: @selected_size, item_quantity: $(@el).find('.cart_product_quantity').val()})
+    # returns { product: product, options: options, cart: cart,bind_id: bind_id }
+    item = new ItemFactory(@el, @model, @options.cart, {selected_matchups: @selected_matchups, selected_flavor: @selected_flavor, selected_size: @selected_size, item_quantity: $(@el).find('.cart_product_quantity').val()}).build()
     # console.log @options.cart
     if @editing
-      cart_product = @edit_cart_product.set({options: item.build().get('options'), quantity: $(@el).find('.cart_product_quantity').val()})
+      cart_product = @edit_cart_product.set({options: item.options , quantity: item.quantity }) # falta editar productos
     else 
-      cart_product = item.build()
-    if cart_product?
-      if @editing
-        cart_product.set({id: @edit_cart_product.get('id')}) 
-        cart_product.save({silent: true}) 
+      cart_product = _.first(@options.cart.get('cart_products').where({ product_id: item.product_id, cart_id: item.cart_id, options: item.options, bind_id: item.bind_id }))
+      if cart_product?
+        cart_product.set({ quantity: (Number(cart_product.get('quantity')) + Number(item.quantity)) })
+        cart_product.save()
       else
-        cart_product.save() 
-      @clear()
-      @clear_edit() if @editing
-      @render()
+        @options.cart.get('cart_products').create({ product_id: item.product_id, product: item.product, quantity: item.quantity, options: item.options, cart_id: item.cart_id,bind_id: item.bind_id })
+    @clear()
+    @clear_edit() if @editing
+    @render()
+    # if cart_product?
+    #   if @editing
+    #     cart_product.set({id: @edit_cart_product.get('id')}) 
+    #     cart_product.save({silent: true}) 
+    #   else
+    #     cart_product.save() 
+    #   @clear()
+    #   @clear_edit() if @editing
+    #   @render()
 
   clear: ->
     @selected_matchups = {}

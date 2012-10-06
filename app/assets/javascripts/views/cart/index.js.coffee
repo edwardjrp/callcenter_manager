@@ -4,11 +4,12 @@ class Kapiqua25.Views.CartIndex extends Backbone.View
   
   initialize: ->
       _.bindAll(this, 'reloadCartProduct', 'removeCartProduct', 'updatePrices', 'addCartCoupon', 'removeCartCoupon', 'remove_coupon', 'addCartProduct')
-      window.socket.on('cart_products:updated', @reloadCartProduct)
+      # window.socket.on('cart_products:updated', @reloadCartProduct)
       window.socket.on('cart_products:deleted', @removeCartProduct)
       window.socket.on('cart:priced', @updatePrices)
       window.socket.on('cart_coupon:saved', @addCartCoupon)
       window.socket.on('cart_coupons:deleted', @removeCartCoupon)
+      @model.get('cart_products').on('add', @addCartProduct)
   #   @model.on('change', @render, this)
   #   @model.on('change', @highlight, this)
   
@@ -85,6 +86,7 @@ class Kapiqua25.Views.CartIndex extends Backbone.View
     item_to_edit = @model.get('cart_products').getByCid(item_to_edit_cid)
     product_for_edit = item_to_edit.get('product')
     category_for_edit = product_for_edit.get('category')
+    # send the cart_product id instead of the cart product it self
     Backbone.pubSub.trigger('editing', { cart_product: item_to_edit, product: product_for_edit, category: category_for_edit } )
 
   remove_cart_product: (event)->
