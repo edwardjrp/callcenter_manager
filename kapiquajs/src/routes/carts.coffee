@@ -104,8 +104,9 @@ class Carts
                   console.log 'dont forget to pull port from settings'
                   cart_placer = new PulseBridge(assempled_cart, assempled_cart.store.storeid, assempled_cart.store.ip, '59101')
                   cart_placer.place pulse_com_error, (res_data) ->
-                    console.log res_data
-                    # order_reply = new OrderReply(res_data)
+                    # console.log res_data
+                    order_reply = new OrderReply(res_data)
+                    console.log order_reply
                     # if order_reply.status == '0'
                     #   cart.updateAttributes { store_order_id: order_reply.reply_id, completed: true }, (cart_update_err, updated_cart)->
                     #     console.log updated_cart

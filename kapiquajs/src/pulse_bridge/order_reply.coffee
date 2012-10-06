@@ -10,7 +10,7 @@ class OrderReply
       @reply_id = doc.get('//OrderReply').attr('orderreplyid').value()
       @status = doc.get('//Status').text()
       @status_text = doc.get('//StatusText').text()
-      @order_id = doc.get('//StoreOrderID').text() if doc.get('StoreOrderID')?
+      @order_id = doc.get('//StoreOrderID').text() if doc.get('//StoreOrderID')?
       @store = doc.get('//StoreID').text()
       @service_method = doc.get('//ServiceMethod').text()
       @can_place = doc.get('//CanPlaceOrder').text()

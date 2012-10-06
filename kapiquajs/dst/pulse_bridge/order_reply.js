@@ -19,7 +19,7 @@ OrderReply = (function() {
       this.reply_id = doc.get('//OrderReply').attr('orderreplyid').value();
       this.status = doc.get('//Status').text();
       this.status_text = doc.get('//StatusText').text();
-      if (doc.get('StoreOrderID') != null) {
+      if (doc.get('//StoreOrderID') != null) {
         this.order_id = doc.get('//StoreOrderID').text();
       }
       this.store = doc.get('//StoreID').text();

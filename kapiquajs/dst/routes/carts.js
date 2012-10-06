@@ -159,7 +159,9 @@ Carts = (function() {
                   console.log('dont forget to pull port from settings');
                   cart_placer = new PulseBridge(assempled_cart, assempled_cart.store.storeid, assempled_cart.store.ip, '59101');
                   return cart_placer.place(pulse_com_error, function(res_data) {
-                    return console.log(res_data);
+                    var order_reply;
+                    order_reply = new OrderReply(res_data);
+                    return console.log(order_reply);
                   });
                 } catch (placing_error) {
                   return console.error(placing_error.stack);
