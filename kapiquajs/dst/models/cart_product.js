@@ -16,7 +16,6 @@ CartProduct.validatesNumericalityOf('quantity');
 
 CartProduct.addItem = function(data, respond, socket) {
   var cart_product;
-  console.log('IS CREATING');
   if (data != null) {
     cart_product = new CartProduct({
       cart_id: data.cart_id,
@@ -31,7 +30,9 @@ CartProduct.addItem = function(data, respond, socket) {
         return respond(err);
       } else {
         result_cart_product.cart(function(c_err, cart) {
-          if (!c_err) {
+          if (c_err) {
+            return socket.emit('cart:pricing:error', 'No se pudo leer la orden actual');
+          } else {
             return cart.price(socket);
           }
         });
@@ -42,7 +43,6 @@ CartProduct.addItem = function(data, respond, socket) {
 };
 
 CartProduct.updateItem = function(data, respond, socket, trigger_pricing) {
-  console.log('IS UPDATING');
   if (data != null) {
     return CartProduct.find(data.id, function(cp_err, cart_product) {
       if (cp_err != null) {

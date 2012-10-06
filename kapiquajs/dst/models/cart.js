@@ -87,11 +87,11 @@ Cart.prototype.price = function(socket) {
             return cart_request.price(pulse_com_error, function(res_data) {
               var order_reply;
               order_reply = new OrderReply(res_data, updated_cart_products);
-              socket.emit('cart:priced', {
+              me.updatePrices(order_reply);
+              return socket.emit('cart:priced', {
                 order_reply: order_reply,
                 items: order_reply.products()
               });
-              return me.updatePrices(order_reply);
             });
           } catch (err_pricing) {
             return console.error(err_pricing.stack);
@@ -110,27 +110,26 @@ Cart.prototype.updatePrices = function(order_reply) {
     tax2_amount: order_reply.tax2amount,
     payment_amount: order_reply.payment_amount
   }, function(err, updated_cart) {
-    var pricing, _i, _len, _ref, _results;
     if (err) {
       return console.error(err);
     } else {
-      _ref = order_reply.products();
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        pricing = _ref[_i];
-        _results.push(CartProduct.find(pricing.cart_product_id, function(cp_err, cart_product) {
+      return _.each(order_reply.products(), function(pricing) {
+        return CartProduct.find(pricing.cart_product_id, function(cp_err, cart_product) {
           if (!cp_err) {
+            console.log(pricing);
+            console.log(JSON.stringify(cart_product));
+            console.log('updating');
             return cart_product.updateAttributes({
               priced_at: pricing.priced_at
             }, function(update_err, updated_cart_product) {
+              console.log(JSON.stringify(updated_cart_product));
               if (update_err) {
                 return console.error(update_err);
               }
             });
           }
-        }));
-      }
-      return _results;
+        });
+      });
     }
   });
 };

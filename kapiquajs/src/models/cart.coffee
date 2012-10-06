@@ -65,9 +65,9 @@ Cart.prototype.price = (socket)->
             cart_request = new  PulseBridge(current_cart, settings.price_store_id, settings.price_store_ip,  settings.pulse_port)
             try
               cart_request.price pulse_com_error, (res_data)->
-                order_reply = new OrderReply(res_data, updated_cart_products)              
+                order_reply = new OrderReply(res_data, updated_cart_products)
+                me.updatePrices(order_reply)           
                 socket.emit 'cart:priced', {order_reply: order_reply, items: order_reply.products()}
-                me.updatePrices(order_reply)
             catch err_pricing
               console.error err_pricing.stack
 
@@ -78,7 +78,7 @@ Cart.prototype.updatePrices = (order_reply) ->
     if err
       console.error err
     else
-      for pricing in order_reply.products()
+      _.each order_reply.products(), (pricing) ->
         CartProduct.find pricing.cart_product_id , (cp_err, cart_product)->
           unless cp_err
             cart_product.updateAttributes { priced_at: pricing.priced_at}, (update_err, updated_cart_product) ->

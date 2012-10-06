@@ -40,7 +40,7 @@ OrderReply = (function() {
   }
 
   OrderReply.prototype.products = function() {
-    var build_result, cart_product, order_item, quantity, results, _i, _j, _len, _len1, _ref, _ref1;
+    var build_result, cart_product, order_item, quantity, reply_quantity, results, _i, _j, _len, _len1, _ref, _ref1;
     results = [];
     _ref = this.order_items;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -53,17 +53,17 @@ OrderReply = (function() {
         } else {
           quantity = null;
         }
-        if (order_item.code === cart_product.product.productcode && order_item.quantity === quantity && _.isEmpty(objectDifference(Option.pulseCollection(cart_product.options), order_item.options))) {
+        if ((order_item.quantity != null) && !_.isUndefined(cart_product.quantity)) {
+          reply_quantity = Number(order_item.quantity);
+        } else {
+          reply_quantity = null;
+        }
+        if (order_item.code === cart_product.product.productcode && reply_quantity === quantity && _.isEmpty(objectDifference(Option.pulseCollection(cart_product.options), order_item.options))) {
           build_result = {
             cart_product_id: cart_product.id,
             product_id: cart_product.product.id,
             priced_at: order_item.priced_at
           };
-          console.log({
-            cart_product_id: cart_product.id,
-            product_id: cart_product.product.id,
-            priced_at: order_item.priced_at
-          });
           if (!objectInclude(results, build_result)) {
             results.push(build_result);
           }
