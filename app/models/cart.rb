@@ -113,6 +113,13 @@ class Cart < ActiveRecord::Base
     self.save!
   end
 
+
+  def take_time
+    if self.completed?
+      complete_on - started_on if complete_on && started_on
+    end
+  end
+
   def clear_prices!
     self.net_amount = nil
     self.tax_amount = nil
