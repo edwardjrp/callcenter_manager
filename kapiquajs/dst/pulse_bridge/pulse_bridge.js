@@ -86,7 +86,7 @@ PulseBridge = (function() {
   };
 
   PulseBridge.prototype.body = function(action) {
-    var auth, body, cart_product, cash_payment, customer, customer_address, customer_name, customer_type_info, doc, envelope, header, item_modifier, item_modifiers, orde_info_collection, order, order_info_1, order_item, order_items, order_source, payment, product_option, product_options, _i, _j, _len, _len1, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
+    var auth, body, cart_product, cash_payment, customer, customer_address, customer_name, customer_type_info, doc, envelope, header, item_modifier, item_modifiers, orde_info_collection, order, order_info_1, order_item, order_items, order_source, payment, product_option, product_options, _i, _j, _len, _len1, _ref, _ref1, _ref10, _ref11, _ref12, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
     doc = new libxml.Document();
     envelope = new libxml.Element(doc, 'env:Envelope').attr({
       'xmlns:xsd': "http://www.w3.org/2001/XMLSchema",
@@ -159,9 +159,7 @@ PulseBridge = (function() {
     }));
     customer.addChild(customer_type_info);
     customer.addChild(new libxml.Element(doc, 'Phone', this.fallback_values(action, (_ref6 = this.cart.client) != null ? (_ref7 = _ref6.phones) != null ? (_ref8 = _ref7.first) != null ? _ref8.number : void 0 : void 0 : void 0, '8095555555')));
-    customer.addChild(new libxml.Element(doc, 'Extension').attr({
-      'xsi:nil': "true"
-    }));
+    customer.addChild(new libxml.Element(doc, 'Extension', this.fallback_values(action, (_ref9 = this.cart.client) != null ? (_ref10 = _ref9.phones) != null ? (_ref11 = _ref10.first) != null ? _ref11.number : void 0 : void 0 : void 0, '99')));
     customer.addChild(new libxml.Element(doc, 'Email', 'test@mail.com'));
     customer.addChild(new libxml.Element(doc, 'DeliveryInstructions').attr({
       'xsi:nil': "true"
@@ -175,16 +173,16 @@ PulseBridge = (function() {
     }));
     order_items = new libxml.Element(doc, 'OrderItems');
     if (_.any(this.cart.cart_products)) {
-      _ref9 = this.cart.cart_products;
-      for (_i = 0, _len = _ref9.length; _i < _len; _i++) {
-        cart_product = _ref9[_i];
+      _ref12 = this.cart.cart_products;
+      for (_i = 0, _len = _ref12.length; _i < _len; _i++) {
+        cart_product = _ref12[_i];
         order_item = new libxml.Element(doc, 'OrderItem');
         order_item.addChild(new libxml.Element(doc, 'ProductCode', cart_product.product.productcode));
         order_item.addChild(new libxml.Element(doc, 'ProductName').attr({
           'xsi:nil': "true"
         }));
         order_item.addChild(new libxml.Element(doc, 'ItemQuantity', cart_product.quantity.toString() || '1'));
-        order_item.addChild(new libxml.Element(doc, 'PricedAt', '100'));
+        order_item.addChild(new libxml.Element(doc, 'PricedAt', this.fallback_values(action, cart_product.priced_at.toString(), '0')));
         order_item.addChild(new libxml.Element(doc, 'OverrideAmmount').attr({
           'xsi:nil': "true"
         }));
@@ -213,8 +211,6 @@ PulseBridge = (function() {
     }
     order.addChild(order_items);
     payment = new libxml.Element(doc, 'Payment');
-    console.log(this.cart.payment_amount);
-    console.log(this.fallback_values(action, this.cart.payment_amount, '1000000'));
     cash_payment = new libxml.Element(doc, 'CashPayment', this.fallback_values(action, this.cart.payment_amount, '1000000'));
     payment.addChild(cash_payment);
     order.addChild(payment);

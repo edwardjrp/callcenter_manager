@@ -108,7 +108,7 @@ class PulseBridge
     customer.addChild(customer_type_info)
      
     customer.addChild(new libxml.Element(doc,'Phone', @fallback_values(action, @cart.client?.phones?.first?.number,'8095555555')))  # user current phone
-    customer.addChild(new libxml.Element(doc,'Extension').attr('xsi:nil':"true")) # user current extention - have to check olo for fallback value
+    customer.addChild(new libxml.Element(doc,'Extension',@fallback_values(action, @cart.client?.phones?.first?.number,'99'))) # user current extention
     customer.addChild(new libxml.Element(doc,'Email', 'test@mail.com')) # user current extention - have to check olo for fallback value
     customer.addChild(new libxml.Element(doc,'DeliveryInstructions').attr('xsi:nil':"true"))
     customer.addChild(new libxml.Element(doc,'CustomerTax').attr('xsi:nil':"true"))
@@ -133,7 +133,7 @@ class PulseBridge
         order_item.addChild(new libxml.Element(doc,'ProductCode', cart_product.product.productcode))
         order_item.addChild(new libxml.Element(doc,'ProductName').attr('xsi:nil':"true"))
         order_item.addChild(new libxml.Element(doc,'ItemQuantity', (cart_product.quantity.toString() || '1')))
-        order_item.addChild(new libxml.Element(doc,'PricedAt', '100'))# @fallback_values(action, cart_product.priced_at,'0')
+        order_item.addChild(new libxml.Element(doc,'PricedAt', @fallback_values(action, cart_product.priced_at.toString(),'0')))# @fallback_values(action, cart_product.priced_at,'0')
         order_item.addChild(new libxml.Element(doc,'OverrideAmmount').attr('xsi:nil':"true"))
         order_item.addChild(new libxml.Element(doc,'CookingInstructions').attr('xsi:nil':"true"))
         
@@ -156,8 +156,6 @@ class PulseBridge
 
     #payment   # this whole section depends on the payment menthod - check olo2 cc for handling
     payment = new libxml.Element(doc,'Payment')
-    console.log @cart.payment_amount
-    console.log @fallback_values(action, @cart.payment_amount,'1000000')
     cash_payment = new libxml.Element(doc,'CashPayment',  @fallback_values(action, @cart.payment_amount,'1000000'))
     # console.log 'HERE\n\n\n\n\n'
     # console.log @cart.payment_amount
