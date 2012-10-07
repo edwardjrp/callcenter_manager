@@ -21,9 +21,9 @@ class PulseBridge
   #   doc = new libxml.Document()
 
 
-  fallback_values: (action, value, fallback) ->
+  fallback_values: (action, value, fallback) =>
     if action == 'PlaceOrder'
-      value || fallback
+      if not value? or _.isUndefined(value) then fallback else value
     else
       fallback
     
@@ -93,8 +93,12 @@ class PulseBridge
     customer.addChild(customer_address)
      
     customer_name = new libxml.Element(doc,'Name').attr({ 'type':"Name-US"})
+    console.log @fallback_values(action, @cart.client?.first_name,'dummy_pricing')
+    console.log @cart.client?.first_name
     customer_name.addChild(new libxml.Element(doc,'FirstName', @fallback_values(action, @cart.client?.first_name,'dummy_pricing')))  # user  name
-    customer_name.addChild(new libxml.Element(doc,'LastName', @fallback_values(action, @cart.client?.last_name,'dummy_pricing')))  # user last name
+    console.log @fallback_values(action, @cart.client?.last_name,'dummy_last_pricing')
+    console.log @cart.client?.last_name
+    customer_name.addChild(new libxml.Element(doc,'LastName', @fallback_values(action, @cart.client?.last_name,'dummy_last_pricing')))  # user last name
     customer.addChild(customer_name)
      
     customer_type_info = new libxml.Element(doc,'CustomerTypeInfo')
@@ -152,7 +156,9 @@ class PulseBridge
 
     #payment   # this whole section depends on the payment menthod - check olo2 cc for handling
     payment = new libxml.Element(doc,'Payment')
-    cash_payment = new libxml.Element(doc,'CashPayment', '360')
+    console.log @cart.payment_amount
+    console.log @fallback_values(action, @cart.payment_amount,'1000000')
+    cash_payment = new libxml.Element(doc,'CashPayment',  @fallback_values(action, @cart.payment_amount,'1000000'))
     # console.log 'HERE\n\n\n\n\n'
     # console.log @cart.payment_amount
     # cash_payment.addChild(new libxml.Element(doc,'PaymentAmmount', '360'))  # current order for place  @fallback_values(action, @cart.payment_amount.toString(),'1000000'))
