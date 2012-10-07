@@ -24,11 +24,12 @@ class CartsController < ApplicationController
   end
 
   def completed
-    @cart = Cart.find(params[:cart][:id])
+    @cart = Cart.find(params[:id])
+    flash['success'] = "Orden : #{params[:store_order_id]} complatada"
     if @cart
       cart_reset
       respond_to do | format|
-        format.json{render :nothing =>true, :status => 200}
+        format.json{ render :nothing =>true, :status => 200 }
       end
     end
   end

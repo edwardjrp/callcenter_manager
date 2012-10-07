@@ -31,13 +31,7 @@
               %ul.nav.nav-tabs.top-tabs#utils_labels
                 %li
                   %a{href: '#chat'} Ayuda
-                - unless current_user.is? :admin || current_cart.nil?
-                  %li
-                    %a{href: '#coupons'} Cupones
               .tab-content
                 .tab-pane{id:'chat'}
                   = render 'chat'
-                - unless current_user.is? :admin || current_cart.nil?
-                  .tab-pane{id:'coupons'}
-                    = render 'coupons'
     #footer.bottom-margin-3

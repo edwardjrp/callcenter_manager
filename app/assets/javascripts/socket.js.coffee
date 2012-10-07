@@ -28,8 +28,15 @@ jQuery ->
       socket.emit('cart:place',  $('#checkout_cart').data('id')) unless target.hasClass('disabled')
       target.addClass('disabled')
     socket.on 'cart:place:completed', (data)->
-      console.log data 
-      console.log 'talk to rails '
+      $.ajax
+        type: 'POST'
+        url: "/carts/#{data.id}/completed"
+        datatype: 'SCRIPT'
+        data: data
+        beforeSend: (xhr) ->
+          xhr.setRequestHeader("Accept", "application/json")
+        complete: ->
+          window.location = '/'
 
     socket.emit 'cart:price', $('#checkout_cart').data('id')
     socket.on 'cart:priced', (data)->
