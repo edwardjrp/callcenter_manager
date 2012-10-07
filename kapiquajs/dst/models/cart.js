@@ -44,41 +44,54 @@ Cart.prototype.price = function(socket) {
       });
     }, function(current_cart_products, callback) {
       return me.products(function(c_p_err, products) {
-        var updated_cart_products;
         if (c_p_err) {
           return socket.emit('cart:price:error', 'No se pudo acceder a la lista de productos para esta orden');
         } else {
-          updated_cart_products = _.map(current_cart_products, function(current_cart_product) {
+          _.each(current_cart_products, function(current_cart_product) {
             return current_cart_product.product = _.find(products, function(product) {
               return product.id === current_cart_product.product_id;
             });
           });
-          return callback(null, current_cart_products, updated_cart_products);
+          return callback(null, current_cart_products);
+        }
+      });
+    }, function(current_cart_products, callback) {
+      return me.cart_coupons(function(c_c_err, cart_coupons) {
+        var current_cart_coupons;
+        if (c_c_err) {
+          console.error(c_c_err.stack);
+          return socket.emit('cart:price:error', 'No se pudo acceder a la lista de cupones para esta orden');
+        } else {
+          current_cart_coupons = _.map(cart_coupons, function(cart_coupon) {
+            return cart_coupon.simplified();
+          });
+          return callback(null, current_cart_products, current_cart_coupons);
         }
       });
     }
-  ], function(final_error, updated_cart_products, current_cart_products) {
+  ], function(final_error, current_cart_products, current_cart_coupons) {
     var current_cart, pulse_com_error;
     if (final_error != null) {
-      console.log(final_error);
+      console.error(final_error.stack);
       return socket.emit('cart:price:error', 'Un error impidio solitar el precio de esta orden');
     } else {
       current_cart = me.simplified();
-      current_cart.cart_products = updated_cart_products;
+      current_cart.cart_products = current_cart_products;
+      current_cart.cart_coupons = current_cart_coupons;
       pulse_com_error = function(comm_err) {
         return socket.emit('cart:price:error', 'Un error de comunicación impidio solitar el precio de esta orden, la aplicacion no podra funcionar correctamente en este estado');
       };
-      if (updated_cart_products.length > 0) {
+      if (current_cart_products.length > 0) {
         return Setting.kapiqua(function(err, settings) {
           var cart_request;
           if (err) {
-            return console.error(err);
+            return console.error(err.stack);
           } else {
             cart_request = new PulseBridge(current_cart, settings.price_store_id, settings.price_store_ip, settings.pulse_port);
             try {
               return cart_request.price(pulse_com_error, function(res_data) {
                 var order_reply;
-                order_reply = new OrderReply(res_data, updated_cart_products);
+                order_reply = new OrderReply(res_data, current_cart_products);
                 me.updatePrices(order_reply, socket);
                 return socket.emit('cart:priced', {
                   order_reply: order_reply,

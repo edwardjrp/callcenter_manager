@@ -41,31 +41,40 @@ Cart.prototype.price = (socket)->
         if(c_p_err)
           socket.emit 'cart:price:error', 'No se pudo acceder a la lista de productos para esta orden'
         else
-          updated_cart_products = _.map current_cart_products, (current_cart_product)-> 
+          _.each current_cart_products, (current_cart_product)-> 
             current_cart_product.product = _.find products, (product)->
               product.id == current_cart_product.product_id
-          callback(null, current_cart_products, updated_cart_products)
-
+          callback(null, current_cart_products)
+    ,
+    (current_cart_products, callback) ->
+      me.cart_coupons (c_c_err, cart_coupons) ->
+        if(c_c_err)
+          console.error c_c_err.stack
+          socket.emit 'cart:price:error', 'No se pudo acceder a la lista de cupones para esta orden'
+        else
+          current_cart_coupons = _.map(cart_coupons, (cart_coupon)-> cart_coupon.simplified())
+          callback(null, current_cart_products, current_cart_coupons)
     ]
     ,
-    (final_error, updated_cart_products, current_cart_products) ->
+    (final_error,  current_cart_products, current_cart_coupons) ->
       if final_error?
-        console.log final_error
+        console.error final_error.stack
         socket.emit 'cart:price:error', 'Un error impidio solitar el precio de esta orden'
       else
         current_cart  = me.simplified()
-        current_cart.cart_products = updated_cart_products
+        current_cart.cart_products = current_cart_products
+        current_cart.cart_coupons = current_cart_coupons
         pulse_com_error = (comm_err) ->
           socket.emit 'cart:price:error', 'Un error de comunicación impidio solitar el precio de esta orden, la aplicacion no podra funcionar correctamente en este estado'
-        if updated_cart_products.length > 0
+        if current_cart_products.length > 0
           Setting.kapiqua (err, settings) ->
             if err
-              console.error err
+              console.error err.stack
             else
               cart_request = new  PulseBridge(current_cart, settings.price_store_id, settings.price_store_ip,  settings.pulse_port)
               try
                 cart_request.price pulse_com_error, (res_data)->
-                  order_reply = new OrderReply(res_data, updated_cart_products)
+                  order_reply = new OrderReply(res_data, current_cart_products)
                   me.updatePrices(order_reply, socket)   # mode emit into this function to emit after prices have been updated        
                   socket.emit 'cart:priced', {order_reply: order_reply, items: order_reply.products()}
               catch err_pricing

@@ -118,7 +118,31 @@ class PulseBridge
      
     #end customer info
     #coupons
-    order.addChild(new libxml.Element(doc,'Coupons').attr('xsi:nil':"true")) # coupons population pending
+
+    # order.addChild(new libxml.Element(doc,'Coupons')) # coupons population pending
+    coupons = new libxml.Element(doc,'Coupons')
+    # console.log @cart.cart_coupons
+    if _.any(@cart.cart_coupons)
+      for cart_coupon in @cart.cart_coupons
+        coupon = new libxml.Element(doc,'Coupon')
+        coupon.addChild(new libxml.Element(doc,'Code', cart_coupon.code))
+        coupon.addChild(new libxml.Element(doc,'approximateMaximumDiscountAmount').attr('xsi:nil':"true"))
+        coupon.addChild(new libxml.Element(doc,'couponProducts').attr('xsi:nil':"true"))
+        coupon.addChild(new libxml.Element(doc,'description').attr('xsi:nil':"true"))
+        coupon.addChild(new libxml.Element(doc,'discountAmount').attr('xsi:nil':"true"))
+        coupon.addChild(new libxml.Element(doc,'discountValue').attr('xsi:nil':"true"))
+        coupon.addChild(new libxml.Element(doc,'effectiveDate').attr('xsi:nil':"true"))
+        coupon.addChild(new libxml.Element(doc,'effectiveDays').attr('xsi:nil':"true"))
+        coupon.addChild(new libxml.Element(doc,'effectiveTime').attr('xsi:nil':"true"))
+        coupon.addChild(new libxml.Element(doc,'expirationDate').attr('xsi:nil':"true"))
+        coupon.addChild(new libxml.Element(doc,'expirationTime').attr('xsi:nil':"true"))
+        coupon.addChild(new libxml.Element(doc,'generatedDescription').attr('xsi:nil':"true"))
+        coupon.addChild(new libxml.Element(doc,'hidden').attr('xsi:nil':"true"))
+        coupon.addChild(new libxml.Element(doc,'minimumPrice').attr('xsi:nil':"true"))
+        coupon.addChild(new libxml.Element(doc,'serviceMethods').attr('xsi:nil':"true"))
+        coupons.addChild(coupon)
+    order.addChild(coupons)
+
     # end coupons
     #items
     order_items = new libxml.Element(doc,'OrderItems')

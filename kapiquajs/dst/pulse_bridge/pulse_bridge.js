@@ -86,7 +86,7 @@ PulseBridge = (function() {
   };
 
   PulseBridge.prototype.body = function(action) {
-    var auth, body, cart_item_price, cart_option_quantity, cart_product, cash_payment, customer, customer_address, customer_name, customer_type_info, doc, envelope, header, item_modifier, item_modifiers, orde_info_collection, order, order_info_1, order_item, order_items, order_source, payment, product_option, product_options, _i, _j, _len, _len1, _ref, _ref1, _ref10, _ref11, _ref12, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
+    var auth, body, cart_coupon, cart_item_price, cart_option_quantity, cart_product, cash_payment, coupon, coupons, customer, customer_address, customer_name, customer_type_info, doc, envelope, header, item_modifier, item_modifiers, orde_info_collection, order, order_info_1, order_item, order_items, order_source, payment, product_option, product_options, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref10, _ref11, _ref12, _ref13, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
     doc = new libxml.Document();
     envelope = new libxml.Element(doc, 'env:Envelope').attr({
       'xmlns:xsd': "http://www.w3.org/2001/XMLSchema",
@@ -168,14 +168,64 @@ PulseBridge = (function() {
       'xsi:nil': "true"
     }));
     order.addChild(customer);
-    order.addChild(new libxml.Element(doc, 'Coupons').attr({
-      'xsi:nil': "true"
-    }));
+    coupons = new libxml.Element(doc, 'Coupons');
+    if (_.any(this.cart.cart_coupons)) {
+      _ref12 = this.cart.cart_coupons;
+      for (_i = 0, _len = _ref12.length; _i < _len; _i++) {
+        cart_coupon = _ref12[_i];
+        coupon = new libxml.Element(doc, 'Coupon');
+        coupon.addChild(new libxml.Element(doc, 'Code', cart_coupon.code));
+        coupon.addChild(new libxml.Element(doc, 'approximateMaximumDiscountAmount').attr({
+          'xsi:nil': "true"
+        }));
+        coupon.addChild(new libxml.Element(doc, 'couponProducts').attr({
+          'xsi:nil': "true"
+        }));
+        coupon.addChild(new libxml.Element(doc, 'description').attr({
+          'xsi:nil': "true"
+        }));
+        coupon.addChild(new libxml.Element(doc, 'discountAmount').attr({
+          'xsi:nil': "true"
+        }));
+        coupon.addChild(new libxml.Element(doc, 'discountValue').attr({
+          'xsi:nil': "true"
+        }));
+        coupon.addChild(new libxml.Element(doc, 'effectiveDate').attr({
+          'xsi:nil': "true"
+        }));
+        coupon.addChild(new libxml.Element(doc, 'effectiveDays').attr({
+          'xsi:nil': "true"
+        }));
+        coupon.addChild(new libxml.Element(doc, 'effectiveTime').attr({
+          'xsi:nil': "true"
+        }));
+        coupon.addChild(new libxml.Element(doc, 'expirationDate').attr({
+          'xsi:nil': "true"
+        }));
+        coupon.addChild(new libxml.Element(doc, 'expirationTime').attr({
+          'xsi:nil': "true"
+        }));
+        coupon.addChild(new libxml.Element(doc, 'generatedDescription').attr({
+          'xsi:nil': "true"
+        }));
+        coupon.addChild(new libxml.Element(doc, 'hidden').attr({
+          'xsi:nil': "true"
+        }));
+        coupon.addChild(new libxml.Element(doc, 'minimumPrice').attr({
+          'xsi:nil': "true"
+        }));
+        coupon.addChild(new libxml.Element(doc, 'serviceMethods').attr({
+          'xsi:nil': "true"
+        }));
+        coupons.addChild(coupon);
+      }
+    }
+    order.addChild(coupons);
     order_items = new libxml.Element(doc, 'OrderItems');
     if (_.any(this.cart.cart_products)) {
-      _ref12 = this.cart.cart_products;
-      for (_i = 0, _len = _ref12.length; _i < _len; _i++) {
-        cart_product = _ref12[_i];
+      _ref13 = this.cart.cart_products;
+      for (_j = 0, _len1 = _ref13.length; _j < _len1; _j++) {
+        cart_product = _ref13[_j];
         order_item = new libxml.Element(doc, 'OrderItem');
         order_item.addChild(new libxml.Element(doc, 'ProductCode', cart_product.product.productcode));
         order_item.addChild(new libxml.Element(doc, 'ProductName').attr({
@@ -197,8 +247,8 @@ PulseBridge = (function() {
         item_modifiers = new libxml.Element(doc, 'ItemModifiers');
         product_options = Option.collection(cart_product.options);
         if (_.any(product_options)) {
-          for (_j = 0, _len1 = product_options.length; _j < _len1; _j++) {
-            product_option = product_options[_j];
+          for (_k = 0, _len2 = product_options.length; _k < _len2; _k++) {
+            product_option = product_options[_k];
             item_modifier = new libxml.Element(doc, 'ItemModifier').attr({
               code: product_option.code()
             });

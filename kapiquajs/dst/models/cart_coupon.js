@@ -67,4 +67,8 @@ CartCoupon.removeItem = function(data, respond, socket) {
   }
 };
 
+CartCoupon.prototype.simplified = function() {
+  return JSON.parse(JSON.stringify(this));
+};
+
 module.exports = CartCoupon;
