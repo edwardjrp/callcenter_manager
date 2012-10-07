@@ -41,9 +41,14 @@ jQuery ->
       $('#checkout_cart_net').html("<strong> Monto neto: </strong>RD$ #{Number(data.order_reply.netamount).toFixed(2)}")
       $('#checkout_cart_tax').html("<strong>  Impuestos: </strong>RD$ #{Number(data.order_reply.taxamount).toFixed(2)}")
       $('#checkout_cart_total').html("<strong> Monto de la orden: </strong>RD$ #{Number(data.order_reply.payment_amount).toFixed(2)}")
-      $('#actions').append('<a href="#" id="place_order_button" class="btn bottom-margin-1"><i class="icon-shopping-cart"></i> Colocar orden</a>') unless $('#place_order_button').size() > 0
       _.each data.items, (item)->
         $("#cart_product_#{item.cart_product_id}").find('.item_price').html("RD$ #{Number(item.priced_at).toFixed(2)}")
+      if data.order_reply.can_place == 'Yes'
+        $('#actions').append('<a href="#" id="place_order_button" class="btn bottom-margin-1"><i class="icon-shopping-cart"></i> Colocar orden</a>') unless $('#place_order_button').size() > 0
+      else
+        $('#place_order_button').remove() if $('#place_order_button').size() > 0
+        $("<div class='purr'>Esta order fue rechazada por Pulse, verifique los requisitos<div>").purr()
+
 
   socket.on 'register_client', (operators) ->  
     $('#chatbox').find('.operator_tab').remove()

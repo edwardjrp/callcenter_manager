@@ -93,10 +93,14 @@ Cart.prototype.price = function(socket) {
                 var order_reply;
                 order_reply = new OrderReply(res_data, current_cart_products);
                 me.updatePrices(order_reply, socket);
-                return socket.emit('cart:priced', {
+                socket.emit('cart:priced', {
                   order_reply: order_reply,
                   items: order_reply.products()
                 });
+                console.info(order_reply);
+                if (order_reply.status === '6') {
+                  return socket.emit('cart:coupons:autocomplete', current_cart_coupons);
+                }
               });
             } catch (err_pricing) {
               return console.error(err_pricing.stack);
@@ -112,6 +116,7 @@ Cart.prototype.price = function(socket) {
 
 Cart.prototype.updatePrices = function(order_reply, socket) {
   return this.updateAttributes({
+    can_place_order: order_reply.can_place,
     net_amount: order_reply.netamount,
     tax_amount: order_reply.taxamount,
     tax1_amount: order_reply.tax1amount,

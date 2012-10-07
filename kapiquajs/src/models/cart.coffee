@@ -21,6 +21,7 @@ Cart.validatesPresenceOf('user_id')
 Cart.prototype.products = (cb)->
   Cart.schema.adapter.query "SELECT \"products\".* FROM \"products\" INNER JOIN \"cart_products\" ON \"products\".\"id\" = \"cart_products\".\"product_id\" WHERE \"cart_products\".\"cart_id\" = #{@id}", (err, collection) ->
     if (err)
+      console.error err.stack
       cb(err)
     else
       cb(err, collection)
@@ -31,6 +32,7 @@ Cart.prototype.price = (socket)->
     (callback) ->
       me.cart_products {}, (c_cp_err, cart_products) ->
         if(c_cp_err)
+          console.error c_cp_err.stack
           socket.emit 'cart:price:error', 'No se pudo acceder a la lista de productos para esta orden'
         else
           current_cart_products = _.map(cart_products, (cart_product)-> cart_product.simplified())
@@ -39,6 +41,7 @@ Cart.prototype.price = (socket)->
     (current_cart_products, callback) ->
       me.products (c_p_err, products) ->
         if(c_p_err)
+          console.error c_p_err.stack
           socket.emit 'cart:price:error', 'No se pudo acceder a la lista de productos para esta orden'
         else
           _.each current_cart_products, (current_cart_product)-> 
@@ -77,6 +80,9 @@ Cart.prototype.price = (socket)->
                   order_reply = new OrderReply(res_data, current_cart_products)
                   me.updatePrices(order_reply, socket)   # mode emit into this function to emit after prices have been updated        
                   socket.emit 'cart:priced', {order_reply: order_reply, items: order_reply.products()}
+                  console.info order_reply # update can_place_order
+                  if order_reply.status == '6'
+                    socket.emit('cart:coupons:autocomplete', current_cart_coupons)
               catch err_pricing
                 console.error err_pricing.stack
         else
@@ -86,7 +92,7 @@ Cart.prototype.price = (socket)->
 
 
 Cart.prototype.updatePrices = (order_reply, socket) ->
-  this.updateAttributes { net_amount: order_reply.netamount, tax_amount: order_reply.taxamount, tax1_amount: order_reply.tax1amount, tax2_amount: order_reply.tax2amount,  payment_amount: order_reply.payment_amount } , (err, updated_cart) ->
+  this.updateAttributes {  can_place_order: order_reply.can_place, net_amount: order_reply.netamount, tax_amount: order_reply.taxamount, tax1_amount: order_reply.tax1amount, tax2_amount: order_reply.tax2amount,  payment_amount: order_reply.payment_amount } , (err, updated_cart) ->
     if err
       console.error err.stack
       socket.emit 'cart:price:error', 'No se pudo actualizar los precios en la base de datos'

@@ -28,8 +28,8 @@ class PulseBridge
       fallback
     
   send: (action, data, err_cb, cb) ->
-    console.log @target()
-    console.log data
+    console.info @target()
+    console.info data
     headers = { "User-Agent": "kapiqua-node","SOAPAction": "http://www.dominos.com/action/#{action}"  , "Content-Length": data.length, "Connection": "close","Accept" : "text/html,application/xhtml+xml,application/xml","Accept-Charset": "utf-8", "Content-Type":"text/xml;charset=UTF-8" }
     console.info headers
     # console.info @storeid
@@ -67,7 +67,7 @@ class PulseBridge
     # 1349230038
     order = new libxml.Element(doc,'Order').attr({orderid:"Order##{Date.now()}", currency:"en-USD", language:"en-USA"})
     order.addChild(new libxml.Element(doc,'StoreID', "#{@storeid}" ))   # store @storeid 
-    order.addChild(new libxml.Element(doc,'ServiceMethod', 'dinein'))  # service method
+    order.addChild(new libxml.Element(doc,'ServiceMethod', @fallback_values(action, @cart.service_method, 'dinein')))  # service method
     order.addChild(new libxml.Element(doc,'OrderTakeSeconds', '60'))
     order.addChild(new libxml.Element(doc,'DeliveryInstructions', 'Edf:;TC:N/A;AP:N/A;D_I.'))  # delivery instructions
     #order source
@@ -78,6 +78,7 @@ class PulseBridge
     order.addChild(order_source)
     # end order source
     #customer info
+    console.log 'DONT FORGET TO ADD USER ADDRESS HERE!!!'
     customer = new libxml.Element(doc,'Customer').attr({'type':'Customer-Standard'})  # if user has current address set else dummy
     customer_address = new libxml.Element(doc,'CustomerAddress').attr({ 'type':"Address-US"})
     customer_address.addChild(new libxml.Element(doc,'City', 'Santo Domingo')) # city
@@ -89,15 +90,11 @@ class PulseBridge
     customer_address.addChild(new libxml.Element(doc,'AddressLine3'))
     customer_address.addChild(new libxml.Element(doc,'AddressLine4'))
     customer_address.addChild(new libxml.Element(doc,'UnitType', 'Apartment').attr({"xsi:type":"xsd:string"}))
-    customer_address.addChild(new libxml.Element(doc,'UnitNumber', '202').attr({"xsi:type":"xsd:string"}))
+    customer_address.addChild(new libxml.Element(doc,'UnitNumber', '999').attr({"xsi:type":"xsd:string"}))
     customer.addChild(customer_address)
      
     customer_name = new libxml.Element(doc,'Name').attr({ 'type':"Name-US"})
-    console.log @fallback_values(action, @cart.client?.first_name,'dummy_pricing')
-    console.log @cart.client?.first_name
     customer_name.addChild(new libxml.Element(doc,'FirstName', @fallback_values(action, @cart.client?.first_name,'dummy_pricing')))  # user  name
-    console.log @fallback_values(action, @cart.client?.last_name,'dummy_last_pricing')
-    console.log @cart.client?.last_name
     customer_name.addChild(new libxml.Element(doc,'LastName', @fallback_values(action, @cart.client?.last_name,'dummy_last_pricing')))  # user last name
     customer.addChild(customer_name)
      
