@@ -13,8 +13,7 @@ describe "Cart checkout" do
       end
       
       it "should show the model", js: true do
-        find('#proceed_to_checkout_out').click
-        page.should have_css('#checkout_Modal', visible: true)
+        pending('set to set up a cart for checkout')
       end
       
   end

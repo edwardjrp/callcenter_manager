@@ -165,11 +165,11 @@ describe "Home::Indices" do
         within('#choose_service_method') { should have_content('pickup') }
       end
         
-      it "should set carry out as the service method persistenly", js: true do
+      it "should set dine in as the service method persistenly", js: true do
         click_link('choose_service_method')
-        click_link('service_method_carry_out')
+        click_link('service_method_dine_in')
         visit root_path
-        within('#choose_service_method') { should have_content('carryout') }
+        within('#choose_service_method') { should have_content('dinein') }
       end
        
     end   

@@ -5,7 +5,7 @@ jQuery ->
   socket = window.socket
   assign_client_to_current_cart()
   assign_service_method($('#service_method_delivery'))
-  assign_service_method($('#service_method_carry_out'))
+  assign_service_method($('#service_method_dine_in'))
   assign_service_method($('#service_method_pickup'))
   $('#client_search_first_name').restric('numeric')
   $('#client_search_last_name').restric('numeric')

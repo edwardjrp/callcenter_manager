@@ -19,6 +19,9 @@ describe StoreProduct do
 
     it { should belong_to :product }
     it { should belong_to :store }
+    it 'shold test has meny through of parents' do
+      pending('test missing but implemented')
+    end
      
   end
 
