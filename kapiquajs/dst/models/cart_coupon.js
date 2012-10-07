@@ -57,7 +57,7 @@ CartCoupon.removeItem = function(data, respond, socket) {
             if (del_err != null) {
               return respond(del_err);
             } else {
-              socket.emit('cart_coupon:deleted', data.id);
+              respond(del_err, data.id);
               return cart.price(socket);
             }
           });

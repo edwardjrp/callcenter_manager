@@ -3,12 +3,13 @@ class Kapiqua25.Views.CartIndex extends Backbone.View
   template: JST['cart/index']
   
   initialize: ->
-      _.bindAll(this,'updatePrices', 'removeCartProduct', 'addCartCoupon', 'removeCartCoupon', 'remove_coupon', 'addCartProduct')
+      _.bindAll(this,'updatePrices', 'removeCartProduct','remoteAddCartCoupon', 'addCartCoupon', 'removeCartCoupon', 'remove_coupon', 'addCartProduct')
       window.socket.on('cart:priced', @updatePrices)
-      window.socket.on('cart_coupon:saved', @addCartCoupon)
-      window.socket.on('cart_coupon:deleted', @removeCartCoupon)
+      window.socket.on('cart_coupon:saved', @remoteAddCartCoupon)
       @model.get('cart_products').on('add', @addCartProduct)
       @model.get('cart_products').on('remove', @removeCartProduct)
+      @model.get('cart_coupons').on('add', @addCartCoupon)
+      @model.get('cart_coupons').on('remove', @removeCartCoupon)
       @model.on('change', @render, this)
   
   
@@ -25,23 +26,26 @@ class Kapiqua25.Views.CartIndex extends Backbone.View
   render: ->
     $(@el).html(@template(cart: @model))
     @model.get('cart_products').each(@addCartProduct)
+    @model.get('cart_coupons').each(@addCartCoupon)
     this
 
 
-  addCartProduct: (cart_coupon) ->
-    view = new Kapiqua25.Views.CartProductsShow(model: cart_coupon)
-    @$('#current_carts_items').append(view.render().el)
+  addCartProduct: (cart_product) ->
+    unless _.isUnidefined
+      view = new Kapiqua25.Views.CartProductsShow(model: cart_product)
+      @$('#current_carts_items').append(view.render().el)
 
-  addCartCoupon: (data)->
-    if data?
-      @model.get('cart_coupons').add(data)
-      $(@el).find('ul#current_carts_coupons').prepend("<li id = 'cart_coupon_#{data.id}'>#{data.code}<a class='coupon_remove'  data-cart-coupon-id='data.id'  ><i class='icon-trash'></i></a></li>")
-      $(@el).find('ul#current_carts_coupons').find("#cart_coupon_#{data.id}").effect('highlight')
+  remoteAddCartCoupon: (cart_coupon) ->
+    if cart_coupon?
+      @model.get('cart_coupons').add(cart_coupon)
 
-  removeCartCoupon: (data)->
-    if data?
-      $(@el).find('ul#current_carts_coupons').find("#cart_coupon_#{data}").remove()
-      $(@el).effect('highlight')
+  addCartCoupon: (cart_coupon)->
+    view = new Kapiqua25.Views.CartCouponsShow(model: cart_coupon)
+    @$('#current_carts_coupons').append(view.render().el)    
+
+  removeCartCoupon: (cart_coupon)->
+    $(@el).find('ul#current_carts_coupons').find("#cart_coupon_#{cart_coupon.id}").remove()
+    $(@el).effect('highlight')
 
   remove_coupon: (event)->
     event.preventDefault()

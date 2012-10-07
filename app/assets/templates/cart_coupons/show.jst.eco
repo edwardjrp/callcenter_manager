@@ -1,0 +1,3 @@
+<li id = "cart_coupon_<%=@cart_coupon.get('id')%>">
+  <%=@cart_coupon.get('code')%><a class='coupon_remove' data-cart-coupon-id='<%=@cart_coupon.get('id')%>'>
+<i class="icon-trash"></i></a></li>
