@@ -1,4 +1,4 @@
-set :host , '10.10.0.50'
+set :host , '192.168.85.10'
 server "#{host}", :web, :app, :db, primary: true
 set :user, 'proteus'
 set :repository,  "ssh://#{user}@#{host}/Users/#{user}/#{application}.git"
