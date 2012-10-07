@@ -32,7 +32,7 @@ CartCoupon.removeItem = (data, respond, socket) ->
             if del_err?
               respond(del_err)
             else
-              socket.emit('cart_coupons:deleted', data.id)
+              socket.emit('cart_coupon:deleted', data.id)
               cart.price(socket)
 
 module.exports = CartCoupon

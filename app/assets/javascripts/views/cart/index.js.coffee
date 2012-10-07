@@ -6,7 +6,7 @@ class Kapiqua25.Views.CartIndex extends Backbone.View
       _.bindAll(this,'updatePrices', 'removeCartProduct', 'addCartCoupon', 'removeCartCoupon', 'remove_coupon', 'addCartProduct')
       window.socket.on('cart:priced', @updatePrices)
       window.socket.on('cart_coupon:saved', @addCartCoupon)
-      window.socket.on('cart_coupons:deleted', @removeCartCoupon)
+      window.socket.on('cart_coupon:deleted', @removeCartCoupon)
       @model.get('cart_products').on('add', @addCartProduct)
       @model.get('cart_products').on('remove', @removeCartProduct)
       @model.on('change', @render, this)

@@ -66,8 +66,7 @@ Cart.prototype.price = function(socket) {
       current_cart = me.simplified();
       current_cart.cart_products = updated_cart_products;
       pulse_com_error = function(comm_err) {
-        console.log(comm_err);
-        return socket.emit('cart:price:error', 'Un error de comunicación impidio solitar el precio de esta orden');
+        return socket.emit('cart:price:error', 'Un error de comunicación impidio solitar el precio de esta orden, la aplicacion no podra funcionar correctamente en este estado');
       };
       if (updated_cart_products.length > 0) {
         return Setting.kapiqua(function(err, settings) {
@@ -80,7 +79,7 @@ Cart.prototype.price = function(socket) {
               return cart_request.price(pulse_com_error, function(res_data) {
                 var order_reply;
                 order_reply = new OrderReply(res_data, updated_cart_products);
-                me.updatePrices(order_reply);
+                me.updatePrices(order_reply, socket);
                 return socket.emit('cart:priced', {
                   order_reply: order_reply,
                   items: order_reply.products()
@@ -98,7 +97,7 @@ Cart.prototype.price = function(socket) {
   });
 };
 
-Cart.prototype.updatePrices = function(order_reply) {
+Cart.prototype.updatePrices = function(order_reply, socket) {
   return this.updateAttributes({
     net_amount: order_reply.netamount,
     tax_amount: order_reply.taxamount,
@@ -107,7 +106,8 @@ Cart.prototype.updatePrices = function(order_reply) {
     payment_amount: order_reply.payment_amount
   }, function(err, updated_cart) {
     if (err) {
-      return console.error(err);
+      console.error(err.stack);
+      return socket.emit('cart:price:error', 'No se pudo actualizar los precios en la base de datos');
     } else {
       return _.each(order_reply.products(), function(pricing) {
         return CartProduct.find(pricing.cart_product_id, function(cp_err, cart_product) {

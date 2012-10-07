@@ -66,7 +66,7 @@ Cart.prototype.price = (socket)->
               try
                 cart_request.price pulse_com_error, (res_data)->
                   order_reply = new OrderReply(res_data, updated_cart_products)
-                  me.updatePrices(order_reply)           
+                  me.updatePrices(order_reply, socket)   # mode emit into this function to emit after prices have been updated        
                   socket.emit 'cart:priced', {order_reply: order_reply, items: order_reply.products()}
               catch err_pricing
                 console.error err_pricing.stack
@@ -76,10 +76,11 @@ Cart.prototype.price = (socket)->
 
 
 
-Cart.prototype.updatePrices = (order_reply) ->
+Cart.prototype.updatePrices = (order_reply, socket) ->
   this.updateAttributes { net_amount: order_reply.netamount, tax_amount: order_reply.taxamount, tax1_amount: order_reply.tax1amount, tax2_amount: order_reply.tax2amount,  payment_amount: order_reply.payment_amount } , (err, updated_cart) ->
     if err
-      console.error err
+      console.error err.stack
+      socket.emit 'cart:price:error', 'No se pudo actualizar los precios en la base de datos'
     else
       _.each order_reply.products(), (pricing) ->
         CartProduct.find pricing.cart_product_id , (cp_err, cart_product)->
