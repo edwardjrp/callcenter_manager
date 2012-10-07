@@ -78,7 +78,7 @@ Cart.prototype.price = (socket)->
               try
                 cart_request.price pulse_com_error, (res_data)->
                   order_reply = new OrderReply(res_data, current_cart_products)
-                  me.updatePrices(order_reply, socket)   # mode emit into this function to emit after prices have been updated        
+                  me.updatePrices(order_reply, socket) if order_reply.status == '0'  # mode emit into this function to emit after prices have been updated        
                   socket.emit 'cart:priced', {order_reply: order_reply, items: order_reply.products()}
                   console.info order_reply # update can_place_order
                   if order_reply.status == '6'

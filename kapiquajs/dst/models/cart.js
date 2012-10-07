@@ -95,7 +95,9 @@ Cart.prototype.price = function(socket) {
               return cart_request.price(pulse_com_error, function(res_data) {
                 var order_reply;
                 order_reply = new OrderReply(res_data, current_cart_products);
-                me.updatePrices(order_reply, socket);
+                if (order_reply.status === '0') {
+                  me.updatePrices(order_reply, socket);
+                }
                 socket.emit('cart:priced', {
                   order_reply: order_reply,
                   items: order_reply.products()
