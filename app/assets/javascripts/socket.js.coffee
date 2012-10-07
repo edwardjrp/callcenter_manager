@@ -47,8 +47,10 @@ jQuery ->
         $('#actions').append('<a href="#" id="place_order_button" class="btn bottom-margin-1"><i class="icon-shopping-cart"></i> Colocar orden</a>') unless $('#place_order_button').size() > 0
       else
         $('#place_order_button').remove() if $('#place_order_button').size() > 0
-        $("<div class='purr'>Esta order fue rechazada por Pulse, verifique los requisitos<div>").purr()
+        $("<div class='purr'>Esta order fue rechazada por Pulse, verifique los requisitos. La tienda puede estar cerrada<div>").purr()
 
+  socket.on 'cart:place:error', (msg) ->
+    $("<div class='purr'>#{msg}<div>").purr()
 
   socket.on 'register_client', (operators) ->  
     $('#chatbox').find('.operator_tab').remove()
