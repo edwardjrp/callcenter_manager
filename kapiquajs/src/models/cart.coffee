@@ -31,7 +31,7 @@ Cart.prototype.price = (socket)->
     (callback) ->
       me.cart_products {}, (c_cp_err, cart_products) ->
         if(c_cp_err)
-          socket.emit 'cart:price:error', 'No se pudo acceder a la lista de productos para esta orden' if socket?
+          socket.emit 'cart:price:error', 'No se pudo acceder a la lista de productos para esta orden'
         else
           current_cart_products = _.map(cart_products, (cart_product)-> cart_product.simplified())
           callback(null, current_cart_products)
@@ -39,7 +39,7 @@ Cart.prototype.price = (socket)->
     (current_cart_products, callback) ->
       me.products (c_p_err, products) ->
         if(c_p_err)
-          socket.emit 'cart:price:error', 'No se pudo acceder a la lista de productos para esta orden' if socket?
+          socket.emit 'cart:price:error', 'No se pudo acceder a la lista de productos para esta orden'
         else
           updated_cart_products = _.map current_cart_products, (current_cart_product)-> 
             current_cart_product.product = _.find products, (product)->
@@ -51,25 +51,28 @@ Cart.prototype.price = (socket)->
     (final_error, updated_cart_products, current_cart_products) ->
       if final_error?
         console.log final_error
-        socket.emit 'cart:price:error', 'Un error impidio solitar el precio de esta orden' if socket?  
+        socket.emit 'cart:price:error', 'Un error impidio solitar el precio de esta orden'
       else
         current_cart  = me.simplified()
         current_cart.cart_products = updated_cart_products
         pulse_com_error = (comm_err) ->
-          console.log comm_err
-          socket.emit 'cart:price:error', 'Un error impidio solitar el precio de esta orden' if socket?
-        Setting.kapiqua (err, settings) ->
-          if err
-            console.error err
-          else
-            cart_request = new  PulseBridge(current_cart, settings.price_store_id, settings.price_store_ip,  settings.pulse_port)
-            try
-              cart_request.price pulse_com_error, (res_data)->
-                order_reply = new OrderReply(res_data, updated_cart_products)
-                me.updatePrices(order_reply)           
-                socket.emit 'cart:priced', {order_reply: order_reply, items: order_reply.products()}
-            catch err_pricing
-              console.error err_pricing.stack
+          socket.emit 'cart:price:error', 'Un error de comunicación impidio solitar el precio de esta orden, la aplicacion no podra funcionar correctamente en este estado'
+        if updated_cart_products.length > 0
+          Setting.kapiqua (err, settings) ->
+            if err
+              console.error err
+            else
+              cart_request = new  PulseBridge(current_cart, settings.price_store_id, settings.price_store_ip,  settings.pulse_port)
+              try
+                cart_request.price pulse_com_error, (res_data)->
+                  order_reply = new OrderReply(res_data, updated_cart_products)
+                  me.updatePrices(order_reply)           
+                  socket.emit 'cart:priced', {order_reply: order_reply, items: order_reply.products()}
+              catch err_pricing
+                console.error err_pricing.stack
+        else
+          socket.emit 'cart:price:error', 'No se pudo acceder a la lista de productos para esta orden'
+
 
 
 

@@ -133,7 +133,8 @@ class PulseBridge
         order_item.addChild(new libxml.Element(doc,'ProductCode', cart_product.product.productcode))
         order_item.addChild(new libxml.Element(doc,'ProductName').attr('xsi:nil':"true"))
         order_item.addChild(new libxml.Element(doc,'ItemQuantity', (cart_product.quantity.toString() || '1')))
-        order_item.addChild(new libxml.Element(doc,'PricedAt', @fallback_values(action, cart_product.priced_at.toString(),'0')))# @fallback_values(action, cart_product.priced_at,'0')
+        if cart_product.priced_at? then cart_item_price = cart_product.priced_at.toString() else cart_item_price = '0'
+        order_item.addChild(new libxml.Element(doc,'PricedAt', @fallback_values(action, cart_item_price,'0')))# @fallback_values(action, cart_product.priced_at,'0')
         order_item.addChild(new libxml.Element(doc,'OverrideAmmount').attr('xsi:nil':"true"))
         order_item.addChild(new libxml.Element(doc,'CookingInstructions').attr('xsi:nil':"true"))
         
@@ -144,7 +145,8 @@ class PulseBridge
           for product_option in product_options             
             item_modifier = new libxml.Element(doc,'ItemModifier').attr({code: product_option.code()})
             item_modifier.addChild(new libxml.Element(doc,'ItemModifierName').attr('xsi:nil':"true"))
-            item_modifier.addChild(new libxml.Element(doc,'ItemModifierQuantity', product_option.quantity().toString()))
+            if product_option.quantity()?  then cart_option_quantity = product_option.quantity().toString() else cart_option_quantity = '0'
+            item_modifier.addChild(new libxml.Element(doc,'ItemModifierQuantity', cart_option_quantity ))
             item_modifier.addChild(new libxml.Element(doc,'ItemModifierPart', product_option.part()))
             item_modifiers.addChild(item_modifier)
         order_item.addChild(item_modifiers)

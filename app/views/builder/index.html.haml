@@ -1,5 +1,7 @@
-#surface.row{data: { categories: Category.all.to_json( include: {products: {} })   }}
+#surface.row{data: { categories: Category.all.to_json( include: { products: {} })   }}
   #desk.span9
-    Loading assets
+    .alert.alert-info
+      %strong Cargando ...
+      Se esta accediendo a los datos, si este mensaje se mantenien por mas de 10 segundos puede que usted no tenga accesso a parte de la aplicacion
   #cart.span3{data: { cart: current_cart.to_json(include: { cart_products: { include: { product: {}}}, cart_coupons: {}})   }}
-    loading cart
+    Cargando ...

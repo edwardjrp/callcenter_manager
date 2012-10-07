@@ -4,8 +4,6 @@ jQuery ->
     socket.emit 'register', { full_name: $('#chatbox').data('full_name'), idnumber: $('#chatbox').data('idnumber'), role: $('#chatbox').data('role') }, (response)->
       # console.log response
       
-  # $('.item_remove, .show_options, .edit_options').tooltip({placement: 'bottom'})
-
   if $(".chatdisplay").size() > 0
     setInterval (->
       if $(".blink").size() > 0
@@ -74,7 +72,6 @@ jQuery ->
       socket.emit 'cart_coupons:create', {cart_id: target.data('cart-id'), coupon_code: target.data('coupon-code'), coupon_id: target.data('coupon-id'), target_products: target.data('coupon-products')}
 
   $('#close_utils').on 'click', (event)->
-    console.log $('#utils_labels').next()
     for tab_contents in $('#utils_labels').next().find('.tab-pane')
       $(tab_contents).removeClass('active')
 

@@ -34,9 +34,7 @@ Cart.prototype.price = function(socket) {
       return me.cart_products({}, function(c_cp_err, cart_products) {
         var current_cart_products;
         if (c_cp_err) {
-          if (socket != null) {
-            return socket.emit('cart:price:error', 'No se pudo acceder a la lista de productos para esta orden');
-          }
+          return socket.emit('cart:price:error', 'No se pudo acceder a la lista de productos para esta orden');
         } else {
           current_cart_products = _.map(cart_products, function(cart_product) {
             return cart_product.simplified();
@@ -48,9 +46,7 @@ Cart.prototype.price = function(socket) {
       return me.products(function(c_p_err, products) {
         var updated_cart_products;
         if (c_p_err) {
-          if (socket != null) {
-            return socket.emit('cart:price:error', 'No se pudo acceder a la lista de productos para esta orden');
-          }
+          return socket.emit('cart:price:error', 'No se pudo acceder a la lista de productos para esta orden');
         } else {
           updated_cart_products = _.map(current_cart_products, function(current_cart_product) {
             return current_cart_product.product = _.find(products, function(product) {
@@ -65,39 +61,39 @@ Cart.prototype.price = function(socket) {
     var current_cart, pulse_com_error;
     if (final_error != null) {
       console.log(final_error);
-      if (socket != null) {
-        return socket.emit('cart:price:error', 'Un error impidio solitar el precio de esta orden');
-      }
+      return socket.emit('cart:price:error', 'Un error impidio solitar el precio de esta orden');
     } else {
       current_cart = me.simplified();
       current_cart.cart_products = updated_cart_products;
       pulse_com_error = function(comm_err) {
         console.log(comm_err);
-        if (socket != null) {
-          return socket.emit('cart:price:error', 'Un error impidio solitar el precio de esta orden');
-        }
+        return socket.emit('cart:price:error', 'Un error de comunicación impidio solitar el precio de esta orden');
       };
-      return Setting.kapiqua(function(err, settings) {
-        var cart_request;
-        if (err) {
-          return console.error(err);
-        } else {
-          cart_request = new PulseBridge(current_cart, settings.price_store_id, settings.price_store_ip, settings.pulse_port);
-          try {
-            return cart_request.price(pulse_com_error, function(res_data) {
-              var order_reply;
-              order_reply = new OrderReply(res_data, updated_cart_products);
-              me.updatePrices(order_reply);
-              return socket.emit('cart:priced', {
-                order_reply: order_reply,
-                items: order_reply.products()
+      if (updated_cart_products.length > 0) {
+        return Setting.kapiqua(function(err, settings) {
+          var cart_request;
+          if (err) {
+            return console.error(err);
+          } else {
+            cart_request = new PulseBridge(current_cart, settings.price_store_id, settings.price_store_ip, settings.pulse_port);
+            try {
+              return cart_request.price(pulse_com_error, function(res_data) {
+                var order_reply;
+                order_reply = new OrderReply(res_data, updated_cart_products);
+                me.updatePrices(order_reply);
+                return socket.emit('cart:priced', {
+                  order_reply: order_reply,
+                  items: order_reply.products()
+                });
               });
-            });
-          } catch (err_pricing) {
-            return console.error(err_pricing.stack);
+            } catch (err_pricing) {
+              return console.error(err_pricing.stack);
+            }
           }
-        }
-      });
+        });
+      } else {
+        return socket.emit('cart:price:error', 'No se pudo acceder a la lista de productos para esta orden');
+      }
     }
   });
 };

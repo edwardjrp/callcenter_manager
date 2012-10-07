@@ -46,6 +46,6 @@ class Admin::UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
-    @carts = @user.carts
+    @carts = @user.carts.completed.page(params[:page])
   end
 end

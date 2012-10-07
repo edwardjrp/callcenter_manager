@@ -86,7 +86,7 @@ PulseBridge = (function() {
   };
 
   PulseBridge.prototype.body = function(action) {
-    var auth, body, cart_product, cash_payment, customer, customer_address, customer_name, customer_type_info, doc, envelope, header, item_modifier, item_modifiers, orde_info_collection, order, order_info_1, order_item, order_items, order_source, payment, product_option, product_options, _i, _j, _len, _len1, _ref, _ref1, _ref10, _ref11, _ref12, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
+    var auth, body, cart_item_price, cart_option_quantity, cart_product, cash_payment, customer, customer_address, customer_name, customer_type_info, doc, envelope, header, item_modifier, item_modifiers, orde_info_collection, order, order_info_1, order_item, order_items, order_source, payment, product_option, product_options, _i, _j, _len, _len1, _ref, _ref1, _ref10, _ref11, _ref12, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
     doc = new libxml.Document();
     envelope = new libxml.Element(doc, 'env:Envelope').attr({
       'xmlns:xsd': "http://www.w3.org/2001/XMLSchema",
@@ -182,7 +182,12 @@ PulseBridge = (function() {
           'xsi:nil': "true"
         }));
         order_item.addChild(new libxml.Element(doc, 'ItemQuantity', cart_product.quantity.toString() || '1'));
-        order_item.addChild(new libxml.Element(doc, 'PricedAt', this.fallback_values(action, cart_product.priced_at.toString(), '0')));
+        if (cart_product.priced_at != null) {
+          cart_item_price = cart_product.priced_at.toString();
+        } else {
+          cart_item_price = '0';
+        }
+        order_item.addChild(new libxml.Element(doc, 'PricedAt', this.fallback_values(action, cart_item_price, '0')));
         order_item.addChild(new libxml.Element(doc, 'OverrideAmmount').attr({
           'xsi:nil': "true"
         }));
@@ -200,7 +205,12 @@ PulseBridge = (function() {
             item_modifier.addChild(new libxml.Element(doc, 'ItemModifierName').attr({
               'xsi:nil': "true"
             }));
-            item_modifier.addChild(new libxml.Element(doc, 'ItemModifierQuantity', product_option.quantity().toString()));
+            if (product_option.quantity() != null) {
+              cart_option_quantity = product_option.quantity().toString();
+            } else {
+              cart_option_quantity = '0';
+            }
+            item_modifier.addChild(new libxml.Element(doc, 'ItemModifierQuantity', cart_option_quantity));
             item_modifier.addChild(new libxml.Element(doc, 'ItemModifierPart', product_option.part()));
             item_modifiers.addChild(item_modifier);
           }

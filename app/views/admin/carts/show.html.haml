@@ -8,8 +8,8 @@
           %dt Agente
           %dd= @cart.user.full_name
         %dl
-          %dt Creada
-          %dd="hace #{time_ago_in_words(@cart.created_at)} (#{l(@cart.created_at, :format=> :short)})"
+          %dt Ultima asignacion de cliente
+          %dd=l(@cart.started_on, :format=> :short)
         %dl
           %dt Tienda
           - if @cart.store.present?
@@ -27,10 +27,10 @@
         .span4.well
           %h3 Datos del cliente
           %dl
-            %dt Nombre Complato
+            %dt Nombre Completo
             %dd= @cart.client.full_name
-            %dt Telefonos
-            -if @cart.client.phones.any?
+            %dt Telefono de contácto
+            -if @cart.client.phones.count.nonzero?
               - @cart.client.phones.each do |phone|
                 %dd="#{number_to_phone phone.number} #{phone.ext}"
             -else
@@ -44,7 +44,7 @@
       %thead
         %tr
           %th Cantidad
-          %th product
+          %th producto
           %th Optiones
           %th Precio              
       %tbody
@@ -53,6 +53,8 @@
             %td= cart_product.quantity
             %td= cart_product.product.productname
             %td= cart_product.product.niffty_options
-            %td= cart_product.priced_at
+            %td
+              - if cart_product.priced_at.present?
+                = number_to_currency cart_product.priced_at
 
 
