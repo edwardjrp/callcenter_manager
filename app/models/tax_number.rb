@@ -11,8 +11,16 @@
 #
 
 class TaxNumber < ActiveRecord::Base
-  validates :rnc, presence: true, uniqueness: { scope: :client_id }
+  validates :rnc, presence: true, uniqueness: { scope: :client_id }, length: {  minimum: 9, maximum: 11 }
   validates :client_id, presence: true
   belongs_to :client
   attr_accessible :rnc, :client_id, :verified
+
+
+  def verify
+    TaxpayerIdentification.find_by_idnumber(self.rnc).tap do |tax_id|
+      self.verified = tax_id.present?
+      self.save
+    end
+  end
 end

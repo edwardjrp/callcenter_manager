@@ -8,7 +8,11 @@ Kapiqua25::Application.routes.draw do
   mount Sidekiq::Web => 'admin/tasks', :constraints => AdminConstraint.new
 
   resources :users , :only =>:index
-  resources :tax_numbers , :only =>[:create, :update, :destroy]
+  resources :tax_numbers , :only =>[:create, :update, :destroy] do 
+    member do 
+      post 'verify'
+    end
+  end
   get 'login', to: "sessions#new", as: :login
   get 'logout', to: "sessions#destroy", as: :logout
   get 'builder', to: "builder#index", as: :builder

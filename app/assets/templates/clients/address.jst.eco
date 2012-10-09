@@ -1,11 +1,11 @@
-<div class='client_address' data-address-id='<%=@address.id%>' id = 'address_<%=@address.id%>'>
+<div class='client_address' data-address ='<%=JSON.stringify(@address)%>' id = 'address_<%=@address.id%>'>
 <div class="row">
   <div class="span3">
     <div class="btn-group right">
-      <button class="btn">
+      <button class="btn btn_edit">
         <i class="icon-edit"></i>
       </button>
-      <button class="btn">
+      <button class="btn btn_trash">
         <i class="icon-trash"></i>
       </button>
     </div>

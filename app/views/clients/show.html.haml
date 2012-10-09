@@ -67,7 +67,7 @@
       #client_tax_numbers_list
         -@client.tax_numbers.order('created_at DESC').each do |tax_number|
           =render 'modal', :modal_id => "edit_tax_number_modal_#{tax_number.id}", :title=>'Editar RNC'
-          .tax_number{:id=> dom_id(tax_number), :data=> {'tax_number'=> tax_number.to_json}}
+          .client_tax_number{:id=> dom_id(tax_number), :data=> {'tax-number'=> tax_number.to_json}}
             .row
               .span3
                 .btn-group.right
@@ -83,7 +83,7 @@
             .row
               .span4
                 %strong Verificado:
-                =tax_number.verified
+                =link_to tax_number.verified.to_s, '#', class: 'btn btn-info verified'
           %hr 
     .well#addresses_list
       .row

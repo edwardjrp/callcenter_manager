@@ -1,0 +1,10 @@
+<form class="form-horizontal" id='edit_tax_number_form_<%=@tax_number.id%>'  data-tax-number-id='<%=@tax_number.id%>'>
+  <fieldset>
+    <legend>Datos del número fiscal</legend>
+    <div class="control-group" id="client_tax_number_rnc_controls_<%=@tax_number.id%>">
+      <label class="control-label" for="client_tax_number_rnc_<%=@tax_number.id%>">RNC</label>
+      <div class="controls">
+        <input type="text" id="client_tax_number_rnc_<%=@tax_number.id%>" name="tax_number[rnc]" value='<%=@tax_number.rnc%>'>
+      </div>
+    </div>
+</div>

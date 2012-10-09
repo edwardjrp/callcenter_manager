@@ -7,6 +7,5 @@
         <input type="text" id="client_tax_number_rnc" name="tax_number[rnc]">
       </div>
     </div>
-    <a href='#' id='verify_tax_number' class ='btn'>Verificar</a>
   </div>
 </div>

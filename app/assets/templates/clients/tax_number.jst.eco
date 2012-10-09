@@ -1,11 +1,11 @@
-<div class='client_tax_number' data-phone = '<%=@tax_number%>' id = 'tax_number_<%=@tax_number.id%>'>
+<div class='client_tax_number' data-tax-number = '<%=JSON.stringify(@tax_number)%>' id = 'tax_number_<%=@tax_number.id%>'>
  <div class= 'row'>
     <div class= 'span3'>
       <div class="btn-group right">
-        <button class="btn">
+        <button class="btn btn_edit">
           <i class="icon-edit"></i>
         </button>
-        <button class="btn">
+        <button class="btn btn_trash">
           <i class="icon-trash"></i>
         </button>
       </div>
@@ -20,7 +20,7 @@
   <div class= 'row'>
     <div class= 'span4'>
       <strong> Verificado: </strong>
-      <%=@tax_number.verified%>
+      <a href="#" class="btn btn-info verified"><%=@tax_number.verified%></a>
     </div>
   </div>
   

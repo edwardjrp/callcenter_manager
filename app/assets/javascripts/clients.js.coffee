@@ -4,6 +4,20 @@
 jQuery ->
   $('.best_in_place').best_in_place()
 
+
+  $('#client_tax_numbers_list').on 'click', '.verified', (event)->
+    event.preventDefault()
+    target = $(event.currentTarget)
+    $.ajax
+      type: 'POST'
+      url: "/tax_numbers/#{target.closest('.client_tax_number').data('tax-number').id}/verify"
+      success: (tax_number)->
+        target.text(tax_number)
+      error: (err)->
+        console.log err
+        $("<div class='purr'>#{err.responseText}<div>").purr()
+  
+
   $('#add_tax_number').on 'click', (event) ->
     event.preventDefault()
     target = $(event.currentTarget)
@@ -14,6 +28,7 @@ jQuery ->
 
 
   $('#add_tax_number_modal_button').on 'click', (event)->
+    event.preventDefault()
     target = event.currentTarger
     $.ajax
       type: 'POST'
@@ -23,7 +38,6 @@ jQuery ->
       beforeSend: (xhr) ->
         xhr.setRequestHeader("Accept", "application/json")
       success: (tax_number)->
-        console.log tax_number
         $('#client_tax_numbers_list').prepend(JST['clients/tax_number'](tax_number: tax_number))
         $('#add_tax_number_modal').modal('hide')
       error: (err)->
@@ -33,6 +47,7 @@ jQuery ->
 
 
   $('#add_address').on 'click', (event)->
+    event.preventDefault()
     $('#add_address_modal').find('.modal-body').html(JST['clients/add_address']())
     $('#add_address_form').prepend("<input type='hidden' id='address_client_id' name='client_id' value='#{_.last(window.location.href.split('/')).match(/\d+/)[0]}'>") unless $('#address_client_id').length > 0
     $('#client_address_city').select2
@@ -67,6 +82,7 @@ jQuery ->
     $('#add_address_modal').modal('show')
 
   $('#add_address_modal_button').on 'click', (event)->
+    event.preventDefault()
     target = event.currentTarger
     $.ajax
       type: 'POST'
@@ -83,6 +99,7 @@ jQuery ->
           $("<div class='purr'>#{error}<div>").purr()
 
   $('#add_phone').on 'click', (event)->
+    event.preventDefault()
     $('#add_phone_modal').find('.modal-body').html(JST['clients/add_phone']())
     $('#add_phone_form').prepend("<input type='hidden' id='phone_client_id' name='client_id' value='#{_.last(window.location.href.split('/')).match(/\d+/)[0]}'>") unless $('#phone_client_id').length > 0
     $('#client_phone_number').restric('alpha').restric('spaces')
@@ -90,6 +107,7 @@ jQuery ->
     $('#add_phone_modal').modal('show')
 
   $('#add_phone_modal_button').on 'click', (event)->
+    event.preventDefault()
     target = event.currentTarger
     $.ajax
       type: 'POST'
@@ -106,11 +124,20 @@ jQuery ->
           $("<div class='purr'>#{error}<div>").purr()
 
   $('#client_phone_list').on 'click', '.btn_edit', (event)->
+    event.preventDefault()
     target = $(event.currentTarget)
     modal = target.closest('.client_phone').prev()
     phone = target.closest('.client_phone').data('phone')
     modal.modal('show')
     modal.find('.modal-body').html(JST['clients/edit_phone'](phone: phone))
+
+   $('#client_tax_numbers_list').on 'click', '.btn_edit', (event)->
+    event.preventDefault()
+    target = $(event.currentTarget)
+    modal = target.closest('.client_tax_number').prev()
+    tax_number = target.closest('.client_tax_number').data('tax-number')
+    modal.modal('show')
+    modal.find('.modal-body').html(JST['clients/edit_tax_number'](tax_number: tax_number))
 
   $('#client_phone_list').on 'click', '.btn-primary', (event)->
     event.preventDefault()
@@ -130,6 +157,27 @@ jQuery ->
         $("#phone_#{phone.id}").effect('highlight',  {}, 500)
       error: (err)->
         $("<div class='purr'>#{err.responseText}<div>").purr()
+
+  $('#client_tax_numbers_list').on 'click', '.btn-primary', (event)->
+    event.preventDefault()
+    target = $(event.currentTarget)
+    form = target.parent().prev().find('form')
+    tax_number_id = target.parent().prev().find('form').data('tax-number-id')
+    $.ajax
+      type: 'PUT'
+      datatype: 'json'
+      data: form.serialize()
+      url: "/tax_numbers/#{tax_number_id}"
+      beforeSend: (xhr) ->
+        xhr.setRequestHeader("Accept", "application/json")
+      success: (tax_number)->
+        $("#tax_number_#{tax_number.id}").replaceWith(JST['clients/tax_number'](tax_number: tax_number))
+        target.closest('.modal').modal('hide')
+        $("#tax_number_#{tax_number.id}").effect('highlight',  {}, 500)
+      error: (err)->
+        $("<div class='purr'>#{err.responseText}<div>").purr()
+
+
 
   $('#client_address_list').on 'click', '.btn-primary', (event)->
     event.preventDefault()
@@ -153,6 +201,7 @@ jQuery ->
 
 
   $('#client_address_list').on 'click', '.btn_edit', (event)->
+    event.preventDefault()
     target = $(event.currentTarget)
     modal = target.closest('.client_address').prev()
     address = target.closest('.client_address').data('address')
@@ -189,7 +238,23 @@ jQuery ->
             )
 
 
+  $('#client_tax_numbers_list').on 'click', '.btn_trash', (event)->
+    event.preventDefault()
+    target = $(event.currentTarget)
+    if confirm('¿Seguro que desea borrar este número fiscal?')
+      $.ajax
+        type: 'DELETE'
+        datatype: 'json'
+        url: "/tax_numbers/#{target.closest('.client_tax_number').data('tax-number').id}"
+        success: ()->
+          target.closest('.client_tax_number').next('hr').remove()
+          target.closest('.client_tax_number').remove()
+        error: (err)->
+          alert('No se pudo realizar la operación')
+
+
   $('#client_address_list').on 'click', '.btn_trash', (event)->
+    event.preventDefault()
     target = $(event.currentTarget)
     if confirm('¿Seguro que desea borrar esta dirección?')
       $.ajax
@@ -197,11 +262,13 @@ jQuery ->
         datatype: 'json'
         url: "/addresses/#{target.closest('.client_address').data('address').id}"
         success: ()->
+          target.closest('.client_address').next('hr').remove()
           target.closest('.client_address').remove()
         error: (err)->
           alert('No se pudo realizar la operación')
 
   $('#client_phone_list').on 'click', '.btn_trash', (event)->
+    event.preventDefault()
     target = $(event.currentTarget)
     if confirm('¿Seguro que desea borrar este telefono?')
       $.ajax
@@ -209,6 +276,7 @@ jQuery ->
         datatype: 'json'
         url: "/phones/#{target.closest('.client_phone').data('phone').id}"
         success: ()->
+          target.closest('.client_phone').next('hr').remove()
           target.closest('.client_phone').remove()
         error: (err)->
           $("<div class='purr'>#{err.responseText}<div>").purr()
