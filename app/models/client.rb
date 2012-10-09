@@ -25,6 +25,7 @@ class Client < ActiveRecord::Base
   has_many :phones, :inverse_of => :client, dependent: :destroy
   has_many :addresses, dependent: :destroy#, :inverse_of => :client
   has_many :carts
+  has_many :tax_numbers
   before_validation :fix_blanks
   before_destroy :ensure_no_carts
   accepts_nested_attributes_for :phones

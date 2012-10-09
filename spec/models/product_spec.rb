@@ -25,6 +25,7 @@ describe Product do
     it { should have_many(:carts).through(:cart_products) }
     it { should have_many :cart_products }
     it { should have_many :store_products }
+    it { should have_many(:stores).through(:store_products) }
 
   end
   

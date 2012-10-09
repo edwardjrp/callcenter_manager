@@ -109,7 +109,7 @@ class Carts
                     console.log order_reply
                     if order_reply.status == '0'
                       cart.updateAttributes { store_order_id: order_reply.order_id, complete_on: Date.now(), completed: true }, (cart_update_err, updated_cart)->
-                      socket.emit 'cart:place:completed', updated_cart
+                        socket.emit 'cart:place:completed', updated_cart
                     else
                       socket.emit 'cart:place:error', "No se puede colocar la order, Pulse respondio: <br/> <strong>#{order_reply.status_text}</strong>"
                 catch placing_error

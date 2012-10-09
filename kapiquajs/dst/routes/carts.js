@@ -163,12 +163,13 @@ Carts = (function() {
                     order_reply = new OrderReply(res_data);
                     console.log(order_reply);
                     if (order_reply.status === '0') {
-                      cart.updateAttributes({
+                      return cart.updateAttributes({
                         store_order_id: order_reply.order_id,
                         complete_on: Date.now(),
                         completed: true
-                      }, function(cart_update_err, updated_cart) {});
-                      return socket.emit('cart:place:completed', updated_cart);
+                      }, function(cart_update_err, updated_cart) {
+                        return socket.emit('cart:place:completed', updated_cart);
+                      });
                     } else {
                       return socket.emit('cart:place:error', "No se puede colocar la order, Pulse respondio: <br/> <strong>" + order_reply.status_text + "</strong>");
                     }

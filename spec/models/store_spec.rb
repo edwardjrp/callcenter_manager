@@ -36,6 +36,7 @@ describe Store do
     it { should belong_to :city }
     it { should have_many :carts }
     it { should have_many :store_products }
+    it { should have_many(:products).through(:store_products) }
 
   end
 

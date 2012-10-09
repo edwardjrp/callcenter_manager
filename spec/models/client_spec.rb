@@ -32,6 +32,8 @@ describe Client do
     it { should validate_uniqueness_of :email }  
     it { should validate_format_of(:email).with('test@mail.com') }
     it { should have_many :phones }
+    it { should have_many :tax_numbers }
+
 
   end
   
