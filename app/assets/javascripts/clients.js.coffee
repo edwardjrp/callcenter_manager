@@ -3,6 +3,16 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 jQuery ->
   $('.best_in_place').best_in_place()
+
+  $('#add_tax_number').on 'click', (event) ->
+    event.preventDefault()
+    target = $(event.currentTarget)
+    $('#add_tax_number_modal').find('.modal-body').html(JST['clients/add_tax_number']())
+    $('#add_tax_number_form').prepend("<input type='hidden' id='tax_number_client_id' name='client_id' value='#{_.last(window.location.href.split('/')).match(/\d/)[0]}'>") unless $('#tax_number_client_id').length > 0
+    $('#client_tax_number_rnc').restric('alpha').restric('spaces')
+    $('#add_tax_number_modal').modal('show')
+
+
   $('#add_address').on 'click', (event)->
     $('#add_address_modal').find('.modal-body').html(JST['clients/add_address']())
     $('#add_address_form').prepend("<input type='hidden' id='address_client_id' name='client_id' value='#{_.last(window.location.href.split('/')).match(/\d+/)[0]}'>") unless $('#address_client_id').length > 0

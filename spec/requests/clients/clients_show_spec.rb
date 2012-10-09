@@ -9,6 +9,7 @@ describe "Client::Show" do
     let!(:city) { area.city }
     let!(:client) { create(:client, first_name: 'tester') }
     let!(:phone) { create :phone, client: client, number: '8095551234', ext: '99' }
+    let!(:tax_number) { create :tax_number, client: client, rnc: '00113574339' }
 
     before(:each) do
       Capybara.current_driver = :selenium_chrome
@@ -46,12 +47,46 @@ describe "Client::Show" do
 
       end
 
+      describe  "When adding a tax_number" do
+        it "should render the add address link" do
+          within('#tax_numbers_list')  do 
+            should have_content('Agregar')
+            should have_content('00113574339')
+          end
+        end
+
+
+        it "shoud show the add tax_number modal" do
+          page.execute_script("$('#utils').hide()")
+          within('#tax_numbers_list') { click_link('Agregar') }
+          should have_css('#add_tax_number_modal', :visible => true)
+        end
+
+         it "should add a tax_number to the client" do
+          within('#tax_numbers_list'){ click_link('Agregar') }
+          within('#add_tax_number_modal')do 
+            fill_in 'client_tax_number', with: '00114574335'
+            click_link 'Guardar'
+          end
+          should have_css('#add_tax_number_modal', :visible => false)
+          within('#tax_numbers_list') do 
+            page.should have_content('00114574335')
+          end
+
+        end
+
+      end
+
       describe "when adding an address" do
+
+       
+
         it "should render the add address link" do
           within('#addresses_list') { should have_content('Agregar') }
         end
 
         it "should show the add address modal" do
+          page.execute_script("$('#utils').hide()")
           within('#addresses_list') { click_link('Agregar') }
           should have_css('#add_address_modal', :visible => true)
         end

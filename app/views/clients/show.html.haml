@@ -54,6 +54,37 @@
                   %strong extensión:
                   =phone.ext
           %hr 
+
+
+    .well#tax_numbers_list
+      .row
+        .span4        
+          %h3 Números fiscales
+          %a#add_tax_number{href: '#'}
+            Agregar
+          =render 'modal', :modal_id => 'add_tax_number_modal', :title=>'Agregar RNC'
+      %hr
+      #client_tax_numbers_list
+        -@client.tax_numbers.order('created_at DESC').each do |tax_number|
+          =render 'modal', :modal_id => "edit_tax_number_modal_#{tax_number.id}", :title=>'Editar RNC'
+          .tax_number{:id=> dom_id(tax_number), :data=> {'tax_number'=> tax_number.to_json}}
+            .row
+              .span3
+                .btn-group.right
+                  %button.btn.btn_edit
+                    %i.icon-edit
+                  %button.btn.btn_trash
+                    %i.icon-trash
+            .row
+              .span4
+                %strong RNC:
+                = tax_number.rnc
+            
+            .row
+              .span4
+                %strong Verificado:
+                =tax_number.verified
+          %hr 
     .well#addresses_list
       .row
         .span4        
@@ -120,16 +151,16 @@
       =will_paginate @carts
       -@carts.each do |cart|
         .row
-          .span2
+          .span3
             %strong Agente:
             =cart.user.full_name
-          .span2.offset2
+          .span3
             =l cart.created_at, format: :short
         .row
-          .span2
+          .span3
             %strong Monto de la orden:
             =number_to_currency(cart.payment_amount) || 'N/A'
-          .span2.offset2
+          .span3
             %strong Modo de servicio:
             =cart.service_method || 'N/A'
 

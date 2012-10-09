@@ -5,8 +5,9 @@ class ClientsController < ApplicationController
                          last_name: params[:client][:last_name],
                          email: params[:client][:email],
                          idnumber: params[:client][:idnumber],
-                         phones_attributes: [{number: params[:client][:phone], ext: params[:client][:ext]}],
-                         addresses_attributes: [params[:client][:address]])
+                         tax_numbers_attributes: [ params[:client][:tax_number] ],
+                         phones_attributes: [ { number: params[:client][:phone], ext: params[:client][:ext] } ],
+                         addresses_attributes: [ params[:client][:address] ] )
     respond_to do |format|
       if @client.save
         format.json{render json: @client}

@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :tax_number do
-    secquence(:rnc) { |tn| "1234#{tn}" }
+    sequence(:rnc) { |tn| "1234#{tn}" }
     verified false
     association(:client)
   end

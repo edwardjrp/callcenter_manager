@@ -10,6 +10,12 @@
 		<input class="input-xlarge" id="client_search_idnumber" name="client[idnumber]" type="text">
 	</div>
 </div>
+<div class="control-group" id="client_search_tax_number_controls">
+	<label class="control-label" for="client_search_tax_number">RNC</label>
+	<div class="controls">
+		<input class="input-xlarge" id="client_search_tax_number" name="client[tax_number][rnc]" type="text">
+	</div>
+</div>
 <div class="control-group" id="client_search_address_city_controls">
 	<label class="control-label" for="client_search_address_city">Ciudad</label>
 	<div class="controls">

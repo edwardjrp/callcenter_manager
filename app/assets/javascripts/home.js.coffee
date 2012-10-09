@@ -366,6 +366,7 @@ clear_extra_data = () ->
   $('#client_search_email').val('')
   window.del($('#client_search_email_controls'))
   window.del($('#client_search_idnumber_controls'))
+  window.del($('#client_search_tax_number_controls'))
   window.del($('#user_not_found_buttons'))
   $("#client_search_address_city").select2("destroy")
   $('#client_search_address_area').select2("destroy")
