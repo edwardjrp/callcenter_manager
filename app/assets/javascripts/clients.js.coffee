@@ -8,9 +8,28 @@ jQuery ->
     event.preventDefault()
     target = $(event.currentTarget)
     $('#add_tax_number_modal').find('.modal-body').html(JST['clients/add_tax_number']())
-    $('#add_tax_number_form').prepend("<input type='hidden' id='tax_number_client_id' name='client_id' value='#{_.last(window.location.href.split('/')).match(/\d/)[0]}'>") unless $('#tax_number_client_id').length > 0
+    $('#add_tax_number_form').prepend("<input type='hidden' id='tax_number_client_id' name='client_id' value='#{_.last(window.location.href.split('/')).match(/\d+/)[0]}'>") unless $('#tax_number_client_id').length > 0
     $('#client_tax_number_rnc').restric('alpha').restric('spaces')
     $('#add_tax_number_modal').modal('show')
+
+
+  $('#add_tax_number_modal_button').on 'click', (event)->
+    target = event.currentTarger
+    $.ajax
+      type: 'POST'
+      datatype: 'json'
+      data: $('#add_tax_number_form').serialize()
+      url: '/tax_numbers'
+      beforeSend: (xhr) ->
+        xhr.setRequestHeader("Accept", "application/json")
+      success: (tax_number)->
+        console.log tax_number
+        $('#client_tax_numbers_list').prepend(JST['clients/tax_number'](tax_number: tax_number))
+        $('#add_tax_number_modal').modal('hide')
+      error: (err)->
+        for error in JSON.parse(err.responseText)
+          $("<div class='purr'>#{error}<div>").purr()
+
 
 
   $('#add_address').on 'click', (event)->
@@ -65,7 +84,7 @@ jQuery ->
 
   $('#add_phone').on 'click', (event)->
     $('#add_phone_modal').find('.modal-body').html(JST['clients/add_phone']())
-    $('#add_phone_form').prepend("<input type='hidden' id='phone_client_id' name='client_id' value='#{_.last(window.location.href.split('/')).match(/\d/)[0]}'>") unless $('#phone_client_id').length > 0
+    $('#add_phone_form').prepend("<input type='hidden' id='phone_client_id' name='client_id' value='#{_.last(window.location.href.split('/')).match(/\d+/)[0]}'>") unless $('#phone_client_id').length > 0
     $('#client_phone_number').restric('alpha').restric('spaces')
     $('#client_ext_number').restric('alpha').restric('spaces')
     $('#add_phone_modal').modal('show')

@@ -3,15 +3,12 @@ require "admin_constraint"
 
 Kapiqua25::Application.routes.draw do
   
-  
-  get "reasons/index"
 
-  get "reasons/show"
 
   mount Sidekiq::Web => 'admin/tasks', :constraints => AdminConstraint.new
 
   resources :users , :only =>:index
-
+  resources :tax_numbers , :only =>[:create, :update, :destroy]
   get 'login', to: "sessions#new", as: :login
   get 'logout', to: "sessions#destroy", as: :logout
   get 'builder', to: "builder#index", as: :builder

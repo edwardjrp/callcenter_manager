@@ -65,7 +65,7 @@ describe "Client::Show" do
          it "should add a tax_number to the client" do
           within('#tax_numbers_list'){ click_link('Agregar') }
           within('#add_tax_number_modal')do 
-            fill_in 'client_tax_number', with: '00114574335'
+            fill_in 'client_tax_number_rnc', with: '00114574335'
             click_link 'Guardar'
           end
           should have_css('#add_tax_number_modal', :visible => false)

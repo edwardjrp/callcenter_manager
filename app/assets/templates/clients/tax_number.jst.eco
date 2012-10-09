@@ -1,0 +1,28 @@
+<div class='client_tax_number' data-phone = '<%=@tax_number%>' id = 'tax_number_<%=@tax_number.id%>'>
+ <div class= 'row'>
+    <div class= 'span3'>
+      <div class="btn-group right">
+        <button class="btn">
+          <i class="icon-edit"></i>
+        </button>
+        <button class="btn">
+          <i class="icon-trash"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class= 'row'>
+    <div class= 'span4'>
+        <strong> RNC: </strong>
+        <%=@tax_number.rnc%>
+    </div>
+  </div>
+  <div class= 'row'>
+    <div class= 'span4'>
+      <strong> Verificado: </strong>
+      <%=@tax_number.verified%>
+    </div>
+  </div>
+  
+  <hr/>
+</div>

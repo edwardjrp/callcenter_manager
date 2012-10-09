@@ -20,5 +20,6 @@ describe TaxNumber do
     it { should validate_presence_of :rnc }
     it { should validate_uniqueness_of(:rnc).scoped_to(:client_id) }
     it { should belong_to :client}
+    it { should validate_uniqueness_of :client_id }
   end
 end

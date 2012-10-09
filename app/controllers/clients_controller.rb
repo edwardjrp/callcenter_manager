@@ -50,7 +50,7 @@ class ClientsController < ApplicationController
 
 
   def show
-    @client = Client.find(params[:id])
-    @carts = @client.carts.page(params[:page])
+    @client = Client.includes(:carts).find(params[:id])
+    @carts = @client.carts.includes(:cart_products).page(params[:page])
   end
 end

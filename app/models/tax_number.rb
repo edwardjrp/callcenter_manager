@@ -12,6 +12,7 @@
 
 class TaxNumber < ActiveRecord::Base
   validates :rnc, presence: true, uniqueness: { scope: :client_id }
+  validates :client_id, presence: true
   belongs_to :client
   attr_accessible :rnc, :client_id, :verified
 end
