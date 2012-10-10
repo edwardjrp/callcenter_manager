@@ -1,10 +1,24 @@
 <form class="form-horizontal" id='edit_tax_number_form_<%=@tax_number.id%>'  data-tax-number-id='<%=@tax_number.id%>'>
   <fieldset>
     <legend>Datos del número fiscal</legend>
+
     <div class="control-group" id="client_tax_number_rnc_controls_<%=@tax_number.id%>">
       <label class="control-label" for="client_tax_number_rnc_<%=@tax_number.id%>">RNC</label>
       <div class="controls">
         <input type="text" id="client_tax_number_rnc_<%=@tax_number.id%>" name="tax_number[rnc]" value='<%=@tax_number.rnc%>'>
       </div>
     </div>
+
+    <div class="control-group" id="client_tax_number_fiscal_type_controls">
+      <label class="control-label" for="client_tax_number_fiscal_type">Tipo fiscal</label>
+      <div class="controls">
+        <select class="input-xlarge" id="client_tax_number_fiscal_type" name="tax_number[fiscal_type]" type="text" value='<%=@tax_number.fiscal_type%>'>
+          <option value="FinalConsumer">Consumidor Final</option>
+          <option value="3rdParty">Crédito Fiscal</option>
+          <option value="SpecialRegme">Regímenes Especiales</option>
+          <option value="Government">Gubernamental</option>
+        </select>
+      </div>
+    </div>
+
 </div>

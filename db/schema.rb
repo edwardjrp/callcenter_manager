@@ -253,10 +253,11 @@ ActiveRecord::Schema.define(:version => 20121009004557) do
 
   create_table "tax_numbers", :force => true do |t|
     t.string   "rnc"
-    t.boolean  "verified",   :default => false
+    t.string   "fiscal_type"
+    t.boolean  "verified",    :default => false
     t.integer  "client_id"
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
   end
 
   add_index "tax_numbers", ["client_id"], :name => "index_tax_numbers_on_client_id"

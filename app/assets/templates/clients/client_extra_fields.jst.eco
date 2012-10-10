@@ -10,17 +10,32 @@
 		<input class="input-xlarge" id="client_search_idnumber" name="client[idnumber]" type="text">
 	</div>
 </div>
-<div class="control-group" id="client_search_tax_number_controls">
-	<label class="control-label" for="client_search_tax_number">RNC</label>
+
+
+<div class="control-group" id="client_search_tax_number_rnc_controls">
+	<label class="control-label" for="client_search_tax_number_rnc">RNC</label>
 	<div class="controls">
-		<input class="input-xlarge" id="client_search_tax_number" name="client[tax_number][rnc]" type="text">
+		<input class="input-xlarge" id="client_search_tax_number_rnc" name="client[tax_number][rnc]" type="text">
 	</div>
 </div>
+
+<div class="control-group" id="client_search_tax_number_fiscal_type_controls">
+	<label class="control-label" for="client_search_tax_number_fiscal_type">Tipo fiscal</label>
+	<div class="controls">
+		<select class="input-xlarge" id="client_search_tax_number_fiscal_type" name="client[tax_number][fiscal_type]" type="text">
+			<option value="FinalConsumer">Consumidor Final</option>
+			<option value="3rdParty">Crédito Fiscal</option>
+			<option value="SpecialRegme">Regímenes Especiales</option>
+			<option value="Government">Gubernamental</option>
+		</select>
+	</div>
+</div>
+
+
 <div class="control-group" id="client_search_address_city_controls">
 	<label class="control-label" for="client_search_address_city">Ciudad</label>
 	<div class="controls">
 		<input type="hidden" id="client_search_address_city" style=" display: none; ">
-		<!-- <select id="client_search_address_city"></select> -->
 	</div>
 </div>
 <div class="control-group" id="client_search_address_area_controls">

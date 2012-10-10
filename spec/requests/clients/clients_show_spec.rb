@@ -92,6 +92,7 @@ describe "Client::Show" do
         end
 
         it "should add an address to the client" do
+          page.execute_script("$('#utils').hide()")
           within('#addresses_list') { click_link('Agregar') }
 
           within('#add_address_modal')do 

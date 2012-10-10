@@ -1,11 +1,25 @@
 <form class="form-horizontal" id='add_tax_number_form'>
   <fieldset>
     <legend>Número fiscal</legend>
+
     <div class="control-group" id="client_tax_number_rnc_controls">
       <label class="control-label" for="client_tax_number_rnc">RNC</label>
       <div class="controls">
         <input type="text" id="client_tax_number_rnc" name="tax_number[rnc]">
       </div>
     </div>
+
+    <div class="control-group" id="client_tax_number_fiscal_type_controls">
+      <label class="control-label" for="client_tax_number_fiscal_type">Tipo fiscal</label>
+      <div class="controls">
+        <select class="input-xlarge" id="client_tax_number_fiscal_type" name="tax_number[fiscal_type]" type="text">
+          <option value="FinalConsumer">Consumidor Final</option>
+          <option value="3rdParty">Crédito Fiscal</option>
+          <option value="SpecialRegme">Regímenes Especiales</option>
+          <option value="Government">Gubernamental</option>
+        </select>
+      </div>
+    </div>
+
   </div>
 </div>

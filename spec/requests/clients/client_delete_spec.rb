@@ -36,6 +36,7 @@ describe "client delete phone and address" do
       page.should have_css("#address_#{address.id}")
       within("#address_#{address.id}") do 
         page.should have_css('.icon-trash')
+        page.execute_script("$('#utils').hide()")
         find('.icon-trash').click
         page.driver.browser.switch_to.alert.accept
       end
@@ -47,6 +48,7 @@ describe "client delete phone and address" do
       page.should have_css("#phone_#{phone2.id}")
       within("#phone_#{phone2.id}") do 
         page.should have_css('.icon-trash')
+        page.execute_script("$('#utils').hide()")
         find('.icon-trash').click
         page.driver.browser.switch_to.alert.accept
       end

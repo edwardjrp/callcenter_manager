@@ -19,6 +19,12 @@
   </div>
   <div class= 'row'>
     <div class= 'span4'>
+        <strong> Tipo fiscal: </strong>
+        <%=@tax_number.tipo_fiscal%>
+    </div>
+  </div>
+  <div class= 'row'>
+    <div class= 'span4'>
       <strong> Verificado: </strong>
       <a href="#" class="btn btn-info verified"><%=@tax_number.verified%></a>
     </div>

@@ -26,7 +26,8 @@ describe "Client::New" do
       fill_in "client_search_first_name", with: 'Tester'
       fill_in "client_search_last_name", with: 'Last'
       fill_in "client_search_idnumber", with: '00113574388'
-      fill_in "client_search_tax_number", with: '00113574388'
+      fill_in "client_search_tax_number_rnc", with: '00113574388'
+      select "Crédito Fiscal", from: 'client_search_tax_number_fiscal_type'
       fill_in "client_search_email", with: 'test@mail.com'
        # select  city.name, from:  'client_search_address_city'
       page.execute_script "$('#client_search_address_street').val('#{street.id}')"
@@ -39,7 +40,8 @@ describe "Client::New" do
       click_button 'Agregar cliente'
       should have_content('Cliente creado')
       should_not have_css('#client_search_email')
-      should_not have_css('#client_search_tax_number')
+      should_not have_css('#client_search_tax_number_rnc')
+      should_not have_css('#client_search_tax_number_fiscal_type')
     end
 
     it "should create a new client from name and phone alone", js: true do
@@ -135,9 +137,10 @@ describe "Client::New" do
       should have_css('#client_search_address_delivery_instructions')
     end
     
-    it "should show the rcn input", js: true do
+    it "should show the rcn inputs", js: true do
       fill_in "client_search_phone", with: '8095551234'
-      should have_css('#client_search_tax_number')
+      should have_css('#client_search_tax_number_rnc')
+      should have_css('#client_search_tax_number_fiscal_type')
     end
     
     describe "when validating" do

@@ -2,6 +2,7 @@ class CreateTaxNumbers < ActiveRecord::Migration
   def change
     create_table :tax_numbers do |t|
       t.string :rnc
+      t.string :fiscal_type
       t.boolean :verified, :default=> false
       t.integer :client_id
 

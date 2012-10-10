@@ -31,7 +31,7 @@ class Client < ActiveRecord::Base
   accepts_nested_attributes_for :phones
   accepts_nested_attributes_for :tax_numbers, :reject_if => proc { |tax_number| tax_number['rnc'].blank? }
   accepts_nested_attributes_for :addresses, :reject_if => proc { |address| address['street_id'].blank? || address['number'].blank? }
-  attr_accessible :active, :email, :first_name, :idnumber, :last_name, :phones_attributes, :addresses_attributes
+  attr_accessible :active, :email, :first_name, :idnumber, :last_name, :phones_attributes, :addresses_attributes, :tax_numbers_attributes
   self.per_page = 15
 
   def self.find_clients(client)
