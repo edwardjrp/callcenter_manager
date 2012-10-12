@@ -1,8 +1,10 @@
-var Client, async, request, _;
+var Client, async, crypto, request, _;
 
 async = require('async');
 
 request = require('request');
+
+crypto = require('crypto');
 
 _ = require('underscore');
 
@@ -15,7 +17,7 @@ Client = (function() {
     page = data.page;
     return request.get({
       headers: {},
-      uri: "http://localhost:4000/api/users.json?page=" + page
+      uri: "http://localhost:4000/api/users.json?access_token=" + (this.access_token()) + "&page=" + page
     }, function(err, res, res_data) {
       if (err) {
         return respond({
@@ -41,7 +43,7 @@ Client = (function() {
   Client.olo_show = function(data, respond, socket) {
     return request.get({
       headers: {},
-      uri: "http://localhost:4000/api/users/" + data.id + ".json"
+      uri: "http://localhost:4000/api/users/" + data.id + ".json?access_token=" + (this.access_token())
     }, function(err, res, res_data) {
       if (err) {
         return respond({
@@ -67,7 +69,7 @@ Client = (function() {
   Client.olo_with_phone = function(data, respond, socket) {
     return request.get({
       headers: {},
-      uri: "http://localhost:4000/api/users/with_phone.json?phone=" + data.phone + "&ext=" + data.ext
+      uri: "http://localhost:4000/api/users/with_phone.json?access_token=" + (this.access_token()) + "&phone=" + data.phone + "&ext=" + data.ext
     }, function(err, res, res_data) {
       if (err) {
         return respond({
@@ -88,6 +90,14 @@ Client = (function() {
         }
       }
     });
+  };
+
+  Client.access_token = function() {
+    var date;
+    if (date === null || _.isUndefined(date)) {
+      date = new Date();
+    }
+    return crypto.createHash('md5').update("kapiqua-access-" + (date.getDay()) + "-" + (date.getHours())).digest("hex");
   };
 
   return Client;

@@ -1,6 +1,14 @@
 // Place all the styles related to the payments controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-tr.unavailable td{
-    background-color: #FCF8E3;
+#payments {
+  tr.unavailable td{
+      background-color: #FCF8E3;
+      input.checkout_input{
+        width:35px;
+        text-align:center;
+      }
+  }
+
+    
 }

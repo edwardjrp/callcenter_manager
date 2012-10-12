@@ -108,9 +108,8 @@ PulseBridge = (function() {
       language: "en-USA"
     });
     order.addChild(new libxml.Element(doc, 'StoreID', "" + this.storeid));
-    order.addChild(new libxml.Element(doc, 'ServiceMethod', this.fallback_values(action, this.cart.service_method, 'dinein')));
+    order.addChild(new libxml.Element(doc, 'ServiceMethod', 'delivery'));
     order.addChild(new libxml.Element(doc, 'OrderTakeSeconds', '60'));
-    order.addChild(new libxml.Element(doc, 'DeliveryInstructions', 'Edf:;TC:N/A;AP:N/A;D_I.'));
     order_source = new libxml.Element(doc, 'OrderSource');
     order_source.addChild(new libxml.Element(doc, 'OrganizationURI', 'proteus.dominos.com.do'));
     order_source.addChild(new libxml.Element(doc, 'OrderMethod', 'Internet'));
@@ -134,7 +133,7 @@ PulseBridge = (function() {
     customer_address.addChild(new libxml.Element(doc, 'UnitType', 'Apartment').attr({
       "xsi:type": "xsd:string"
     }));
-    customer_address.addChild(new libxml.Element(doc, 'UnitNumber', '999').attr({
+    customer_address.addChild(new libxml.Element(doc, 'UnitNumber', '').attr({
       "xsi:type": "xsd:string"
     }));
     customer.addChild(customer_address);
@@ -155,7 +154,7 @@ PulseBridge = (function() {
       'xsi:nil': "true"
     }));
     customer.addChild(customer_type_info);
-    customer.addChild(new libxml.Element(doc, 'Phone', this.fallback_values(action, (_ref2 = this.cart.client) != null ? (_ref3 = _ref2.phones) != null ? (_ref4 = _ref3.first) != null ? _ref4.number : void 0 : void 0 : void 0, '8095555555')));
+    customer.addChild(new libxml.Element(doc, 'Phone', this.fallback_values(action, (_ref2 = this.cart.client) != null ? (_ref3 = _ref2.phones) != null ? (_ref4 = _ref3.first) != null ? _ref4.number : void 0 : void 0 : void 0, '8095656322')));
     customer.addChild(new libxml.Element(doc, 'Extension', this.fallback_values(action, (_ref5 = this.cart.client) != null ? (_ref6 = _ref5.phones) != null ? (_ref7 = _ref6.first) != null ? _ref7.number : void 0 : void 0 : void 0, '99')));
     customer.addChild(new libxml.Element(doc, 'Email', 'test@mail.com'));
     customer.addChild(new libxml.Element(doc, 'DeliveryInstructions').attr({

@@ -67,9 +67,10 @@ class PulseBridge
     # 1349230038
     order = new libxml.Element(doc,'Order').attr({orderid:"Order##{Date.now()}", currency:"en-USD", language:"en-USA"})
     order.addChild(new libxml.Element(doc,'StoreID', "#{@storeid}" ))   # store @storeid 
-    order.addChild(new libxml.Element(doc,'ServiceMethod', @fallback_values(action, @cart.service_method, 'dinein')))  # service method
+    # order.addChild(new libxml.Element(doc,'ServiceMethod', @fallback_values(action, @cart.service_method, 'delivery')))  # service method
+    order.addChild(new libxml.Element(doc,'ServiceMethod', 'delivery'))  # service method
     order.addChild(new libxml.Element(doc,'OrderTakeSeconds', '60'))
-    order.addChild(new libxml.Element(doc,'DeliveryInstructions', 'Edf:;TC:N/A;AP:N/A;D_I.'))  # delivery instructions
+    # order.addChild(new libxml.Element(doc,'DeliveryInstructions', 'Edf:;TC:N/A;AP:N/A;D_I.'))  # delivery instructions
     #order source
     order_source  = new libxml.Element(doc,'OrderSource')
     order_source.addChild(new libxml.Element(doc,'OrganizationURI', 'proteus.dominos.com.do'))
@@ -90,7 +91,7 @@ class PulseBridge
     customer_address.addChild(new libxml.Element(doc,'AddressLine3'))
     customer_address.addChild(new libxml.Element(doc,'AddressLine4'))
     customer_address.addChild(new libxml.Element(doc,'UnitType', 'Apartment').attr({"xsi:type":"xsd:string"}))
-    customer_address.addChild(new libxml.Element(doc,'UnitNumber', '999').attr({"xsi:type":"xsd:string"}))
+    customer_address.addChild(new libxml.Element(doc,'UnitNumber', '').attr({"xsi:type":"xsd:string"}))
     customer.addChild(customer_address)
      
     customer_name = new libxml.Element(doc,'Name').attr({ 'type':"Name-US"})
@@ -104,7 +105,7 @@ class PulseBridge
     customer_type_info.addChild(new libxml.Element(doc,'Department').attr('xsi:nil':"true"))
     customer.addChild(customer_type_info)
      
-    customer.addChild(new libxml.Element(doc,'Phone', @fallback_values(action, @cart.client?.phones?.first?.number,'8095555555')))  # user current phone
+    customer.addChild(new libxml.Element(doc,'Phone', @fallback_values(action, @cart.client?.phones?.first?.number,'8095656322')))  # user current phone
     customer.addChild(new libxml.Element(doc,'Extension',@fallback_values(action, @cart.client?.phones?.first?.number,'99'))) # user current extention
     customer.addChild(new libxml.Element(doc,'Email', 'test@mail.com')) # user current extention - have to check olo for fallback value
     customer.addChild(new libxml.Element(doc,'DeliveryInstructions').attr('xsi:nil':"true"))

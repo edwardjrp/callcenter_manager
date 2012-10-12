@@ -21,6 +21,7 @@ class Admin::SettingsController < ApplicationController
       settings['price_store_ip'] = Kapiqua.price_store_ip || Kapiqua.defaults[:price_store_ip]
       settings['price_store_id'] = Kapiqua.price_store_id || Kapiqua.defaults[:price_store_id]
       settings['pulse_port'] = Kapiqua.pulse_port || Kapiqua.defaults[:pulse_port]
+      settings['olo_url'] = Kapiqua.olo_url || Kapiqua.defaults[:olo_url]
       settings
     end
 end

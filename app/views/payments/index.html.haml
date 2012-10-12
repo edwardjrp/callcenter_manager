@@ -3,6 +3,8 @@
 #actions
   =link_to '<i class="icon-arrow-left"></i> Atras'.html_safe, builder_path, class: 'btn bottom-margin-1'
   =link_to '<i class="icon-trash"></i> Anular'.html_safe, '#', class: 'btn bottom-margin-1'
+  =link_to '<i class="icon-gift"></i> Descuento'.html_safe, '#', class: 'btn bottom-margin-1'
+  =link_to '<i class="icon-briefcase"></i> Exoneración'.html_safe, '#', class: 'btn bottom-margin-1'
   =link_to '<i class="icon-share"></i> Dejar incompleta'.html_safe, '#', class: 'btn bottom-margin-1'
 .row
   .span4
@@ -26,6 +28,14 @@
         .span4
           %strong Correo:
           = @cart.client.email
+
+      .row
+        .span4
+          %strong Números fiscales disponibles:
+          %select
+            = @cart.client.tax_numbers.each do |tax_number|
+              %option{value: ''} Seleccione un RNC
+              %option{value: tax_number.id}= "#{tax_number.rnc} - #{tax_number.tipo_fiscal}"
     .well#phones_list
       .row
         .span4        
@@ -95,7 +105,7 @@
           %strong Agente:
           =@cart.user.full_name
         .span3
-          %strong Inicio de toma de la orden:
+          %strong Orden iniciada en:
           =l @cart.started_on, format: :short
       .row
         .span3#checkout_cart_net
@@ -120,11 +130,26 @@
           .alert.span7
             %strong advertencia 
             Algunos productos no están disponible en esta tienda
+      - if @cart.coupons.count.nonzero?
+        .row
+          #client_side_coupons_list
+            %table.table.table-striped.table-bordered.table-condensed.span8
+              %thead
+                %th Codigo
+                %th Descripcion Generada
+                %th Precio minimo
+                %th
+              %tbody#quick_coupons
+                - @cart.coupons.each do |coupon|
+                  %tr
+                    %td.span1= coupon.code
+                    %td= coupon.generated_description
+                    %td= coupon.try(:minimum_price)
+                    %td.span1= link_to 'Remover', '#', class: 'btn'
       .row{:data=>{'cart-id'=> @cart.id}, :id=>dom_id(@cart)}
         %table.table.table-striped.table-bordered.table-condensed.span8
           %thead
             %tr
-              %th Disponibilidad
               %th Cantidad
               %th product
               %th Optiones
@@ -133,8 +158,7 @@
           %tbody
             - @cart.cart_products.each do |cart_product|
               %tr{id: dom_id(cart_product), class: availability_class(cart_product.available_in_store(@cart.store))}
-                %td= availability(cart_product.available_in_store(@cart.store))
-                %td= cart_product.quantity
+                %td.span1=text_field_tag 'cart_product[quantity]', cart_product.quantity, class: 'checkout_input'
                 %td= cart_product.product.productname
                 %td= cart_product.product.niffty_options
                 %td.item_price
@@ -142,6 +166,6 @@
                     = number_to_currency(cart_product.priced_at)
                   - else
                     pendiente
-                %td
+                %td.span1
                   =link_to 'Remover', '#', class: 'btn'
       %hr 

@@ -40,9 +40,7 @@ class User < ActiveRecord::Base
     "#{first_name} #{last_name}"
   end
   
-  def generate_auth_token
-    self.auth_token = SecureRandom.hex(10)
-  end
+ 
 
   def roles=(sent_roles)
     self.role_mask = (normalize_roles_type(sent_roles) & self.class.valid_roles).map { |r| 2**self.class.valid_roles.index(r) }.sum
@@ -64,6 +62,10 @@ class User < ActiveRecord::Base
 
 
   private 
+
+  def generate_auth_token
+    self.auth_token = SecureRandom.hex(10)
+  end
 
   def normalize_roles_type(sent_roles)
     normal_roles = []

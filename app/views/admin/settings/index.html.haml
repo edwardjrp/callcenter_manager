@@ -7,6 +7,7 @@
     = f.input :price_store_ip, label: 'Ip tienda de precios'
     = f.input :price_store_id, label: 'Id tienda de precios'
     = f.input :pulse_port  , label: 'Puerto de escucha en pulse'
+    = f.input :olo_url , label: 'Ruta a olo para la importación'
     .form-actions
       =f.submit 'Guardar', class: 'btn btn-primary'
       = link_to 'Cancelar', admin_stores_path, class: 'btn'
