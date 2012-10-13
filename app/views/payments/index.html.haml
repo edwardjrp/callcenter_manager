@@ -32,13 +32,19 @@
           %strong Correo:
           = @cart.client.email
       - if @cart.client.tax_numbers.count.nonzero?
+        %hr
         .row
           .span4
-            %strong Números fiscales disponibles:
+            %h4.bottom-margin-1 RNC disponibles
             %select
+              %option{value: ''} Seleccione un RNC
               = @cart.client.tax_numbers.each do |tax_number|
-                %option{value: ''} Seleccione un RNC
                 %option{value: tax_number.id}= "#{tax_number.rnc} - #{tax_number.tipo_fiscal}"
+      %hr
+      .row
+        .span
+          %h4.bottom-margin-1 Opciones de pago
+          =render 'payment_setup'
     .well#phones_list
       .row
         .span4        
