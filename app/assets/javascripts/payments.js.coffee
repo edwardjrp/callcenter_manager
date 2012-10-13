@@ -108,6 +108,22 @@ jQuery ->
         error: (response) ->
           $("<div class='purr'>#{response.responseText}<div>").purr()
 
+    socket.on 'cart:empty', (data)->
+      window.location = '/builder'
+
+    $('.checkout_cart_remove_item').on 'click', (event)->
+      event.preventDefault()
+      target = $(event.currentTarget)
+      table = target.closest('table')
+      $('#actions').find('#place_order_button').remove()
+      socket.emit 'cart_products:delete', { id: target.closest('tr').data('cart-product-id') }, (error, cart_product_id) ->
+        if error
+          $("<div class='purr'>No se puedo remover el elemento<div>").purr()
+        else
+          $("#cart_product_#{cart_product_id}").remove()
+          table.find('td').effect('highlight', { color: '#1175AE'})
+        
+
     $('.checkout_input').on 'focus', (event)->
       target = $(event.currentTarget)
       target.css('background-color','#F78181')
@@ -127,4 +143,4 @@ jQuery ->
         else
           target.data('orig', cart_product.quantity)
           target.css('background-color','white')
-          target.effect('highlight')
+          target.closest('tr').find('td').effect('highlight', { color: '#1175AE'})

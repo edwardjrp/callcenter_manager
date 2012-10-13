@@ -34,7 +34,6 @@ CartProduct.updateItem =  (data, respond, socket, trigger_pricing) ->
             attributes['quantity'] = Number(data.quantity) if data? and data.quantity?
             attributes['options'] = data.options if data? and data.options?
             attributes['updated_at'] = new Date()
-            console.log attributes
             cart_product.updateAttributes attributes, (cp_update_err, updated_cart_product)->
               if cp_update_err?
                  respond(cp_update_err)
@@ -45,6 +44,7 @@ CartProduct.updateItem =  (data, respond, socket, trigger_pricing) ->
                   if trigger_pricing? and trigger_pricing == true
                     updated_cart_product.cart (err, cart_to_price)->
                       if err
+                        console.error err.stack
                         socket.emit 'cart:pricing:error', 'No se pudo leer la orden actual'
                       else
                         cart_to_price.price(socket)
@@ -61,7 +61,15 @@ CartProduct.removeItem = (data, respond, socket) ->
               respond(del_err)
             else
               respond(del_err, data.id)
-              cart.price(socket)
+              cart.cart_products {}, (cp_list_err, cart_products) ->
+                if cp_list_err
+                  console.erro cp_list_err.stack
+                else
+                  if _.isEmpty(cart_products)
+                    socket.emit 'cart:empty', {cart: cart}
+                  else
+                    cart.price(socket)
+
               
 CartProduct.prototype.simplified = ->
   JSON.parse(JSON.stringify(this))

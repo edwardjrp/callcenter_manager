@@ -59,7 +59,6 @@ CartProduct.updateItem = function(data, respond, socket, trigger_pricing) {
             attributes['options'] = data.options;
           }
           attributes['updated_at'] = new Date();
-          console.log(attributes);
           return cart_product.updateAttributes(attributes, function(cp_update_err, updated_cart_product) {
             if (cp_update_err != null) {
               return respond(cp_update_err);
@@ -69,6 +68,7 @@ CartProduct.updateItem = function(data, respond, socket, trigger_pricing) {
               if ((trigger_pricing != null) && trigger_pricing === true) {
                 return updated_cart_product.cart(function(err, cart_to_price) {
                   if (err) {
+                    console.error(err.stack);
                     return socket.emit('cart:pricing:error', 'No se pudo leer la orden actual');
                   } else {
                     return cart_to_price.price(socket);
@@ -95,7 +95,19 @@ CartProduct.removeItem = function(data, respond, socket) {
               return respond(del_err);
             } else {
               respond(del_err, data.id);
-              return cart.price(socket);
+              return cart.cart_products({}, function(cp_list_err, cart_products) {
+                if (cp_list_err) {
+                  return console.erro(cp_list_err.stack);
+                } else {
+                  if (_.isEmpty(cart_products)) {
+                    return socket.emit('cart:empty', {
+                      cart: cart
+                    });
+                  } else {
+                    return cart.price(socket);
+                  }
+                }
+              });
             }
           });
         });
