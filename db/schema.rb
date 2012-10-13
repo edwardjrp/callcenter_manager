@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121009004557) do
+ActiveRecord::Schema.define(:version => 20121013162321) do
 
   create_table "addresses", :force => true do |t|
     t.integer  "client_id"
@@ -89,6 +89,7 @@ ActiveRecord::Schema.define(:version => 20121009004557) do
     t.datetime "placed_at"
     t.boolean  "exonerated"
     t.datetime "started_on"
+    t.integer  "exoneration_authorizer"
   end
 
   add_index "carts", ["client_id"], :name => "index_carts_on_client_id"

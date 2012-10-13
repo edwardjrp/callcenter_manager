@@ -39,6 +39,7 @@
 #  placed_at                 :datetime
 #  exonerated                :boolean
 #  started_on                :datetime
+#  exoneration_authorizer    :integer
 #
 
 require 'csv'
@@ -106,6 +107,22 @@ class Cart < ActiveRecord::Base
     errors.empty?
   end
 
+
+  def exonerate(username, password)
+    admin = User.find_by_username(username)
+    if admin 
+      if admin.admin? && admin.try(:authenticate, password)
+        self.exoneration_authorizer = admin.id
+        self.exonerated = true
+        self.save         
+      else
+        self.errors.add(:base, 'El usuario provisto no tiene suficientes provilegios')
+      end
+    else
+      self.errors.add(:base, 'No se encontro el usuario provisto para la autorización')
+    end
+    self.errors.empty?
+  end
 
   def reset_for_new_client!
     self.started_on = Time.now
