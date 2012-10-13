@@ -6,7 +6,8 @@
   =render 'abandon'
   =link_to '<i class="icon-gift"></i> Descuento'.html_safe, '#', class: 'btn bottom-margin-1', id: 'discount_cart'
   = render 'discount'
-  =link_to '<i class="icon-briefcase"></i> Exoneración'.html_safe, '#', class: 'btn bottom-margin-1'
+  =link_to '<i class="icon-briefcase"></i> Exoneración'.html_safe, '#', class: 'btn bottom-margin-1', id: 'exonerate_cart'
+  = render 'exonerate'
   =link_to '<i class="icon-share"></i> Dejar incompleta'.html_safe, '#', class: 'btn bottom-margin-1'
 .row
   .span4
@@ -105,31 +106,35 @@
       .row
         .span3
           %strong Agente:
-          =@cart.user.full_name
+          = @cart.user.full_name
         .span3
           %strong Orden iniciada en:
-          =l @cart.started_on, format: :short
+          = l @cart.started_on, format: :short
       .row
         .span3#checkout_cart_net
           %strong Monto neto:
-          =number_to_currency(@cart.net_amount) || 'N/A'
+          = number_to_currency(@cart.net_amount) || 'N/A'
         .span3
           %strong Modo de servicio:
-          =@cart.service_method || 'N/A'
+          = @cart.service_method || 'N/A'
       .row
         .span3#checkout_cart_tax
           %strong Impuestos:
-          =number_to_currency(@cart.tax_amount) || 'N/A'
+          = number_to_currency(@cart.tax_amount) || 'N/A'
         .span3
           %strong Tienda:
-          =@cart.store.name
+          = @cart.store.name
       .row
         .span3#checkout_cart_total
           %strong Monto de la orden:
-          =number_to_currency(@cart.payment_amount) || 'N/A'
+          = number_to_currency(@cart.payment_amount) || 'N/A'
         .span3#checkout_cart_discount
           %strong Descuento:
-          =number_to_currency(@cart.discount) || '0'
+          = number_to_currency(@cart.discount) || '0'
+      .row
+        .span3#checkout_cart_exoneration
+          %strong Exonerado:
+          = @cart.exonerated || 'N/A'
       - unless @cart.cart_products.all? { | cart_product | cart_product.available_in_store(@cart.store) }
         .row
           .alert.span7

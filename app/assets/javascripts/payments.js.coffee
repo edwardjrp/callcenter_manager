@@ -38,6 +38,32 @@ jQuery ->
         $('#place_order_button').remove() if $('#place_order_button').size() > 0
         $("<div class='purr'>Esta order fue rechazada por Pulse, verifique los requisitos. La tienda puede estar cerrada.<div>").purr()
 
+    $('#exonerate_cart').on 'click', (event)->
+      event.preventDefault()
+      target = $(event.currentTarget)
+      $('#exonerate_cart_modal').modal('show')
+
+
+    $('#exonerate_cart_modal_button').on 'click', (event)->
+      event.preventDefault()
+      target = $(event.currentTarget)
+      form = $('#exonerate_cart_form')
+      $.ajax
+        type: 'POST'
+        url: form.attr('action')
+        datatype: 'JSON'
+        data: form.serialize()
+        beforeSend: (xhr) ->
+          xhr.setRequestHeader("Accept", "application/json")
+        success: (cart) ->
+          console.log cart
+          $('#exonerate_cart_modal').modal('hide')
+          $('#checkout_cart_exoneration').html("<strong>Exonerado:</strong> #{cart.exonerated}")
+        error: (response) ->
+          $("<div class='purr'>#{response.responseText}<div>").purr()
+
+
+
     $('#discount_cart').on 'click', (event)->
       event.preventDefault()
       target = $(event.currentTarget)

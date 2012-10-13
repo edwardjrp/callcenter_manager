@@ -6,7 +6,9 @@
     = form_tag :abandon_carts, class: 'form-horizontal', id: 'abandon_cart_form' do
       %fieldset
         %legend Seleccione una razón
-        = select_tag 'cart[reason_id]', options_for_select( Reason.all.map{|reason| [ reason.description, reason.id] } )
+        .control-group
+          .controls
+            = select_tag 'cart[reason_id]', options_for_select( Reason.all.map{|reason| [ reason.description, reason.id] } )
 
   .modal-footer
     %a.btn{"data-dismiss" => "modal", :href => "#"} Cerrar

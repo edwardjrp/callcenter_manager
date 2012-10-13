@@ -46,6 +46,8 @@ class CartsController < ApplicationController
       end
     end
   end
+
+
   
   # "discount"=>{"username"=>"admin", "password"=>"[FILTERED]", "amount"=>"200"}}
   def discount
@@ -58,6 +60,18 @@ class CartsController < ApplicationController
       end
     end
   end
+
+  def exonerate
+    @cart = current_cart
+    respond_to do |format|
+      if @cart.exonerate(params[:exoneration][:username],params[:exoneration][:password])
+        format.json{ render json: @cart }
+      else
+        format.json { render json: @cart.errors.full_messages.to_sentence , :status => 422}
+      end
+    end
+  end
+
   
   def service_method
     @cart = current_cart

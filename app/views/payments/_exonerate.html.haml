@@ -1,0 +1,21 @@
+.modal.hide{id: "exonerate_cart_modal"}
+  .modal-header
+    %button.close{"data-dismiss" => "modal", :type => "button"} ×
+    %h3="Exonerar"
+  .modal-body
+    = form_tag :exonerate_carts, class: 'form-horizontal', id: 'exonerate_cart_form' do
+      %fieldset
+        %legend Autorizar exoneración
+        .control-group
+          =label_tag'exoneration[username]','Username' , class: 'control-label'
+          .controls
+            = text_field_tag 'exoneration[username]'
+          .control-group
+          =label_tag'exoneration[password]','Contraseña' , class: 'control-label'
+          .controls
+            = password_field_tag 'exoneration[password]'
+        
+
+  .modal-footer
+    %a.btn{"data-dismiss" => "modal", :href => "#"} Cerrar
+    %a.btn.btn-primary{:href => "#" , :id=>"exonerate_cart_modal_button"} Exonerar
