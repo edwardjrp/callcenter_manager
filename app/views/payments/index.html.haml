@@ -2,7 +2,8 @@
 
 #actions
   =link_to '<i class="icon-arrow-left"></i> Atras'.html_safe, builder_path, class: 'btn bottom-margin-1'
-  =link_to '<i class="icon-trash"></i> Anular'.html_safe, '#', class: 'btn bottom-margin-1'
+  =link_to '<i class="icon-trash"></i> Anular'.html_safe, '#', class: 'btn bottom-margin-1', id: 'abandon_cart'
+  =render 'abandon'
   =link_to '<i class="icon-gift"></i> Descuento'.html_safe, '#', class: 'btn bottom-margin-1'
   =link_to '<i class="icon-briefcase"></i> Exoneración'.html_safe, '#', class: 'btn bottom-margin-1'
   =link_to '<i class="icon-share"></i> Dejar incompleta'.html_safe, '#', class: 'btn bottom-margin-1'
@@ -28,14 +29,14 @@
         .span4
           %strong Correo:
           = @cart.client.email
-
-      .row
-        .span4
-          %strong Números fiscales disponibles:
-          %select
-            = @cart.client.tax_numbers.each do |tax_number|
-              %option{value: ''} Seleccione un RNC
-              %option{value: tax_number.id}= "#{tax_number.rnc} - #{tax_number.tipo_fiscal}"
+      - if @cart.client.tax_numbers.count.nonzero?
+        .row
+          .span4
+            %strong Números fiscales disponibles:
+            %select
+              = @cart.client.tax_numbers.each do |tax_number|
+                %option{value: ''} Seleccione un RNC
+                %option{value: tax_number.id}= "#{tax_number.rnc} - #{tax_number.tipo_fiscal}"
     .well#phones_list
       .row
         .span4        

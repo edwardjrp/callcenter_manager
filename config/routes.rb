@@ -28,6 +28,7 @@ Kapiqua25::Application.routes.draw do
       post 'service_method'
       post 'current_store'
       post 'discount'
+      post 'abandon'
       get 'current'
     end
     member do 

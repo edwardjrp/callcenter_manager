@@ -88,27 +88,6 @@ describe Cart do
 
   end
 
-  # describe '#clear_all' do
-  #   let!(:client){ create :client }
-  #   let!(:store){ create :store }
-  #   let!(:user){ create :user, :operator }
-  #   let!(:cart){ create :cart, client: client, payment_amount: 100.00, service_method: 'PickUp', store: store, user: user}
-
-  #   it "should reset value to nil or zero " do
-  #     cart.client.should == client
-  #     cart.payment_amount.should == 100.00
-  #     cart.service_method.should == 'PickUp'
-  #     cart.store.should == store
-  #     cart.clear_all
-  #     cart.reload
-  #     art.client.should be_nil
-  #     cart.payment_amount.should == 0
-  #     cart.service_method.should == be_blank
-  #     cart.store.should == be_nil
-  #     cart.user.should == user
-  #   end
-  # end
-
   describe '#clear_client' do
 
     let!(:client) { create :client }
@@ -161,6 +140,12 @@ describe Cart do
 
   end
 
+  describe '.service_methods' do
+    it "should return the list of pulse service_methods " do
+      Cart.service_methods.should == %w( delivery pickup dinein )
+    end
+  end
+
   describe '#clear_discount' do
     let!(:user){ create :user, :operator }
     let!(:admin){ create :user, :admin }
@@ -177,6 +162,35 @@ describe Cart do
 
   end
 
+  describe '#placeable?' do
+    let!(:cart_product) { create :cart_product }
+    let!(:cart) { cart_product.cart }
+
+    it 'should return true if all requirements are met' do
+      cart.should be_placeable
+    end
+
+    it 'should not be placeable if store is missing' do
+      cart.store = nil
+      cart.should_not be_placeable
+    end
+
+    it 'should not be placeable if it has no products' do
+      cart.cart_products.each { |cp| cp.destroy }
+      cart.should_not be_placeable
+    end
+
+    it 'should not be placeable if service_method is missing' do
+      cart.service_method = ''
+      cart.should_not be_placeable
+    end
+
+    it 'should not be placeable if the client is missing' do
+      cart.client = nil
+      cart.should_not be_placeable
+    end
+  end
+
   describe '#clear_store' do
     let!(:store){ create :store }
     let!(:user){ create :user, :operator }
@@ -191,6 +205,35 @@ describe Cart do
     end
 
   end
+
+  describe '#delivery?' do
+    it "should return true if the service_method is delivery" do
+      build(:cart, service_method: 'delivery').should be_delivery
+    end
+  end
+
+  describe '#pickup?' do
+    it "should return true if the service_method is pickup" do
+      build(:cart, service_method: 'pickup').should be_pickup
+    end
+  end
+
+  describe '#dinein?' do
+    it "should return true if the service_method is dinein" do
+      build(:cart, service_method: 'dinein').should be_dinein
+    end
+  end
+
+
+  describe '#communication_fail!' do
+    it 'should set the cart to critical if communication has failted' do
+      cart = create(:cart)
+      cart.should_not be_in('criticos')
+      cart.communication_fail!
+      cart.should be_in('criticos')
+    end
+  end
+
 
   describe '#clear_prices' do
     let!(:user){ create :user, :operator }

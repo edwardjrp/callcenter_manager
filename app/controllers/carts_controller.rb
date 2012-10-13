@@ -4,12 +4,12 @@ class CartsController < ApplicationController
     @client = Client.find_by_id(params[:client_id])
     respond_to do |format|
       if @client.present?
-         @cart  = @client.carts.incomplete.latest.first || current_cart
+         @cart  = @client.carts.incomplete.available.latest.first || current_cart
          session[:current_cart_id] = @cart.id unless @cart.id == current_cart.id
          @cart.user = current_user unless @cart.user == current_user
          @cart.client = @client unless @cart.client == @client
          @cart.reset_for_new_client!
-         @cart.save
+         @cart.save!
          format.json{render :json => @cart.as_json(only: [:service_method, :store_id], include: [client: {only: [:id, :first_name, :last_name]}])}
       else
         format.json{render :nothing =>true, :status => 422}
@@ -30,6 +30,19 @@ class CartsController < ApplicationController
       cart_reset
       respond_to do | format|
         format.json{ render :nothing =>true, :status => 200 }
+      end
+    end
+  end
+
+  def abandon
+    @cart = current_cart
+    @cart.reason = Reason.find(params[:cart][:reason_id])
+    respond_to do |format|
+      if @cart.save
+        flash['success'] = "Orden : #{@cart.id} Anulada"
+        format.json { render json: @cart, :status => 200 }
+      else
+        format.json { render json: @cart.errors.full_messages.to_sentence , :status => 422}
       end
     end
   end

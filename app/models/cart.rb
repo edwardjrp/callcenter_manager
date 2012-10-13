@@ -46,6 +46,8 @@ class Cart < ActiveRecord::Base
   # attr_accessible :title, :body
   scope :completed, where(:completed=>true)
   scope :incomplete, where(:completed=>false)
+  scope :abandoned, where('reason_id IS NOT NULL')
+  scope :available, where('reason_id IS NULL')
   scope :latest, order('created_at DESC')
   belongs_to :user
   belongs_to :client
@@ -73,7 +75,7 @@ class Cart < ActiveRecord::Base
   def placeable?
     errors.add :base, 'No ha seleccionado una tienda' if self.store.nil?
     errors.add :base, 'No ha seleccionado un modo de servicio' if self.service_method.blank?
-    errors.add :base, 'No ha introducido productos a la orden' if self.cart_products.empty?
+    errors.add :base, 'No ha introducido productos a la orden' if self.cart_products.count.zero?
     if self.client.nil?
       errors.add :base, 'No ha seleccionado un cliente'
     else
@@ -113,7 +115,7 @@ class Cart < ActiveRecord::Base
     self.save!
   end
 
-
+  # no test - perform in node
   def take_time
     if self.completed?
       complete_on - started_on if complete_on && started_on
@@ -141,7 +143,7 @@ class Cart < ActiveRecord::Base
     self.service_method.present? and (self.service_method == self.class.service_methods[1])
   end
   
-  def dine_in?
+  def dinein?
     self.service_method.present? and (self.service_method == self.class.service_methods[2])
   end
   
@@ -150,7 +152,7 @@ class Cart < ActiveRecord::Base
      ['nuevos', 'archivados', 'eliminados', 'criticos']
   end
   
-
+  # move to report module that take an active record relation
   def self.detailed_report
     CSV.generate do |csv|
       csv << ['No. Orden', 'Tienda', 'Nuevo cliente', 'Cliente', 'Fecha', 'Modo de servicio', 'Agente', 'Tiempo de toma', 'Monto de la order', 'Pago efectivo', 'Tipo de factura', 'Estado en pulse']

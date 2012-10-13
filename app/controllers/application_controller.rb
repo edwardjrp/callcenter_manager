@@ -29,8 +29,8 @@ class ApplicationController < ActionController::Base
 
    def current_cart
      if user_signed_in? and !current_user.is?(:admin)
-       if  session[:current_cart_id] && current_user.carts.exists?(session[:current_cart_id]) && !current_user.carts.find(session[:current_cart_id]).completed?
-          cart =  current_user.carts.find(session[:current_cart_id])
+       if  session[:current_cart_id] && current_user.carts.available.incomplete.exists?(session[:current_cart_id])
+          cart =  current_user.carts.available.incomplete.find(session[:current_cart_id])
        else
           cart = current_user.carts.create
           session[:current_cart_id] = cart.id

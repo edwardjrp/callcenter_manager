@@ -37,3 +37,24 @@ jQuery ->
       else
         $('#place_order_button').remove() if $('#place_order_button').size() > 0
         $("<div class='purr'>Esta order fue rechazada por Pulse, verifique los requisitos. La tienda puede estar cerrada.<div>").purr()
+
+    $('#abandon_cart').on 'click', (event)->
+      event.preventDefault()
+      target = $(event.currentTarget)
+      $('#abandon_cart_modal').modal('show')
+
+    $('#abandon_cart_modal_button').on 'click', (event)->
+      event.preventDefault()
+      target = $(event.currentTarget)
+      form = $('#abandon_cart_form')
+      $.ajax
+        type: 'POST'
+        url: form.attr('action')
+        datatype: 'JSON'
+        data: form.serialize()
+        beforeSend: (xhr) ->
+          xhr.setRequestHeader("Accept", "application/json")
+        success: (response) ->
+          window.location = '/'
+        error: (response) ->
+          $("<div class='purr'>#{response.responseText}<div>").purr()
