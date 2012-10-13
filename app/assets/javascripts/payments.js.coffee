@@ -108,6 +108,14 @@ jQuery ->
         error: (response) ->
           $("<div class='purr'>#{response.responseText}<div>").purr()
 
+    $('#cash_payment').on 'click', (event)->
+      $('#creditcard_number').addClass('hidden')
+      $('#creditcard_approval').addClass('hidden')
+
+    $('#credit_payment').on 'click', (event)->
+      $('#creditcard_number').removeClass('hidden')
+      $('#creditcard_approval').removeClass('hidden')
+
     socket.on 'cart:empty', (data)->
       window.location = '/builder'
 

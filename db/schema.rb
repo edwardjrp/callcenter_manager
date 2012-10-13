@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121013162321) do
+ActiveRecord::Schema.define(:version => 20121013233841) do
 
   create_table "addresses", :force => true do |t|
     t.integer  "client_id"
@@ -56,7 +56,7 @@ ActiveRecord::Schema.define(:version => 20121013162321) do
   create_table "carts", :force => true do |t|
     t.integer  "user_id"
     t.integer  "client_id"
-    t.boolean  "communication_failed",      :default => false
+    t.boolean  "communication_failed",        :default => false
     t.string   "status_text"
     t.integer  "store_id"
     t.string   "store_order_id"
@@ -74,15 +74,15 @@ ActiveRecord::Schema.define(:version => 20121013162321) do
     t.boolean  "can_place_order"
     t.text     "delivery_instructions"
     t.string   "payment_type"
-    t.string   "credit_cart_approval_name"
+    t.string   "credit_cart_approval_number"
     t.string   "fiscal_number"
     t.string   "fiscal_type"
     t.string   "company_name"
     t.decimal  "discount"
     t.integer  "discount_auth_id"
-    t.boolean  "completed",                 :default => false
-    t.datetime "created_at",                                   :null => false
-    t.datetime "updated_at",                                   :null => false
+    t.boolean  "completed",                   :default => false
+    t.datetime "created_at",                                     :null => false
+    t.datetime "updated_at",                                     :null => false
     t.integer  "message_mask"
     t.integer  "reason_id"
     t.datetime "complete_on"
