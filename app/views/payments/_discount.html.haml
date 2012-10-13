@@ -1,0 +1,24 @@
+.modal.hide{id: "discount_cart_modal"}
+  .modal-header
+    %button.close{"data-dismiss" => "modal", :type => "button"} ×
+    %h3="Descuento"
+  .modal-body
+    = form_tag :discount_carts, class: 'form-horizontal', id: 'discount_cart_form' do
+      %fieldset
+        %legend Autorizar Descuento
+        .control-group
+          =label_tag'discount[username]','Username' , class: 'control-label'
+          .controls
+            = text_field_tag 'discount[username]'
+          .control-group
+          =label_tag'discount[password]','Contraseña' , class: 'control-label'
+          .controls
+            = password_field_tag 'discount[password]'
+          .control-group
+          =label_tag'discount[amount]','Monto' , class: 'control-label'
+          .controls
+            %input{type:"number", min: '0', id:"discount_amount", name:"discount[amount]", value: '0'}
+
+  .modal-footer
+    %a.btn{"data-dismiss" => "modal", :href => "#"} Cerrar
+    %a.btn.btn-primary{:href => "#" , :id=>"discount_cart_modal_button"} Descontar

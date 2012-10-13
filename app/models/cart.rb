@@ -78,7 +78,7 @@ class Cart < ActiveRecord::Base
       if admin.admin? && admin.try(:authenticate, password)
         if self.payment_amount.present? && (self.payment_amount - discount_amount.to_d ) > 0
           self.discount_auth_id = admin.id
-          self.payment_amount = (self.payment_amount - discount_amount.to_d)
+          self.discount = discount_amount.to_d
           self.save
         else
           self.errors.add(:base, 'El el monto a descontar no es valido')  

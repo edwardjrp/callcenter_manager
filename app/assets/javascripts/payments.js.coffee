@@ -25,11 +25,11 @@ jQuery ->
     $('.checkout_input').restric('alpha').restric('spaces')
     socket.emit 'cart:price', $('#checkout_cart').data('id')
     socket.on 'cart:priced', (data)->
-      $('#checkout_cart_net').html("<strong> Monto neto: </strong>RD$ #{Number(data.order_reply.netamount).toFixed(2)}")
-      $('#checkout_cart_tax').html("<strong>  Impuestos: </strong>RD$ #{Number(data.order_reply.taxamount).toFixed(2)}")
-      $('#checkout_cart_total').html("<strong> Monto de la orden: </strong>RD$ #{Number(data.order_reply.payment_amount).toFixed(2)}")
+      $('#checkout_cart_net').html("<strong> Monto neto: </strong> #{window.to_money(data.order_reply.netamount)}")
+      $('#checkout_cart_tax').html("<strong>  Impuestos: </strong> #{window.to_money(data.order_reply.taxamount)}")
+      $('#checkout_cart_total').html("<strong> Monto de la orden: </strong> #{window.to_money(data.order_reply.payment_amount)}")
       _.each data.items, (item)->
-        $("#cart_product_#{item.cart_product_id}").find('.item_price').html("RD$ #{Number(item.priced_at).toFixed(2)}")
+        $("#cart_product_#{item.cart_product_id}").find('.item_price').html(window.to_money(item.priced_at))
       # console.log data.order_reply
       if data.order_reply.can_place == 'Yes'
         $('#actions').append('<a href="#" id="place_order_button" class="btn bottom-margin-1"><i class="icon-shopping-cart"></i> Colocar orden</a>') unless $('#place_order_button').size() > 0
@@ -37,6 +37,29 @@ jQuery ->
       else
         $('#place_order_button').remove() if $('#place_order_button').size() > 0
         $("<div class='purr'>Esta order fue rechazada por Pulse, verifique los requisitos. La tienda puede estar cerrada.<div>").purr()
+
+    $('#discount_cart').on 'click', (event)->
+      event.preventDefault()
+      target = $(event.currentTarget)
+      $('#discount_cart_modal').modal('show')
+
+    $('#discount_cart_modal_button').on 'click', (event)->
+      event.preventDefault()
+      target = $(event.currentTarget)
+      form = $('#discount_cart_form')
+      $.ajax
+        type: 'POST'
+        url: form.attr('action')
+        datatype: 'JSON'
+        data: form.serialize()
+        beforeSend: (xhr) ->
+          xhr.setRequestHeader("Accept", "application/json")
+        success: (cart) ->
+          $('#discount_cart_modal').modal('hide')
+          $('#checkout_cart_discount').html("<strong>Descuento:</strong> RD$ #{(Number(cart.discount)).toFixed(2)}")
+        error: (response) ->
+          $("<div class='purr'>#{response.responseText}<div>").purr()
+
 
     $('#abandon_cart').on 'click', (event)->
       event.preventDefault()

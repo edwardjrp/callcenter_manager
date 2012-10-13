@@ -98,7 +98,8 @@ describe Cart do
     it 'should allow a discount if the user is and authenticated admin' do
       cart.perform_discount(admin.username, 'please', 40.0)
       cart.reload
-      cart.payment_amount.round.should == 105.0
+      cart.payment_amount.round.should == 145.0
+      cart.discount.should == 40
       cart.discount_auth_id.should == admin.id
     end
 

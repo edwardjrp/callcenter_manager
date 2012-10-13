@@ -47,34 +47,14 @@ class CartsController < ApplicationController
     end
   end
   
-  
+  # "discount"=>{"username"=>"admin", "password"=>"[FILTERED]", "amount"=>"200"}}
   def discount
     @cart = current_cart
-    #MOVE TO MODEL
     respond_to do |format|
-      if params[:discount]
-        user = User.authenticate(params[:discount][:auth_user], params[:discount][:auth_pass])
-        discount_amount = params[:discount][:order_discount_amount] || 0
-        discount_amount = 0 if discount_amount.blank?
-        tax_discount = params[:discount][:tax_discount_amount] || 0
-        tax_discount = 0 if params[:discount][:discount_tax] != 'on'
-        begin
-          new_current_payment_amount= current_cart.payment_amount - (Float(tax_discount) + Float(discount_amount))
-          new_current_payment_amount= current_cart.payment_amount if new_current_payment_amount < 0
-          if user && user.is?(:admin)
-            @cart.discount_auth_id= user.id
-            @cart.discount = discount_amount
-            @cart.payment_amount = new_current_payment_amount
-            @cart.save!
-            format.json{render json: {authorized_by: user.to_json(only: [:first_name, :last_name]), new_payment_amount: new_current_payment_amount}}
-          else
-            format.json{render json: {error: 'NO se autorizo el descuento'}, :status => 422}      
-          end
-        rescue
-            format.json{render json: {error: 'El descuento no se puede aplicar'}, :status => 422}      
-        end
+      if @cart.perform_discount(params[:discount][:username],params[:discount][:password],params[:discount][:amount] )
+        format.json{ render json: @cart }
       else
-        format.json{render json: {error: 'Parametros incompletos'}, :status => 422}      
+        format.json { render json: @cart.errors.full_messages.to_sentence , :status => 422}
       end
     end
   end

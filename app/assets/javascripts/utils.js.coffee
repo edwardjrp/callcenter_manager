@@ -75,6 +75,14 @@
   (_.flatten([(_.without(string_array, _.last(string_array))).join(', '), _.last(string_array)])).join(' y ')
 
 
+@to_money = (amount) ->
+  if _.isString(amount)
+    "RD$ #{Number(amount).toFixed(2)}"
+  else
+    return 'RD$ 0.00'
+
+
+
 @to_phone = (string)->
   string = string.toString() if string? and _.isNumber(string)
   return string if string.length != 10
