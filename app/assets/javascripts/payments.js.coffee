@@ -107,3 +107,24 @@ jQuery ->
           window.location = '/'
         error: (response) ->
           $("<div class='purr'>#{response.responseText}<div>").purr()
+
+    $('.checkout_input').on 'focus', (event)->
+      target = $(event.currentTarget)
+      target.css('background-color','#F78181')
+
+    $('.checkout_input').on 'blur', (event)->
+      target = $(event.currentTarget)
+      target.css('background-color','white')
+
+    $('.checkout_input').on 'change', (event)->
+      target = $(event.currentTarget)
+      $('#actions').find('#place_order_button').remove()
+      if Number(target.val()) < 1 then target.val('1')
+      socket.emit 'cart_products:update', { id: target.closest('tr').data('cart-product-id'), quantity: target.val() }, (error, cart_product) ->
+        if error
+          $("<div class='purr'>No se puedo realizar la actualización<div>").purr()
+          target.val(target.data('orig'))
+        else
+          target.data('orig', cart_product.quantity)
+          target.css('background-color','white')
+          target.effect('highlight')

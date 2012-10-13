@@ -8,7 +8,7 @@
   = render 'discount'
   =link_to '<i class="icon-briefcase"></i> Exoneración'.html_safe, '#', class: 'btn bottom-margin-1', id: 'exonerate_cart'
   = render 'exonerate'
-  =link_to '<i class="icon-share"></i> Dejar incompleta'.html_safe, '#', class: 'btn bottom-margin-1'
+  = link_to '<i class="icon-share"></i> Dejar incompleta'.html_safe, release_carts_path, data: { confirm: '¿Desea dejar esta orden incompleta?'}, method: :post, class: 'btn bottom-margin-1'
 .row
   .span4
     .well
@@ -156,8 +156,8 @@
                     %td= coupon.generated_description
                     %td= coupon.try(:minimum_price)
                     %td.span1= link_to 'Remover', '#', class: 'btn'
-      .row{:data=>{'cart-id'=> @cart.id}, :id=>dom_id(@cart)}
-        %table.table.table-striped.table-bordered.table-condensed.span8
+      .row
+        %table.table.table-striped.table-bordered.table-condensed.span8{:data=>{'cart-id'=> @cart.id}, :id=>dom_id(@cart)}
           %thead
             %tr
               %th Cantidad
@@ -167,8 +167,8 @@
               %th             
           %tbody
             - @cart.cart_products.each do |cart_product|
-              %tr{id: dom_id(cart_product), class: availability_class(cart_product.available_in_store(@cart.store))}
-                %td.span1=text_field_tag 'cart_product[quantity]', cart_product.quantity, class: 'checkout_input'
+              %tr{:id=> dom_id(cart_product), :data=> { 'cart-product-id'=> cart_product.id }, :class=> availability_class(cart_product.available_in_store(@cart.store))}
+                %td.span1=text_field_tag 'cart_product[quantity]', cart_product.quantity, class: 'checkout_input', data: { orig: cart_product.quantity }
                 %td= cart_product.product.productname
                 %td= cart_product.product.niffty_options
                 %td.item_price

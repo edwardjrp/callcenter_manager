@@ -43,22 +43,29 @@ CartProduct.addItem = function(data, respond, socket) {
 };
 
 CartProduct.updateItem = function(data, respond, socket, trigger_pricing) {
+  console.log(data);
   if (data != null) {
     return CartProduct.find(data.id, function(cp_err, cart_product) {
+      var attributes;
       if (cp_err != null) {
-        return respond(err);
+        return respond(cp_err);
       } else {
         if (cart_product != null) {
-          return cart_product.updateAttributes({
-            quantity: Number(data.quantity),
-            options: data.options,
-            updated_at: new Date()
-          }, function(err, updated_cart_product) {
-            if (err != null) {
-              return respond(err);
+          attributes = {};
+          if ((data != null) && (data.quantity != null)) {
+            attributes['quantity'] = Number(data.quantity);
+          }
+          if ((data != null) && (data.options != null)) {
+            attributes['options'] = data.options;
+          }
+          attributes['updated_at'] = new Date();
+          console.log(attributes);
+          return cart_product.updateAttributes(attributes, function(cp_update_err, updated_cart_product) {
+            if (cp_update_err != null) {
+              return respond(cp_update_err);
             } else {
               socket.emit('cart_products:updated', updated_cart_product.toJSON());
-              respond(err, updated_cart_product);
+              respond(cp_update_err, updated_cart_product);
               if ((trigger_pricing != null) && trigger_pricing === true) {
                 return updated_cart_product.cart(function(err, cart_to_price) {
                   if (err) {

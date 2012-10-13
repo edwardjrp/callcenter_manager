@@ -48,6 +48,10 @@ class CartsController < ApplicationController
   end
 
 
+  def release
+    cart_reset
+    redirect_to root_path
+  end
   
   # "discount"=>{"username"=>"admin", "password"=>"[FILTERED]", "amount"=>"200"}}
   def discount

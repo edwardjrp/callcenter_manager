@@ -30,6 +30,7 @@ Kapiqua25::Application.routes.draw do
       post 'discount'
       post 'abandon'
       post 'exonerate'
+      post 'release'
       get 'current'
     end
     member do 

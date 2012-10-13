@@ -27,6 +27,7 @@ class Kapiqua25.Views.CartIndex extends Backbone.View
     $(@el).html(@template(cart: @model))
     @model.get('cart_products').each(@addCartProduct)
     @model.get('cart_coupons').each(@addCartCoupon)
+    $(@el).find('input').restric('alpha').restric('spaces')
     this
 
 
