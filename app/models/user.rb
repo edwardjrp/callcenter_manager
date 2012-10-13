@@ -56,6 +56,10 @@ class User < ActiveRecord::Base
     (roles & normalize_roles_type(sent_roles)).any?
   end
 
+  def admin?
+    role_mask == 1
+  end
+
   def self.valid_roles
     ['admin', 'operator']
   end

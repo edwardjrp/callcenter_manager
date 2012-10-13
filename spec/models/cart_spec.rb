@@ -1,3 +1,4 @@
+# encoding: utf-8
 # == Schema Information
 #
 # Table name: carts
@@ -84,6 +85,31 @@ describe Cart do
       cart.critical!
       should include('nuevos')
       should include('criticos')
+    end
+
+  end
+
+  describe '#perform_discount' do
+    let!(:admin) { create :user, username: 'test_admin', password: 'please', password_confirmation: 'please', roles: [ 'admin' ] }
+    let!(:operator) { create :user, username: 'tester', password: 'please', password_confirmation: 'please', roles: [ 'operator' ] }
+    let!(:cart){ create :cart, net_amount: 100, tax_amount: 45, tax1_amount: 20, tax2_amount: 15, payment_amount: 145 }
+    let!(:cart_product){ create :cart_product , priced_at: 1000, cart: cart }
+
+    it 'should allow a discount if the user is and authenticated admin' do
+      cart.perform_discount(admin.username, 'please', 40.0)
+      cart.reload
+      cart.payment_amount.round.should == 105.0
+      cart.discount_auth_id.should == admin.id
+    end
+
+    it 'should allow not allow discount if the discount if the en payment_amount if less or equal zero' do
+      cart.perform_discount(admin.username, 'please', 400.0).should be_false
+      cart.errors.full_messages.should include('El el monto a descontar no es valido')
+    end
+
+    it 'should allow not allow discount if the username is not found' do
+      cart.perform_discount('tester', 'please', 400.0).should be_false
+      cart.errors.full_messages.should include('El usuario provisto no tiene suficientes provilegios')
     end
 
   end

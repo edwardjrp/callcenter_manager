@@ -72,6 +72,27 @@ class Cart < ActiveRecord::Base
     %w( delivery pickup dinein )
   end
 
+  def perform_discount(username, password, discount_amount)
+    admin = User.find_by_username(username)
+    if admin 
+      if admin.admin? && admin.try(:authenticate, password)
+        if self.payment_amount.present? && (self.payment_amount - discount_amount.to_d ) > 0
+          self.discount_auth_id = admin.id
+          self.payment_amount = (self.payment_amount - discount_amount.to_d)
+          self.save
+        else
+          self.errors.add(:base, 'El el monto a descontar no es valido')  
+        end
+      else
+        self.errors.add(:base, 'El usuario provisto no tiene suficientes provilegios')
+      end
+    else
+      self.errors.add(:base, 'No se encontro el usuario provisto para la autorización')
+    end
+    self.errors.empty?
+  end
+
+
   def placeable?
     errors.add :base, 'No ha seleccionado una tienda' if self.store.nil?
     errors.add :base, 'No ha seleccionado un modo de servicio' if self.service_method.blank?
