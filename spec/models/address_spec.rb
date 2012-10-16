@@ -27,5 +27,21 @@ describe Address do
     it{should validate_presence_of :street_id}
 
   end
+
+  describe '#client_target?' do
+    let!(:client) { create(:client, first_name: 'tester') }
+    let!(:address1) { create :address, client: client}
+    let!(:address2) { create :address, client: client}
+    before { client.set_last_address(address1) }
+
+    it 'should return true if its the client is target phone' do
+      address1.should be_client_target
+    end
+
+    it 'should return false if its not the client is target phone' do
+      address2.should_not be_client_target
+    end
+
+  end
   
 end

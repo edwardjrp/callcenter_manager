@@ -39,6 +39,22 @@ describe Phone do
 
   end
 
+  describe '#client_target?' do
+    let!(:client) { create(:client, first_name: 'tester') }
+    let!(:phone1) { create :phone, client: client, number: '8095551234', ext: '99' }
+    let!(:phone2) { create :phone, client: client, number: '8095551224', ext: '99' }
+    before { client.set_last_phone(phone1) }
+
+    it 'should return true if its the client is target phone' do
+      phone1.should be_client_target
+    end
+
+    it 'should return false if its not the client is target phone' do
+      phone2.should_not be_client_target
+    end
+
+  end
+
   it "should clear phone number" do 
 
     phone = Phone.new do |phone|

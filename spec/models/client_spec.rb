@@ -48,6 +48,35 @@ describe Client do
 
   end
 
+  describe '#set_last_phone' do
+    let!(:client) { create :client }
+    let!(:phone1) { create :phone, client: client }
+    let!(:phone2) { create :phone, client: client }
+
+    it "should set the last_phone for the client" do
+      client.last_phone.should == phone1
+      client.set_last_phone(phone2)
+      client.last_phone.should == phone2
+    end
+    
+  end
+
+  describe '#set_last_address' do
+    let!(:client) { create :client }
+    let!(:address1) { create :address, client: client }
+    let!(:address2) { create :address, client: client }
+
+    it "should set the last_phone for the client" do
+      client.last_address.should == address1
+      client.set_last_address(address2)
+      client.last_address.should == address2
+    end
+    
+  end
+
+  # describe '#last_store' do
+  # end
+
   describe "when mergin clients" do
   
     let!(:client) { create :client,  first_name: 'test' }

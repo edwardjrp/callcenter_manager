@@ -40,12 +40,17 @@
             .row
               .span3
                 .btn-group.right
+                  - unless phone.client_target?
+                    %button.btn.set_last_phone
+                      %i.icon-star
                   %button.btn.btn_edit
                     %i.icon-edit
                   %button.btn.btn_trash
                     %i.icon-trash
             .row
               .span4
+                - if phone.client_target?
+                  %i.icon-star
                 %strong Numero:
                 =number_to_phone phone.number
             - if phone.ext.present?

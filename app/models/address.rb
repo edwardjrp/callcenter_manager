@@ -24,6 +24,11 @@ class Address < ActiveRecord::Base
   attr_accessible :client_id, :delivery_instructions, :number, :postal_code, :street_id, :unit_number, :unit_type
   
   
+  def client_target?
+    client.target_address_id == self.id
+  end
+
+
   def store
     return nil if street.nil?
     return nil if street.area.nil?

@@ -25,6 +25,10 @@ class Phone < ActiveRecord::Base
     return phones.limit(10).order(:id)
   end
   
+
+  def client_target?
+    client.target_phone_id == self.id
+  end
   
   private
     def clear_number

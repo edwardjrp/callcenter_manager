@@ -77,9 +77,16 @@ describe "Client::Show" do
 
       end
 
-      describe "when adding an address" do
 
-       
+      describe 'When setting last phone ' do
+        let!(:phone2) { create :phone, client: client, number: '8095552134', ext: '99' }
+        
+        it 'should render the last_phone button in the phones list' do
+          within("#phone_#{phone2.id}") { should have_css('button.set_last_phone') }
+        end
+      end
+
+      describe "when adding an address" do
 
         it "should render the add address link" do
           within('#addresses_list') { should have_content('Agregar') }

@@ -22,6 +22,10 @@ Kapiqua25::Application.routes.draw do
     collection do 
       post 'import'
     end
+
+    member do
+      post 'set_last_phone'
+    end
   end
   resources :carts do
     collection do

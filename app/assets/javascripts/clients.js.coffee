@@ -282,6 +282,29 @@ jQuery ->
           $("<div class='purr'>#{err.responseText}<div>").purr()
   
 
+  $('#client_phone_list').on 'click', '.set_last_phone', (event) ->
+    event.preventDefault()
+    target = $(event.currentTarget)
+    owner = target.closest('.phones_list')
+    $.ajax
+      type: 'POST'
+      datatype: 'json'
+      url: "/clients/#{_.last(window.location.href.split('/')).match(/\d+/)[0]}/set_last_phone"
+      data: {phone_id: target.closest('.client_phone').data('phone').id }
+      success: (old_phone)->
+        label = target.closest('.client_phone').find('.span4:first')
+        label.html("<i class='icon-star'></i>#{label.html()}")
+        target.remove()
+        if old_phone?
+          old_last_phone = $("#phone_#{old_phone.id}")
+          old_last_phone.find('.span4:first').find('.icon-star').remove()
+          old_last_phone.find('.btn-group').prepend('<button class="btn set_last_phone"><i class="icon-star"></i></button>') unless old_last_phone.find('.btn-group').find('.set_last_phone').size() > 0
+      error: (err)->
+        $("<div class='purr'>#{err.responseText}<div>").purr()
+
+
+
+
 
 
 

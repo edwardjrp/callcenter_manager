@@ -29,7 +29,16 @@ class ClientsController < ApplicationController
       end
     end
   end
-   
+
+  def set_last_phone
+    @client = Client.find(params[:id])
+    @old_last_phone = @client.last_phone
+    @phone = @client.phones.find(params[:phone_id])
+    @client.set_last_phone(@phone)
+    respond_to do |format|
+      format.json{ render json: @old_last_phone }
+    end
+  end
 
   def import
     @client = Client.new(params[:client])
