@@ -96,7 +96,10 @@ class Client < ActiveRecord::Base
           end
         end
       end
-      self.class.find_by_id(source_id).destroy if self.class.exists?(source_id)
+      if self.class.exists?(source_id)
+        Cart.update_all({:client_id => self.id}, {:client_id => source_id})
+        self.class.find_by_id(source_id).destroy
+      end
       self.save
     end
   end

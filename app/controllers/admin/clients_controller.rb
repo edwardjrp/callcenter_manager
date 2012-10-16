@@ -27,7 +27,7 @@ class Admin::ClientsController < ApplicationController
 
   def merge
     @search = Client.search(params[:q])
-    @clients= @search.result(:distinct => true).limit(4)
+    @clients= @search.result(:distinct => true)
     respond_to do |format|
       format.json{ render json: @clients.to_json( include: { addresses: { include: { street: { include: { area: { include: { city: {}}}}}}}, phones: {} } )}
       format.html
@@ -51,7 +51,7 @@ class Admin::ClientsController < ApplicationController
         flash[:success]='Clientes fusionados correctamente.'
         format.json{render json: @client}
       else
-        flash[:error]="Un error ha impedido completar el proceso"
+        flash[:error]="Un error ha impedido completar el proceso : #{@client.errors.full_messages.to_sentence}"
         format.json{render json: @client.errors.full_messages.to_sentence, status: 422}
       end
     end

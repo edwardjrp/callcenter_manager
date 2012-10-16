@@ -3,8 +3,8 @@
 =link_to '<i class="icon-arrow-left"></i> Tiendas'.html_safe, admin_stores_path, class: 'btn bottom-margin-1'
 .row  
   = search_form_for [:admin,@search], :url=> admin_store_path(@store),:html=>{:class=>'well form-search top-margin-1 filter'} do |f|
-    =f.text_field :productname_start, :class=> 'input-medium search-query', :placeholder=>'Productname'
-    =f.text_field :productcode_start, :class=> 'input-medium search-query', :placeholder=>'Productcode'
+    =f.text_field :productname_cont, :class=> 'input-medium search-query', :placeholder=>'Productname'
+    =f.text_field :productcode_cont, :class=> 'input-medium search-query', :placeholder=>'Productcode'
     =f.submit 'Buscar', :name=>nil, :class=> 'btn'
     %a.btn#clear_product_search{ href: '#'} Limpiar
 - if @products.any?
@@ -28,7 +28,7 @@
               =link_to store_product(@store, product).available.to_s , "/admin/store_products/#{store_product(@store, product).id}", class: "store_product_change_state_available  btn #{store_product_class(@store, product)}"
             -else
               =link_to 'Asignar', '/admin/store_products', class: 'create_store_product'
-          %td= product.productname
+          %td= product.productname.html_safe
           %td= product.productcode
           %td= product.niffty_options
           %td= product.flavorcode

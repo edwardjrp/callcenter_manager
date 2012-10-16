@@ -109,12 +109,17 @@
             .row
               .span3
                 .btn-group.right
+                  - unless address.client_target?
+                    %button.btn.set_last_address
+                      %i.icon-star
                   %button.btn.btn_edit
                     %i.icon-edit
                   %button.btn.btn_trash
                     %i.icon-trash
             .row
               .span4
+                - if address.client_target?
+                  %i.icon-star
                 %strong Ciudad:
                 =address.street_area.city.name
             .row

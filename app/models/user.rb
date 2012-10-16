@@ -23,6 +23,7 @@ class User < ActiveRecord::Base
   validates :username, presence: true, uniqueness: true
   validates :first_name, presence: true
   validates :last_name, presence: true
+  validates :password, presence: true, confirmation: true, on: :create
   validates :idnumber, presence: true, uniqueness: true, length: { :is => 11 }, allow_blank: true
   has_many :carts
   attr_accessible :first_name, :last_name, :idnumber, :username, :password, :password_confirmation, :roles, :active

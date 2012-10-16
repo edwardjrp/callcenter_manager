@@ -25,6 +25,7 @@ Kapiqua25::Application.routes.draw do
 
     member do
       post 'set_last_phone'
+      post 'set_last_address'
     end
   end
   resources :carts do

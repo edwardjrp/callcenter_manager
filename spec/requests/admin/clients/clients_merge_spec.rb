@@ -45,7 +45,7 @@ describe 'Cleints merge' do
       end
       click_link('Siguiente')
       page.should have_css('#client_personal_data_merge', visible: true)
-      page.should have_content('Telefonos')
+      page.should have_content('Teléfonos')
       within('#client_personal_data_merge') do
         find("input[name='client_merge_first_name']:first").click
         find("input[name='client_merge_last_name']:first").click

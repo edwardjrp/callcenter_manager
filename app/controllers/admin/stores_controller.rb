@@ -36,8 +36,10 @@ class Admin::StoresController < ApplicationController
 
   def show
     @store = Store.find(params[:id])
+    params[:q][:productname_cont] = params[:q][:productname_cont].gsub(/"/,'&quot;') if  params[:q].present? && params[:q][:productname_cont].present? 
     @search = Product.search(params[:q])
     @products = @search.result.page(params[:page])
+    flash['info'] = 'Su busqueda no produjo resultados' if @products.empty?
   end
 
   def destroy

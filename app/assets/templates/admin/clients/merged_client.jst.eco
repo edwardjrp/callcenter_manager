@@ -25,10 +25,10 @@
     </td>
   <tr/>
 </table>
-<h3 class='margin-bottom-1'>Telefonos</h3>
+<h3 class='margin-bottom-1'>Teléfonos</h3>
 <table class='table'>
   <thead>
-    <th>Numero</th>
+    <th>Número</th>
     <th>Extensión</th>
   </thead>
   <tbody>

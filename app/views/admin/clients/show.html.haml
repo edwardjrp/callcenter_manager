@@ -123,18 +123,33 @@
       =will_paginate @carts
       -@carts.each do |cart|
         .row
-          .span2
+          .span3
             %strong Agente:
             =cart.user.full_name
-          .span2.offset2
-            =l cart.created_at, format: :short
+          .span3
+            %strong Inicio:
+            =l cart.started_on, format: :short if cart.started_on
         .row
-          .span2
+          .span3
             %strong Monto de la orden:
             =number_to_currency(cart.payment_amount) || 'N/A'
-          .span2.offset2
+          .span3
             %strong Modo de servicio:
             =cart.service_method || 'N/A'
+        .row
+          .span3
+            %strong Forma de pago:
+            = cart.payment_type || 'N/A'
+          .span3
+            %strong ID en pulse:
+            = cart.store_order_id || 'N/A'
+        .row
+          .span3
+            %strong Tipo fiscal:
+            = cart.fiscal_type || 'N/A'
+          .span3
+            %strong Número fiscal:
+            =cart.fiscal_number || 'N/A'
 
         .row{:data=>{'cart-id'=> cart.id}, :id=>dom_id(cart)}
           %table.table.table-striped.table-bordered.table-condensed.span8
@@ -150,7 +165,9 @@
                   %td= cart_product.quantity
                   %td= cart_product.product.productname
                   %td= cart_product.product.niffty_options
-                  %td= cart_product.priced_at
+                  %td
+                    - if cart_product.priced_at.present?
+                      = number_to_currency cart_product.priced_at
         %hr 
       =will_paginate @carts
     -else

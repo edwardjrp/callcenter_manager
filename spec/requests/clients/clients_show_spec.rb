@@ -10,6 +10,7 @@ describe "Client::Show" do
     let!(:client) { create(:client, first_name: 'tester') }
     let!(:phone) { create :phone, client: client, number: '8095551234', ext: '99' }
     let!(:tax_number) { create :tax_number, client: client, rnc: '00113574339' }
+    let!(:phone2) { create :phone, client: client, number: '8095552134', ext: '99' }
 
     before(:each) do
       Capybara.current_driver = :selenium_chrome
@@ -79,14 +80,18 @@ describe "Client::Show" do
 
 
       describe 'When setting last phone ' do
-        let!(:phone2) { create :phone, client: client, number: '8095552134', ext: '99' }
         
         it 'should render the last_phone button in the phones list' do
-          within("#phone_#{phone2.id}") { should have_css('button.set_last_phone') }
+          within("#phone_#{phone2.id}") do 
+            should have_css('button.set_last_phone')
+            find('.set_last_phone:first').click
+            should_not have_css('button.set_last_phone')
+          end
         end
       end
 
       describe "when adding an address" do
+        before { page.execute_script("window.scrollTo(0, document.body.scrollHeight);") }
 
         it "should render the add address link" do
           within('#addresses_list') { should have_content('Agregar') }

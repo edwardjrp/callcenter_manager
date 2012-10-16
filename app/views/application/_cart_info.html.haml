@@ -41,7 +41,7 @@
             -current_cart.client.addresses.each do |address|
               -if address.store.present?
                 %li
-                  %a.set_last_address{:data=> { "address-id"=> address.id , "store-id"=> address.store.id}}
+                  %a.set_target_store_address{:data=> { "address-id"=> address.id , "store-id"=> address.store.id}}
                     - if current_cart.client.last_address.present? && current_cart.client.last_address == address
                       %i.icon-bookmark
                     ="Calle #{address.street.name}, No. #{address.number} - Tienda: #{address.store.name} #{address.store.storeid}"

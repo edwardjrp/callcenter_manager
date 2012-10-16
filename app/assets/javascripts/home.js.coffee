@@ -14,7 +14,11 @@ jQuery ->
       $("<div class='purr'>Solo se aceptan números en esta campo<div>").purr()
 
 
-
+  $('#client_search').on 'blur', '#client_search_address_number', (event) ->
+    target = $(event.currentTarget)
+    if target.val() == ''
+      if $('#client_search_address_street').val() != '' or $('#client_search_address_area').val() != '' or $('#client_search_address_city').val() != ''
+        $("<div class='purr'>Inroducjo datos parciales para la dirección<div>").purr()
 
   if $('#client_search_panel').size() > 0
     $('#client_search_panel').on 'click', '#import_client_button', (event) ->
@@ -45,20 +49,20 @@ jQuery ->
           else
             $("<div class='purr'>#{response.data}<div>").purr()
     
-  $('.set_last_address').on 'click', (event)->
+  $('.set_target_store_address').on 'click', (event)->
     target = $(event.currentTarget)
     $.ajax
       type: 'POST'
       url: "/carts/current_store"
       datatype: 'json'
-      data: {order_target: { store_id: target.data('store-id'), address_id: target.data('address-id')}}
+      data: { order_target: { store_id: target.data('store-id'), address_id: target.data('address-id')} }
       beforeSend: (xhr) ->
         xhr.setRequestHeader("Accept", "application/json")
       success: (cart)->
         $('#choose_store').text("Tienda : #{cart.store.name}")
-        $('.set_last_address').find('i').remove()
+        $('.set_target_store_address').find('i').remove()
         $('.set_target_store').find('i').remove()
-        $(".set_last_address[data-address-id=#{cart.client.target_address_id}]").prepend('<i class="icon-bookmark">')
+        $(".set_target_store_address[data-address-id=#{cart.client.target_address_id}]").prepend('<i class="icon-bookmark">')
         $(".set_target_store[data-store-id=#{cart.store.id}]").prepend('<i class="icon-ok">')
         
   $('.set_target_store').on 'click', (event)->

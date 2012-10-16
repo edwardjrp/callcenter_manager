@@ -40,6 +40,16 @@ class ClientsController < ApplicationController
     end
   end
 
+  def set_last_address
+    @client = Client.find(params[:id])
+    @old_last_address = @client.last_address
+    @address = @client.addresses.find(params[:address_id])
+    @client.set_last_address(@address)
+    respond_to do |format|
+      format.json{ render json: @old_last_address }
+    end
+  end
+
   def import
     @client = Client.new(params[:client])
     present_client= Client.find_by_idnumber(params[:client][:idnumber])

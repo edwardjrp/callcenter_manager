@@ -1,8 +1,8 @@
 <table class='table'>
   <thead>
     <th> Campo</th>
-    <th> Cliente a fuente</th>
-    <th> Cliente a destino</th>
+    <th> Cliente 1</th>
+    <th> Cliente 2</th>
   </head>
   <tbody>
     <tr>
@@ -51,7 +51,7 @@
     <tr/>
 
     <tr>
-      <th>Telefonos:</th>
+      <th>Teléfonos:</th>
       <td>
         <table>
           <thead>
