@@ -189,11 +189,39 @@ Cart.prototype.place = (data, socket) ->
         socket.emit 'cart:place:error', 'Un error impidio la colocación de la orden'
       else
         pulse_com_error = (comm_err) ->
+          # mark pulse comm error and emit
           socket.emit 'cart:place:error', 'Falla en la comunicación con Pulse'
           console.error comm_err.stack
 
         unless me.completed == true
-          
+          current_cart  = me.simplified()
+          current_cart.cart_products = current_cart_products
+          current_cart.cart_coupons = current_cart_coupons
+          current_cart.client = client.simplified()
+          current_cart.user = user.simplified()
+          current_cart.phone = phone.simplified()
+          current_cart.address = address.simplified()
+          current_cart.store = store.simplified()
+          current_cart.extra = data
+          Setting.kapiqua (err, settings) ->
+            if err
+              socket.emit 'cart:place:error', 'Falla Lectura de la configuración'
+              console.error err.stack
+            else
+              cart_request = new  PulseBridge(current_cart, current_cart.store.storeid, current_cart.store.id,  settings.pulse_port)
+              try
+                cart_request.place pulse_com_error, (res_data)->
+                  order_reply = new OrderReply(res_data)
+                  console.log order_reply
+                  if order_reply.status == '0'
+                    cart.updateAttributes { store_order_id: order_reply.order_id, complete_on: Date.now(), completed: true }, (cart_update_err, updated_cart)->
+                      socket.emit 'cart:place:completed', updated_cart
+                  else
+                    socket.emit 'cart:place:error', "No se puede colocar la order, Pulse respondio: <br/> <strong>#{order_reply.status_text}</strong>"
+              catch err_pricing
+                # mark pulse comm error and emit
+                console.error err_pricing.stack
+
         else
           socket.emit 'cart:place:error', 'Esta orden aparece como completada en el sistema'
           

@@ -16,124 +16,18 @@ class Carts
     if data?
       Cart.find data, (cart_find_err, cart) ->
         if cart_find_err?
-          socket.emit 'cart:price:error', 'No se pudo establecer la comunición con pulse' if socket?
+          console.error cart_find_err.stack
+          socket.emit 'cart:price:error', 'La orden no se encontro en el sistema'
         else
           cart.price(socket)
 
   @place: (data, respond, socket) =>
-    # socket.emit 'cart:price:error', {error: 'La información requerida para colocar la orden no esta completa'} if socket?
-    Cart.find data, (cart_find_err, cart) ->
-      if cart_find_err?
-        console.error cart_find_err.stack
-        socket.emit 'cart:place:error', {error: JSON.stringify(cart_find_err)} if socket?
-      else
-        async.waterfall [
-          (callback) ->
-            cart.client (cart_client_err, client) ->
-              if(cart_client_err)
-                socket.emit 'cart:place:error', {error: JSON.stringify(cart_client_err)} if socket?  
-              else
-                callback(null, client)
-          ,
-          (client, callback) ->
-            cart.cart_products {}, (c_cp_err, cart_products) ->
-              if(c_cp_err)
-                socket.emit 'cart:place:error', {error: JSON.stringify(c_cp_err)} if socket?
-              else
-                get_products = (cp, cb) ->
-                  cp.product (p_err, product) ->
-                    jcp = Carts.to_json(cp)
-                    jcp.product = Carts.to_json(product)
-                    Carts.parsed_options(jcp, cb)
-                    
-                async.map cart_products,get_products, (it_err, cart_products) ->
-                  if it_err
-                    socket.emit 'cart:place:error', {error: JSON.stringify(it_err)} if socket?
-                  else
-                    callback(null, client, cart_products)
-          ,
-          ( client, cart_products, callback ) ->
-            if client.phones_count? and client.phones_count > 0
-              client.phones (cart_client_phones_err, phones) ->
-                if cart_client_phones_err?
-                  socket.emit 'cart:place:error', {error: JSON.stringify(cart_client_phones_err)} if socket?
-                else
-                  callback(null, client, cart_products, Carts.to_json(phones))
-            else
-              callback(null, client, cart_products, [])
-          ,
-          (client, cart_products, phones, callback) ->
-            if client.addresses_count? and client.addresses_count > 0
-              client.addresses (cart_client_addresses_err, addresses) ->
-                if cart_client_addresses_err?
-                  socket.emit 'cart:place:error', {error: JSON.stringify(cart_client_addresses_err)} if socket?
-                else
-                  callback(null, client, cart_products, phones, Carts.to_json(addresses))
-            else
-              callback(null, client, cart_products, phones, [])
-          ,
-          (client, cart_products , phones, addresses, callback) ->
-            cart.store (cart_store_err, store) ->
-              if(cart_store_err)
-                socket.emit 'cart:place:error', {error: JSON.stringify(cart_store_err)} if socket?  
-              else
-                callback(null, client, cart_products , phones, addresses, Carts.to_json(store))
-        ]
-        ,
-        (final_error,  client, cart_products, phones, addresses, store) ->
-          if final_error?
-            console.log 'Error at the end'
-            # socket.emit 'cart:place:error', {error: ''} if socket?  
-          else
-            pulse_com_error = (comm_err) ->
-              # emit an error
-              console.log comm_err
-            # check all user elemenents
-            # include user in assembled cart
-            unless cart.completed == true
-              assempled_cart = Carts.to_json(cart)
-              assempled_cart.client = client
-              assempled_cart.cart_products = cart_products
-              assempled_cart.phones = phones
-              assempled_cart.addresses = addresses
-              assempled_cart.store = store
-              # console.log assempled_cart
-              if assempled_cart.store? and assempled_cart.client? and assempled_cart.cart_products.length > 0 and assempled_cart.phones.length > 0
-                # stablish send time to avoid sending for the next 30 seconds or so
-                try
-                  console.log 'dont forget to pull port from settings'
-                  cart_placer = new PulseBridge(assempled_cart, assempled_cart.store.storeid, assempled_cart.store.ip, '59101')
-                  cart_placer.place pulse_com_error, (res_data) ->
-                    # console.log res_data
-                    order_reply = new OrderReply(res_data)
-                    console.log order_reply
-                    if order_reply.status == '0'
-                      cart.updateAttributes { store_order_id: order_reply.order_id, complete_on: Date.now(), completed: true }, (cart_update_err, updated_cart)->
-                        socket.emit 'cart:place:completed', updated_cart
-                    else
-                      socket.emit 'cart:place:error', "No se puede colocar la order, Pulse respondio: <br/> <strong>#{order_reply.status_text}</strong>"
-                catch placing_error
-                  console.error placing_error.stack
-              else
-                console.log 'Princing conditions not met'
-            else
-              # here emits cart completer errot
-              console.log 'Cart is complete'
-
-
-      # console.log 'Placing'
-
-  @to_json : (obj) ->
-    JSON.parse(JSON.stringify(obj))
+    if data?
+      Cart.find data, (cart_find_err, cart) ->
+        if cart_find_err?
+          console.error cart_find_err.stack
+          socket.emit 'cart:place:error', 'La orden no se encontro en el sistema'
+        else
+          cart.place(data, socket)
 
 module.exports  = Carts
-
-
-
-
-# if client.addresses_count? and client.addresses_count > 0
-#   client.addresses (cart_client_addresses_err, addresses)->
-#     if cart_client_addresses_err?
-#       socket.emit 'cart:price:error', {error: JSON.stringify(cart_client_addresses_err)} if socket?
-#     else
-#       socket.emit 'cart:price:client:addresses', {addresses}
