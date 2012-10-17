@@ -1,4 +1,4 @@
-var Address, Cart, CartProduct, Client, OrderReply, Phone, PulseBridge, Setting, Store, async, _;
+var Address, Cart, CartProduct, Client, OrderReply, Phone, PulseBridge, Setting, Store, User, async, _;
 
 Cart = require('./schema').Cart;
 
@@ -17,6 +17,8 @@ Client = require('../models/client');
 Store = require('../models/store');
 
 Phone = require('../models/phone');
+
+User = require('../models/user');
 
 Address = require('../models/address');
 
@@ -215,7 +217,7 @@ Cart.prototype.place = function(data, socket) {
         }
       });
     }, function(current_cart_products, current_cart_coupons, callback) {
-      return cart.client(function(cart_client_err, client) {
+      return me.client(function(cart_client_err, client) {
         if (cart_client_err) {
           console.error(cart_client_err.stack);
           return socket.emit('cart:place:error', 'No se pudo cargar el cliente para esta orden');
@@ -224,7 +226,7 @@ Cart.prototype.place = function(data, socket) {
         }
       });
     }, function(current_cart_products, current_cart_coupons, client, callback) {
-      return cart.user(function(cart_client_err, user) {
+      return me.user(function(cart_user_err, user) {
         if (cart_user_err) {
           console.error(cart_user_err.stack);
           return socket.emit('cart:place:error', 'No se pudo cargar el agente para esta orden');
@@ -249,7 +251,7 @@ Cart.prototype.place = function(data, socket) {
         }
       });
     }, function(current_cart_products, current_cart_coupons, client, user, phone, address, callback) {
-      return cart.store(function(cart_store_err, store) {
+      return me.store(function(cart_store_err, store) {
         if (cart_store_err) {
           console.error(cart_store_err.stack);
           return socket.emit('cart:place:error', 'No se pudo acceder a la tienda para la esta orden');
@@ -274,6 +276,7 @@ Cart.prototype.place = function(data, socket) {
         current_cart.cart_products = current_cart_products;
         current_cart.cart_coupons = current_cart_coupons;
         current_cart.client = client.simplified();
+        console.log(user);
         current_cart.user = user.simplified();
         current_cart.phone = phone.simplified();
         current_cart.address = address.simplified();
@@ -285,14 +288,14 @@ Cart.prototype.place = function(data, socket) {
             socket.emit('cart:place:error', 'Falla Lectura de la configuración');
             return console.error(err.stack);
           } else {
-            cart_request = new PulseBridge(current_cart, current_cart.store.storeid, current_cart.store.id, settings.pulse_port);
+            cart_request = new PulseBridge(current_cart, current_cart.store.storeid, current_cart.store.ip, settings.pulse_port);
             try {
               return cart_request.place(pulse_com_error, function(res_data) {
                 var order_reply;
                 order_reply = new OrderReply(res_data);
                 console.log(order_reply);
                 if (order_reply.status === '0') {
-                  return cart.updateAttributes({
+                  return me.updateAttributes({
                     store_order_id: order_reply.order_id,
                     complete_on: Date.now(),
                     completed: true

@@ -7,6 +7,7 @@ CartProduct = require('../models/cart_product')
 Client = require('../models/client')
 Store = require('../models/store')
 Phone = require('../models/phone')
+User = require('../models/user')
 Address = require('../models/address')
 Setting = require('../models/setting')
 
@@ -141,7 +142,7 @@ Cart.prototype.place = (data, socket) ->
           callback(null, current_cart_products, current_cart_coupons)
     ,
     (current_cart_products, current_cart_coupons, callback) ->
-      cart.client (cart_client_err, client) ->
+      me.client (cart_client_err, client) ->
         if(cart_client_err)
           console.error cart_client_err.stack
           socket.emit 'cart:place:error', 'No se pudo cargar el cliente para esta orden'
@@ -149,7 +150,7 @@ Cart.prototype.place = (data, socket) ->
           callback(null, current_cart_products, current_cart_coupons, client)
     ,
     (current_cart_products, current_cart_coupons, client, callback) ->
-      cart.user (cart_client_err, user) ->
+      me.user (cart_user_err, user) ->
         if(cart_user_err)
           console.error cart_user_err.stack
           socket.emit 'cart:place:error', 'No se pudo cargar el agente para esta orden'
@@ -171,7 +172,7 @@ Cart.prototype.place = (data, socket) ->
           callback(null, current_cart_products, current_cart_coupons, client, user, phone, address)
     ,
     (current_cart_products, current_cart_coupons, client, user, phone, address, callback) ->
-      cart.store (cart_store_err, store) ->
+      me.store (cart_store_err, store) ->
         if(cart_store_err)
           console.error cart_store_err.stack
           socket.emit 'cart:place:error', 'No se pudo acceder a la tienda para la esta orden'
@@ -194,6 +195,7 @@ Cart.prototype.place = (data, socket) ->
           current_cart.cart_products = current_cart_products
           current_cart.cart_coupons = current_cart_coupons
           current_cart.client = client.simplified()
+          console.log user
           current_cart.user = user.simplified()
           current_cart.phone = phone.simplified()
           current_cart.address = address.simplified()
@@ -204,13 +206,13 @@ Cart.prototype.place = (data, socket) ->
               socket.emit 'cart:place:error', 'Falla Lectura de la configuración'
               console.error err.stack
             else
-              cart_request = new  PulseBridge(current_cart, current_cart.store.storeid, current_cart.store.id,  settings.pulse_port)
+              cart_request = new  PulseBridge(current_cart, current_cart.store.storeid, current_cart.store.ip,  settings.pulse_port)
               try
                 cart_request.place pulse_com_error, (res_data)->
                   order_reply = new OrderReply(res_data)
                   console.log order_reply
                   if order_reply.status == '0'
-                    cart.updateAttributes { store_order_id: order_reply.order_id, complete_on: Date.now(), completed: true }, (cart_update_err, updated_cart)->
+                    me.updateAttributes { store_order_id: order_reply.order_id, complete_on: Date.now(), completed: true }, (cart_update_err, updated_cart)->
                       socket.emit 'cart:place:completed', updated_cart
                   else
                     socket.emit 'cart:place:error', "No se puede colocar la order, Pulse respondio: <br/> <strong>#{order_reply.status_text}</strong>"
