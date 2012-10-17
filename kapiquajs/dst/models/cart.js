@@ -1,4 +1,4 @@
-var Cart, CartProduct, OrderReply, PulseBridge, Setting, async, _;
+var Address, Cart, CartProduct, Client, OrderReply, Phone, PulseBridge, Setting, Store, async, _;
 
 Cart = require('./schema').Cart;
 
@@ -11,6 +11,14 @@ PulseBridge = require('../pulse_bridge/pulse_bridge');
 OrderReply = require('../pulse_bridge/order_reply');
 
 CartProduct = require('../models/cart_product');
+
+Client = require('../models/client');
+
+Store = require('../models/store');
+
+Phone = require('../models/phone');
+
+Address = require('../models/address');
 
 Setting = require('../models/setting');
 
@@ -119,6 +127,19 @@ Cart.prototype.price = function(socket) {
   });
 };
 
+Cart.prototype.comm_failed = function(socket) {
+  return this.updateAttributes({
+    communication_failed: true,
+    message_mask: 9
+  }, function(err, updated_cart) {
+    if (err) {
+      return console.error(err.stack);
+    } else {
+      return socket.emit('cart:price:comm_failed', updated_cart);
+    }
+  });
+};
+
 Cart.prototype.updatePrices = function(order_reply, socket) {
   return this.updateAttributes({
     can_place_order: order_reply.can_place,
@@ -145,6 +166,153 @@ Cart.prototype.updatePrices = function(order_reply, socket) {
           }
         });
       });
+    }
+  });
+};
+
+Cart.prototype.place = function(data, socket) {
+  var me;
+  me = this;
+  return async.waterfall([
+    function(callback) {
+      return me.cart_products({}, function(c_cp_err, cart_products) {
+        var current_cart_products;
+        if (c_cp_err) {
+          console.error(c_cp_err.stack);
+          return socket.emit('cart:place:error', 'No se pudo acceder a la lista de productos para esta orden');
+        } else {
+          current_cart_products = _.map(cart_products, function(cart_product) {
+            return cart_product.simplified();
+          });
+          return callback(null, current_cart_products);
+        }
+      });
+    }, function(current_cart_products, callback) {
+      return me.products(function(c_p_err, products) {
+        if (c_p_err) {
+          console.error(c_p_err.stack);
+          return socket.emit('cart:place:error', 'No se pudo acceder a la lista de productos para esta orden');
+        } else {
+          _.each(current_cart_products, function(current_cart_product) {
+            return current_cart_product.product = _.find(products, function(product) {
+              return product.id === current_cart_product.product_id;
+            });
+          });
+          return callback(null, current_cart_products);
+        }
+      });
+    }, function(current_cart_products, callback) {
+      return me.cart_coupons(function(c_c_err, cart_coupons) {
+        var current_cart_coupons;
+        if (c_c_err) {
+          console.error(c_c_err.stack);
+          return socket.emit('cart:place:error', 'No se pudo acceder a la lista de cupones para esta orden');
+        } else {
+          current_cart_coupons = _.map(cart_coupons, function(cart_coupon) {
+            return cart_coupon.simplified();
+          });
+          return callback(null, current_cart_products, current_cart_coupons);
+        }
+      });
+    }, function(current_cart_products, current_cart_coupons, callback) {
+      return cart.client(function(cart_client_err, client) {
+        if (cart_client_err) {
+          console.error(cart_client_err.stack);
+          return socket.emit('cart:place:error', 'No se pudo cargar el cliente para esta orden');
+        } else {
+          return callback(null, current_cart_products, current_cart_coupons, client);
+        }
+      });
+    }, function(current_cart_products, current_cart_coupons, client, callback) {
+      return cart.user(function(cart_client_err, user) {
+        if (cart_user_err) {
+          console.error(cart_user_err.stack);
+          return socket.emit('cart:place:error', 'No se pudo cargar el agente para esta orden');
+        } else {
+          return callback(null, current_cart_products, current_cart_coupons, client, user);
+        }
+      });
+    }, function(current_cart_products, current_cart_coupons, client, user, callback) {
+      return client.last_phone(function(l_p_err, phone) {
+        if (l_p_err) {
+          return console.error(l_p_err.stack);
+        } else {
+          return callback(null, current_cart_products, current_cart_coupons, client, user, phone);
+        }
+      });
+    }, function(current_cart_products, current_cart_coupons, client, user, phone, callback) {
+      return client.last_address(function(l_a_err, address) {
+        if (l_a_err) {
+          return console.error(l_a_err.stack);
+        } else {
+          return callback(null, current_cart_products, current_cart_coupons, client, user, phone, address);
+        }
+      });
+    }, function(current_cart_products, current_cart_coupons, client, user, phone, address, callback) {
+      return cart.store(function(cart_store_err, store) {
+        if (cart_store_err) {
+          console.error(cart_store_err.stack);
+          return socket.emit('cart:place:error', 'No se pudo acceder a la tienda para la esta orden');
+        } else {
+          return callback(null, current_cart_products, current_cart_coupons, client, user, phone, address, store);
+        }
+      });
+    }
+  ], function(final_error, current_cart_products, current_cart_coupons, client, user, phone, address, store) {
+    var current_cart, pulse_com_error;
+    if (final_error != null) {
+      console.error(final_error.stack);
+      return socket.emit('cart:place:error', 'Un error impidio la colocación de la orden');
+    } else {
+      pulse_com_error = function(comm_err) {
+        socket.emit('cart:place:error', 'Falla en la comunicación con Pulse');
+        me.comm_failed(socket);
+        return console.error(comm_err.stack);
+      };
+      if (me.completed !== true) {
+        current_cart = me.simplified();
+        current_cart.cart_products = current_cart_products;
+        current_cart.cart_coupons = current_cart_coupons;
+        current_cart.client = client.simplified();
+        current_cart.user = user.simplified();
+        current_cart.phone = phone.simplified();
+        current_cart.address = address.simplified();
+        current_cart.store = store.simplified();
+        current_cart.extra = data;
+        return Setting.kapiqua(function(err, settings) {
+          var cart_request;
+          if (err) {
+            socket.emit('cart:place:error', 'Falla Lectura de la configuración');
+            return console.error(err.stack);
+          } else {
+            cart_request = new PulseBridge(current_cart, current_cart.store.storeid, current_cart.store.id, settings.pulse_port);
+            try {
+              return cart_request.place(pulse_com_error, function(res_data) {
+                var order_reply;
+                order_reply = new OrderReply(res_data);
+                console.log(order_reply);
+                if (order_reply.status === '0') {
+                  return cart.updateAttributes({
+                    store_order_id: order_reply.order_id,
+                    complete_on: Date.now(),
+                    completed: true
+                  }, function(cart_update_err, updated_cart) {
+                    return socket.emit('cart:place:completed', updated_cart);
+                  });
+                } else {
+                  return socket.emit('cart:place:error', "No se puede colocar la order, Pulse respondio: <br/> <strong>" + order_reply.status_text + "</strong>");
+                }
+              });
+            } catch (err_pricing) {
+              socket.emit('cart:place:error', 'Falla en la comunicación con Pulse');
+              me.comm_failed(socket);
+              return console.error(err_pricing.stack);
+            }
+          }
+        });
+      } else {
+        return socket.emit('cart:place:error', 'Esta orden aparece como completada en el sistema');
+      }
     }
   });
 };

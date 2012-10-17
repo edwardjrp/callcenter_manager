@@ -12,16 +12,6 @@ Setting = require('../models/setting')
 
 Cart.validatesPresenceOf('user_id')
 
-# Cart.read = (data, respond, socket)->
-#   id = data.id
-#   Cart.find data.cart_id, (cart_find_err, cart) ->
-#     if cart_find_err?
-#       respond(cart_find_err)
-#     else
-#       console.log 'HELLO'
-#       Cart.products data.id , (err, collection) ->
-#         console.log err if err
-#         console.log collection if collection
 
 Cart.prototype.products = (cb)->
   Cart.schema.adapter.query "SELECT \"products\".* FROM \"products\" INNER JOIN \"cart_products\" ON \"products\".\"id\" = \"cart_products\".\"product_id\" WHERE \"cart_products\".\"cart_id\" = #{@id}", (err, collection) ->
@@ -95,6 +85,13 @@ Cart.prototype.price = (socket)->
 
 
 
+Cart.prototype.comm_failed = (socket) ->
+  this.updateAttributes { communication_failed: true, message_mask: 9 } , (err, updated_cart) ->
+    if err
+      console.error err.stack
+    else
+      socket.emit 'cart:price:comm_failed', updated_cart
+
 
 Cart.prototype.updatePrices = (order_reply, socket) ->
   # consider removing discount and exonerations
@@ -142,7 +139,6 @@ Cart.prototype.place = (data, socket) ->
         else
           current_cart_coupons = _.map(cart_coupons, (cart_coupon)-> cart_coupon.simplified())
           callback(null, current_cart_products, current_cart_coupons)
-    ]
     ,
     (current_cart_products, current_cart_coupons, callback) ->
       cart.client (cart_client_err, client) ->
@@ -189,8 +185,8 @@ Cart.prototype.place = (data, socket) ->
         socket.emit 'cart:place:error', 'Un error impidio la colocación de la orden'
       else
         pulse_com_error = (comm_err) ->
-          # mark pulse comm error and emit
           socket.emit 'cart:place:error', 'Falla en la comunicación con Pulse'
+          me.comm_failed(socket)
           console.error comm_err.stack
 
         unless me.completed == true
@@ -219,15 +215,13 @@ Cart.prototype.place = (data, socket) ->
                   else
                     socket.emit 'cart:place:error', "No se puede colocar la order, Pulse respondio: <br/> <strong>#{order_reply.status_text}</strong>"
               catch err_pricing
-                # mark pulse comm error and emit
+                socket.emit 'cart:place:error', 'Falla en la comunicación con Pulse'
+                me.comm_failed(socket)
                 console.error err_pricing.stack
-
         else
           socket.emit 'cart:place:error', 'Esta orden aparece como completada en el sistema'
           
             
-
-# set com error and emit into the admins group
 
 Cart.prototype.simplified = ->
   JSON.parse(JSON.stringify(this))
