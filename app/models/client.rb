@@ -46,11 +46,11 @@ class Client < ActiveRecord::Base
   end
   
   def last_address
-    Address.find_by_id(self.target_address_id) || self.addresses.order(:id).first if self.addresses.any?
+    addresses.order(:id).find_by_id(self.target_address_id) || self.addresses.order(:id).first if self.addresses.any?
   end
 
   def last_phone
-    Phone.find_by_id(self.target_phone_id) || self.phones.order(:id).first if self.phones.any?
+    phones.order(:id).find_by_id(self.target_phone_id) || self.phones.order(:id).first if self.phones.any?
   end
 
   def set_last_phone(phone)

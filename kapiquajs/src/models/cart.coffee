@@ -4,7 +4,12 @@ _ = require('underscore')
 PulseBridge = require('../pulse_bridge/pulse_bridge')
 OrderReply = require('../pulse_bridge/order_reply')
 CartProduct = require('../models/cart_product')
+Client = require('../models/client')
+Store = require('../models/store')
+Phone = require('../models/phone')
+Address = require('../models/address')
 Setting = require('../models/setting')
+
 Cart.validatesPresenceOf('user_id')
 
 # Cart.read = (data, respond, socket)->
@@ -31,7 +36,7 @@ Cart.prototype.price = (socket)->
   async.waterfall [
     (callback) ->
       me.cart_products {}, (c_cp_err, cart_products) ->
-        if(c_cp_err)
+        if (c_cp_err)
           console.error c_cp_err.stack
           socket.emit 'cart:price:error', 'No se pudo acceder a la lista de productos para esta orden'
         else
@@ -92,6 +97,7 @@ Cart.prototype.price = (socket)->
 
 
 Cart.prototype.updatePrices = (order_reply, socket) ->
+  # consider removing discount and exonerations
   this.updateAttributes {  can_place_order: order_reply.can_place, net_amount: order_reply.netamount, tax_amount: order_reply.taxamount, tax1_amount: order_reply.tax1amount, tax2_amount: order_reply.tax2amount,  payment_amount: order_reply.payment_amount } , (err, updated_cart) ->
     if err
       console.error err.stack
@@ -105,7 +111,95 @@ Cart.prototype.updatePrices = (order_reply, socket) ->
                 console.error update_err
 
 
+Cart.prototype.place = (data, socket) ->
+  me = this
+  async.waterfall [
+    (callback) ->
+      me.cart_products {}, (c_cp_err, cart_products) ->
+        if (c_cp_err)
+          console.error c_cp_err.stack
+          socket.emit 'cart:place:error', 'No se pudo acceder a la lista de productos para esta orden'
+        else
+          current_cart_products = _.map(cart_products, (cart_product)-> cart_product.simplified())
+          callback(null, current_cart_products)
+    ,
+    (current_cart_products, callback) ->
+      me.products (c_p_err, products) ->
+        if(c_p_err)
+          console.error c_p_err.stack
+          socket.emit 'cart:place:error', 'No se pudo acceder a la lista de productos para esta orden'
+        else
+          _.each current_cart_products, (current_cart_product)-> 
+            current_cart_product.product = _.find products, (product)->
+              product.id == current_cart_product.product_id
+          callback(null, current_cart_products)
+    ,
+    (current_cart_products, callback) ->
+      me.cart_coupons (c_c_err, cart_coupons) ->
+        if(c_c_err)
+          console.error c_c_err.stack
+          socket.emit 'cart:place:error', 'No se pudo acceder a la lista de cupones para esta orden'
+        else
+          current_cart_coupons = _.map(cart_coupons, (cart_coupon)-> cart_coupon.simplified())
+          callback(null, current_cart_products, current_cart_coupons)
+    ]
+    ,
+    (current_cart_products, current_cart_coupons, callback) ->
+      cart.client (cart_client_err, client) ->
+        if(cart_client_err)
+          console.error cart_client_err.stack
+          socket.emit 'cart:place:error', 'No se pudo cargar el cliente para esta orden'
+        else
+          callback(null, current_cart_products, current_cart_coupons, client)
+    ,
+    (current_cart_products, current_cart_coupons, client, callback) ->
+      cart.user (cart_client_err, user) ->
+        if(cart_user_err)
+          console.error cart_user_err.stack
+          socket.emit 'cart:place:error', 'No se pudo cargar el agente para esta orden'
+        else
+          callback(null, current_cart_products, current_cart_coupons, client, user)
+    ,
+    (current_cart_products, current_cart_coupons, client, user, callback) ->
+      client.last_phone (l_p_err, phone) ->
+        if l_p_err
+          console.error l_p_err.stack
+        else
+          callback(null, current_cart_products, current_cart_coupons, client, user, phone)
+    ,
+    (current_cart_products, current_cart_coupons, client, user, phone, callback) ->
+      client.last_address (l_a_err, address) ->
+        if l_a_err
+          console.error l_a_err.stack
+        else
+          callback(null, current_cart_products, current_cart_coupons, client, user, phone, address)
+    ,
+    (current_cart_products, current_cart_coupons, client, user, phone, address, callback) ->
+      cart.store (cart_store_err, store) ->
+        if(cart_store_err)
+          console.error cart_store_err.stack
+          socket.emit 'cart:place:error', 'No se pudo acceder a la tienda para la esta orden'
+        else
+          callback(null, current_cart_products, current_cart_coupons, client, user, phone, address, store)
+    ]
+    ,
+    (final_error,  current_cart_products, current_cart_coupons, client, user, phone, address, store) ->
+      if final_error?
+        console.error final_error.stack
+        socket.emit 'cart:place:error', 'Un error impidio la colocación de la orden'
+      else
+        pulse_com_error = (comm_err) ->
+          socket.emit 'cart:place:error', 'Falla en la comunicación con Pulse'
+          console.error comm_err.stack
 
+        unless me.completed == true
+          
+        else
+          socket.emit 'cart:place:error', 'Esta orden aparece como completada en el sistema'
+          
+            
+
+# set com error and emit into the admins group
 
 Cart.prototype.simplified = ->
   JSON.parse(JSON.stringify(this))
