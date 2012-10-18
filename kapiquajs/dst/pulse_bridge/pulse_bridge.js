@@ -38,7 +38,7 @@ PulseBridge = (function() {
 
   PulseBridge.prototype.fallback_values = function(action, value, fallback) {
     if (action === 'PlaceOrder') {
-      if (!(value != null) || _.isUndefined(value)) {
+      if (_.isUndefined(value) || _.isNull(value)) {
         return fallback;
       } else {
         return value;
@@ -86,7 +86,7 @@ PulseBridge = (function() {
   };
 
   PulseBridge.prototype.body = function(action) {
-    var auth, body, cart_coupon, cart_item_price, cart_option_quantity, cart_product, cash_payment, coupon, coupons, customer, customer_address, customer_name, customer_type_info, doc, envelope, header, item_modifier, item_modifiers, orde_info_collection, order, order_info_1, order_item, order_items, order_source, payment, product_option, product_options, take_time, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
+    var ap, auth, body, cart_coupon, cart_item_price, cart_option_quantity, cart_product, cash_payment, coupon, coupons, customer, customer_address, customer_name, customer_type_info, doc, envelope, header, item_modifier, item_modifiers, orde_info_collection, order, order_info_1, order_info_2, order_info_3, order_item, order_items, order_source, payment, product_option, product_options, take_time, tax, tc, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref10, _ref11, _ref12, _ref13, _ref14, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
     doc = new libxml.Document();
     envelope = new libxml.Element(doc, 'env:Envelope').attr({
       'xmlns:xsd': "http://www.w3.org/2001/XMLSchema",
@@ -113,39 +113,68 @@ PulseBridge = (function() {
     take_time;
 
     order.addChild(new libxml.Element(doc, 'OrderTakeSeconds', this.fallback_values(action, take_time.toString(), '60')));
-    order.addChild(new libxml.Element(doc, 'DeliveryInstructions', 'Edf:;TC:N/A;AP:N/A;D_I.'));
+    tc = this.fallback_values(action, (_ref = this.cart.extra) != null ? _ref.cardnumber : void 0, 'N/A');
+    ap = this.fallback_values(action, (_ref1 = this.cart.extra) != null ? _ref1.cardapproval : void 0, 'N/A');
+    if ((this.cart.extra != null) && (this.cart.extra.fiscal_type != null)) {
+      switch (this.cart.extra.fiscal_type) {
+        case "3rdParty":
+          tax = "CF:CredFiscal;RNC:" + this.cart.extra.rnc;
+          break;
+        case "SpecialRegme":
+          tax = "CF:RegEspecial;RNC:" + this.cart.extra.rnc;
+          break;
+        case "Government":
+          tax = "CF:Government;RNC:" + this.cart.extra.rnc;
+          break;
+        default:
+          tax = 'CF:ConsFinal';
+      }
+    }
+    order.addChild(new libxml.Element(doc, 'DeliveryInstructions', "Edf:;TC:" + (tc.toString()) + ";AP:" + (ap.toString()) + ";" + (this.fallback_values(action, tax, 'N/A')) + ";D_I."));
     order_source = new libxml.Element(doc, 'OrderSource');
     order_source.addChild(new libxml.Element(doc, 'OrganizationURI', 'proteus.dominos.com.do'));
     order_source.addChild(new libxml.Element(doc, 'OrderMethod', 'Internet'));
     order_source.addChild(new libxml.Element(doc, 'OrderTaker', 'node-js'));
     order.addChild(order_source);
-    console.log('DONT FORGET TO ADD USER ADDRESS HERE!!!');
     customer = new libxml.Element(doc, 'Customer').attr({
       'type': 'Customer-Standard'
     });
     customer_address = new libxml.Element(doc, 'CustomerAddress').attr({
       'type': "Address-US"
     });
-    customer_address.addChild(new libxml.Element(doc, 'City', 'Santo Domingo'));
-    customer_address.addChild(new libxml.Element(doc, 'Region', 'DR'));
-    customer_address.addChild(new libxml.Element(doc, 'PostalCode', "" + this.storeid));
-    customer_address.addChild(new libxml.Element(doc, 'StreetNumber', '99'));
-    customer_address.addChild(new libxml.Element(doc, 'StreetName', 'Princing'));
-    customer_address.addChild(new libxml.Element(doc, 'AddressLine2'));
-    customer_address.addChild(new libxml.Element(doc, 'AddressLine3'));
-    customer_address.addChild(new libxml.Element(doc, 'AddressLine4'));
-    customer_address.addChild(new libxml.Element(doc, 'UnitType', 'Apartment').attr({
-      "xsi:type": "xsd:string"
-    }));
-    customer_address.addChild(new libxml.Element(doc, 'UnitNumber', '').attr({
-      "xsi:type": "xsd:string"
-    }));
+    if (action === 'PlaceOrder' && (this.cart.address != null) && this.cart.service_method === 'delivery') {
+      customer_address.addChild(new libxml.Element(doc, 'City', this.fallback_values(action, this.cart.extra.city, 'Santo Domingo')));
+      customer_address.addChild(new libxml.Element(doc, 'Region', 'DR'));
+      customer_address.addChild(new libxml.Element(doc, 'PostalCode', this.fallback_values(action, this.cart.address.postal_code, "" + this.storeid)));
+      customer_address.addChild(new libxml.Element(doc, 'StreetNumber', this.fallback_values(action, this.cart.address.number, "")));
+      customer_address.addChild(new libxml.Element(doc, 'StreetName', this.fallback_values(action, "" + this.cart.extra.street + ", " + this.cart.extra.area, "")));
+      customer_address.addChild(new libxml.Element(doc, 'AddressLine2'));
+      customer_address.addChild(new libxml.Element(doc, 'AddressLine3'));
+      customer_address.addChild(new libxml.Element(doc, 'AddressLine4'));
+      customer_address.addChild(new libxml.Element(doc, 'UnitType', this.fallback_values(action, this.cart.address.unit_type, "")).attr({
+        "xsi:type": "xsd:string"
+      }));
+      customer_address.addChild(new libxml.Element(doc, 'UnitNumber', this.fallback_values(action, this.cart.address.unit_number, "")).attr({
+        "xsi:type": "xsd:string"
+      }));
+    } else {
+      customer_address.addChild(new libxml.Element(doc, 'City'));
+      customer_address.addChild(new libxml.Element(doc, 'Region'));
+      customer_address.addChild(new libxml.Element(doc, 'PostalCode'));
+      customer_address.addChild(new libxml.Element(doc, 'StreetNumber'));
+      customer_address.addChild(new libxml.Element(doc, 'StreetName'));
+      customer_address.addChild(new libxml.Element(doc, 'AddressLine2'));
+      customer_address.addChild(new libxml.Element(doc, 'AddressLine3'));
+      customer_address.addChild(new libxml.Element(doc, 'AddressLine4'));
+      customer_address.addChild(new libxml.Element(doc, 'UnitType'));
+      customer_address.addChild(new libxml.Element(doc, 'UnitNumber'));
+    }
     customer.addChild(customer_address);
     customer_name = new libxml.Element(doc, 'Name').attr({
       'type': "Name-US"
     });
-    customer_name.addChild(new libxml.Element(doc, 'FirstName', this.fallback_values(action, (_ref = this.cart.client) != null ? _ref.first_name : void 0, 'dummy_pricing')));
-    customer_name.addChild(new libxml.Element(doc, 'LastName', this.fallback_values(action, (_ref1 = this.cart.client) != null ? _ref1.last_name : void 0, 'dummy_last_pricing')));
+    customer_name.addChild(new libxml.Element(doc, 'FirstName', this.fallback_values(action, (_ref2 = this.cart.client) != null ? _ref2.first_name : void 0, 'dummy_pricing')));
+    customer_name.addChild(new libxml.Element(doc, 'LastName', this.fallback_values(action, (_ref3 = this.cart.client) != null ? _ref3.last_name : void 0, 'dummy_last_pricing')));
     customer.addChild(customer_name);
     customer_type_info = new libxml.Element(doc, 'CustomerTypeInfo');
     customer_type_info.addChild(new libxml.Element(doc, 'InfoType').attr({
@@ -158,9 +187,9 @@ PulseBridge = (function() {
       'xsi:nil': "true"
     }));
     customer.addChild(customer_type_info);
-    customer.addChild(new libxml.Element(doc, 'Phone', this.fallback_values(action, (_ref2 = this.cart.client) != null ? (_ref3 = _ref2.phones) != null ? (_ref4 = _ref3.first) != null ? _ref4.number : void 0 : void 0 : void 0, '8095656322')));
-    customer.addChild(new libxml.Element(doc, 'Extension', this.fallback_values(action, (_ref5 = this.cart.client) != null ? (_ref6 = _ref5.phones) != null ? (_ref7 = _ref6.first) != null ? _ref7.number : void 0 : void 0 : void 0, '99')));
-    customer.addChild(new libxml.Element(doc, 'Email', 'test@mail.com'));
+    customer.addChild(new libxml.Element(doc, 'Phone', this.fallback_values(action, (_ref4 = this.cart.phone) != null ? _ref4.number : void 0, '8095559999')));
+    customer.addChild(new libxml.Element(doc, 'Extension', this.fallback_values(action, (_ref5 = this.cart.phone) != null ? _ref5.ext : void 0, '')));
+    customer.addChild(new libxml.Element(doc, 'Email', this.fallback_values(action, (_ref6 = this.cart.client) != null ? _ref6.email : void 0, 'test@mail.com')));
     customer.addChild(new libxml.Element(doc, 'DeliveryInstructions').attr({
       'xsi:nil': "true"
     }));
@@ -170,9 +199,9 @@ PulseBridge = (function() {
     order.addChild(customer);
     coupons = new libxml.Element(doc, 'Coupons');
     if (_.any(this.cart.cart_coupons)) {
-      _ref8 = this.cart.cart_coupons;
-      for (_i = 0, _len = _ref8.length; _i < _len; _i++) {
-        cart_coupon = _ref8[_i];
+      _ref7 = this.cart.cart_coupons;
+      for (_i = 0, _len = _ref7.length; _i < _len; _i++) {
+        cart_coupon = _ref7[_i];
         coupon = new libxml.Element(doc, 'Coupon');
         coupon.addChild(new libxml.Element(doc, 'Code', cart_coupon.code));
         coupon.addChild(new libxml.Element(doc, 'approximateMaximumDiscountAmount').attr({
@@ -223,9 +252,9 @@ PulseBridge = (function() {
     order.addChild(coupons);
     order_items = new libxml.Element(doc, 'OrderItems');
     if (_.any(this.cart.cart_products)) {
-      _ref9 = this.cart.cart_products;
-      for (_j = 0, _len1 = _ref9.length; _j < _len1; _j++) {
-        cart_product = _ref9[_j];
+      _ref8 = this.cart.cart_products;
+      for (_j = 0, _len1 = _ref8.length; _j < _len1; _j++) {
+        cart_product = _ref8[_j];
         order_item = new libxml.Element(doc, 'OrderItem');
         order_item.addChild(new libxml.Element(doc, 'ProductCode', cart_product.product.productcode));
         order_item.addChild(new libxml.Element(doc, 'ProductName').attr({
@@ -271,14 +300,25 @@ PulseBridge = (function() {
     }
     order.addChild(order_items);
     payment = new libxml.Element(doc, 'Payment');
-    cash_payment = new libxml.Element(doc, 'CashPayment', this.fallback_values(action, this.cart.payment_amount, '1000000'));
+    cash_payment = new libxml.Element(doc, this.fallback_values(action, (_ref9 = this.cart.extra) != null ? _ref9.payment_type : void 0, 'CashPayment'), this.fallback_values(action, this.cart.payment_amount, '1000000'));
     payment.addChild(cash_payment);
     order.addChild(payment);
     orde_info_collection = new libxml.Element(doc, 'OrderInfoCollection');
     order_info_1 = new libxml.Element(doc, 'OrderInfo');
-    order_info_1.addChild(new libxml.Element(doc, 'KeyCode', this.fallback_values(action, this.cart.fiscal_type, 'FinalConsumer')));
-    order_info_1.addChild(new libxml.Element(doc, 'Response', this.fallback_values(action, this.cart.fiscal_type, 'FinalConsumer')));
+    order_info_1.addChild(new libxml.Element(doc, 'KeyCode', this.fallback_values(action, (_ref10 = this.cart.extra) != null ? _ref10.fiscal_type : void 0, 'FinalConsumer')));
+    order_info_1.addChild(new libxml.Element(doc, 'Response', this.fallback_values(action, (_ref11 = this.cart.extra) != null ? _ref11.fiscal_type : void 0, 'FinalConsumer')));
     orde_info_collection.addChild(order_info_1);
+    if ((((_ref12 = this.cart.extra) != null ? _ref12.fiscal_type : void 0) != null) && ((_ref13 = this.cart.extra) != null ? _ref13.fiscal_type : void 0) !== 'FinalConsumer') {
+      order_info_2 = new libxml.Element(doc, 'OrderInfo');
+      order_info_2.addChild(new libxml.Element(doc, 'KeyCode', 'TaxID'));
+      order_info_2.addChild(new libxml.Element(doc, 'Response', this.fallback_values(action, (_ref14 = this.cart.extra) != null ? _ref14.rnc : void 0, '')));
+      orde_info_collection.addChild(order_info_2);
+      order_info_3 = new libxml.Element(doc, 'OrderInfo');
+      order_info_3.addChild(new libxml.Element(doc, 'KeyCode', 'CompanyName'));
+      console.log('MISSING COMPANY NAME');
+      order_info_3.addChild(new libxml.Element(doc, 'Response', this.fallback_values(action, this.cart.client.first_name, '')));
+      orde_info_collection.addChild(order_info_3);
+    }
     order.addChild(orde_info_collection);
     body = new libxml.Element(doc, 'env:Body');
     action = new libxml.Element(doc, "ns1:" + action).attr({

@@ -23,7 +23,7 @@ class Carts
 
   @place: (data, respond, socket) =>
     if data?
-      Cart.find data, (cart_find_err, cart) ->
+      Cart.find data.cart_id, (cart_find_err, cart) ->
         if cart_find_err?
           console.error cart_find_err.stack
           socket.emit 'cart:place:error', 'La orden no se encontro en el sistema'

@@ -7,6 +7,6 @@
     %input{:type=>"radio", :name=>"cart[payment_type]", :id=>"credit_payment", :value=>"CreditCard" }
     Pago con tarjeta
   .control-group#creditcard_number.hidden.top-margin-1
-    = text_field_tag 'cart[cardnumber]', nil, placeholder: 'Numero de tarjeta'
+    = text_field_tag 'cart[cardnumber]', nil, placeholder: 'Numero de tarjeta', id: 'cardnumber'
   .control-group#creditcard_approval.hidden
-    = password_field_tag 'cart[credit_cart_approval_number]', nil, placeholder: 'Numero de aprovación'
+    = text_field_tag 'cart[credit_cart_approval_number]', nil, placeholder: 'Numero de aprovación', id: 'cardapproval'

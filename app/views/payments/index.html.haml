@@ -36,10 +36,10 @@
         .row
           .span4
             %h4.bottom-margin-1 RNC disponibles
-            %select
+            %select#fiscal_info
               %option{value: ''} Seleccione un RNC
-              = @cart.client.tax_numbers.each do |tax_number|
-                %option{value: tax_number.id}= "#{tax_number.rnc} - #{tax_number.tipo_fiscal}"
+              - @cart.client.tax_numbers.each do |tax_number|
+                %option{value: "#{tax_number.rnc}/#{tax_number.fiscal_type}"}= "#{tax_number.rnc} - #{tax_number.tipo_fiscal}"
       %hr
       .row
         .span
@@ -68,15 +68,15 @@
             .row
               .span4
                 %strong Ciudad:
-                = @cart.client.last_address.street_area.city.name
+                %span#target_city= @cart.client.last_address.street_area.city.name
             .row
               .span4
                 %strong Sector:
-                = @cart.client.last_address.street_area.name
+                %span#target_area= @cart.client.last_address.street_area.name
             .row
               .span4
                 %strong Calle:
-                = @cart.client.last_address.street.name
+                %span#target_street= @cart.client.last_address.street.name
             .row
               .span4
                 %strong Numero:

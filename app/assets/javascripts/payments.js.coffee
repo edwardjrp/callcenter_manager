@@ -9,8 +9,28 @@ jQuery ->
     $('#actions').on 'click', '#place_order_button', (event)->
       event.preventDefault()
       target = $(event.currentTarget)
-      socket.emit('cart:place',  $('#checkout_cart').data('id')) unless target.hasClass('disabled')
+      payment_attributes = {}
+      payment_attributes['cart_id'] = $('#checkout_cart').data('id')
+      payment_attributes['city'] = $('#target_city').text() if $('#target_city')?
+      payment_attributes['area'] = $('#target_area').text() if $('#target_area')?
+      payment_attributes['street'] = $('#target_street').text() if $('#target_street')?
+      if $('#cash_payment').is(':checked')
+        payment_attributes['payment_type'] = 'CashPayment'
+      else if $('#credit_payment').is(':checked')
+        if $('#cardnumber').val() != '' and $('#cardapproval').val() != ''
+          payment_attributes['payment_type'] = 'CreditCardPayment'
+          payment_attributes['cardnumber'] = $('#cardnumber').val()
+          payment_attributes['cardapproval'] = $('#cardapproval').val()
+        else
+          $("<div class='purr'>La información de pago no esta completa.<div>").purr()
+      else
+        $("<div class='purr'>La información de pago no esta completa.<div>").purr()
+      if $('#fiscal_info').val()? and $('#fiscal_info').val() != ''
+        payment_attributes['rnc'] = $('#fiscal_info').val().split('/')[0]
+        payment_attributes['fiscal_type'] = $('#fiscal_info').val().split('/')[1]
+      socket.emit('cart:place',  payment_attributes) unless target.hasClass('disabled')
       target.addClass('disabled')
+
     socket.on 'cart:place:completed', (data)->
       $.ajax
         type: 'POST'
