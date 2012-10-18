@@ -89,7 +89,7 @@ class PulseBridge
             else
                 tax = 'CF:ConsFinal'
 
-    order.addChild(new libxml.Element(doc,'DeliveryInstructions', "Edf:;TC:#{tc.toString()};AP:#{ap.toString()};#{@fallback_values(action, tax, 'N/A')};D_I."))  # delivery instructions
+    order.addChild(new libxml.Element(doc,'DeliveryInstructions', "Edf:;TC:#{tc.toString()};AP:#{ap.toString()};#{@fallback_values(action, tax, 'CF:ConsFinal')};D_I."))  # delivery instructions
     #order source
     order_source  = new libxml.Element(doc,'OrderSource')
     order_source.addChild(new libxml.Element(doc,'OrganizationURI', 'proteus.dominos.com.do'))
@@ -103,16 +103,16 @@ class PulseBridge
     customer_address = new libxml.Element(doc,'CustomerAddress').attr({ 'type':"Address-US"})
 
     if action == 'PlaceOrder' and @cart.address? and @cart.service_method == 'delivery'
-        customer_address.addChild(new libxml.Element(doc,'City', @fallback_values(action, @cart.extra.city, 'Santo Domingo'))) # city
+        customer_address.addChild(new libxml.Element(doc,'City', @fallback_values(action, @cart.extra?.city, 'Santo Domingo'))) # city
         customer_address.addChild(new libxml.Element(doc,'Region', 'DR'))
-        customer_address.addChild(new libxml.Element(doc,'PostalCode', @fallback_values(action, @cart.address.postal_code, "#{@storeid}")))
-        customer_address.addChild(new libxml.Element(doc,'StreetNumber', @fallback_values(action, @cart.address.number, "")))
-        customer_address.addChild(new libxml.Element(doc,'StreetName', @fallback_values(action, "#{@cart.extra.street}, #{@cart.extra.area}", "")))
+        customer_address.addChild(new libxml.Element(doc,'PostalCode', @fallback_values(action, @cart.address?.postal_code?.toString(), "#{@storeid}")))
+        customer_address.addChild(new libxml.Element(doc,'StreetNumber', @fallback_values(action, @cart.address?.number?.toString(), "")))
+        customer_address.addChild(new libxml.Element(doc,'StreetName', @fallback_values(action, "#{@cart.extra?.street}, #{@cart.extra?.area}", "")))
         customer_address.addChild(new libxml.Element(doc,'AddressLine2'))
         customer_address.addChild(new libxml.Element(doc,'AddressLine3'))
         customer_address.addChild(new libxml.Element(doc,'AddressLine4'))
-        customer_address.addChild(new libxml.Element(doc,'UnitType', @fallback_values(action, @cart.address.unit_type, "")).attr({"xsi:type":"xsd:string"}))
-        customer_address.addChild(new libxml.Element(doc,'UnitNumber', @fallback_values(action, @cart.address.unit_number, "")).attr({"xsi:type":"xsd:string"}))
+        customer_address.addChild(new libxml.Element(doc,'UnitType', @fallback_values(action, @cart.address?.unit_type, "")).attr({"xsi:type":"xsd:string"}))
+        customer_address.addChild(new libxml.Element(doc,'UnitNumber', @fallback_values(action, @cart.address?.unit_number?.toString(), "")).attr({"xsi:type":"xsd:string"}))
     else
         customer_address.addChild(new libxml.Element(doc,'City')) # city
         customer_address.addChild(new libxml.Element(doc,'Region'))
@@ -140,8 +140,8 @@ class PulseBridge
     customer_type_info.addChild(new libxml.Element(doc,'Department').attr('xsi:nil':"true"))
     customer.addChild(customer_type_info)
      
-    customer.addChild(new libxml.Element(doc,'Phone', @fallback_values(action, @cart.phone?.number,'8095559999')))  # user current phone
-    customer.addChild(new libxml.Element(doc,'Extension',@fallback_values(action, @cart.phone?.ext,''))) # user current extention
+    customer.addChild(new libxml.Element(doc,'Phone', @fallback_values(action, @cart.phone?.number.toString(),'8095559999')))  # user current phone
+    customer.addChild(new libxml.Element(doc,'Extension',@fallback_values(action, @cart.phone?.ext.toString(),''))) # user current extention
     customer.addChild(new libxml.Element(doc,'Email', @fallback_values(action, @cart.client?.email,'test@mail.com'))) # user current extention - have to check olo for fallback value
     customer.addChild(new libxml.Element(doc,'DeliveryInstructions').attr('xsi:nil':"true"))
     customer.addChild(new libxml.Element(doc,'CustomerTax').attr('xsi:nil':"true"))
@@ -215,11 +215,16 @@ class PulseBridge
 
     #payment   # this whole section depends on the payment menthod - check olo2 cc for handling
     payment = new libxml.Element(doc,'Payment')
-    cash_payment = new libxml.Element(doc, @fallback_values(action, @cart.extra?.payment_type,'CashPayment') ,  @fallback_values(action, @cart.payment_amount,'1000000'))
-    # console.log 'HERE\n\n\n\n\n'
-    # console.log @cart.payment_amount
-    # cash_payment.addChild(new libxml.Element(doc,'PaymentAmmount', '360'))  # current order for place  @fallback_values(action, @cart.payment_amount.toString(),'1000000'))
-    payment.addChild(cash_payment)
+
+    payment_type = new libxml.Element(doc, @fallback_values(action, @cart.extra?.payment_type,'CashPayment'))
+    payment_type.addChild(new libxml.Element(doc,'PaymentAmmount',   @fallback_values(action, @cart.payment_amount?.toString(),'1000000')    ))
+
+    if @fallback_values(action, @cart.extra?.payment_type,'CashPayment') == 'CreditCardPayment'
+        payment_type.addChild(new libxml.Element(doc,"CreditCardType", 'Mastercard'))
+        payment_type.addChild(new libxml.Element(doc,"CreditCardTypeId", '7'))
+
+    payment.addChild(payment_type)
+    
     order.addChild(payment)
     #end payment
 
@@ -233,7 +238,7 @@ class PulseBridge
 
         order_info_2  = new libxml.Element(doc,'OrderInfo')
         order_info_2.addChild(new libxml.Element(doc,'KeyCode','TaxID'))
-        order_info_2.addChild(new libxml.Element(doc,'Response', @fallback_values(action, @cart.extra?.rnc, '')))
+        order_info_2.addChild(new libxml.Element(doc,'Response', @fallback_values(action, @cart.extra?.rnc.toString(), '')))
         orde_info_collection.addChild(order_info_2)
 
         order_info_3  = new libxml.Element(doc,'OrderInfo')
