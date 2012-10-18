@@ -276,7 +276,6 @@ Cart.prototype.place = function(data, socket) {
         current_cart.cart_products = current_cart_products;
         current_cart.cart_coupons = current_cart_coupons;
         current_cart.client = client.simplified();
-        console.log(user);
         current_cart.user = user.simplified();
         current_cart.phone = phone.simplified();
         current_cart.address = address.simplified();
@@ -292,8 +291,9 @@ Cart.prototype.place = function(data, socket) {
             try {
               return cart_request.place(pulse_com_error, function(res_data) {
                 var order_reply;
+                console.info(res_data);
                 order_reply = new OrderReply(res_data);
-                console.log(order_reply);
+                console.info(order_reply);
                 if (order_reply.status === '0') {
                   return me.updateAttributes({
                     store_order_id: order_reply.order_id,

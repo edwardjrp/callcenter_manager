@@ -16,26 +16,28 @@ OrderReply = (function() {
     this.cart_products = cart_products;
     if (!(typeof this.body === 'undefined' || !(this.body != null))) {
       doc = libxmljs.parseXmlString(this.body);
-      this.reply_id = doc.get('//OrderReply').attr('orderreplyid').value();
-      this.status = doc.get('//Status').text();
-      this.status_text = doc.get('//StatusText').text();
-      if (doc.get('//StoreOrderID') != null) {
-        this.order_id = doc.get('//StoreOrderID').text();
+      if ((doc.get('//OrderReply') != null) && !_.isUndefined(doc.get('//OrderReply'))) {
+        this.reply_id = doc.get('//OrderReply').attr('orderreplyid').value();
+        this.status = doc.get('//Status').text();
+        this.status_text = doc.get('//StatusText').text();
+        if (doc.get('//StoreOrderID') != null) {
+          this.order_id = doc.get('//StoreOrderID').text();
+        }
+        this.store = doc.get('//StoreID').text();
+        this.service_method = doc.get('//ServiceMethod').text();
+        this.can_place = doc.get('//CanPlaceOrder').text();
+        this.wait_time = doc.get('//EstimatedWaitTime').text();
+        this.sumary = doc.get('//OrderText').text();
+        this.order_items = _.map(doc.find('//OrderItem'), function(order_item) {
+          return new ReplyItem(order_item);
+        });
+        this.sumary = doc.get('//OrderText').text();
+        this.netamount = doc.get('//NetAmount').text();
+        this.taxamount = doc.get('//TaxAmount').text();
+        this.tax1amount = doc.get('//Tax1Amount').text();
+        this.tax2amount = doc.get('//Tax2Amount').text();
+        this.payment_amount = doc.get('//PaymentAmount').text();
       }
-      this.store = doc.get('//StoreID').text();
-      this.service_method = doc.get('//ServiceMethod').text();
-      this.can_place = doc.get('//CanPlaceOrder').text();
-      this.wait_time = doc.get('//EstimatedWaitTime').text();
-      this.sumary = doc.get('//OrderText').text();
-      this.order_items = _.map(doc.find('//OrderItem'), function(order_item) {
-        return new ReplyItem(order_item);
-      });
-      this.sumary = doc.get('//OrderText').text();
-      this.netamount = doc.get('//NetAmount').text();
-      this.taxamount = doc.get('//TaxAmount').text();
-      this.tax1amount = doc.get('//Tax1Amount').text();
-      this.tax2amount = doc.get('//Tax2Amount').text();
-      this.payment_amount = doc.get('//PaymentAmount').text();
     }
   }
 

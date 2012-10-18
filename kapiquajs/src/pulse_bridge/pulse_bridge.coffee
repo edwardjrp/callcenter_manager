@@ -68,9 +68,12 @@ class PulseBridge
     order = new libxml.Element(doc,'Order').attr({orderid:"Order##{Date.now()}", currency:"en-USD", language:"en-USA"})
     order.addChild(new libxml.Element(doc,'StoreID', "#{@storeid}" ))   # store @storeid 
     # order.addChild(new libxml.Element(doc,'ServiceMethod', @fallback_values(action, @cart.service_method, 'delivery')))  # service method
-    order.addChild(new libxml.Element(doc,'ServiceMethod', 'delivery'))  # service method
-    order.addChild(new libxml.Element(doc,'OrderTakeSeconds', '60'))
-    # order.addChild(new libxml.Element(doc,'DeliveryInstructions', 'Edf:;TC:N/A;AP:N/A;D_I.'))  # delivery instructions
+    order.addChild(new libxml.Element(doc,'ServiceMethod', @fallback_values(action, @cart.service_method, 'dinein')))  # service method
+
+    take_time = (Date.now() - Date.parse(@cart.started_on))/1000
+    take_time
+    order.addChild(new libxml.Element(doc,'OrderTakeSeconds',@fallback_values(action, take_time.toString(), '60')))
+    order.addChild(new libxml.Element(doc,'DeliveryInstructions', 'Edf:;TC:N/A;AP:N/A;D_I.'))  # delivery instructions
     #order source
     order_source  = new libxml.Element(doc,'OrderSource')
     order_source.addChild(new libxml.Element(doc,'OrganizationURI', 'proteus.dominos.com.do'))

@@ -195,7 +195,6 @@ Cart.prototype.place = (data, socket) ->
           current_cart.cart_products = current_cart_products
           current_cart.cart_coupons = current_cart_coupons
           current_cart.client = client.simplified()
-          console.log user
           current_cart.user = user.simplified()
           current_cart.phone = phone.simplified()
           current_cart.address = address.simplified()
@@ -209,8 +208,9 @@ Cart.prototype.place = (data, socket) ->
               cart_request = new  PulseBridge(current_cart, current_cart.store.storeid, current_cart.store.ip,  settings.pulse_port)
               try
                 cart_request.place pulse_com_error, (res_data)->
+                  console.info res_data
                   order_reply = new OrderReply(res_data)
-                  console.log order_reply
+                  console.info order_reply
                   if order_reply.status == '0'
                     me.updateAttributes { store_order_id: order_reply.order_id, complete_on: Date.now(), completed: true }, (cart_update_err, updated_cart)->
                       socket.emit 'cart:place:completed', updated_cart

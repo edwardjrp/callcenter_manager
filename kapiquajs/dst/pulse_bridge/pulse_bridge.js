@@ -86,7 +86,7 @@ PulseBridge = (function() {
   };
 
   PulseBridge.prototype.body = function(action) {
-    var auth, body, cart_coupon, cart_item_price, cart_option_quantity, cart_product, cash_payment, coupon, coupons, customer, customer_address, customer_name, customer_type_info, doc, envelope, header, item_modifier, item_modifiers, orde_info_collection, order, order_info_1, order_item, order_items, order_source, payment, product_option, product_options, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
+    var auth, body, cart_coupon, cart_item_price, cart_option_quantity, cart_product, cash_payment, coupon, coupons, customer, customer_address, customer_name, customer_type_info, doc, envelope, header, item_modifier, item_modifiers, orde_info_collection, order, order_info_1, order_item, order_items, order_source, payment, product_option, product_options, take_time, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
     doc = new libxml.Document();
     envelope = new libxml.Element(doc, 'env:Envelope').attr({
       'xmlns:xsd': "http://www.w3.org/2001/XMLSchema",
@@ -108,8 +108,12 @@ PulseBridge = (function() {
       language: "en-USA"
     });
     order.addChild(new libxml.Element(doc, 'StoreID', "" + this.storeid));
-    order.addChild(new libxml.Element(doc, 'ServiceMethod', 'delivery'));
-    order.addChild(new libxml.Element(doc, 'OrderTakeSeconds', '60'));
+    order.addChild(new libxml.Element(doc, 'ServiceMethod', this.fallback_values(action, this.cart.service_method, 'dinein')));
+    take_time = (Date.now() - Date.parse(this.cart.started_on)) / 1000;
+    take_time;
+
+    order.addChild(new libxml.Element(doc, 'OrderTakeSeconds', this.fallback_values(action, take_time.toString(), '60')));
+    order.addChild(new libxml.Element(doc, 'DeliveryInstructions', 'Edf:;TC:N/A;AP:N/A;D_I.'));
     order_source = new libxml.Element(doc, 'OrderSource');
     order_source.addChild(new libxml.Element(doc, 'OrganizationURI', 'proteus.dominos.com.do'));
     order_source.addChild(new libxml.Element(doc, 'OrderMethod', 'Internet'));
