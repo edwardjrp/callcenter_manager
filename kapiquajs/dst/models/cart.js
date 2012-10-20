@@ -143,14 +143,19 @@ Cart.prototype.comm_failed = function(socket) {
 };
 
 Cart.prototype.updatePrices = function(order_reply, socket) {
-  return this.updateAttributes({
-    can_place_order: order_reply.can_place,
-    net_amount: order_reply.netamount,
-    tax_amount: order_reply.taxamount,
-    tax1_amount: order_reply.tax1amount,
-    tax2_amount: order_reply.tax2amount,
-    payment_amount: order_reply.payment_amount
-  }, function(err, updated_cart) {
+  var prices_attributes;
+  prices_attributes = {};
+  prices_attributes['can_place_order'] = order_reply.can_place;
+  prices_attributes['net_amount'] = order_reply.netamount;
+  prices_attributes['tax_amount'] = order_reply.taxamount;
+  prices_attributes['tax1_amount'] = order_reply.tax1amount;
+  prices_attributes['tax2_amount'] = order_reply.tax2amount;
+  prices_attributes['payment_amount'] = order_reply.payment_amount;
+  prices_attributes['discount'] = 0.0;
+  prices_attributes['discount_auth_id'] = null;
+  prices_attributes['exonerated'] = false;
+  prices_attributes['exoneration_authorizer'] = null;
+  return this.updateAttributes(prices_attributes, function(err, updated_cart) {
     if (err) {
       console.error(err.stack);
       return socket.emit('cart:price:error', 'No se pudo actualizar los precios en la base de datos');

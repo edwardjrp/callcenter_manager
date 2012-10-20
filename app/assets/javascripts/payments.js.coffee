@@ -50,6 +50,8 @@ jQuery ->
       $('#checkout_cart_net').html("<strong> Monto neto: </strong> #{window.to_money(data.order_reply.netamount)}")
       $('#checkout_cart_tax').html("<strong>  Impuestos: </strong> #{window.to_money(data.order_reply.taxamount)}")
       $('#checkout_cart_total').html("<strong> Monto de la orden: </strong> #{window.to_money(data.order_reply.payment_amount)}")
+      $('#checkout_cart_exoneration').html("<strong>Exonerado:</strong> N/A")
+      $('#checkout_cart_discount').html("<strong>Descuento:</strong> RD$ 0.00")
       _.each data.items, (item)->
         $("#cart_product_#{item.cart_product_id}").find('.item_price').html(window.to_money(item.priced_at))
       # console.log data.order_reply
@@ -145,13 +147,15 @@ jQuery ->
       event.preventDefault()
       target = $(event.currentTarget)
       table = target.closest('table')
-      $('#actions').find('#place_order_button').remove()
-      socket.emit 'cart_products:delete', { id: target.closest('tr').data('cart-product-id') }, (error, cart_product_id) ->
-        if error
-          $("<div class='purr'>No se puedo remover el elemento<div>").purr()
-        else
-          $("#cart_product_#{cart_product_id}").remove()
-          table.find('td').effect('highlight', { color: '#1175AE'})
+      if confirm('¿Seguro que desea remover el producto de la orden?')
+        $('#actions').find('#place_order_button').remove()
+        socket.emit 'cart_products:delete', { id: target.closest('tr').data('cart-product-id') }, (error, cart_product_id) ->
+          if error
+            $("<div class='purr'>No se puedo remover el elemento<div>").purr()
+          else
+            $("#cart_product_#{cart_product_id}").remove()
+            $("<div class='purr'>Los descuentos y exoneraciones deben ser solicitados luego de cada cambio a la orden<div>").purr()
+            table.find('td').effect('highlight', { color: '#1175AE'})
         
 
     $('.checkout_input').on 'focus', (event)->

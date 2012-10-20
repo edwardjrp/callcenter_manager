@@ -44,7 +44,7 @@ class ApplicationController < ActionController::Base
    
    def current_user
      return nil unless session[:user_token] || !User.exists?(auth_token: session[:user_token])
-     return User.includes(:carts).find_by_auth_token(session[:user_token]) 
+     return User.find_by_auth_token(session[:user_token]) 
    end
    helper_method :current_user
    

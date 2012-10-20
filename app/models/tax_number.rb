@@ -20,6 +20,7 @@ class TaxNumber < ActiveRecord::Base
   belongs_to :client
   attr_accessible :rnc, :client_id, :verified, :fiscal_type
 
+  scope :with_verification, where(verified: true)
 
   def self.fiscal_types
     ["Consumidor Final","Crédito Fiscal","Regímenes Especiales","Gubernamental"]

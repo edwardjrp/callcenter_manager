@@ -218,7 +218,7 @@ class PulseBridge
     payment = new libxml.Element(doc,'Payment')
 
     payment_type = new libxml.Element(doc, @fallback_values(action, @cart.extra?.payment_type,'CashPayment'))
-    payment_type.addChild(new libxml.Element(doc,'PaymentAmmount',   @fallback_values(action, @cart.payment_amount?.toString(),'1000000')    ))
+    payment_type.addChild(new libxml.Element(doc,'PaymentAmmount',   @fallback_values(action, @cart.payment_amount?.toString(),'1000000')    ))  # send discount and exonerations
 
     if @fallback_values(action, @cart.extra?.payment_type,'CashPayment') == 'CreditCardPayment'
         payment_type.addChild(new libxml.Element(doc,"CreditCardType", 'Mastercard'))

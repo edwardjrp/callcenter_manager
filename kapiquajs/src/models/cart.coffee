@@ -96,7 +96,18 @@ Cart.prototype.comm_failed = (socket) ->
 
 Cart.prototype.updatePrices = (order_reply, socket) ->
   # consider removing discount and exonerations
-  this.updateAttributes {  can_place_order: order_reply.can_place, net_amount: order_reply.netamount, tax_amount: order_reply.taxamount, tax1_amount: order_reply.tax1amount, tax2_amount: order_reply.tax2amount,  payment_amount: order_reply.payment_amount } , (err, updated_cart) ->
+  prices_attributes = {}
+  prices_attributes['can_place_order'] = order_reply.can_place
+  prices_attributes['net_amount'] = order_reply.netamount
+  prices_attributes['tax_amount'] = order_reply.taxamount
+  prices_attributes['tax1_amount'] = order_reply.tax1amount
+  prices_attributes['tax2_amount'] = order_reply.tax2amount
+  prices_attributes['payment_amount'] = order_reply.payment_amount
+  prices_attributes['discount'] = 0.0
+  prices_attributes['discount_auth_id'] = null
+  prices_attributes['exonerated'] = false
+  prices_attributes['exoneration_authorizer'] = null
+  this.updateAttributes prices_attributes , (err, updated_cart) ->
     if err
       console.error err.stack
       socket.emit 'cart:price:error', 'No se pudo actualizar los precios en la base de datos'

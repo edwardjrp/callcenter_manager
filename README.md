@@ -33,3 +33,7 @@
 - save payment details in node
 
 - manage reenabling checkout button
+
+- test all model methods
+
+- fix socket.io on error
