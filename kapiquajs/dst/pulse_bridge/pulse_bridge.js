@@ -315,11 +315,11 @@ PulseBridge = (function() {
     exoneration_present = this.cart.exonerated && this.cart.exonerated === true && !_.isNull(this.cart.exoneration_authorizer) && !_.isUndefined(this.cart.exoneration_authorizer);
     orderOverrrideAmount = this.cart.payment_amount;
     if (this.cart.payment_amount != null) {
-      if (discount_present) {
-        orderOverrrideAmount = Number(orderOverrrideAmount) - Number(this.cart.discount);
-      }
       if (exoneration_present) {
         orderOverrrideAmount = Number(orderOverrrideAmount) - Number(this.cart.tax_amount);
+      }
+      if (discount_present) {
+        orderOverrrideAmount = Number(orderOverrrideAmount) - Number(this.cart.discount);
       }
       if (orderOverrrideAmount < 1) {
         orderOverrrideAmount = this.cart.payment_amount;

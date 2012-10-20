@@ -13,14 +13,10 @@ class PulseBridge
 
   constructor: (@cart, @storeid, @target_ip, @target_port) ->
 
-  # @debug = false
+  
   target: ->
     "http://#{@target_ip}:#{@target_port}/RemotePulseAPI/RemotePulseAPI.WSDL"
   
-  # @make: (action, data) ->
-  #   doc = new libxml.Document()
-
-
   fallback_values: (action, value, fallback) =>
     if action == 'PlaceOrder'
       if _.isUndefined(value) or _.isNull(value) then fallback else value
@@ -32,9 +28,6 @@ class PulseBridge
     console.info data
     headers = { "User-Agent": "kapiqua-node","SOAPAction": "http://www.dominos.com/action/#{action}"  , "Content-Length": data.length, "Connection": "close","Accept" : "text/html,application/xhtml+xml,application/xml","Accept-Charset": "utf-8", "Content-Type":"text/xml;charset=UTF-8" }
     console.info headers
-    # console.info @storeid
-    # console.info @target()
-    # console.info data
     request {method: 'POST', headers: headers, uri: @target(), body: data }, (err, res, res_data) ->
       if err
         console.error err.stack
@@ -180,13 +173,10 @@ class PulseBridge
     # end coupons
     #items
     order_items = new libxml.Element(doc,'OrderItems')
-    # iteration here
-    # console.log @cart if action == 'PlaceOrder'
+    
 
     if _.any(@cart.cart_products)
       for cart_product in @cart.cart_products
-        # console.log cart_product
-        # console.log cart_product
         order_item = new libxml.Element(doc,'OrderItem')
         order_item.addChild(new libxml.Element(doc,'ProductCode', cart_product.product.productcode))
         order_item.addChild(new libxml.Element(doc,'ProductName').attr('xsi:nil':"true"))
@@ -214,7 +204,7 @@ class PulseBridge
     # end items
 
 
-    #payment   # this whole section depends on the payment menthod - check olo2 cc for handling
+    
     payment = new libxml.Element(doc,'Payment')
 
     payment_type = new libxml.Element(doc, @fallback_values(action, @cart.extra?.payment_type,'CashPayment'))
@@ -236,8 +226,8 @@ class PulseBridge
 
     orderOverrrideAmount = @cart.payment_amount
     if @cart.payment_amount?
-      orderOverrrideAmount = Number(orderOverrrideAmount) - Number(@cart.discount) if discount_present
       orderOverrrideAmount = Number(orderOverrrideAmount) - Number(@cart.tax_amount) if exoneration_present
+      orderOverrrideAmount = Number(orderOverrrideAmount) - Number(@cart.discount) if discount_present
       orderOverrrideAmount = @cart.payment_amount if orderOverrrideAmount < 1
 
     if discount_present or exoneration_present
@@ -275,7 +265,7 @@ class PulseBridge
     envelope.addChild(header)
     envelope.addChild(body) 
     doc.root(envelope)
-    # console.log doc.toString()
+    
     doc.toString().replace(/\"/g, '\"')
     
 
