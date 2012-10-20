@@ -215,7 +215,8 @@ Cart.prototype.place = (data, socket) ->
                     me.updateAttributes { store_order_id: order_reply.order_id, complete_on: Date.now(), completed: true }, (cart_update_err, updated_cart)->
                       socket.emit 'cart:place:completed', updated_cart
                   else
-                    socket.emit 'cart:place:error', "No se puede colocar la order, Pulse respondio: <br/> <strong>#{order_reply.status_text}</strong>"
+                    if order_reply and order_reply.status_text then msg = order_reply.status_text else msg = 'La respuesta e pulse no pudo ser interpretada'
+                    socket.emit 'cart:place:error', "No se puede colocar la order, Pulse respondio: <br/> <strong>#{msg}</strong>"
               catch err_pricing
                 socket.emit 'cart:place:error', 'Falla en la comunicación con Pulse'
                 me.comm_failed(socket)

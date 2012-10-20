@@ -4,8 +4,6 @@
 
 - Currently is not clearing the user data when I clear the ext only working for replace
 
-- add functionality to the cancel button
-
 - need to complete and test store selection
 
 - add clear when address dependencies change
@@ -16,17 +14,11 @@
 
 - Implementar dicontinuado/borrado store, coupons and products/ have to add discontinued to products to allow reimporting
 
-- socket.io sometimes return 'transport end (undefined)' and ignores messages
-
 - request.js crashes when destination host is unreachable
-
-- add olo url to settings section
-
-- add settings load in node
 
 - add resports section
 
-- add coupons
+- refactor add coupons
 
 - add import section
 
@@ -39,3 +31,7 @@
 - verify acceptance test for admin stores editing
 
 - check parsing regexp everywhere
+
+- save payment details in node
+
+- manage reenabling checkout button
