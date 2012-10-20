@@ -39,7 +39,7 @@
             %select#fiscal_info
               %option{value: ''} Seleccione un RNC
               - @cart.client.tax_numbers.each do |tax_number|
-                %option{value: "#{tax_number.rnc}/#{tax_number.fiscal_type}"}= "#{tax_number.rnc} - #{tax_number.tipo_fiscal}"
+                %option{value: "#{tax_number.rnc}/#{tax_number.fiscal_type}/#{tax_number.company_name}"}= "#{tax_number.rnc} - #{tax_number.tipo_fiscal}"
       %hr
       .row
         .span

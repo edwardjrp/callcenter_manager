@@ -244,8 +244,7 @@ class PulseBridge
 
         order_info_3  = new libxml.Element(doc,'OrderInfo')
         order_info_3.addChild(new libxml.Element(doc,'KeyCode','CompanyName'))
-        console.log 'MISSING COMPANY NAME'
-        order_info_3.addChild(new libxml.Element(doc,'Response', @fallback_values(action, @cart.client.first_name, '')))
+        order_info_3.addChild(new libxml.Element(doc,'Response', @fallback_values(action, @cart.extra?.fiscal_name, '')))
         orde_info_collection.addChild(order_info_3)
 
     order.addChild(orde_info_collection)

@@ -86,7 +86,7 @@ PulseBridge = (function() {
   };
 
   PulseBridge.prototype.body = function(action) {
-    var ap, auth, body, cart_coupon, cart_item_price, cart_option_quantity, cart_product, coupon, coupons, customer, customer_address, customer_name, customer_type_info, doc, envelope, header, item_modifier, item_modifiers, orde_info_collection, order, order_info_1, order_info_2, order_info_3, order_item, order_items, order_source, payment, payment_type, product_option, product_options, take_time, tax, tc, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref10, _ref11, _ref12, _ref13, _ref14, _ref15, _ref16, _ref17, _ref18, _ref19, _ref2, _ref20, _ref21, _ref22, _ref23, _ref24, _ref25, _ref26, _ref27, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
+    var ap, auth, body, cart_coupon, cart_item_price, cart_option_quantity, cart_product, coupon, coupons, customer, customer_address, customer_name, customer_type_info, doc, envelope, header, item_modifier, item_modifiers, orde_info_collection, order, order_info_1, order_info_2, order_info_3, order_item, order_items, order_source, payment, payment_type, product_option, product_options, take_time, tax, tc, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref10, _ref11, _ref12, _ref13, _ref14, _ref15, _ref16, _ref17, _ref18, _ref19, _ref2, _ref20, _ref21, _ref22, _ref23, _ref24, _ref25, _ref26, _ref27, _ref28, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
     doc = new libxml.Document();
     envelope = new libxml.Element(doc, 'env:Envelope').attr({
       'xmlns:xsd': "http://www.w3.org/2001/XMLSchema",
@@ -110,6 +110,9 @@ PulseBridge = (function() {
     order.addChild(new libxml.Element(doc, 'StoreID', "" + this.storeid));
     order.addChild(new libxml.Element(doc, 'ServiceMethod', this.fallback_values(action, this.cart.service_method, 'dinein')));
     take_time = (Date.now() - Date.parse(this.cart.started_on)) / 1000;
+    if (take_time > 9999) {
+      take_time = 9999;
+    }
     take_time;
 
     order.addChild(new libxml.Element(doc, 'OrderTakeSeconds', this.fallback_values(action, take_time.toString(), '60')));
@@ -320,8 +323,7 @@ PulseBridge = (function() {
       orde_info_collection.addChild(order_info_2);
       order_info_3 = new libxml.Element(doc, 'OrderInfo');
       order_info_3.addChild(new libxml.Element(doc, 'KeyCode', 'CompanyName'));
-      console.log('MISSING COMPANY NAME');
-      order_info_3.addChild(new libxml.Element(doc, 'Response', this.fallback_values(action, this.cart.client.first_name, '')));
+      order_info_3.addChild(new libxml.Element(doc, 'Response', this.fallback_values(action, (_ref28 = this.cart.extra) != null ? _ref28.fiscal_name : void 0, '')));
       orde_info_collection.addChild(order_info_3);
     }
     order.addChild(orde_info_collection);

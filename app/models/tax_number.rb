@@ -40,7 +40,13 @@ class TaxNumber < ActiveRecord::Base
 
   def verify
     TaxpayerIdentification.find_by_idnumber(self.rnc).tap do |tax_id|
-      self.update_attributes(verified: tax_id.present?)
+      self.verified = tax_id.present?
+      if tax_id.present?
+        self.company_name = tax_id.full_name || tax_id.company_name 
+      else
+        self.company_name = nil
+      end
+      self.save
     end
   end
 end
