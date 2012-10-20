@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+
+/usr/local/bin/mocha test/_test_helper.js test/models/*.coffee 
