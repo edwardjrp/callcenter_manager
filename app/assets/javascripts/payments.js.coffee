@@ -43,7 +43,9 @@ jQuery ->
           window.location = '/'
 
     $('.checkout_input').restric('alpha').restric('spaces')
+
     socket.emit 'cart:price', $('#checkout_cart').data('id')
+    
     socket.on 'cart:priced', (data)->
       $('#checkout_cart_net').html("<strong> Monto neto: </strong> #{window.to_money(data.order_reply.netamount)}")
       $('#checkout_cart_tax').html("<strong>  Impuestos: </strong> #{window.to_money(data.order_reply.taxamount)}")

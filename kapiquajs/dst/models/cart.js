@@ -49,7 +49,7 @@ Cart.prototype.price = function(socket) {
           return socket.emit('cart:price:error', 'No se pudo acceder a la lista de productos para esta orden');
         } else {
           current_cart_products = _.map(cart_products, function(cart_product) {
-            return cart_product.simplified();
+            return cart_product.toJSON();
           });
           return callback(null, current_cart_products);
         }
@@ -76,7 +76,7 @@ Cart.prototype.price = function(socket) {
           return socket.emit('cart:price:error', 'No se pudo acceder a la lista de cupones para esta orden');
         } else {
           current_cart_coupons = _.map(cart_coupons, function(cart_coupon) {
-            return cart_coupon.simplified();
+            return cart_coupon.toJSON();
           });
           return callback(null, current_cart_products, current_cart_coupons);
         }
@@ -88,7 +88,7 @@ Cart.prototype.price = function(socket) {
       console.error(final_error.stack);
       return socket.emit('cart:price:error', 'Un error impidio solitar el precio de esta orden');
     } else {
-      current_cart = me.simplified();
+      current_cart = me.toJSON();
       current_cart.cart_products = current_cart_products;
       current_cart.cart_coupons = current_cart_coupons;
       pulse_com_error = function(comm_err) {
@@ -184,7 +184,7 @@ Cart.prototype.place = function(data, socket) {
           return socket.emit('cart:place:error', 'No se pudo acceder a la lista de productos para esta orden');
         } else {
           current_cart_products = _.map(cart_products, function(cart_product) {
-            return cart_product.simplified();
+            return cart_product.toJSON();
           });
           return callback(null, current_cart_products);
         }
@@ -211,7 +211,7 @@ Cart.prototype.place = function(data, socket) {
           return socket.emit('cart:place:error', 'No se pudo acceder a la lista de cupones para esta orden');
         } else {
           current_cart_coupons = _.map(cart_coupons, function(cart_coupon) {
-            return cart_coupon.simplified();
+            return cart_coupon.toJSON();
           });
           return callback(null, current_cart_products, current_cart_coupons);
         }
@@ -272,14 +272,14 @@ Cart.prototype.place = function(data, socket) {
         return console.error(comm_err.stack);
       };
       if (me.completed !== true) {
-        current_cart = me.simplified();
+        current_cart = me.toJSON();
         current_cart.cart_products = current_cart_products;
         current_cart.cart_coupons = current_cart_coupons;
-        current_cart.client = client.simplified();
-        current_cart.user = user.simplified();
-        current_cart.phone = phone.simplified();
-        current_cart.address = address.simplified();
-        current_cart.store = store.simplified();
+        current_cart.client = client.toJSON();
+        current_cart.user = user.toJSON();
+        current_cart.phone = phone.toJSON();
+        current_cart.address = address != null ? address.toJSON() : void 0;
+        current_cart.store = store.toJSON();
         current_cart.extra = data;
         return Setting.kapiqua(function(err, settings) {
           var cart_request;
@@ -318,10 +318,6 @@ Cart.prototype.place = function(data, socket) {
       }
     }
   });
-};
-
-Cart.prototype.simplified = function() {
-  return JSON.parse(JSON.stringify(this));
 };
 
 module.exports = Cart;

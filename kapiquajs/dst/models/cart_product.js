@@ -116,8 +116,4 @@ CartProduct.removeItem = function(data, respond, socket) {
   }
 };
 
-CartProduct.prototype.simplified = function() {
-  return JSON.parse(JSON.stringify(this));
-};
-
 module.exports = CartProduct;

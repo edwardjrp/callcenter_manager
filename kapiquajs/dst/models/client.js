@@ -48,8 +48,4 @@ Client.prototype.last_address = function(cb) {
   });
 };
 
-Client.prototype.simplified = function() {
-  return JSON.parse(JSON.stringify(this));
-};
-
 module.exports = Client;

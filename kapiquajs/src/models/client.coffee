@@ -28,7 +28,4 @@ Client.prototype.last_address = (cb) ->
       else
         cb(err, null)
 
-Client.prototype.simplified = ->
-  JSON.parse(JSON.stringify(this))
-
 module.exports = Client

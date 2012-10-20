@@ -141,7 +141,7 @@ class PulseBridge
     customer.addChild(customer_type_info)
      
     customer.addChild(new libxml.Element(doc,'Phone', @fallback_values(action, @cart.phone?.number.toString(),'8095559999')))  # user current phone
-    customer.addChild(new libxml.Element(doc,'Extension',@fallback_values(action, @cart.phone?.ext.toString(),''))) # user current extention
+    customer.addChild(new libxml.Element(doc,'Extension',@fallback_values(action, @cart.phone?.ext?.toString(),''))) # user current extention
     customer.addChild(new libxml.Element(doc,'Email', @fallback_values(action, @cart.client?.email,'test@mail.com'))) # user current extention - have to check olo for fallback value
     customer.addChild(new libxml.Element(doc,'DeliveryInstructions').attr('xsi:nil':"true"))
     customer.addChild(new libxml.Element(doc,'CustomerTax').attr('xsi:nil':"true"))

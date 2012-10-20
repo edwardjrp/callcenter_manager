@@ -35,7 +35,4 @@ CartCoupon.removeItem = (data, respond, socket) ->
               respond(del_err,  data.id)
               cart.price(socket)
 
-CartCoupon.prototype.simplified = ->
-  JSON.parse(JSON.stringify(this))
-
 module.exports = CartCoupon

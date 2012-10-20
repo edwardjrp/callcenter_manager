@@ -31,7 +31,7 @@ Cart.prototype.price = (socket)->
           console.error c_cp_err.stack
           socket.emit 'cart:price:error', 'No se pudo acceder a la lista de productos para esta orden'
         else
-          current_cart_products = _.map(cart_products, (cart_product)-> cart_product.simplified())
+          current_cart_products = _.map(cart_products, (cart_product)-> cart_product.toJSON())
           callback(null, current_cart_products)
     ,
     (current_cart_products, callback) ->
@@ -51,7 +51,7 @@ Cart.prototype.price = (socket)->
           console.error c_c_err.stack
           socket.emit 'cart:price:error', 'No se pudo acceder a la lista de cupones para esta orden'
         else
-          current_cart_coupons = _.map(cart_coupons, (cart_coupon)-> cart_coupon.simplified())
+          current_cart_coupons = _.map(cart_coupons, (cart_coupon)-> cart_coupon.toJSON())
           callback(null, current_cart_products, current_cart_coupons)
     ]
     ,
@@ -60,7 +60,7 @@ Cart.prototype.price = (socket)->
         console.error final_error.stack
         socket.emit 'cart:price:error', 'Un error impidio solitar el precio de esta orden'
       else
-        current_cart  = me.simplified()
+        current_cart  = me.toJSON()
         current_cart.cart_products = current_cart_products
         current_cart.cart_coupons = current_cart_coupons
         pulse_com_error = (comm_err) ->
@@ -118,7 +118,7 @@ Cart.prototype.place = (data, socket) ->
           console.error c_cp_err.stack
           socket.emit 'cart:place:error', 'No se pudo acceder a la lista de productos para esta orden'
         else
-          current_cart_products = _.map(cart_products, (cart_product)-> cart_product.simplified())
+          current_cart_products = _.map(cart_products, (cart_product)-> cart_product.toJSON())
           callback(null, current_cart_products)
     ,
     (current_cart_products, callback) ->
@@ -138,7 +138,7 @@ Cart.prototype.place = (data, socket) ->
           console.error c_c_err.stack
           socket.emit 'cart:place:error', 'No se pudo acceder a la lista de cupones para esta orden'
         else
-          current_cart_coupons = _.map(cart_coupons, (cart_coupon)-> cart_coupon.simplified())
+          current_cart_coupons = _.map(cart_coupons, (cart_coupon)-> cart_coupon.toJSON())
           callback(null, current_cart_products, current_cart_coupons)
     ,
     (current_cart_products, current_cart_coupons, callback) ->
@@ -191,14 +191,14 @@ Cart.prototype.place = (data, socket) ->
           console.error comm_err.stack
 
         unless me.completed == true
-          current_cart  = me.simplified()
+          current_cart  = me.toJSON()
           current_cart.cart_products = current_cart_products
           current_cart.cart_coupons = current_cart_coupons
-          current_cart.client = client.simplified()
-          current_cart.user = user.simplified()
-          current_cart.phone = phone.simplified()
-          current_cart.address = address.simplified()
-          current_cart.store = store.simplified()
+          current_cart.client = client.toJSON()
+          current_cart.user = user.toJSON()
+          current_cart.phone = phone.toJSON()
+          current_cart.address = address?.toJSON()
+          current_cart.store = store.toJSON()
           current_cart.extra = data
           Setting.kapiqua (err, settings) ->
             if err
@@ -223,9 +223,5 @@ Cart.prototype.place = (data, socket) ->
         else
           socket.emit 'cart:place:error', 'Esta orden aparece como completada en el sistema'
           
-            
-
-Cart.prototype.simplified = ->
-  JSON.parse(JSON.stringify(this))
 
 module.exports = Cart

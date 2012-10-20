@@ -71,9 +71,6 @@ CartProduct.removeItem = (data, respond, socket) ->
                     cart.price(socket)
 
               
-CartProduct.prototype.simplified = ->
-  JSON.parse(JSON.stringify(this))
-
 
 
 module.exports = CartProduct

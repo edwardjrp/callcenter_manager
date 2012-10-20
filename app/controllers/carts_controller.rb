@@ -25,7 +25,7 @@ class CartsController < ApplicationController
 
   def completed
     @cart = Cart.find(params[:id])
-    flash['success'] = "Orden : #{params[:store_order_id]} completada"
+    flash['success'] = "Orden : #{params[:store_order_id]} completada en #{@cart.store.storeid} #{@cart.store.name}"
     if @cart
       cart_reset
       respond_to do | format|
