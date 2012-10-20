@@ -20,6 +20,7 @@
 //= require jquery.hoverpulse
 //= require jquery.effects.highlight
 //= require jquery.ui.datepicker
+//= require dataTables/jquery.dataTables
 //= require select2
 //= require jquery.purr
 //= require best_in_place

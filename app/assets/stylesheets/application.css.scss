@@ -52,5 +52,6 @@ body { padding-top: 100px; }
 @import './admin/clients';
 @import './admin/addresses';
 @import './admin/services';
+@import 'dataTables/jquery.dataTables';
 @import 'select2';
 @import 'smart_wizard';

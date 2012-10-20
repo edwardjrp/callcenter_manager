@@ -40,6 +40,7 @@ jQuery ->
     event.preventDefault()
     $(this).tab('show')
 
+  # REFACTOR THIS
   if $('#desk').size() > 0
     $('#quick_coupons').find('tr').append("<td><a class='btn add_coupon'>Agregar</a></td>")
     $('#quick_coupons').prev('thead').find('tr').append('<th></th>')

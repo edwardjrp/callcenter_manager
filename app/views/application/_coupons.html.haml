@@ -1,8 +1,9 @@
 .row
-  .span11#client_side_coupons_list
-    %table.table.table-condensed
+  .span11
+    %table.table.table-condensed#client_side_coupons_list
       %thead
         %th Codigo
+        %th Disponibilidad
         %th Description
         %th Descripcion Generada
         %th Precio minimo
@@ -10,6 +11,9 @@
         - Coupon.available.each do |coupon|
           %tr{ :data=> { 'cart-id'=> current_cart.id, 'coupon-code'=> coupon.code, 'coupon-id'=>coupon.id, 'coupon-products'=> coupon.target_products }}
             %td= coupon.code
+            %td= coupon_effective(coupon)
             %td= coupon.description
             %td= coupon.generated_description
-            %td= coupon.try(:minimum_price)
+            %td
+              - if coupon.minimum_price
+                = number_to_currency coupon.minimum_price

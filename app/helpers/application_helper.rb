@@ -26,4 +26,8 @@ module ApplicationHelper
   def availability_class(value)
     value == true ? '' : 'unavailable'
   end
+
+  def coupon_effective(coupon)
+    coupon.effective_today? ? 'Disponible' : 'No disponible hoy'
+  end
 end
