@@ -86,7 +86,7 @@ PulseBridge = (function() {
   };
 
   PulseBridge.prototype.body = function(action) {
-    var ap, auth, body, cart_coupon, cart_item_price, cart_option_quantity, cart_product, coupon, coupons, customer, customer_address, customer_name, customer_type_info, doc, envelope, header, item_modifier, item_modifiers, orde_info_collection, order, order_info_1, order_info_2, order_info_3, order_item, order_items, order_source, payment, payment_type, product_option, product_options, take_time, tax, tc, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref10, _ref11, _ref12, _ref13, _ref14, _ref15, _ref16, _ref17, _ref18, _ref19, _ref2, _ref20, _ref21, _ref22, _ref23, _ref24, _ref25, _ref26, _ref27, _ref28, _ref29, _ref3, _ref30, _ref31, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
+    var ap, auth, body, cart_coupon, cart_item_price, cart_option_quantity, cart_product, coupon, coupons, customer, customer_address, customer_name, customer_type_info, discount_present, doc, envelope, exoneration_present, header, item_modifier, item_modifiers, orde_info_collection, order, orderOverrrideAmount, order_info_1, order_info_2, order_info_3, order_item, order_items, order_source, payment, payment_type, product_option, product_options, take_time, tax, tc, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref10, _ref11, _ref12, _ref13, _ref14, _ref15, _ref16, _ref17, _ref18, _ref19, _ref2, _ref20, _ref21, _ref22, _ref23, _ref24, _ref25, _ref26, _ref27, _ref28, _ref29, _ref3, _ref30, _ref31, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
     doc = new libxml.Document();
     envelope = new libxml.Element(doc, 'env:Envelope').attr({
       'xmlns:xsd': "http://www.w3.org/2001/XMLSchema",
@@ -270,7 +270,7 @@ PulseBridge = (function() {
           cart_item_price = '0';
         }
         order_item.addChild(new libxml.Element(doc, 'PricedAt', this.fallback_values(action, cart_item_price, '0')));
-        order_item.addChild(new libxml.Element(doc, 'OverrideAmmount').attr({
+        order_item.addChild(new libxml.Element(doc, 'OverrideAmount').attr({
           'xsi:nil': "true"
         }));
         order_item.addChild(new libxml.Element(doc, 'CookingInstructions').attr({
@@ -311,6 +311,23 @@ PulseBridge = (function() {
     }
     payment.addChild(payment_type);
     order.addChild(payment);
+    discount_present = this.cart.discount && !_.isNull(this.cart.discount_auth_id) && !_.isUndefined(this.cart.discount_auth_id);
+    exoneration_present = this.cart.exonerated && this.cart.exonerated === true && !_.isNull(this.cart.exoneration_authorizer) && !_.isUndefined(this.cart.exoneration_authorizer);
+    orderOverrrideAmount = this.cart.payment_amount;
+    if (this.cart.payment_amount != null) {
+      if (discount_present) {
+        orderOverrrideAmount = Number(orderOverrrideAmount) - Number(this.cart.discount);
+      }
+      if (exoneration_present) {
+        orderOverrrideAmount = Number(orderOverrrideAmount) - Number(this.cart.tax_amount);
+      }
+      if (orderOverrrideAmount < 1) {
+        orderOverrrideAmount = this.cart.payment_amount;
+      }
+    }
+    if (discount_present || exoneration_present) {
+      order.addChild(new libxml.Element(doc, 'OrderOverrideAmount', orderOverrrideAmount.toString()));
+    }
     orde_info_collection = new libxml.Element(doc, 'OrderInfoCollection');
     order_info_1 = new libxml.Element(doc, 'OrderInfo');
     order_info_1.addChild(new libxml.Element(doc, 'KeyCode', this.fallback_values(action, (_ref25 = this.cart.extra) != null ? _ref25.fiscal_type : void 0, 'FinalConsumer')));

@@ -80,15 +80,15 @@ class PulseBridge
     ap = @fallback_values(action, @cart.extra?.cardapproval, 'N/A')
 
     if @cart.extra? and @cart.extra.fiscal_type?
-        switch @cart.extra.fiscal_type
-            when "3rdParty"
-                tax = "CF:CredFiscal;RNC:#{@cart.extra.rnc}"
-            when "SpecialRegme"
-                tax= "CF:RegEspecial;RNC:#{@cart.extra.rnc}"
-            when "Government"
-                tax = "CF:Government;RNC:#{@cart.extra.rnc}"
-            else
-                tax = 'CF:ConsFinal'
+      switch @cart.extra.fiscal_type
+        when "3rdParty"
+            tax = "CF:CredFiscal;RNC:#{@cart.extra.rnc}"
+        when "SpecialRegme"
+            tax= "CF:RegEspecial;RNC:#{@cart.extra.rnc}"
+        when "Government"
+            tax = "CF:Government;RNC:#{@cart.extra.rnc}"
+        else
+            tax = 'CF:ConsFinal'
 
     order.addChild(new libxml.Element(doc,'DeliveryInstructions', "Edf:;TC:#{tc.toString()};AP:#{ap.toString()};#{@fallback_values(action, tax, 'CF:ConsFinal')};D_I."))  # delivery instructions
     #order source
@@ -104,27 +104,27 @@ class PulseBridge
     customer_address = new libxml.Element(doc,'CustomerAddress').attr({ 'type':"Address-US"})
 
     if action == 'PlaceOrder' and @cart.address? and @cart.service_method == 'delivery'
-        customer_address.addChild(new libxml.Element(doc,'City', @fallback_values(action, @cart.extra?.city, 'Santo Domingo'))) # city
-        customer_address.addChild(new libxml.Element(doc,'Region', 'DR'))
-        customer_address.addChild(new libxml.Element(doc,'PostalCode', @fallback_values(action, @cart.address?.postal_code?.toString(), "#{@storeid}")))
-        customer_address.addChild(new libxml.Element(doc,'StreetNumber', @fallback_values(action, @cart.address?.number?.toString(), "")))
-        customer_address.addChild(new libxml.Element(doc,'StreetName', @fallback_values(action, "#{@cart.extra?.street}, #{@cart.extra?.area}", "")))
-        customer_address.addChild(new libxml.Element(doc,'AddressLine2'))
-        customer_address.addChild(new libxml.Element(doc,'AddressLine3'))
-        customer_address.addChild(new libxml.Element(doc,'AddressLine4'))
-        customer_address.addChild(new libxml.Element(doc,'UnitType', @fallback_values(action, @cart.address?.unit_type, "")).attr({"xsi:type":"xsd:string"}))
-        customer_address.addChild(new libxml.Element(doc,'UnitNumber', @fallback_values(action, @cart.address?.unit_number?.toString(), "")).attr({"xsi:type":"xsd:string"}))
+      customer_address.addChild(new libxml.Element(doc,'City', @fallback_values(action, @cart.extra?.city, 'Santo Domingo'))) # city
+      customer_address.addChild(new libxml.Element(doc,'Region', 'DR'))
+      customer_address.addChild(new libxml.Element(doc,'PostalCode', @fallback_values(action, @cart.address?.postal_code?.toString(), "#{@storeid}")))
+      customer_address.addChild(new libxml.Element(doc,'StreetNumber', @fallback_values(action, @cart.address?.number?.toString(), "")))
+      customer_address.addChild(new libxml.Element(doc,'StreetName', @fallback_values(action, "#{@cart.extra?.street}, #{@cart.extra?.area}", "")))
+      customer_address.addChild(new libxml.Element(doc,'AddressLine2'))
+      customer_address.addChild(new libxml.Element(doc,'AddressLine3'))
+      customer_address.addChild(new libxml.Element(doc,'AddressLine4'))
+      customer_address.addChild(new libxml.Element(doc,'UnitType', @fallback_values(action, @cart.address?.unit_type, "")).attr({"xsi:type":"xsd:string"}))
+      customer_address.addChild(new libxml.Element(doc,'UnitNumber', @fallback_values(action, @cart.address?.unit_number?.toString(), "")).attr({"xsi:type":"xsd:string"}))
     else
-        customer_address.addChild(new libxml.Element(doc,'City')) # city
-        customer_address.addChild(new libxml.Element(doc,'Region'))
-        customer_address.addChild(new libxml.Element(doc,'PostalCode'))
-        customer_address.addChild(new libxml.Element(doc,'StreetNumber'))
-        customer_address.addChild(new libxml.Element(doc,'StreetName'))
-        customer_address.addChild(new libxml.Element(doc,'AddressLine2'))
-        customer_address.addChild(new libxml.Element(doc,'AddressLine3'))
-        customer_address.addChild(new libxml.Element(doc,'AddressLine4'))
-        customer_address.addChild(new libxml.Element(doc,'UnitType'))
-        customer_address.addChild(new libxml.Element(doc,'UnitNumber'))
+      customer_address.addChild(new libxml.Element(doc,'City')) # city
+      customer_address.addChild(new libxml.Element(doc,'Region'))
+      customer_address.addChild(new libxml.Element(doc,'PostalCode'))
+      customer_address.addChild(new libxml.Element(doc,'StreetNumber'))
+      customer_address.addChild(new libxml.Element(doc,'StreetName'))
+      customer_address.addChild(new libxml.Element(doc,'AddressLine2'))
+      customer_address.addChild(new libxml.Element(doc,'AddressLine3'))
+      customer_address.addChild(new libxml.Element(doc,'AddressLine4'))
+      customer_address.addChild(new libxml.Element(doc,'UnitType'))
+      customer_address.addChild(new libxml.Element(doc,'UnitNumber'))
 
 
 
@@ -193,7 +193,7 @@ class PulseBridge
         order_item.addChild(new libxml.Element(doc,'ItemQuantity', (cart_product.quantity.toString() || '1')))
         if cart_product.priced_at? then cart_item_price = cart_product.priced_at.toString() else cart_item_price = '0'
         order_item.addChild(new libxml.Element(doc,'PricedAt', @fallback_values(action, cart_item_price,'0')))# @fallback_values(action, cart_product.priced_at,'0')
-        order_item.addChild(new libxml.Element(doc,'OverrideAmmount').attr('xsi:nil':"true"))
+        order_item.addChild(new libxml.Element(doc,'OverrideAmount').attr('xsi:nil':"true"))
         order_item.addChild(new libxml.Element(doc,'CookingInstructions').attr('xsi:nil':"true"))
         
         item_modifiers = new libxml.Element(doc,'ItemModifiers')
@@ -218,16 +218,32 @@ class PulseBridge
     payment = new libxml.Element(doc,'Payment')
 
     payment_type = new libxml.Element(doc, @fallback_values(action, @cart.extra?.payment_type,'CashPayment'))
-    payment_type.addChild(new libxml.Element(doc,'PaymentAmmount',   @fallback_values(action, @cart.payment_amount?.toString(),'1000000')    ))  # send discount and exonerations
+
+    payment_type.addChild(new libxml.Element(doc,'PaymentAmmount',   @fallback_values(action, @cart.payment_amount?.toString(),'1000000')))  # send discount and exonerations
 
     if @fallback_values(action, @cart.extra?.payment_type,'CashPayment') == 'CreditCardPayment'
-        payment_type.addChild(new libxml.Element(doc,"CreditCardType", 'Mastercard'))
-        payment_type.addChild(new libxml.Element(doc,"CreditCardTypeId", '7'))
+      payment_type.addChild(new libxml.Element(doc,"CreditCardType", 'Mastercard'))
+      payment_type.addChild(new libxml.Element(doc,"CreditCardTypeId", '7'))
 
     payment.addChild(payment_type)
     
     order.addChild(payment)
     #end payment
+
+    discount_present = @cart.discount and not _.isNull(@cart.discount_auth_id) and not _.isUndefined(@cart.discount_auth_id)
+
+    exoneration_present = @cart.exonerated and @cart.exonerated == true and not _.isNull(@cart.exoneration_authorizer) and not _.isUndefined(@cart.exoneration_authorizer)
+
+    orderOverrrideAmount = @cart.payment_amount
+    if @cart.payment_amount?
+      orderOverrrideAmount = Number(orderOverrrideAmount) - Number(@cart.discount) if discount_present
+      orderOverrrideAmount = Number(orderOverrrideAmount) - Number(@cart.tax_amount) if exoneration_present
+      orderOverrrideAmount = @cart.payment_amount if orderOverrrideAmount < 1
+
+    if discount_present or exoneration_present
+      order.addChild( new libxml.Element(doc,'OrderOverrideAmount', orderOverrrideAmount.toString() ))
+ 
+
 
     orde_info_collection = new libxml.Element(doc,'OrderInfoCollection')
     order_info_1  = new libxml.Element(doc,'OrderInfo')
@@ -237,15 +253,15 @@ class PulseBridge
 
     if @cart.extra?.fiscal_type? and @cart.extra?.fiscal_type != 'FinalConsumer'
 
-        order_info_2  = new libxml.Element(doc,'OrderInfo')
-        order_info_2.addChild(new libxml.Element(doc,'KeyCode','TaxID'))
-        order_info_2.addChild(new libxml.Element(doc,'Response', @fallback_values(action, @cart.extra?.rnc?.toString(), '')))
-        orde_info_collection.addChild(order_info_2)
+      order_info_2  = new libxml.Element(doc,'OrderInfo')
+      order_info_2.addChild(new libxml.Element(doc,'KeyCode','TaxID'))
+      order_info_2.addChild(new libxml.Element(doc,'Response', @fallback_values(action, @cart.extra?.rnc?.toString(), '')))
+      orde_info_collection.addChild(order_info_2)
 
-        order_info_3  = new libxml.Element(doc,'OrderInfo')
-        order_info_3.addChild(new libxml.Element(doc,'KeyCode','CompanyName'))
-        order_info_3.addChild(new libxml.Element(doc,'Response', @fallback_values(action, @cart.extra?.fiscal_name, '')))
-        orde_info_collection.addChild(order_info_3)
+      order_info_3  = new libxml.Element(doc,'OrderInfo')
+      order_info_3.addChild(new libxml.Element(doc,'KeyCode','CompanyName'))
+      order_info_3.addChild(new libxml.Element(doc,'Response', @fallback_values(action, @cart.extra?.fiscal_name, '')))
+      orde_info_collection.addChild(order_info_3)
 
     order.addChild(orde_info_collection)
 
