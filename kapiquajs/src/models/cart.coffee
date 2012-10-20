@@ -200,27 +200,41 @@ Cart.prototype.place = (data, socket) ->
           current_cart.address = address?.toJSON()
           current_cart.store = store.toJSON()
           current_cart.extra = data
-          Setting.kapiqua (err, settings) ->
-            if err
-              socket.emit 'cart:place:error', 'Falla Lectura de la configuración'
-              console.error err.stack
+          payment_attributes = {}
+          payment_attributes['payment_type'] = current_cart.extra?.payment_type || null
+          payment_attributes['creditcard_number'] = current_cart.extra?.cardnumber || null
+          payment_attributes['credit_cart_approval_number'] = current_cart.extra?.cardapproval || null
+          payment_attributes['fiscal_type'] = current_cart.extra?.fiscal_type || null
+          payment_attributes['fiscal_number'] = current_cart.extra?.rnc || null
+          payment_attributes['fiscal_company_name'] = current_cart.extra?.fiscal_name || null
+
+          console.log payment_attributes
+          me.updateAttributes payment_attributes, (pay_error, cart_with_pay_detailes) ->
+            if (pay_error)
+              console.error pay_error.stack
+              socket.emit 'cart:place:error', 'No fue posible actualizar los datos de pago'
             else
-              cart_request = new  PulseBridge(current_cart, current_cart.store.storeid, current_cart.store.ip,  settings.pulse_port)
-              try
-                cart_request.place pulse_com_error, (res_data)->
-                  console.info res_data
-                  order_reply = new OrderReply(res_data)
-                  console.info order_reply
-                  if order_reply.status == '0'
-                    me.updateAttributes { store_order_id: order_reply.order_id, complete_on: Date.now(), completed: true }, (cart_update_err, updated_cart)->
-                      socket.emit 'cart:place:completed', updated_cart
-                  else
-                    if order_reply and order_reply.status_text then msg = order_reply.status_text else msg = 'La respuesta e pulse no pudo ser interpretada'
-                    socket.emit 'cart:place:error', "No se puede colocar la order, Pulse respondio: <br/> <strong>#{msg}</strong>"
-              catch err_pricing
-                socket.emit 'cart:place:error', 'Falla en la comunicación con Pulse'
-                me.comm_failed(socket)
-                console.error err_pricing.stack
+              Setting.kapiqua (err, settings) ->
+                if err
+                  socket.emit 'cart:place:error', 'Falla Lectura de la configuración'
+                  console.error err.stack
+                else
+                  cart_request = new  PulseBridge(current_cart, current_cart.store.storeid, current_cart.store.ip,  settings.pulse_port)
+                  try
+                    cart_request.place pulse_com_error, (res_data)->
+                      console.info res_data
+                      order_reply = new OrderReply(res_data)
+                      console.info order_reply
+                      if order_reply.status == '0'
+                        me.updateAttributes { store_order_id: order_reply.order_id, complete_on: Date.now(), completed: true }, (cart_update_err, updated_cart)->
+                          socket.emit 'cart:place:completed', updated_cart
+                      else
+                        if order_reply and order_reply.status_text then msg = order_reply.status_text else msg = 'La respuesta e pulse no pudo ser interpretada'
+                        socket.emit 'cart:place:error', "No se puede colocar la order, Pulse respondio: <br/> <strong>#{msg}</strong>"
+                  catch err_pricing
+                    socket.emit 'cart:place:error', 'Falla en la comunicación con Pulse'
+                    me.comm_failed(socket)
+                    console.error err_pricing.stack
         else
           socket.emit 'cart:place:error', 'Esta orden aparece como completada en el sistema'
           

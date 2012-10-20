@@ -3,13 +3,14 @@
 #
 # Table name: tax_numbers
 #
-#  id          :integer          not null, primary key
-#  rnc         :string(255)
-#  fiscal_type :string(255)
-#  verified    :boolean          default(FALSE)
-#  client_id   :integer
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
+#  id           :integer          not null, primary key
+#  rnc          :string(255)
+#  fiscal_type  :string(255)
+#  verified     :boolean          default(FALSE)
+#  client_id    :integer
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  company_name :string(255)
 #
 
 class TaxNumber < ActiveRecord::Base

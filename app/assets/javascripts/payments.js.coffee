@@ -2,10 +2,9 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 jQuery ->
-  socket = window.socket
-
   if $('#payments').size() > 0
-    # console.log 'emit price'
+    socket = window.socket
+
     $('#actions').on 'click', '#place_order_button', (event)->
       event.preventDefault()
       target = $(event.currentTarget)
@@ -28,6 +27,7 @@ jQuery ->
       if $('#fiscal_info').val()? and $('#fiscal_info').val() != ''
         payment_attributes['rnc'] = $('#fiscal_info').val().split('/')[0]
         payment_attributes['fiscal_type'] = $('#fiscal_info').val().split('/')[1]
+        payment_attributes['fiscal_name'] = $('#fiscal_info').val().split('/')[2]
       socket.emit('cart:place',  payment_attributes) unless target.hasClass('disabled')
       target.addClass('disabled')
 
@@ -45,7 +45,7 @@ jQuery ->
     $('.checkout_input').restric('alpha').restric('spaces')
 
     socket.emit 'cart:price', $('#checkout_cart').data('id')
-    
+
     socket.on 'cart:priced', (data)->
       $('#checkout_cart_net').html("<strong> Monto neto: </strong> #{window.to_money(data.order_reply.netamount)}")
       $('#checkout_cart_tax').html("<strong>  Impuestos: </strong> #{window.to_money(data.order_reply.taxamount)}")

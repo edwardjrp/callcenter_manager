@@ -261,7 +261,7 @@ Cart.prototype.place = function(data, socket) {
       });
     }
   ], function(final_error, current_cart_products, current_cart_coupons, client, user, phone, address, store) {
-    var current_cart, pulse_com_error;
+    var current_cart, payment_attributes, pulse_com_error, _ref, _ref1, _ref2, _ref3, _ref4, _ref5;
     if (final_error != null) {
       console.error(final_error.stack);
       return socket.emit('cart:place:error', 'Un error impidio la colocación de la orden');
@@ -281,36 +281,56 @@ Cart.prototype.place = function(data, socket) {
         current_cart.address = address != null ? address.toJSON() : void 0;
         current_cart.store = store.toJSON();
         current_cart.extra = data;
-        return Setting.kapiqua(function(err, settings) {
-          var cart_request;
-          if (err) {
-            socket.emit('cart:place:error', 'Falla Lectura de la configuración');
-            return console.error(err.stack);
+        payment_attributes = {};
+        payment_attributes['payment_type'] = ((_ref = current_cart.extra) != null ? _ref.payment_type : void 0) || null;
+        payment_attributes['creditcard_number'] = ((_ref1 = current_cart.extra) != null ? _ref1.cardnumber : void 0) || null;
+        payment_attributes['credit_cart_approval_number'] = ((_ref2 = current_cart.extra) != null ? _ref2.cardapproval : void 0) || null;
+        payment_attributes['fiscal_type'] = ((_ref3 = current_cart.extra) != null ? _ref3.fiscal_type : void 0) || null;
+        payment_attributes['fiscal_number'] = ((_ref4 = current_cart.extra) != null ? _ref4.rnc : void 0) || null;
+        payment_attributes['fiscal_company_name'] = ((_ref5 = current_cart.extra) != null ? _ref5.fiscal_name : void 0) || null;
+        console.log(payment_attributes);
+        return me.updateAttributes(payment_attributes, function(pay_error, cart_with_pay_detailes) {
+          if (pay_error) {
+            console.error(pay_error.stack);
+            return socket.emit('cart:place:error', 'No fue posible actualizar los datos de pago');
           } else {
-            cart_request = new PulseBridge(current_cart, current_cart.store.storeid, current_cart.store.ip, settings.pulse_port);
-            try {
-              return cart_request.place(pulse_com_error, function(res_data) {
-                var order_reply;
-                console.info(res_data);
-                order_reply = new OrderReply(res_data);
-                console.info(order_reply);
-                if (order_reply.status === '0') {
-                  return me.updateAttributes({
-                    store_order_id: order_reply.order_id,
-                    complete_on: Date.now(),
-                    completed: true
-                  }, function(cart_update_err, updated_cart) {
-                    return socket.emit('cart:place:completed', updated_cart);
+            return Setting.kapiqua(function(err, settings) {
+              var cart_request;
+              if (err) {
+                socket.emit('cart:place:error', 'Falla Lectura de la configuración');
+                return console.error(err.stack);
+              } else {
+                cart_request = new PulseBridge(current_cart, current_cart.store.storeid, current_cart.store.ip, settings.pulse_port);
+                try {
+                  return cart_request.place(pulse_com_error, function(res_data) {
+                    var msg, order_reply;
+                    console.info(res_data);
+                    order_reply = new OrderReply(res_data);
+                    console.info(order_reply);
+                    if (order_reply.status === '0') {
+                      return me.updateAttributes({
+                        store_order_id: order_reply.order_id,
+                        complete_on: Date.now(),
+                        completed: true
+                      }, function(cart_update_err, updated_cart) {
+                        return socket.emit('cart:place:completed', updated_cart);
+                      });
+                    } else {
+                      if (order_reply && order_reply.status_text) {
+                        msg = order_reply.status_text;
+                      } else {
+                        msg = 'La respuesta e pulse no pudo ser interpretada';
+                      }
+                      return socket.emit('cart:place:error', "No se puede colocar la order, Pulse respondio: <br/> <strong>" + msg + "</strong>");
+                    }
                   });
-                } else {
-                  return socket.emit('cart:place:error', "No se puede colocar la order, Pulse respondio: <br/> <strong>" + order_reply.status_text + "</strong>");
+                } catch (err_pricing) {
+                  socket.emit('cart:place:error', 'Falla en la comunicación con Pulse');
+                  me.comm_failed(socket);
+                  return console.error(err_pricing.stack);
                 }
-              });
-            } catch (err_pricing) {
-              socket.emit('cart:place:error', 'Falla en la comunicación con Pulse');
-              me.comm_failed(socket);
-              return console.error(err_pricing.stack);
-            }
+              }
+            });
           }
         });
       } else {

@@ -71,6 +71,7 @@ class PulseBridge
     order.addChild(new libxml.Element(doc,'ServiceMethod', @fallback_values(action, @cart.service_method, 'dinein')))  # service method
 
     take_time = (Date.now() - Date.parse(@cart.started_on))/1000
+    if take_time > 9999 then take_time = 9999
     take_time
     order.addChild(new libxml.Element(doc,'OrderTakeSeconds',@fallback_values(action, take_time.toString(), '60')))
 

@@ -124,6 +124,14 @@ Cart = DB.define("Cart",
   exoneration_authorizer:
     type: Number
 
+  creditcard_number:
+    type: String
+    length: 255
+
+  fiscal_company_name:
+    type: String
+    length: 255
+
   created_at:
     type: Date
     default: Date.now

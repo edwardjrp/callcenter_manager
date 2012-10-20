@@ -40,6 +40,8 @@
 #  exonerated                  :boolean
 #  started_on                  :datetime
 #  exoneration_authorizer      :integer
+#  creditcard_number           :string(255)
+#  fiscal_company_name         :string(255)
 #
 
 require 'spec_helper'

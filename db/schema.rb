@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121013233841) do
+ActiveRecord::Schema.define(:version => 20121020142821) do
 
   create_table "addresses", :force => true do |t|
     t.integer  "client_id"
@@ -90,6 +90,8 @@ ActiveRecord::Schema.define(:version => 20121013233841) do
     t.boolean  "exonerated"
     t.datetime "started_on"
     t.integer  "exoneration_authorizer"
+    t.string   "creditcard_number"
+    t.string   "fiscal_company_name"
   end
 
   add_index "carts", ["client_id"], :name => "index_carts_on_client_id"
@@ -255,10 +257,11 @@ ActiveRecord::Schema.define(:version => 20121013233841) do
   create_table "tax_numbers", :force => true do |t|
     t.string   "rnc"
     t.string   "fiscal_type"
-    t.boolean  "verified",    :default => false
+    t.boolean  "verified",     :default => false
     t.integer  "client_id"
-    t.datetime "created_at",                     :null => false
-    t.datetime "updated_at",                     :null => false
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
+    t.string   "company_name"
   end
 
   add_index "tax_numbers", ["client_id"], :name => "index_tax_numbers_on_client_id"
