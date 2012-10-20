@@ -6,12 +6,14 @@ class Config
     switch process.env.NODE_ENV
       when 'production' then "soporte"
       when 'development' then 'radhamesbrito'
+      when 'test' then 'radhamesbrito'
       else 'radhamesbrito'
     
   @password: ()->
     switch process.env.NODE_ENV
       when 'production' then "d0m1n0s"
       when 'development' then 'siriguillo'
+      when 'test' then 'siriguillo'
       else 'siriguillo'
       
     
@@ -19,6 +21,7 @@ class Config
     switch process.env.NODE_ENV
       when 'production' then "kapiqua_#{process.env.NODE_ENV}"
       when 'development' then "kapiqua_#{process.env.NODE_ENV}"
+      when 'test' then "kapiqua_#{process.env.NODE_ENV}"
       else "kapiqua_development"
       
   @connection_string: "postgres://#{@username()}:#{@password()}@#{@host}/#{@db()}"

@@ -12,6 +12,8 @@ Config = (function() {
         return "soporte";
       case 'development':
         return 'radhamesbrito';
+      case 'test':
+        return 'radhamesbrito';
       default:
         return 'radhamesbrito';
     }
@@ -23,6 +25,8 @@ Config = (function() {
         return "d0m1n0s";
       case 'development':
         return 'siriguillo';
+      case 'test':
+        return 'siriguillo';
       default:
         return 'siriguillo';
     }
@@ -33,6 +37,8 @@ Config = (function() {
       case 'production':
         return "kapiqua_" + process.env.NODE_ENV;
       case 'development':
+        return "kapiqua_" + process.env.NODE_ENV;
+      case 'test':
         return "kapiqua_" + process.env.NODE_ENV;
       default:
         return "kapiqua_development";

@@ -20,6 +20,7 @@ io = require('socket.io').listen(app)
 app.configure ->
   app.use(express.logger({ immediate: true, format: 'dev' }))
   app.use(express.bodyParser())
+  app.set('port', 3030)
   app.use(express.methodOverride())
   app.use(app.router)
   
@@ -31,6 +32,9 @@ app.configure 'development', ->
 
 app.configure 'production', ->
   app.use(express.errorHandler())
+
+app.configure 'test', ->
+  app.set('port', 3031)
 
 
 operators = []
@@ -120,5 +124,5 @@ io.sockets.on "connection", (socket) ->
 process.on 'uncaughtException', (err)->
     console.log(err.stack)
 
-app.listen 3030, ->
+app.listen app.settings.port, ->
   console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env)

@@ -304,7 +304,7 @@ PulseBridge = (function() {
     payment_type.addChild(new libxml.Element(doc, 'PaymentAmmount', this.fallback_values(action, (_ref20 = this.cart.payment_amount) != null ? _ref20.toString() : void 0, '1000000')));
     if (this.fallback_values(action, (_ref21 = this.cart.extra) != null ? _ref21.payment_type : void 0, 'CashPayment') === 'CreditCardPayment') {
       payment_type.addChild(new libxml.Element(doc, "CreditCardType", 'Mastercard'));
-      payment_type.addChild(new libxml.Element(doc, "CreditCardTypeId", '5'));
+      payment_type.addChild(new libxml.Element(doc, "CreditCardTypeId", '7'));
     }
     payment.addChild(payment_type);
     order.addChild(payment);

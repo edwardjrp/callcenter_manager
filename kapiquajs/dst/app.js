@@ -26,6 +26,7 @@ app.configure(function() {
     format: 'dev'
   }));
   app.use(express.bodyParser());
+  app.set('port', 3030);
   app.use(express.methodOverride());
   return app.use(app.router);
 });
@@ -39,6 +40,10 @@ app.configure('development', function() {
 
 app.configure('production', function() {
   return app.use(express.errorHandler());
+});
+
+app.configure('test', function() {
+  return app.set('port', 3031);
 });
 
 operators = [];
@@ -147,6 +152,6 @@ process.on('uncaughtException', function(err) {
   return console.log(err.stack);
 });
 
-app.listen(3030, function() {
+app.listen(app.settings.port, function() {
   return console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 });
