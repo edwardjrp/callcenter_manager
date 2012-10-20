@@ -30,8 +30,6 @@
 
 - verify acceptance test for admin stores editing
 
-- check parsing regexp everywhere
-
 - save payment details in node
 
 - manage reenabling checkout button

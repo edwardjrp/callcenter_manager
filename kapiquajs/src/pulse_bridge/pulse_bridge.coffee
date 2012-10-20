@@ -95,7 +95,7 @@ class PulseBridge
     order_source  = new libxml.Element(doc,'OrderSource')
     order_source.addChild(new libxml.Element(doc,'OrganizationURI', 'proteus.dominos.com.do'))
     order_source.addChild(new libxml.Element(doc,'OrderMethod', 'Internet'))
-    order_source.addChild(new libxml.Element(doc,'OrderTaker', 'node-js')) # agent idnumber
+    order_source.addChild(new libxml.Element(doc,'OrderTaker', "#{@cart.user?.first_name} #{@cart.user?.last_name}")) # agent idnumber
     order.addChild(order_source)
     # end order source
     #customer info
@@ -239,7 +239,7 @@ class PulseBridge
 
         order_info_2  = new libxml.Element(doc,'OrderInfo')
         order_info_2.addChild(new libxml.Element(doc,'KeyCode','TaxID'))
-        order_info_2.addChild(new libxml.Element(doc,'Response', @fallback_values(action, @cart.extra?.rnc.toString(), '')))
+        order_info_2.addChild(new libxml.Element(doc,'Response', @fallback_values(action, @cart.extra?.rnc?.toString(), '')))
         orde_info_collection.addChild(order_info_2)
 
         order_info_3  = new libxml.Element(doc,'OrderInfo')
