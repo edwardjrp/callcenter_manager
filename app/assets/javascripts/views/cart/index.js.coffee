@@ -3,9 +3,10 @@ class Kapiqua25.Views.CartIndex extends Backbone.View
   template: JST['cart/index']
   
   initialize: ->
-      _.bindAll(this,'updatePrices', 'removeCartProduct','remoteAddCartCoupon', 'addCartCoupon', 'removeCartCoupon', 'remove_coupon', 'addCartProduct')
+      _.bindAll(this,'updatePrices', 'removeCartProduct','remoteAddCartCoupon', 'addCartCoupon', 'removeCartCoupon', 'remove_coupon', 'addCartProduct','render')
       window.socket.on('cart:priced', @updatePrices)
       window.socket.on('cart_coupon:saved', @remoteAddCartCoupon)
+      window.socket.on('cart:empty', @render)
       @model.get('cart_products').on('add', @addCartProduct)
       @model.get('cart_products').on('remove', @removeCartProduct)
       @model.get('cart_coupons').on('add', @addCartCoupon)

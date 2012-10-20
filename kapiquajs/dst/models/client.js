@@ -35,11 +35,15 @@ Client.prototype.last_address = function(cb) {
       console.error(err.stack);
       return cb(err);
     } else {
-      target = _.find(addresses, function(address) {
-        return address.id === me.target_address_id;
-      });
-      target_address = target || _.first(address);
-      return cb(err, target_address);
+      if (_.any(addresses)) {
+        target = _.find(addresses, function(address) {
+          return address.id === me.target_address_id;
+        });
+        target_address = target || _.first(address);
+        return cb(err, target_address);
+      } else {
+        return cb(err, null);
+      }
     }
   });
 };

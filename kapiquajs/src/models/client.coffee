@@ -21,9 +21,12 @@ Client.prototype.last_address = (cb) ->
       console.error err.stack
       cb(err)
     else
-      target = _.find( addresses, (address)-> address.id == me.target_address_id )
-      target_address = target || _.first(address)
-      cb(err, target_address)
+      if _.any(addresses)
+        target = _.find( addresses, (address)-> address.id == me.target_address_id )
+        target_address = target || _.first(address)
+        cb(err, target_address)
+      else
+        cb(err, null)
 
 Client.prototype.simplified = ->
   JSON.parse(JSON.stringify(this))
