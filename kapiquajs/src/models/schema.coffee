@@ -76,7 +76,7 @@ Cart = DB.define("Cart",
     type: String
     length: 255
 
-  credit_cart_approval_number:
+  credit_card_approval_number:
     type: String
     length: 255
 

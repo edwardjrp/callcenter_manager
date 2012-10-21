@@ -13,15 +13,15 @@ module Reports
             csv << [
               cart.id,
               cart.store.storeid,
-              (cart.client && cart.client.carts.count == 1),
+              (cart.client && cart.client.carts.count == 1) ? '*' : '',
               "#{cart.client.first_name} #{cart.client.last_name} - #{cart.client.last_phone.number.gsub(/([0-9]{3})([0-9]{3})([0-9]{4})/,'\\1-\\2-\\3')}",
-              cart.created_at.strftime('%Y-%m-%d %H:%M:%S'), # there has to be a completed_on field
+              cart.complete_on.strftime('%Y-%m-%d %H:%M:%S'), # there has to be a completed_on field
               cart.service_method,
               cart.user.idnumber,
-              'Provisto por asterisk',
+              cart.take_time,
               cart.payment_amount,
               cart.payment_type,
-              cart.fiscal_type || 'FinalConsumer',
+              cart.fiscal_type,
               cart.order_progress,
               cart.products.map(&:productname).to_sentence
                ]

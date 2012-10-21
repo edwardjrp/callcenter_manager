@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121020142821) do
+ActiveRecord::Schema.define(:version => 20121021165534) do
 
   create_table "addresses", :force => true do |t|
     t.integer  "client_id"
@@ -74,7 +74,7 @@ ActiveRecord::Schema.define(:version => 20121020142821) do
     t.boolean  "can_place_order"
     t.text     "delivery_instructions"
     t.string   "payment_type"
-    t.string   "credit_cart_approval_number"
+    t.string   "credit_card_approval_number"
     t.string   "fiscal_number"
     t.string   "fiscal_type"
     t.string   "company_name"

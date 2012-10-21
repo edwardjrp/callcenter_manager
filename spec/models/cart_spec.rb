@@ -24,7 +24,7 @@
 #  can_place_order             :boolean
 #  delivery_instructions       :text
 #  payment_type                :string(255)
-#  credit_cart_approval_number :string(255)
+#  credit_card_approval_number :string(255)
 #  fiscal_number               :string(255)
 #  fiscal_type                 :string(255)
 #  company_name                :string(255)

@@ -67,7 +67,10 @@ Kapiqua25::Application.routes.draw do
       end
     end
     resources :reasons, except: [:new, :edit]
-    resources :reports, only: [:index, :create, :destroy]
+
+    get "reports/detailed" => "reports#detailed"
+    post "reports/detailed" => "reports#generate_detailed"
+
     resources :users
     resources :coupons, except: [:new, :create, :show]
     resources :taxpayer_identifications, only: [:index, :create]

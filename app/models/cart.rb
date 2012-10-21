@@ -24,7 +24,7 @@
 #  can_place_order             :boolean
 #  delivery_instructions       :text
 #  payment_type                :string(255)
-#  credit_cart_approval_number :string(255)
+#  credit_card_approval_number :string(255)
 #  fiscal_number               :string(255)
 #  fiscal_type                 :string(255)
 #  company_name                :string(255)
@@ -52,6 +52,7 @@ class Cart < ActiveRecord::Base
   scope :incomplete, where(:completed=>false)
   scope :abandoned, where('reason_id IS NOT NULL')
   scope :available, where('reason_id IS NULL')
+  scope :finalized, where('completed = ? or reason_id IS NOT NULL', true)
   scope :latest, order('created_at DESC')
   belongs_to :user
   belongs_to :client
