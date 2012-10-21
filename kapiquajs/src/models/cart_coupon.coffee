@@ -40,8 +40,9 @@ CartCoupon.removeCoupon = (data, respond, socket) ->
             if del_err?
               respond(del_err)
             else
-              respond(del_err,  data.id)
+              socket.emit('cart_coupon:removed', data.id)
               try
+                respond(del_err,  data.id) unless _.isUndefined(respond)
                 cart.price(socket)  
               catch e
                 console.error e.stack

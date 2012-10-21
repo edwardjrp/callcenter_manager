@@ -67,8 +67,11 @@ CartCoupon.removeCoupon = function(data, respond, socket) {
             if (del_err != null) {
               return respond(del_err);
             } else {
-              respond(del_err, data.id);
+              socket.emit('cart_coupon:removed', data.id);
               try {
+                if (!_.isUndefined(respond)) {
+                  respond(del_err, data.id);
+                }
                 return cart.price(socket);
               } catch (e) {
                 return console.error(e.stack);

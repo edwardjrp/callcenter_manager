@@ -155,15 +155,15 @@
                 %th Descripcion Generada
                 %th Precio minimo
                 %th
-              %tbody#quick_coupons
-                - @cart.coupons.each do |coupon|
-                  %tr
-                    %td.span1= coupon.code
-                    %td= coupon.generated_description
+              %tbody
+                - @cart.cart_coupons.each do |cart_coupon|
+                  %tr{:id=> dom_id(cart_coupon),:data=> { 'cart-coupon-id'=> cart_coupon.id }}
+                    %td.span1= cart_coupon.coupon.code
+                    %td= cart_coupon.coupon.generated_description
                     %td
-                      - if coupon.minimum_price
-                        = number_to_currency coupon.minimum_price
-                    %td.span1= link_to 'Remover', '#', class: 'btn'
+                      - if cart_coupon.coupon.minimum_price
+                        = number_to_currency cart_coupon.coupon.minimum_price
+                    %td.span1= link_to 'Remover', '#', class: 'btn checkout_cart_remove_coupon'
       .row
         %table.table.table-striped.table-bordered.table-condensed.span8{:data=>{'cart-id'=> @cart.id}, :id=>dom_id(@cart)}
           %thead

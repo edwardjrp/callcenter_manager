@@ -31,6 +31,16 @@ jQuery ->
       socket.emit('cart:place',  payment_attributes) unless target.hasClass('disabled')
       target.addClass('disabled')
 
+    $('.checkout_cart_remove_coupon').on 'click', (event) ->
+      event.preventDefault()
+      target = $(event.currentTarget)
+      if confirm('¿Seguro que desea remover este cupón?')
+        socket.emit "cart_coupons:delete", { id: target.closest('tr').data('cart-coupon-id') }
+
+    socket.on 'cart_coupon:removed', (coupon_id)->
+      $("#cart_coupon_{data.id}").remove()
+      $('#checkout_client_side_coupons_list').remove() if $('#checkout_client_side_coupons_list').find('body').children().length == 0
+
     socket.on 'cart:place:completed', (data)->
       $.ajax
         type: 'POST'
