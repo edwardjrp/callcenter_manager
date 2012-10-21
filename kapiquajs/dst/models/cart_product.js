@@ -1,6 +1,8 @@
-var CartProduct, async, _;
+var CartProduct, Product, async, _;
 
 CartProduct = require('./schema').CartProduct;
+
+Product = require('../models/product');
 
 async = require('async');
 
@@ -42,8 +44,62 @@ CartProduct.addItem = function(data, respond, socket) {
   }
 };
 
+CartProduct.addCollection = function(data, respond, socket) {
+  var addProduct, cart;
+  if (data != null) {
+    cart = null;
+    addProduct = function(coupon_product, callback) {
+      return Product.all({
+        where: {
+          productcode: coupon_product.product_code
+        }
+      }, function(product_error, products) {
+        var cart_product, product;
+        if (_.any(products)) {
+          product = _.first(products);
+          cart_product = new CartProduct({
+            cart_id: data.cart_id,
+            product_id: product.id,
+            options: product.options,
+            bind_id: null,
+            quantity: Number(coupon_product.minimun_require) || 1,
+            created_at: new Date()
+          });
+          return cart_product.save(function(cart_product_save_error, saved_cart_product) {
+            if (cart_product_save_error != null) {
+              console.error(cart_product_save_error.stack);
+              return callback(cart_product_save_error);
+            } else {
+              return saved_cart_product.cart(function(saved_cart_product_error, current_cart) {
+                var saved_cart_product_to_send;
+                cart = current_cart;
+                saved_cart_product_to_send = saved_cart_product.toJSON();
+                saved_cart_product_to_send.product = product.toJSON();
+                saved_cart_product_to_send.cart = current_cart.toJSON();
+                socket.emit('cart_products:add:backwards', saved_cart_product_to_send);
+                return callback();
+              });
+            }
+          });
+        } else {
+          socket.emit('cart:pricing:error', "El cupón hace referencia al producto " + coupon_product.product_code + " pero este no se encontró en el listado");
+          return callback();
+        }
+      });
+    };
+    return async.forEach(data.coupon_products, addProduct, function(err) {
+      if (err) {
+        return console.error(err.stack);
+      } else {
+        return process.nextTick(function() {
+          return cart.price(socket);
+        });
+      }
+    });
+  }
+};
+
 CartProduct.updateItem = function(data, respond, socket, trigger_pricing) {
-  console.log(data);
   if (data != null) {
     return CartProduct.find(data.id, function(cp_err, cart_product) {
       var attributes;
@@ -89,28 +145,30 @@ CartProduct.removeItem = function(data, respond, socket) {
       if (cp_err) {
         return respond(cp_err);
       } else {
-        return cart_product.cart(function(err, cart) {
-          return cart_product.destroy(function(del_err) {
-            if (del_err != null) {
-              return respond(del_err);
-            } else {
-              respond(del_err, data.id);
-              return cart.cart_products({}, function(cp_list_err, cart_products) {
-                if (cp_list_err) {
-                  return console.erro(cp_list_err.stack);
-                } else {
-                  if (_.isEmpty(cart_products)) {
-                    return socket.emit('cart:empty', {
-                      cart: cart
-                    });
+        if (cart_product != null) {
+          return cart_product.cart(function(err, cart) {
+            return cart_product.destroy(function(del_err) {
+              if (del_err != null) {
+                return respond(del_err);
+              } else {
+                respond(del_err, data.id);
+                return cart.cart_products({}, function(cp_list_err, cart_products) {
+                  if (cp_list_err) {
+                    return console.erro(cp_list_err.stack);
                   } else {
-                    return cart.price(socket);
+                    if (_.isEmpty(cart_products)) {
+                      return socket.emit('cart:empty', {
+                        cart: cart
+                      });
+                    } else {
+                      return cart.price(socket);
+                    }
                   }
-                }
-              });
-            }
+                });
+              }
+            });
           });
-        });
+        }
       }
     });
   }

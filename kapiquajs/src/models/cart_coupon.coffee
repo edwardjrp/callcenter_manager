@@ -1,27 +1,39 @@
 CartCoupon = require('./schema').CartCoupon
+CartProduct = require('../models/cart_product')
+Cart = require('../models/cart')
 _ = require('underscore')
 
 CartCoupon.addCoupon = (data, respond, socket) ->
   if data?
-    search_data = {cart_id : data.cart_id, coupon_id : data.coupon_id}
-    CartCoupon.all {where:search_data}, (cc_err, cart_coupons) ->
-      if cc_err
-        console.error cc_err
+    Cart.find data.cart_id, (cart_error, cart) ->
+      if cart_error
+        console.error cart_error.stack
+        socket.emit "coupon:error", "No se pudo obtener los datos de la orden"
       else
-        if _.isEmpty(cart_coupons)
-          target_products =  JSON.stringify(data.target_products) if data.target_products?  
-          cart_coupon = new CartCoupon({cart_id : data.cart_id, code: data.coupon_code, coupon_id : data.coupon_id, target_products: target_products})
-          cart_coupon.save (s_cc_err, saved_cart_coupon) ->
-            if s_cc_err
-              console.error s_cc_err
-              # emit error
+        cart.cart_products {}, (cart_products_error, cart_products) ->
+          if cart_products_error
+            console.error cart_products_error.stack
+          else
+            if _.isEmpty(cart_products)
+              socket.emit "coupon:error", "Debe introducir productos a la orden"    
             else
-              saved_cart_coupon.cart (err, cart) ->
-                unless err
-                  cart.price(socket)
-              socket.emit('cart_coupon:saved', saved_cart_coupon)
+              cart.cart_coupons { where: {coupon_id : data.coupon_id} }, (cc_err, cart_coupons) ->
+                if cc_err
+                  console.error cc_err.stack
+                else
+                  if _.isEmpty(cart_coupons)
+                    target_products =  JSON.stringify(data.target_products) if data.target_products?  
+                    cart_coupon = new CartCoupon({cart_id : cart.id, code: data.coupon_code, coupon_id : data.coupon_id, target_products: target_products})
+                    cart_coupon.save (s_cc_err, saved_cart_coupon) ->
+                      if s_cc_err
+                        console.error s_cc_err
+                        # emit error
+                      else
+                        socket.emit('cart_coupon:saved', saved_cart_coupon)
+                        socket.emit('cart:coupons:autocomplete', saved_cart_coupon )
 
-CartCoupon.removeItem = (data, respond, socket) ->
+
+CartCoupon.removeCoupon = (data, respond, socket) ->
   if data?
     CartCoupon.find data.id, (cc_err, cart_coupon) ->
       if cc_err
@@ -33,6 +45,11 @@ CartCoupon.removeItem = (data, respond, socket) ->
               respond(del_err)
             else
               respond(del_err,  data.id)
-              cart.price(socket)
+              try
+                cart.price(socket)  
+              catch e
+                console.error e.stack
+              
+              
 
 module.exports = CartCoupon

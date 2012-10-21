@@ -11,7 +11,7 @@ CartCoupons = (function() {
   };
 
   CartCoupons.destroy = function(data, respond, socket) {
-    return CartCoupon.removeItem(data, respond, socket);
+    return CartCoupon.removeCoupon(data, respond, socket);
   };
 
   return CartCoupons;

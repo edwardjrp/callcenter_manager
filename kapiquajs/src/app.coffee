@@ -93,6 +93,9 @@ io.sockets.on "connection", (socket) ->
   socket.on "cart_products:create", (data, responder) ->
     CartProducts.create(data, responder, socket)
     
+  socket.on "cart_products:add_collection", (data, responder) ->
+    CartProducts.addCollection(data, responder, socket)
+
   socket.on "cart_products:update", (data, responder) ->
     CartProducts.update(data, responder, socket)
     

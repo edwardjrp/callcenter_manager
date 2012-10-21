@@ -25,14 +25,14 @@ class Option
 
   @collection: (recipe_list)->
     results = []
-    recipes = recipe_list.split(',') || recipe_list
+    recipes = recipe_list?.split(',') || recipe_list
     for recipe in _.compact(recipes)
       results.push new Option(recipe) if recipe?
     results
 
   @pulseCollection: (recipe_list)->
     results = []
-    recipes = recipe_list.split(',') || recipe_list
+    recipes = recipe_list?.split(',') || recipe_list
     for recipe in _.compact(recipes)
       results.push new Option(recipe).toPulse() if recipe?
     results

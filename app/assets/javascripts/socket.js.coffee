@@ -40,14 +40,10 @@ jQuery ->
     event.preventDefault()
     $(this).tab('show')
 
-  # REFACTOR THIS
-  if $('#desk').size() > 0
-    $('#quick_coupons').find('tr').append("<td><a class='btn add_coupon'>Agregar</a></td>")
-    $('#quick_coupons').prev('thead').find('tr').append('<th></th>')
-    $('#quick_coupons').on 'click' , '.add_coupon', (event) ->
-      event.preventDefault()
-      target = $(event.currentTarget).closest('tr')
-      socket.emit 'cart_coupons:create', {cart_id: target.data('cart-id'), coupon_code: target.data('coupon-code'), coupon_id: target.data('coupon-id'), target_products: target.data('coupon-products')}
+  $('#quick_coupons').on 'click' , '.add_coupon', (event) ->
+    event.preventDefault()
+    target = $(event.currentTarget).closest('tr')
+    socket.emit 'cart_coupons:create', {cart_id: target.data('cart-id'), coupon_code: target.data('coupon-code'), coupon_id: target.data('coupon-id'), target_products: target.data('coupon-products')}
 
   $('#close_utils').on 'click', (event)->
     for tab_contents in $('#utils_labels').next().find('.tab-pane')

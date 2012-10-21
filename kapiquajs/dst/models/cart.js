@@ -114,7 +114,7 @@ Cart.prototype.price = function(socket) {
                 });
                 console.info(order_reply);
                 if (order_reply.status === '6') {
-                  return socket.emit('cart:coupons:autocomplete', current_cart_coupons);
+                  return socket.emit('cart:price:error', 'La orden tiene cupones incompletos');
                 }
               });
             } catch (err_pricing) {
@@ -162,7 +162,7 @@ Cart.prototype.updatePrices = function(order_reply, socket) {
     } else {
       return _.each(order_reply.products(), function(pricing) {
         return CartProduct.find(pricing.cart_product_id, function(cp_err, cart_product) {
-          if (!cp_err) {
+          if (cp_err == null) {
             return cart_product.updateAttributes({
               priced_at: pricing.priced_at
             }, function(update_err, updated_cart_product) {

@@ -12,6 +12,7 @@ class Kapiqua25.Views.CartProductsShow extends Backbone.View
 
   render: ->
     $(@el).html(@template(cart_product: @model))
+    $(@el).find('input').restric('alpha').restric('spaces')
     this
   
   updatePrices: (data) ->

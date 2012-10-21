@@ -78,7 +78,7 @@ Cart.prototype.price = (socket)->
                   socket.emit 'cart:priced', {order_reply: order_reply, items: order_reply.products()}
                   console.info order_reply # update can_place_order
                   if order_reply.status == '6'
-                    socket.emit('cart:coupons:autocomplete', current_cart_coupons)
+                    socket.emit('cart:price:error', 'La orden tiene cupones incompletos')
               catch err_pricing
                 console.error err_pricing.stack
         else
@@ -114,7 +114,7 @@ Cart.prototype.updatePrices = (order_reply, socket) ->
     else
       _.each order_reply.products(), (pricing) ->
         CartProduct.find pricing.cart_product_id , (cp_err, cart_product)->
-          unless cp_err
+          unless cp_err?
             cart_product.updateAttributes { priced_at: pricing.priced_at}, (update_err, updated_cart_product) ->
               if update_err
                 console.error update_err

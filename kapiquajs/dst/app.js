@@ -119,6 +119,9 @@ io.sockets.on("connection", function(socket) {
   socket.on("cart_products:create", function(data, responder) {
     return CartProducts.create(data, responder, socket);
   });
+  socket.on("cart_products:add_collection", function(data, responder) {
+    return CartProducts.addCollection(data, responder, socket);
+  });
   socket.on("cart_products:update", function(data, responder) {
     return CartProducts.update(data, responder, socket);
   });

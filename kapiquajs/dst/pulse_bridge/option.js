@@ -47,7 +47,7 @@ Option = (function() {
   Option.collection = function(recipe_list) {
     var recipe, recipes, results, _i, _len, _ref;
     results = [];
-    recipes = recipe_list.split(',') || recipe_list;
+    recipes = (recipe_list != null ? recipe_list.split(',') : void 0) || recipe_list;
     _ref = _.compact(recipes);
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       recipe = _ref[_i];
@@ -61,7 +61,7 @@ Option = (function() {
   Option.pulseCollection = function(recipe_list) {
     var recipe, recipes, results, _i, _len, _ref;
     results = [];
-    recipes = recipe_list.split(',') || recipe_list;
+    recipes = (recipe_list != null ? recipe_list.split(',') : void 0) || recipe_list;
     _ref = _.compact(recipes);
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       recipe = _ref[_i];

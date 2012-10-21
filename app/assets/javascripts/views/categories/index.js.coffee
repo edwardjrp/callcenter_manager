@@ -20,20 +20,17 @@ class Kapiqua25.Views.CategoriesIndex extends Backbone.View
 
   couponsComplete: (cart_coupons)=>
     if cart_coupons?
-      all_products = _.flatten(_.map(@collection.models, (category) -> category.mainProducts().models))
-      coupon_products = _.map cart_coupons, (cart_coupon) ->
-        _.filter all_products, (product) ->
-          _.include(_.map($.parseJSON(cart_coupon.target_products), (target_product)-> target_product.product_code ), product.get('productcode'))
-      coupon_products_ids = _.map _.uniq(coupon_products[0]), (coupon_product) -> coupon_product.id
-      current_cart_products_ids = _.map @options.cart.get('cart_products').models, (cart_product) -> cart_product.get('product').id
-      # if _.any(_.difference(coupon_products_ids, current_cart_products_ids))
-      #   if confirm('¿ Desea introducir solo los productos faltantes?')
-      #     console.log 'enter difference'
-      #   else
-      #     _.each coupon_products_ids, (cart_product_id) =>
-      #       product = _.find( all_products, (product) -> product.id == cart_product_id )
-      #       console.log { product_id: cart_product_id, product: product, quantity: '1', options: product.get('options'), cart_id: @options.cart, bind_id: null }
-            # @options.cart.get('cart_products').add({ product_id: cart_product_id, product: product, quantity: '1', options: product.get('options'), cart_id: @options.cart, bind_id: null })
+      current_cart_products_codes = _.map @options.cart.get('cart_products').models, (cart_product) -> cart_product.get('product').get('productcode')
+      coupon_products = $.parseJSON(cart_coupons.target_products)
+      coupon_products_codes = _.map coupon_products, (coupon_product) -> coupon_product.product_code
+      cart_missing_products_codes = _.difference(coupon_products_codes, current_cart_products_codes)
+      if _.any(cart_missing_products_codes)
+        if (cart_missing_products_codes.length < coupon_products_codes.length) and confirm('¿ Desea introducir solo los productos faltantes ?')
+          cart_missing_products = _.filter coupon_products, (cart_coupon) -> _.include(cart_missing_products_codes,cart_coupon.product_code)
+          window.socket.emit 'cart_products:add_collection', { coupon_products: cart_missing_products, cart_id: @options.cart.id }
+        else
+          window.socket.emit 'cart_products:add_collection', { coupon_products: coupon_products, cart_id: @options.cart.id }
+
 
   onEditing: (data)->
     $(@el).find('.nav-tabs').find("li a[href='##{data.category.get('name')}']").trigger('click')

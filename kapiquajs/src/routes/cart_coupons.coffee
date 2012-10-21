@@ -8,7 +8,7 @@ class CartCoupons
 
 
   @destroy: (data, respond, socket) ->
-    CartCoupon.removeItem(data, respond, socket)
+    CartCoupon.removeCoupon(data, respond, socket)
           
 
 module.exports = CartCoupons

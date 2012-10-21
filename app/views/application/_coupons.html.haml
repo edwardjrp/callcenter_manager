@@ -1,5 +1,5 @@
 .row
-  .span11
+  .span12
     %table.table.table-condensed#client_side_coupons_list
       %thead
         %th Codigo
@@ -7,6 +7,9 @@
         %th Description
         %th Descripcion Generada
         %th Precio minimo
+        - if request.path == builder_path
+          %th
+
       %tbody#quick_coupons
         - Coupon.available.each do |coupon|
           %tr{ :data=> { 'cart-id'=> current_cart.id, 'coupon-code'=> coupon.code, 'coupon-id'=>coupon.id, 'coupon-products'=> coupon.target_products }}
@@ -17,3 +20,5 @@
             %td
               - if coupon.minimum_price
                 = number_to_currency coupon.minimum_price
+            - if request.path == builder_path
+              %td= link_to 'Agregar', '#', class: 'add_coupon'

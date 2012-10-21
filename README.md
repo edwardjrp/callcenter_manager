@@ -37,3 +37,5 @@
 - test all model methods
 
 - fix socket.io on error
+
+- restric alpha is missing special characters

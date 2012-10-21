@@ -7,5 +7,5 @@ jQuery ->
       "sInfoFiltered": " - filtrando de un total de _MAX_ cupones"
       "sInfo": "Mostrando _START_ to _END_ de  _TOTAL_ cupones"
       "oPaginate":
-        "sPrevious": "Anterior" 
-        "sNext": "Siguiente" 
+        "sPrevious": "Anterior"
+        "sNext": "Siguiente"

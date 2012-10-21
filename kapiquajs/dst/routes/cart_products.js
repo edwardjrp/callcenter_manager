@@ -10,6 +10,10 @@ CartProducts = (function() {
     return CartProduct.addItem(data, respond, socket, true);
   };
 
+  CartProducts.addCollection = function(data, respond, socket) {
+    return CartProduct.addCollection(data, respond, socket, true);
+  };
+
   CartProducts.update = function(data, respond, socket) {
     return CartProduct.updateItem(data, respond, socket, true);
   };

@@ -1,4 +1,5 @@
 CartProduct = require('./schema').CartProduct
+Product = require('../models/product')
 async = require('async')
 _ = require('underscore')
 CartProduct.validatesPresenceOf('cart_id')
@@ -20,10 +21,40 @@ CartProduct.addItem = (data, respond, socket) ->
           else
             cart.price(socket)
         respond(err, result_cart_product)
+
+
+CartProduct.addCollection = (data, respond, socket) ->
+  if data?
+    cart = null
+    addProduct = (coupon_product, callback) ->
+      Product.all { where: { productcode: coupon_product.product_code } }, (product_error, products) ->
+        if _.any(products)
+          product = _.first(products)
+          cart_product = new CartProduct({cart_id: data.cart_id, product_id: product.id, options: product.options, bind_id: null, quantity: Number(coupon_product.minimun_require) || 1, created_at: new Date()})
+          cart_product.save (cart_product_save_error, saved_cart_product) ->
+            if cart_product_save_error?
+              console.error cart_product_save_error.stack
+              callback(cart_product_save_error)
+            else
+              saved_cart_product.cart (saved_cart_product_error, current_cart) ->
+                cart = current_cart
+                saved_cart_product_to_send = saved_cart_product.toJSON()
+                saved_cart_product_to_send.product = product.toJSON()
+                saved_cart_product_to_send.cart = current_cart.toJSON()
+                socket.emit 'cart_products:add:backwards', saved_cart_product_to_send
+                callback()
+        else
+          socket.emit 'cart:pricing:error',  "El cupón hace referencia al producto #{coupon_product.product_code} pero este no se encontró en el listado"
+          callback()
+    async.forEach data.coupon_products, addProduct, (err)->
+      if err
+        console.error err.stack
+      else
+        process.nextTick ->
+          cart.price(socket)
     
 
 CartProduct.updateItem =  (data, respond, socket, trigger_pricing) ->
-  console.log data
   if data?
     CartProduct.find data.id, (cp_err, cart_product) ->
         if cp_err?
@@ -54,21 +85,22 @@ CartProduct.removeItem = (data, respond, socket) ->
     CartProduct.find data.id, (cp_err, cart_product) ->
       if cp_err
         respond(cp_err)
-      else 
-        cart_product.cart (err, cart) ->
-          cart_product.destroy (del_err) ->
-            if del_err?
-              respond(del_err)
-            else
-              respond(del_err, data.id)
-              cart.cart_products {}, (cp_list_err, cart_products) ->
-                if cp_list_err
-                  console.erro cp_list_err.stack
-                else
-                  if _.isEmpty(cart_products)
-                    socket.emit 'cart:empty', {cart: cart}
+      else
+        if cart_product?
+          cart_product.cart (err, cart) ->
+            cart_product.destroy (del_err) ->
+              if del_err?
+                respond(del_err)
+              else
+                respond(del_err, data.id)
+                cart.cart_products {}, (cp_list_err, cart_products) ->
+                  if cp_list_err
+                    console.erro cp_list_err.stack
                   else
-                    cart.price(socket)
+                    if _.isEmpty(cart_products)
+                      socket.emit 'cart:empty', {cart: cart}
+                    else
+                      cart.price(socket)
 
               
 
