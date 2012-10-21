@@ -91,7 +91,7 @@ Cart.prototype.comm_failed = (socket) ->
     if err
       console.error err.stack
     else
-      socket.emit 'cart:price:comm_failed', updated_cart
+      socket.emit 'cart:place:comm_failed', updated_cart
 
 
 Cart.prototype.updatePrices = (order_reply, socket) ->

@@ -2,8 +2,11 @@
 require 'spec_helper'
 
 describe 'Categories general' do
+  
   let!(:category) { create :category, :name=>'test category'}
+
   let!(:user) { create :user, :admin  }
+
   before { login(user) } 
   
   it "should render de link in the main nav" do
