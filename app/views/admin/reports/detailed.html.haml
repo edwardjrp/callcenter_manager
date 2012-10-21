@@ -8,11 +8,13 @@
           -@reports.each do |report|
             %li
               =link_to report.csv_file.file.identifier, report.csv_file_url
+            %li
+              =link_to report.pdf_file.file.identifier, report.pdf_file_url
         = will_paginate @reports
   .span9
     .row
       .span9#report_detailed_filter
-        = search_form_for [:admin,@search], :url => admin_reports_path, :html=>{ :class=>'form-horizontal top-margin-1 filter' } do |f|
+        = search_form_for [:admin,@search], :url => admin_reports_detailed_path, :html=>{ :class=>'form-horizontal top-margin-1 filter' } do |f|
           %fieldset
             %legend Filtro
             .alert
@@ -27,7 +29,7 @@
               =f.text_field :created_at_lteq, :class=> 'input-medium ', :placeholder=>'Creado antes de '
             .form-actions
               =f.submit 'Filtrar', :name=>nil, :class=> 'btn btn-primary'
-              %a.btn#report_clear_search{ href: "#{admin_reports_path}"} Limpiar
+              %a.btn#report_clear_search{ href: "#{admin_reports_detailed_path}"} Limpiar
         
         =link_to 'Generar reporte', admin_reports_detailed_path, method: :post, class: 'btn bottom-margin-1'
     .row

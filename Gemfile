@@ -56,6 +56,8 @@ gem 'best_in_place'
 gem 'sidekiq'
 gem 'sinatra', require: false
 gem 'slim'
+gem 'prawn'
+
 
 # To use ActiveModel has_secure_password
 gem 'bcrypt-ruby', '~> 3.0.0'
