@@ -70,6 +70,9 @@ jQuery ->
 
     target[0].reset()
     target.find("input[type='text']").val('')
+
+  socket.on "coupon:error", (msg)->
+    $("<div class='purr'>#{msg}<div>").purr()
     
   socket.on 'cart:price:error', (msg)->
     $("<div class='purr'>#{msg}<div>").purr()

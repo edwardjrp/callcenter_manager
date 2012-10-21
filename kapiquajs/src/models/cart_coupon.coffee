@@ -24,7 +24,6 @@ CartCoupon.addCoupon = (data, respond, socket) ->
                   cart_coupon.save (s_cc_err, saved_cart_coupon) ->
                     if s_cc_err
                       console.error s_cc_err
-                      # emit error
                     else
                       socket.emit('cart_coupon:saved', saved_cart_coupon)
                       socket.emit('cart:coupons:autocomplete', saved_cart_coupon )
