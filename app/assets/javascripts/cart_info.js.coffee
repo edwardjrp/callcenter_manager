@@ -15,7 +15,7 @@ jQuery ->
         $(item).show()
     else
       for item in $(this).closest('ul').find('.filterable')
-        unless $(item).find('a').text().match(new RegExp($(this).val()))?
+        unless $(item).find('a').text().toLowerCase().match(new RegExp($(this).val().toLowerCase()))?
           $(item).hide()
         else
           $(item).show()
