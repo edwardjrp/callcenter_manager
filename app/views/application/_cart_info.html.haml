@@ -46,11 +46,13 @@
                       %i.icon-bookmark
                     ="Calle #{address.street.name}, No. #{address.number} - Tienda: #{address.store.name} #{address.store.storeid}"
             %hr
+        %li
+          %input{type: 'text' , id: 'filter_store'}
         - Store.all.each do |store|
-          %li
+          %li.filterable
             %a.set_target_store{id: dom_id(store, store.storeid), :data=> { "store-id"=> store.id }}
               - if current_cart.present? && current_cart.store.present? && store == current_cart.store
                 %i.icon-ok
-              ="#{store.name} #{store.storeid}"
+              ="#{store.storeid} | #{store.name} "
     %li
       %a{:id => "proceed_to_checkout_out", :href=>payments_path} Checkout!
