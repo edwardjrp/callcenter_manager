@@ -19,40 +19,36 @@ CartCoupon.addCoupon = function(data, respond, socket) {
           if (cart_products_error) {
             return console.error(cart_products_error.stack);
           } else {
-            if (_.isEmpty(cart_products)) {
-              return socket.emit("coupon:error", "Debe introducir productos a la orden");
-            } else {
-              return cart.cart_coupons({
-                where: {
-                  coupon_id: data.coupon_id
-                }
-              }, function(cc_err, cart_coupons) {
-                var cart_coupon, target_products;
-                if (cc_err) {
-                  return console.error(cc_err.stack);
-                } else {
-                  if (_.isEmpty(cart_coupons)) {
-                    if (data.target_products != null) {
-                      target_products = JSON.stringify(data.target_products);
-                    }
-                    cart_coupon = new CartCoupon({
-                      cart_id: cart.id,
-                      code: data.coupon_code,
-                      coupon_id: data.coupon_id,
-                      target_products: target_products
-                    });
-                    return cart_coupon.save(function(s_cc_err, saved_cart_coupon) {
-                      if (s_cc_err) {
-                        return console.error(s_cc_err);
-                      } else {
-                        socket.emit('cart_coupon:saved', saved_cart_coupon);
-                        return socket.emit('cart:coupons:autocomplete', saved_cart_coupon);
-                      }
-                    });
+            return cart.cart_coupons({
+              where: {
+                coupon_id: data.coupon_id
+              }
+            }, function(cc_err, cart_coupons) {
+              var cart_coupon, target_products;
+              if (cc_err) {
+                return console.error(cc_err.stack);
+              } else {
+                if (_.isEmpty(cart_coupons)) {
+                  if (data.target_products != null) {
+                    target_products = JSON.stringify(data.target_products);
                   }
+                  cart_coupon = new CartCoupon({
+                    cart_id: cart.id,
+                    code: data.coupon_code,
+                    coupon_id: data.coupon_id,
+                    target_products: target_products
+                  });
+                  return cart_coupon.save(function(s_cc_err, saved_cart_coupon) {
+                    if (s_cc_err) {
+                      return console.error(s_cc_err);
+                    } else {
+                      socket.emit('cart_coupon:saved', saved_cart_coupon);
+                      return socket.emit('cart:coupons:autocomplete', saved_cart_coupon);
+                    }
+                  });
                 }
-              });
-            }
+              }
+            });
           }
         });
       }

@@ -115,9 +115,10 @@ Cart.prototype.updatePrices = (order_reply, socket) ->
       _.each order_reply.products(), (pricing) ->
         CartProduct.find pricing.cart_product_id , (cp_err, cart_product)->
           unless cp_err?
-            cart_product.updateAttributes { priced_at: pricing.priced_at}, (update_err, updated_cart_product) ->
-              if update_err
-                console.error update_err
+            if cart_product?
+              cart_product.updateAttributes { priced_at: pricing.priced_at}, (update_err, updated_cart_product) ->
+                if update_err
+                  console.error update_err
 
 
 Cart.prototype.place = (data, socket) ->
