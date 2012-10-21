@@ -18,7 +18,7 @@ class TaxNumber < ActiveRecord::Base
   validates :client_id, presence: true, on: :update
   validates :fiscal_type, inclusion: { in: ["FinalConsumer","3rdParty","SpecialRegme","Government"] }
   belongs_to :client
-  attr_accessible :rnc, :client_id, :verified, :fiscal_type
+  attr_accessible :rnc, :client_id, :verified, :fiscal_type, :company_name
 
   scope :with_verification, where(verified: true)
 

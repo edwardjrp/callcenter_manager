@@ -14,7 +14,7 @@ class Area < ActiveRecord::Base
   belongs_to :city
   belongs_to :store
   has_many :streets, dependent: :destroy
-  validates :name, :presence => true, :uniqueness => true
+  validates :name, :presence=> true, uniqueness: { scope: :city_id}
   attr_accessible :city_id, :name
   
   

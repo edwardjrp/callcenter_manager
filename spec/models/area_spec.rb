@@ -16,10 +16,11 @@ describe Area do
 
   describe "Validation" do
 
-    it{should validate_presence_of :name}
-    it{should belong_to :city}
-    it{should belong_to :store}
-    it{should have_many :streets}
+    it { should validate_presence_of :name }
+    it { should validate_uniqueness_of(:name).scoped_to(:city_id) }
+    it { should belong_to :city }
+    it { should belong_to :store }
+    it { should have_many :streets }
 
   end
   
