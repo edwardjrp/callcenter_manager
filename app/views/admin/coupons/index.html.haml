@@ -23,7 +23,6 @@
           %td= number_to_currency coupon.minimum_price
           %td
             .btn-group
-              =link_to 'Detalles', [:admin, coupon], class: 'btn'
               =link_to 'Descontinuar', '#', class: 'btn'
               =link_to 'Eliminar', [:admin, coupon], method: :delete, :data => { :confirm => '¿Seguro que desea eliminar este cupón?' } , :class=> 'btn '
   =will_paginate @coupons

@@ -150,13 +150,43 @@
           .span3
             %strong Número fiscal:
             =cart.fiscal_number || 'N/A'
+        .row
+          .span3
+            %strong Inicio:
+            =l cart.started_on, format: :short if cart.started_on
+          .span3
+            %strong Completada:
+            =l cart.complete_on, format: :short if cart.complete_on
+        .row
+          .span3
+            %strong Tiempo:
+            = "#{cart.take_time.round} segundos" if cart.take_time
+          .span3
+            %strong Tipo de pago:
+            = cart.payment_type
+        - if cart.coupons.count.nonzero?
+          .row
+            #client_coupons_list
+              %table.table.table-striped.table-bordered.table-condensed.span8
+                %thead
+                  %th Codigo
+                  %th Descripcion Generada
+                  %th Precio minimo
+                %tbody
+                  - cart.cart_coupons.each do |cart_coupon|
+                    %tr[cart_coupon]
+                      %td.span1= cart_coupon.coupon.code
+                      %td= cart_coupon.coupon.generated_description
+                      %td
+                        - if cart_coupon.coupon.minimum_price
+                          = number_to_currency cart_coupon.coupon.minimum_price
 
         .row{:data=>{'cart-id'=> cart.id}, :id=>dom_id(cart)}
           %table.table.table-striped.table-bordered.table-condensed.span8
             %thead
               %tr
                 %th Cantidad
-                %th product
+                %th producto
                 %th Optiones
                 %th Precio              
             %tbody

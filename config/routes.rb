@@ -69,7 +69,7 @@ Kapiqua25::Application.routes.draw do
     resources :reasons, except: [:new, :edit]
     resources :reports, only: [:index, :create, :destroy]
     resources :users
-    resources :coupons, except: [:new, :create]
+    resources :coupons, except: [:new, :create, :show]
     resources :taxpayer_identifications, only: [:index, :create]
     resources :import_logs
     resources :settings , only: [:index, :create]

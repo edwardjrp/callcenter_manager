@@ -39,3 +39,5 @@
 - fix socket.io on error
 
 - restric alpha is missing special characters
+
+- missing coupons edit and show

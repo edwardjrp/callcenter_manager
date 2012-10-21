@@ -8,7 +8,7 @@ class Admin::ClientsController < ApplicationController
 
   def show
     @client= Client.find(params[:id])
-    @carts = @client.carts.page(params[:page])
+    @carts = @client.carts.completed.order('complete_on DESC').page(params[:page])
   end
 
   def olo

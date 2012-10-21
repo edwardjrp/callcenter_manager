@@ -6,9 +6,9 @@ class Admin::CouponsController < ApplicationController
     @coupons = @search.result.page(params[:page])
   end
 
-  def show
-    @coupon = Coupon.find(params[:id])
-  end
+  # def show
+  #   @coupon = Coupon.find(params[:id])
+  # end
 
   def edit
     @coupon = Coupon.find(params[:id])

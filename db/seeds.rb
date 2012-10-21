@@ -1,22 +1,5 @@
 # #encoding: utf-8
 require 'csv'
-# if Rails.env.production?
-  require 'factory_girl'
-  require 'faker'
-  # Dir[Rails.root.join("spec/factories/*.rb")].each {|f| require f}
-# end
-# # This file should contain all the record creation needed to seed the database with its default values.
-# # The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-# #
-# # Examples:
-# #
-# #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-# #   Mayor.create(name: 'Emanuel', city: cities.first)
-# FactoryGirl.create :user, :password=>'please', :password_confirmation=>'please', :username=>'test', :roles=> [:operator]
-# FactoryGirl.create :user, :password=>'please', :password_confirmation=>'please', :username=>'admin', :roles=> [:admin]
-# 100.times do
-#   FactoryGirl.create :phone
-# end
 
 
 # def save_without_massasignment(model, attributes={})
@@ -53,63 +36,22 @@ require 'csv'
 # save_without_massasignment(Store,{:name=>"Tienda Virtual OLO",:address=>"Dominos cc",:ip=>"192.168.85.4",:storeid=>"99999",:city_id =>City.find_or_create_by_name("Santo Domingo").id})
 # save_without_massasignment(Store,{:name=>"La Vega",:address=>"Av. García Godoy esq. Balilo Gómez, Plaza Michelle",:ip=>"192.168.74.2",:storeid=>"15885",:city_id =>City.find_or_create_by_name("La Vega").id})
 
-# puts "adding addresses"
-# addresses_data_file = Rails.root.join("tmp","direcciones.csv")
-# if File.exists? addresses_data_file
-#   CSV.foreach(addresses_data_file, :quote_char => '"', :col_sep =>'|', :headers =>true) do |row|
-#     if row.fields.length == 3
-#       # puts "**************"
-#       # puts row.fields.first.match(/(?:.+),(.+),(?:.\d+)/)[1] unless row.fields.first.match(/(?:.+),(.+),(?:.\d+)/).nil?
-#       # puts row.fields[1]
-#       # puts row.fields
-#       # puts "=============="
-#       current_city = City.find_by_name(row.fields.last)
-#       current_store = Store.find_by_storeid(row.fields[1]) if row.fields[1].present?
-#       unless row.fields.first.match(/(?:.+),(.+),(?:.\d+)/).nil?
-#         Area.create do |area|
-#           # puts row.fields.first.match(/(?:.+),(.+),(?:.\d+)/)[1]
-#           area.name = row.fields.first.match(/(?:.+),(.+),(?:.\d+)/)[1].strip
-#           area.city_id = current_city.id if current_city.present?
-#           area.store_id = current_store.id if current_store.present?
-#         end
-#       end
-#       unless row.fields.first.match(/(.+),(?:.+),(?:.\d+)/).nil?
-#         current_area = Area.find_by_name(row.fields.first.match(/(?:.+),(.+),(?:.\d+)/)[1].strip)
-#         # puts current_area.inspect if current_area
-#         # puts row.fields.first.match(/(?:.+),(.+),(?:.\d+)/)
-#         Street.create do |street|
-#           street.name = row.fields.first.match(/(.+),(?:.+),(?:.\d+)/)[1].strip
-#           street.area_id = current_area.id if current_area.present?
-#         end
-#       end
-#     end
-#   end
-# end
-
-# 6.times { FactoryGirl.create :user, :password=>'please', :password_confirmation=>'please', :username=>'test', :roles=> [:operator] }
-unless Product.count == 0
-  500.times do
-    current_cart = Cart.create do |cart| 
-        cart.user_id  = User.all.sample.id
-        cart.client_id  =  Client.all.sample.id
-        cart.store_id  =  Store.all.sample.id
-        cart.store_order_id  =  "%07d" % rand(999)
-        cart.service_method = ['Pickup', 'CarryOut'].sample
-        cart.net_amount = rand(9999) + 100
-        cart.tax_amount = cart.net_amount * 0.16
-        cart.payment_amount = cart.net_amount + cart.tax_amount
-        cart.payment_type = 'CashPayment'
-        cart.discount = (cart.payment_amount * 0.1) * rand(1)
-        cart.discount_auth_id = User.find(2).id if cart.discount > 0
-        cart.completed = true
-    end
-    rand_product_price = (rand(10) + 1 )
-    rand_product_price.times do
-      CartProduct.create do |cart_product|
-        cart_product.cart_id = current_cart.id
-        cart_product.product_id = Product.all.sample.id
-        cart_product.quantity = (rand(3) + 1)
-        cart_product.priced_at = (cart_product.cart.payment_amount / rand_product_price)
+puts "adding addresses"
+addresses_data_file = Rails.root.join("tmp","direcciones2.csv")
+if File.exists? addresses_data_file
+  CSV.foreach(addresses_data_file, :quote_char => '"', :col_sep =>',', :headers =>false) do |row|
+    if row.length == 4
+      current_city = City.find_by_name(row[0])
+      current_store = Store.find_by_storeid(row[3])
+      Area.create do |area|
+        area.name = row[2]
+        area.city_id = current_city.id if current_city.present?
+        area.store_id = current_store.id if current_store.present?
+      end.tap do |current_area|
+        Street.create do |street|
+          street.name = row[1]
+          street.area_id = current_area.id if current_area.present?
+        end
       end
     end
   end

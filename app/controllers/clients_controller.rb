@@ -71,6 +71,6 @@ class ClientsController < ApplicationController
 
   def show
     @client = Client.includes(:carts).find(params[:id])
-    @carts = @client.carts.includes(:cart_products).page(params[:page])
+    @carts = @client.carts.includes(:cart_products).completed.order('complete_on DESC').page(params[:page])
   end
 end
