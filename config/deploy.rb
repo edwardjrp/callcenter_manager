@@ -35,10 +35,10 @@ namespace :deploy do
   task :coffee_compile, roles: :app do
     puts "Compiling coffee files."
     run "mkdir -p #{shared_path}/node_modules"
-    run("ln -s #{shared_path}/node_modules #{current_path}/kapiquajs/node_modules")
-    run "cd #{current_path}/kapiquajs && #{sudo} npm link coffee-script"
-    run "cd #{current_path}/kapiquajs && #{sudo} npm install"
-    run "coffee #{current_path}/kapiquajs/build.coffee"
+    run("ln -s #{shared_path}/node_modules #{release_path}/kapiquajs/node_modules")
+    run "cd #{release_path}/kapiquajs && #{sudo} npm link coffee-script"
+    run "cd #{release_path}/kapiquajs && #{sudo} npm install"
+    run "coffee #{release_path}/kapiquajs/build.coffee"
     puts "done."
   end
   before "forever:restart", "deploy:coffee_compile"
