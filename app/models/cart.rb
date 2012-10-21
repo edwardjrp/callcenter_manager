@@ -46,6 +46,7 @@
 
 require 'csv'
 class Cart < ActiveRecord::Base
+  include Reports::Carts
   # attr_accessible :title, :body
   scope :completed, where(:completed=>true)
   scope :incomplete, where(:completed=>false)
@@ -190,30 +191,6 @@ class Cart < ActiveRecord::Base
   def self.valid_mailboxes
      #    1         2             4             8
      ['nuevos', 'archivados', 'eliminados', 'criticos']
-  end
-  
-  # move to report module that take an active record relation
-  def self.detailed_report
-    CSV.generate do |csv|
-      csv << ['No. Orden', 'Tienda', 'Nuevo cliente', 'Cliente', 'Fecha', 'Modo de servicio', 'Agente', 'Tiempo de toma', 'Monto de la order', 'Pago efectivo', 'Tipo de factura', 'Estado en pulse']
-      all.each do |cart|
-        csv << [
-          cart.id,
-          cart.store.storeid,
-          (cart.client && cart.client.carts.count == 1),
-          "#{cart.client.first_name} #{cart.client.last_name} - #{cart.client.last_phone.number.gsub(/([0-9]{3})([0-9]{3})([0-9]{4})/,'\\1-\\2-\\3')}",
-          cart.created_at.strftime('%Y-%m-%d %H:%M:%S'), # there has to be a completed_on field
-          cart.service_method,
-          cart.user.idnumber,
-          'Provisto por asterisk',
-          cart.payment_amount,
-          cart.payment_type,
-          cart.fiscal_type || 'FinalConsumer',
-          cart.order_progress,
-          cart.products.map(&:productname).to_sentence
-           ]
-      end
-    end
   end
   
   def mailboxes=(sent_mailboxes)

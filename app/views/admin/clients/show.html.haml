@@ -120,6 +120,18 @@
     - if @carts.any?
       %h3 Ordenes
       %hr
+      .row
+        .span8#client_carts_list
+          = search_form_for [:admin,@search], :url => admin_client_path(@client), :html=>{:class=>'well form-search top-margin-1 filter'} do |f|
+            =f.text_field :created_at_gteq, :class=> 'input-medium search-query', :placeholder=>'Creado después de '
+            =f.text_field :created_at_lteq, :class=> 'input-medium search-query', :placeholder=>'Creado antes de '
+            =f.submit 'Buscar', :name=>nil, :class=> 'btn'
+            %a.btn#clear_cart_search{ href: '#'} Limpiar
+      .row
+        .span5
+          Descargar: 
+          = link_to 'CSV', admin_client_path(@client, format: 'csv', params: params)
+          %hr
       =will_paginate @carts
       -@carts.each do |cart|
         .row
