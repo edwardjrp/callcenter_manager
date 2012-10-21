@@ -148,7 +148,7 @@
             Algunos productos no están disponible en esta tienda
       - if @cart.coupons.count.nonzero?
         .row
-          #client_side_coupons_list
+          #checkout_client_side_coupons_list
             %table.table.table-striped.table-bordered.table-condensed.span8
               %thead
                 %th Codigo
@@ -160,7 +160,9 @@
                   %tr
                     %td.span1= coupon.code
                     %td= coupon.generated_description
-                    %td= coupon.try(:minimum_price)
+                    %td
+                      - if coupon.minimum_price
+                        = number_to_currency coupon.minimum_price
                     %td.span1= link_to 'Remover', '#', class: 'btn'
       .row
         %table.table.table-striped.table-bordered.table-condensed.span8{:data=>{'cart-id'=> @cart.id}, :id=>dom_id(@cart)}
