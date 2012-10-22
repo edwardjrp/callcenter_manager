@@ -6,6 +6,44 @@ module Reports
 
     extend ActiveSupport::Concern
 
+    module InstanceMethods
+      def store_info
+        return 'N/A' if store.nil?
+        store.name
+      end
+
+      def new_client?
+        return 'N/A' if client.nil?
+        client.carts.count == 1 ? '*' : ''
+      end
+
+      def client_info
+        return 'N/A' if client.nil?
+        return "#{client.full_name} - #{client.last_phone.number.gsub(/([0-9]{3})([0-9]{3})([0-9]{4})/,'\\1-\\2-\\3')}" if client.phones.count.nonzero?
+        client.full_name
+      end
+
+      def completion_info
+        return 'N/A' if complete_on.nil?
+        complete_on.strftime('%Y-%m-%d %H:%M:%S')
+      end
+
+      def agent_info
+        return 'N/A' if user.nil?
+        user.idnumber.gsub(/([0-9]{3})([0-9]{7})([0-9]{1})/,'\\1-\\2-\\3')
+      end
+
+      def take_time_info
+        return 'N/A' if complete_on.nil?
+        return 'N/A' if started_on.nil?
+        take_time
+      end
+
+
+
+
+    end
+
     module ClassMethods
       # detailed reports
       def csv_detailed_report
@@ -14,13 +52,13 @@ module Reports
           all.each do |cart|
             csv << [
               cart.id,
-              cart.store.storeid,
-              (cart.client && cart.client.carts.count == 1) ? '*' : '',
-              "#{cart.client.first_name} #{cart.client.last_name} - #{cart.client.last_phone.number.gsub(/([0-9]{3})([0-9]{3})([0-9]{4})/,'\\1-\\2-\\3')}",
-              cart.complete_on.strftime('%Y-%m-%d %H:%M:%S'), # there has to be a completed_on field
+              cart.store_info,
+              cart.new_client?,
+              cart.client_info,
+              cart.completion_info, # there has to be a completed_on field
               cart.service_method,
-              cart.user.idnumber,
-              cart.take_time,
+              cart.agent_info,
+              cart.take_time_info,
               cart.payment_amount,
               cart.payment_type,
               cart.fiscal_type,
@@ -43,13 +81,13 @@ module Reports
         all.each do |cart|
           pdf_table << [
             cart.id,
-            "cart.store.storeid",
-            (cart.client && cart.client.carts.count == 1) ? '*' : '',
-            "#{cart.client.first_name} #{cart.client.last_name} - #{cart.client.last_phone.number.gsub(/([0-9]{3})([0-9]{3})([0-9]{4})/,'\\1-\\2-\\3')}",
-            "cart.complete_on.strftime('%Y-%m-%d %H:%M:%S')", # there has to be a completed_on field
+            cart.store_info,
+            cart.new_client?,
+            cart.client_info,
+            cart.completion_info, # there has to be a completed_on field
             cart.service_method,
-            cart.user.idnumber,
-            cart.take_time,
+            cart.agent_info,
+            cart.take_time_info,
             cart.payment_amount,
             cart.payment_type,
             cart.fiscal_type,
