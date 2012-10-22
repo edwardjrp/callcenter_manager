@@ -1,7 +1,16 @@
+= content_for :subnav do
+  .subnav.subnav-fixed
+    %ul.nav.nav-pills
+      %li= link_to 'Detallado', admin_reports_detailed_path
+      %li= link_to 'Product Mix', admin_reports_detailed_path
+      %li= link_to 'Consolidado', admin_reports_detailed_path
+      %li= link_to 'Cupones', admin_reports_detailed_path
+      %li= link_to 'Descuentos', admin_reports_detailed_path
+      %li= link_to 'Por hora', admin_reports_detailed_path
 .row
-  .span3
+  .span4
     .row
-      .span3
+      .span4
         %h4.bottom-margin-1 Listado de reportes detallados generados
         = will_paginate @reports
         %ul#detailed_reports.unstyled.well
@@ -11,9 +20,9 @@
             %li
               =link_to report.pdf_file.file.identifier, report.pdf_file_url
         = will_paginate @reports
-  .span9
+  .span8
     .row
-      .span9#report_detailed_filter
+      .span8#report_detailed_filter
         = search_form_for [:admin,@search], :url => admin_reports_detailed_path, :html=>{ :class=>'form-horizontal top-margin-1 filter' } do |f|
           %fieldset
             %legend Filtro
@@ -25,15 +34,15 @@
               =f.text_field :user_last_name_cont, :class=> 'input-medium ', :placeholder=>'Apellido del agente'
               =f.text_field :user_idnumber_cont, :class=> 'input-medium ', :placeholder=>'Cédula del agente'
             .control-group
-              =f.text_field :created_at_gteq, :class=> 'input-medium ', :placeholder=>'Creado después de '
-              =f.text_field :created_at_lteq, :class=> 'input-medium ', :placeholder=>'Creado antes de '
+              =f.text_field :complete_on_gteq, :class=> 'input-medium ', :placeholder=>'Creado después de '
+              =f.text_field :complete_on_lteq, :class=> 'input-medium ', :placeholder=>'Creado antes de '
             .form-actions
               =f.submit 'Filtrar', :name=>nil, :class=> 'btn btn-primary'
               %a.btn#report_clear_search{ href: "#{admin_reports_detailed_path}"} Limpiar
         
         =link_to 'Generar reporte', admin_reports_detailed_path, method: :post, class: 'btn bottom-margin-1'
     .row
-      .span9
+      .span8
         %h4 Proeba de Filtro
         %hr
         %table.table.table-striped.table-bordered.table-condensed
@@ -45,10 +54,7 @@
             %th Fecha
             %th Modo de servicio
             %th Agente
-            %th Tiempo de toma
             %th Monto de la order
-            %th Pago efectivo
-            %th Tipo de factura
             %th Estado en pulse
           %tbody
             -@carts.each do |cart|          
@@ -56,12 +62,9 @@
                 %td= cart.id
                 %td= cart.store.name
                 %td= (cart.client && cart.client.carts.count == 1) ? '*' : ''
-                %td= "#{cart.client.first_name} #{cart.client.last_name} - #{cart.client.last_phone.number.gsub(/([0-9]{3})([0-9]{3})([0-9]{4})/,'\\1-\\2-\\3')}"
-                %td= cart.complete_on.strftime('%Y-%m-%d %H:%M:%S')
+                %td= cart.client.full_name
+                %td= cart.completion_info
                 %td= cart.service_method
                 %td= number_to_cedula cart.user.idnumber
-                %td= cart.take_time
                 %td= number_to_currency cart.payment_amount
-                %td= cart.try(:payment_type)
-                %td= cart.try(:fiscal_type)
                 %td= cart.try(:order_progress)
