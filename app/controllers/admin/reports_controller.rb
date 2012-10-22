@@ -11,13 +11,13 @@ class Admin::ReportsController < ApplicationController
     def generate_detailed 
       @search = Cart.finalized.search(params[:q])
       @report = Report.create(name: 'Detallado')
-      # begin
+      begin
         @report.process(@search.result(:distinct => true))
         flash['success'] = "Reporte generado"
-      # rescue => error
-      #   Rails.logger.info error
-      #   flash['error'] = "Un error impidio la generación del reporte"
-      # end
+      rescue => error
+        Rails.logger.info error
+        flash['error'] = "Un error impidio la generación del reporte"
+      end
       redirect_to admin_reports_detailed_path
     end
 end
