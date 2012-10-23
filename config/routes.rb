@@ -70,6 +70,8 @@ Kapiqua25::Application.routes.draw do
 
     get "reports/detailed" => "reports#detailed"
     post "reports/detailed" => "reports#generate_detailed"
+    get "reports/sumary" => "reports#sumary", as: :report_sumary
+    post "reports/sumary" => "reports#generate_sumary"
 
     resources :users
     resources :coupons, except: [:new, :create, :show]

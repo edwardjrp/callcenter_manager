@@ -1,0 +1,9 @@
+= content_for :subnav do
+  .subnav.subnav-fixed
+    %ul.nav.nav-pills
+      %li= link_to 'Detallado', admin_reports_detailed_path
+      %li= link_to 'Product Mix', admin_reports_detailed_path
+      %li= link_to 'Consolidado', admin_report_sumary_path
+      %li= link_to 'Cupones', admin_reports_detailed_path
+      %li= link_to 'Descuentos', admin_reports_detailed_path
+      %li= link_to 'Por hora', admin_reports_detailed_path
