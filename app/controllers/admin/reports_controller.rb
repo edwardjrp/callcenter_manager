@@ -32,14 +32,34 @@ class Admin::ReportsController < ApplicationController
       (params[:sumary_report].present? && params[:sumary_report][:start_date].present?) ? start_date = Date.parse(params[:sumary_report][:start_date]) : start_date = 1.month.ago.to_date
       (params[:sumary_report].present? && params[:sumary_report][:end_date].present?) ? end_date = Date.parse(params[:sumary_report][:end_date]) : end_date = Date.today
       @report = Report.new(name: 'Consolidado')
+      begin
+        @report.process_sumary(Cart.date_range(start_date, end_date), start_date, end_date)
+        flash['success'] = "Reporte generado"
+      rescue => error
+        Rails.logger.info error
+        flash['error'] = "Un error impidio la generación del reporte"
+      end
+      redirect_to admin_report_sumary_path
+    end
+
+    def coupons
+      @reports = Report.coupons.order('created_at DESC').page(params[:page])
+      (params[:coupons_report].present? && params[:coupons_report][:start_date].present?) ? start_date = Date.parse(params[:coupons_report][:start_date]) : start_date = 1.month.ago.to_date
+      (params[:coupons_report].present? && params[:coupons_report][:end_date].present?) ? end_date = Date.parse(params[:coupons_report][:end_date]) : end_date = Date.today
+      @carts = Cart.date_range(start_date, end_date).limit(5)
+    end
+
+    def generate_coupons
+      (params[:coupons_report].present? && params[:coupons_report][:start_date].present?) ? start_date = Date.parse(params[:coupons_report][:start_date]) : start_date = 1.month.ago.to_date
+      (params[:coupons_report].present? && params[:coupons_report][:end_date].present?) ? end_date = Date.parse(params[:coupons_report][:end_date]) : end_date = Date.today
+      @report = Report.new(name: 'Cupones')
       # begin
-      @report.process_sumary(Cart.date_range(start_date, end_date), start_date, end_date)
-      # flash['success'] = Cart.date_range(start_date, end_date)
+        @report.process_coupons(Cart.date_range(start_date, end_date), start_date, end_date)
         # flash['success'] = "Reporte generado"
       # rescue => error
       #   Rails.logger.info error
       #   flash['error'] = "Un error impidio la generación del reporte"
       # end
-      redirect_to admin_report_sumary_path
+      redirect_to admin_report_coupons_path
     end
 end

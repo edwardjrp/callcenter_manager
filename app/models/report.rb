@@ -16,9 +16,10 @@ class Report < ActiveRecord::Base
   mount_uploader :pdf_file, ReportUploader
   scope :detailed, where(:name=>'Detallado')
   scope :sumary, where(:name=>'Consolidado')
+  scope :coupons, where(:name=>'Cupones')
 
   def self.report_types
-    %W( Detallado Consolidado )
+    %W( Detallado Consolidado Cupones )
   end
 
   def output_file_name
@@ -40,6 +41,14 @@ class Report < ActiveRecord::Base
     pdf_temp_file = Tempfile.new(["reporte consolidado", '.pdf'])
     pdf_temp_file.binmode
     pdf_temp_file.write(relation.pdf_sumary_report(start_date, end_date).render)
+    self.pdf_file = pdf_temp_file
+    self.save
+  end
+
+  def process_coupons(relation, start_date, end_date)
+    pdf_temp_file = Tempfile.new(["reporte cupones", '.pdf'])
+    pdf_temp_file.binmode
+    pdf_temp_file.write(relation.pdf_coupons_report(start_date, end_date).render)
     self.pdf_file = pdf_temp_file
     self.save
   end

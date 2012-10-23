@@ -4,7 +4,7 @@
   .span4
     .row
       .span4
-        %h4.bottom-margin-1 Listado de reportes consolidados generados
+        %h4.bottom-margin-1 Listado de reportes de cupones generados
         = will_paginate @reports
         %ul#coupons_reports.unstyled.well
           -@reports.each do |report|
@@ -14,8 +14,8 @@
         = will_paginate @reports
   .span8
     .row
-      .span8#report_sumary_filter
-        = form_for :sumary_report, :url => admin_report_sumary_path, :html=>{ :class=>'form-horizontal top-margin-1 filter' }, method: :get do |f|
+      .span8#report_coupons_filter
+        = form_for :sumary_report, :url => admin_report_coupons_path, :html=>{ :class=>'form-horizontal top-margin-1 filter' }, method: :get do |f|
           %fieldset
             %legend Filtro
             .alert
@@ -26,9 +26,9 @@
               =f.text_field :end_date, :class=> 'input-medium datepicker', :placeholder=>'Creado antes de '
             .form-actions
               =f.submit 'Filtrar', :name=>nil, :class=> 'btn btn-primary'
-              %a.btn#report_clear_search{ href: "#{admin_report_sumary_path}"} Limpiar
+              %a.btn#report_clear_search{ href: "#{admin_report_coupons_path}"} Limpiar
         
-        =link_to 'Generar reporte', admin_report_sumary_path(params: params), method: :post, class: 'btn bottom-margin-1'
+        =link_to 'Generar reporte', admin_report_coupons_path(params: params), method: :post, class: 'btn bottom-margin-1'
     .row
       .span8
         %h4 Proeba de Filtro

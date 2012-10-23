@@ -40,12 +40,38 @@ module Reports
         take_time
       end
 
-
-
-
     end
 
     module ClassMethods
+
+
+      def pdf_coupons_report(start_date, end_date)
+        pdf = Prawn::Document.new(top_margin: 70)
+        pdf.font "Helvetica", :size => 10
+        pdf.text "Reporte Consolidado", size: 20, style: :bold
+        pdf.move_down 20
+        pdf.text "Inicio #{start_date.strftime('%d %B %Y')}", size: 10, style: :bold
+        pdf.text "Conclusión #{end_date.strftime('%d %B %Y')}", size: 10, style: :bold
+        pdf.move_down 20
+
+        coupons_table = []
+        coupons_table << ['Código',  'Descripción', 'Cantidad', '% de ordenes', '% de cupones']
+        completed.joins(:coupons).group('coupons.code').count.each do |coupon_code, coupon_count|
+          coupon = Coupon.find_by_code(coupon_code)
+          coupons_table << [coupon_code,  coupon, coupon_count, coupon_count / completed.count , coupon_count / completed.joins(:coupons).count] if coupon
+        end
+
+        pdf.table coupons_table do
+          row(0).font_style = :bold
+          style(row(0), :background_color => '4682B4')
+          cells.borders = []
+          # columns(1..3).align = :right
+          self.row_colors = ["F8F8FF", "ADD8E6"]
+          self.header = true
+        end
+
+        pdf
+      end
 
 
       def pdf_sumary_report(start_date, end_date)
