@@ -54,7 +54,7 @@ class Cart < ActiveRecord::Base
   scope :available, where('reason_id IS NULL')
   scope :finalized, where('completed = ? or reason_id IS NOT NULL', true)
   scope :latest, order('created_at DESC')
-  belongs_to :user
+  belongs_to :user, :counter_cache => true
   belongs_to :client
   belongs_to :store
   belongs_to :reason
@@ -98,7 +98,7 @@ class Cart < ActiveRecord::Base
   end
 
   def self.date_range(start_date, end_date)
-    where('created_at > ? and created_at < ?', start_date, end_date)
+    where('carts.created_at > ? and carts.created_at < ?', start_date, end_date)
   end
 
 

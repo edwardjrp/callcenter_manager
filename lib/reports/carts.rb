@@ -65,16 +65,6 @@ module Reports
         sale_table << [   'Ventas Netas', ActionController::Base.helpers.number_to_currency(self.completed.sum('net_amount'))  ]
         sale_table << [   'Canceladas', self.abandoned.count  ]
 
-        pdf.move_down 20
-
-        pdf.text "Ordenes", size: 15, style: :bold
-
-        service_table = []
-        completed.group(:service_method).count.each do | service_method, service_count |
-          service_table << [ service_method, ActionController::Base.helpers.number_to_percentage((service_count.to_d / self.completed.count.to_d) * 100,:delimiter => ',', :separator => '.', :precision => 2),  ActionController::Base.helpers.number_to_currency(self.completed.group(:service_method).sum('payment_amount')[service_method])]
-        end
-        pdf.move_down 20
-
         pdf.table sale_table do
           row(0).font_style = :bold
           # style(row(0), :background_color => '4682B4')
@@ -83,6 +73,17 @@ module Reports
           self.row_colors = ["F8F8FF", "ADD8E6"]
           self.header = false
         end
+
+        pdf.move_down 20
+
+
+        pdf.text "Ordenes", size: 15, style: :bold
+
+        service_table = []
+        completed.group(:service_method).count.each do | service_method, service_count |
+          service_table << [ service_method, ActionController::Base.helpers.number_to_percentage((service_count.to_d / self.completed.count.to_d) * 100,:delimiter => ',', :separator => '.', :precision => 2),  ActionController::Base.helpers.number_to_currency(self.completed.group(:service_method).sum('payment_amount')[service_method])]
+        end
+        pdf.move_down 20
 
         pdf.move_down 20
         pdf.text "Modos de servicio", size: 15, style: :bold
@@ -95,6 +96,56 @@ module Reports
           self.row_colors = ["F8F8FF", "ADD8E6"]
           self.header = false
         end
+
+        pdf.move_down 20
+        pdf.text "Otros indicadores", size: 15, style: :bold
+        pdf.move_down 20
+
+        username = 'cdruser'
+        password = 'cdrus3rd1s8x10bctb3st'
+        nonce  = SecureRandom.hex(10)
+        token = Digest::MD5.hexdigest("#{username}:#{nonce}:#{Digest::MD5.hexdigest(password)}")
+        url = URI.parse("http://192.168.85.80:8080/totalincoming.json?fecha1=#{start_date}&fecha2=#{end_date}&token=#{token}&nonce=#{nonce}")
+        request = Net::HTTP.get(url)
+        total_call = JSON.parse(request)["result"]["totalincoming"]
+        # {"resultcode"=>0, "result"=>{"totalincoming"=>16573}}
+        user_with_completed_in_range = User.joins(:carts).where('carts.completed = true').where('carts.created_at > ? and carts.created_at < ?', start_date, end_date)
+
+        other_table = []
+        other_table << [ 'Orden promedio', ActionController::Base.helpers.number_to_currency(completed.average('payment_amount')) ]
+        avg_cart_per_user = user_with_completed_in_range.average('carts_count')
+        other_table << [ 'Ventas por agente promedio', avg_cart_per_user ]
+        other_table << [ 'Tiempo de orde promedio', (completed.sum(&:take_time) / completed.count) ]
+        other_table << [ 'Llamadas entrantes', total_call ]
+        other_table << [ 'Llamadas por agente', (total_call / user_with_completed_in_range.count) ]
+
+        pdf.table other_table do
+          row(0).font_style = :bold
+          # style(row(0), :background_color => '4682B4')
+          cells.borders = []
+          # columns(1..3).align = :right
+          self.row_colors = ["F8F8FF", "ADD8E6"]
+          self.header = false
+        end
+
+        pdf.move_down 20
+        pdf.text "products mix", size: 15, style: :bold
+        pdf.move_down 20
+        products_table = []
+
+        joins(:products).group('products.productname').count.each do | product, product_count |
+          products_table << [ product, product_count  ]
+        end
+
+        pdf.table products_table do
+          row(0).font_style = :bold
+          # style(row(0), :background_color => '4682B4')
+          cells.borders = []
+          # columns(1..3).align = :right
+          self.row_colors = ["F8F8FF", "ADD8E6"]
+          self.header = false
+        end
+
         pdf
       end
 

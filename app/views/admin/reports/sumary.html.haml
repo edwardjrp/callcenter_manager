@@ -45,14 +45,14 @@
             %th Monto de la order
             %th Estado en pulse
           %tbody
-            / -@carts.each do |cart|          
-            /   %tr{:data=>{'cart-id'=> cart.id}, :id=>dom_id(cart)}
-            /     %td= cart.id
-            /     %td= cart.store.name
-            /     %td= (cart.client && cart.client.carts.count == 1) ? '*' : ''
-            /     %td= cart.client.full_name
-            /     %td= cart.completion_info
-            /     %td= cart.service_method
-            /     %td= number_to_cedula cart.user.idnumber
-            /     %td= number_to_currency cart.payment_amount
-            /     %td= cart.try(:order_progress)
+            -@carts.each do |cart|          
+              %tr{:data=>{'cart-id'=> cart.id}, :id=>dom_id(cart)}
+                %td= cart.id
+                %td= cart.store_info
+                %td= cart.new_client?
+                %td= cart.client_info
+                %td= cart.completion_info
+                %td= cart.service_method
+                %td= number_to_cedula cart.user.idnumber
+                %td= number_to_currency cart.payment_amount
+                %td= cart.try(:order_progress)
