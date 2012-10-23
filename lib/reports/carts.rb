@@ -58,7 +58,7 @@ module Reports
         pdf.text "Conclusión #{end_date.strftime('%d %B %Y')}", size: 10, style: :bold
         pdf.move_down 20
         pdf.text "Ventas", size: 17, style: :bold
-
+        pdf.move_down 20
 
         sale_table = []
         sale_table << [   'Ventas Brutas', ActionController::Base.helpers.number_to_currency(self.completed.sum('payment_amount'))  ]
@@ -66,6 +66,27 @@ module Reports
         sale_table << [   'Canceladas', self.abandoned.count  ]
 
         pdf.table sale_table do
+          row(0).font_style = :bold
+          # style(row(0), :background_color => '4682B4')
+          cells.borders = []
+          # columns(1..3).align = :right
+          self.row_colors = ["F8F8FF", "ADD8E6"]
+          self.header = false
+        end
+
+        pdf.move_down 20
+        pdf.text "Ordenes antes y despues de las 4:00 pm", size: 17, style: :bold
+        pdf.move_down 20
+
+        lunch = completed.where("date_part('hour',complete_on) < 16")
+        dinner = completed.where("date_part('hour',complete_on) > 16")
+
+        time_table = []
+        time_table << [   'Almuerzo', lunch.count , ActionController::Base.helpers.number_to_currency(lunch.sum('payment_amount'))  ]
+        time_table << [   'Cena', dinner.count, ActionController::Base.helpers.number_to_currency(dinner.sum('net_amount'))  ]
+    
+
+        pdf.table time_table do
           row(0).font_style = :bold
           # style(row(0), :background_color => '4682B4')
           cells.borders = []
