@@ -36,10 +36,10 @@ class Report < ActiveRecord::Base
     self.save
   end
 
-  def process_sumary(relation)
+  def process_sumary(relation, start_date, end_date)
     pdf_temp_file = Tempfile.new(["reporte consolidado", '.pdf'])
     pdf_temp_file.binmode
-    pdf_temp_file.write(relation.pdf_sumary_report.render)
+    pdf_temp_file.write(relation.pdf_sumary_report(start_date, end_date).render)
     self.pdf_file = pdf_temp_file
     self.save
   end

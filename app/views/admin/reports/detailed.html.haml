@@ -27,13 +27,13 @@
               =f.text_field :user_last_name_cont, :class=> 'input-medium ', :placeholder=>'Apellido del agente'
               =f.text_field :user_idnumber_cont, :class=> 'input-medium ', :placeholder=>'Cédula del agente'
             .control-group
-              =f.text_field :complete_on_gteq, :class=> 'input-medium ', :placeholder=>'Completado después de '
-              =f.text_field :complete_on_lteq, :class=> 'input-medium ', :placeholder=>'Completado antes de '
+              =f.text_field :complete_on_gteq, :class=> 'input-medium datepicker', :placeholder=>'Completado después de '
+              =f.text_field :complete_on_lteq, :class=> 'input-medium datepicker', :placeholder=>'Completado antes de '
             .form-actions
               =f.submit 'Filtrar', :name=>nil, :class=> 'btn btn-primary'
               %a.btn#report_clear_search{ href: "#{admin_reports_detailed_path}"} Limpiar
         
-        =link_to 'Generar reporte', admin_reports_detailed_path, method: :post, class: 'btn bottom-margin-1'
+        =link_to 'Generar reporte', admin_reports_detailed_path(params: params), method: :post, class: 'btn bottom-margin-1'
     .row
       .span8
         %h4 Proeba de Filtro

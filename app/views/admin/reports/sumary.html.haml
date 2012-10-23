@@ -15,20 +15,20 @@
   .span8
     .row
       .span8#report_sumary_filter
-        = search_form_for [:admin,@search], :url => admin_report_sumary_path, :html=>{ :class=>'form-horizontal top-margin-1 filter' } do |f|
+        = form_for :sumary_report, :url => admin_report_sumary_path, :html=>{ :class=>'form-horizontal top-margin-1 filter' }, method: :get do |f|
           %fieldset
             %legend Filtro
             .alert
               %strong Advertencia
               No olvide crear un filtro antes de Generar el reporte
             .control-group
-              =f.text_field :created_at_gteq, :class=> 'input-medium ', :placeholder=>'Creado después de '
-              =f.text_field :created_at_lteq, :class=> 'input-medium ', :placeholder=>'Creado antes de '
+              =f.text_field :start_date, :class=> 'input-medium datepicker', :placeholder=>'Creado después de '
+              =f.text_field :end_date, :class=> 'input-medium datepicker', :placeholder=>'Creado antes de '
             .form-actions
               =f.submit 'Filtrar', :name=>nil, :class=> 'btn btn-primary'
               %a.btn#report_clear_search{ href: "#{admin_report_sumary_path}"} Limpiar
         
-        =link_to 'Generar reporte', admin_report_sumary_path, method: :post, class: 'btn bottom-margin-1'
+        =link_to 'Generar reporte', admin_report_sumary_path(params: params), method: :post, class: 'btn bottom-margin-1'
     .row
       .span8
         %h4 Proeba de Filtro
@@ -45,14 +45,14 @@
             %th Monto de la order
             %th Estado en pulse
           %tbody
-            -@carts.each do |cart|          
-              %tr{:data=>{'cart-id'=> cart.id}, :id=>dom_id(cart)}
-                %td= cart.id
-                %td= cart.store.name
-                %td= (cart.client && cart.client.carts.count == 1) ? '*' : ''
-                %td= cart.client.full_name
-                %td= cart.completion_info
-                %td= cart.service_method
-                %td= number_to_cedula cart.user.idnumber
-                %td= number_to_currency cart.payment_amount
-                %td= cart.try(:order_progress)
+            / -@carts.each do |cart|          
+            /   %tr{:data=>{'cart-id'=> cart.id}, :id=>dom_id(cart)}
+            /     %td= cart.id
+            /     %td= cart.store.name
+            /     %td= (cart.client && cart.client.carts.count == 1) ? '*' : ''
+            /     %td= cart.client.full_name
+            /     %td= cart.completion_info
+            /     %td= cart.service_method
+            /     %td= number_to_cedula cart.user.idnumber
+            /     %td= number_to_currency cart.payment_amount
+            /     %td= cart.try(:order_progress)

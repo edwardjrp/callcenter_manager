@@ -41,3 +41,5 @@
 - restric alpha is missing special characters
 
 - missing coupons edit and show
+
+- check that params are passed to detailed report button

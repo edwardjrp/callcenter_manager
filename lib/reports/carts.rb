@@ -48,15 +48,14 @@ module Reports
     module ClassMethods
 
 
-      def pdf_sumary_report
-        initial  = order(:created_at).first.created_at
-        final  = order(:created_at).last.created_at
+      def pdf_sumary_report(start_date, end_date)
+        
         pdf = Prawn::Document.new(top_margin: 70)
         pdf.font "Helvetica", :size => 10
         pdf.text "Reporte Consolidado", size: 20, style: :bold
         pdf.move_down 20
-        pdf.text "Inicio #{initial.strftime('%d %B %Y')}", size: 10, style: :bold
-        pdf.text "Conclusión #{final.strftime('%d %B %Y')}", size: 10, style: :bold
+        pdf.text "Inicio #{start_date.strftime('%d %B %Y')}", size: 10, style: :bold
+        pdf.text "Conclusión #{end_date.strftime('%d %B %Y')}", size: 10, style: :bold
         pdf.move_down 20
         pdf.text "Ventas", size: 17, style: :bold
 

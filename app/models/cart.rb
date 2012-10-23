@@ -97,6 +97,10 @@ class Cart < ActiveRecord::Base
     self.errors.empty?
   end
 
+  def self.date_range(start_date, end_date)
+    where('created_at > ? and created_at < ?', start_date, end_date)
+  end
+
 
   def placeable?
     errors.add :base, 'No ha seleccionado una tienda' if self.store.nil?

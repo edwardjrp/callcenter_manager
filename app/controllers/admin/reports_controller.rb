@@ -10,7 +10,7 @@ class Admin::ReportsController < ApplicationController
 
     def generate_detailed 
       @search = Cart.finalized.search(params[:q])
-      @report = Report.create(name: 'Detallado')
+      @report = Report.new(name: 'Detallado')
       begin
         @report.process_detailed(@search.result(:distinct => true))
         flash['success'] = "Reporte generado"
@@ -23,8 +23,10 @@ class Admin::ReportsController < ApplicationController
 
     def sumary
       @reports = Report.sumary.order('created_at DESC').page(params[:page])
-      @search = Cart.finalized.search(params[:q])
-      @carts = @search.result(:distinct => true).limit(5)
+      # @search = Cart.finalized.search(params[:q])
+      # @carts = @search.result(:distinct => true).limit(5)
+
+
       # username = 'cdruser'
       # password = 'cdrus3rd1s8x10bctb3st'
       # nonce  = SecureRandom.hex(10)
@@ -37,11 +39,15 @@ class Admin::ReportsController < ApplicationController
     end
 
     def generate_sumary
-      @search = Cart.finalized.search(params[:q])
-      @report = Report.create(name: 'Consolidado')
+      start_date = Date.parse(params[:sumary_report][:start_date]) || 1.month.ago.to_date
+      end_date = Date.parse(params[:sumary_report][:end_date]) || Date.today
+      
+      @report = Report.new(name: 'Consolidado')
       # begin
-        @report.process_sumary(@search.result(:distinct => true))
-        flash['success'] = "Reporte generado"
+
+      @report.process_sumary(Cart.date_range(start_date, end_date), start_date, end_date)
+      # flash['success'] = Cart.date_range(start_date, end_date)
+        # flash['success'] = "Reporte generado"
       # rescue => error
       #   Rails.logger.info error
       #   flash['error'] = "Un error impidio la generación del reporte"

@@ -5,3 +5,7 @@ jQuery ->
   $('#report_clear_search').click (event)->
     $(this).closest('form')[0].reset()
     $(this).closest('form').find("input[type='text']").val('')
+
+  $('.datepicker').datepicker
+    dateFormat: 'yy-mm-dd'
+    maxDate: new Date()
