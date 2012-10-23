@@ -4,14 +4,14 @@ class Config
     
   @username: ()->
     switch process.env.NODE_ENV
-      when 'production' then "soporte"
+      when 'production' then "proteus"
       when 'development' then 'radhamesbrito'
       when 'test' then 'radhamesbrito'
       else 'radhamesbrito'
     
   @password: ()->
     switch process.env.NODE_ENV
-      when 'production' then "d0m1n0s"
+      when 'production' then "u5bl4ck"
       when 'development' then 'siriguillo'
       when 'test' then 'siriguillo'
       else 'siriguillo'
