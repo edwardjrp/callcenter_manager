@@ -26,7 +26,7 @@
               =render_navigation :expand_all => true, :renderer => :bootstrap
             %ul.nav.pull-right
               -if user_signed_in?
-                %li#current_username= link_to current_user.full_name, '#'
+                %li#current_username{data: { idnumber: current_user.idnumber } }= link_to current_user.full_name, '#'
                 %li.divider-vertical
                 %li= link_to "Cerrar Sesión", logout_path, :id=>'end_session'
               -else

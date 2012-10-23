@@ -23,6 +23,7 @@
           / =current_cart.inspect if Rails.env.development?
           = yield
       - if user_signed_in?
+        #current_username{data: { idnumber: current_user.idnumber } }
         .row#utils
           .span12
             .row
