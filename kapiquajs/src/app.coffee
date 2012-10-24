@@ -116,6 +116,9 @@ io.sockets.on "connection", (socket) ->
 
   socket.on "clients:olo:show", (data, responder) ->
     Clients.olo_show(data, responder, socket)  
+
+  socket.on "cart:status", (data, responder) ->
+    Carts.status(data, responder, socket)
     
   socket.on "cart:price", (data, responder) ->
     Carts.price(data, responder, socket)

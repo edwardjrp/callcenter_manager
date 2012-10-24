@@ -9,7 +9,7 @@ Config = (function() {
   Config.username = function() {
     switch (process.env.NODE_ENV) {
       case 'production':
-        return "soporte";
+        return "proteus";
       case 'development':
         return 'radhamesbrito';
       case 'test':
@@ -22,7 +22,7 @@ Config = (function() {
   Config.password = function() {
     switch (process.env.NODE_ENV) {
       case 'production':
-        return "d0m1n0s";
+        return "u5bl4ck";
       case 'development':
         return 'siriguillo';
       case 'test':

@@ -143,6 +143,9 @@ io.sockets.on("connection", function(socket) {
   socket.on("clients:olo:show", function(data, responder) {
     return Clients.olo_show(data, responder, socket);
   });
+  socket.on("cart:status", function(data, responder) {
+    return Carts.status(data, responder, socket);
+  });
   socket.on("cart:price", function(data, responder) {
     return Carts.price(data, responder, socket);
   });

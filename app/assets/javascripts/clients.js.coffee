@@ -2,8 +2,19 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 jQuery ->
+  socket = window.socket
+
   $('.best_in_place').best_in_place()
 
+  $('.get_pulse_status').on 'click', (event) ->
+    event.preventDefault()
+    target = $(event.currentTarget)
+    socket.emit 'cart:status', target.data('cart-id')
+
+  socket.on 'cart:status:pulse',(data) ->
+    if data
+      cart = data.updated_cart
+      $("#pulse_status_#{cart.id}").html("<strong>Estado en pulse:</strong> #{cart.order_progress}")
 
   $('#client_tax_numbers_list').on 'click', '.verified', (event)->
     event.preventDefault()

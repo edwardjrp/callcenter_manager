@@ -6,6 +6,7 @@ OrderReply = require('../pulse_bridge/order_reply')
 CartProduct = require('../models/cart_product')
 Client = require('../models/client')
 Store = require('../models/store')
+libxmljs = require("libxmljs")
 Phone = require('../models/phone')
 User = require('../models/user')
 Address = require('../models/address')
@@ -21,6 +22,34 @@ Cart.prototype.products = (cb)->
       cb(err)
     else
       cb(err, collection)
+
+Cart.prototype.status = (socket)->
+  me = this
+  if me.completed == true and me.store_order_id? and me.store_order_i isnt ''
+    me.store (cart_store_err, store) ->
+        if(cart_store_err)
+          console.error cart_store_err.stack
+          socket.emit 'cart:place:error', 'No se pudo acceder a la tienda para la esta orden'
+        else
+          Setting.kapiqua (err, settings) ->
+            if err
+              console.error err.stack
+            else
+              pulse_com_error = (comm_err) ->
+                socket.emit 'cart:status:error', 'Un error impidio solicitar el status de la orden a pulse'
+              cart_request = new  PulseBridge(me.toJSON(), store.storeid, store.ip,  settings.pulse_port)
+              cart_request.status pulse_com_error, (res_data)->
+                if res_data?
+                  doc = libxmljs.parseXmlString(res_data)
+                  if doc.get('//OrderProgress')?
+                    me.updateAttributes { order_progress: doc.get('//OrderProgress').text() }, (cart_update_error, updated_cart) ->
+                      if cart_update_error 
+                        console.error cart_update_error.stack
+                      else
+                        socket.emit 'cart:status:pulse', { updated_cart }
+
+
+
 
 Cart.prototype.price = (socket)->
   me = this

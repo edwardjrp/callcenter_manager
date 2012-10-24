@@ -1,4 +1,4 @@
-var Address, Cart, CartProduct, Client, OrderReply, Phone, PulseBridge, Setting, Store, User, async, _;
+var Address, Cart, CartProduct, Client, OrderReply, Phone, PulseBridge, Setting, Store, User, async, libxmljs, _;
 
 Cart = require('./schema').Cart;
 
@@ -15,6 +15,8 @@ CartProduct = require('../models/cart_product');
 Client = require('../models/client');
 
 Store = require('../models/store');
+
+libxmljs = require("libxmljs");
 
 Phone = require('../models/phone');
 
@@ -35,6 +37,50 @@ Cart.prototype.products = function(cb) {
       return cb(err, collection);
     }
   });
+};
+
+Cart.prototype.status = function(socket) {
+  var me;
+  me = this;
+  if (me.completed === true && (me.store_order_id != null) && me.store_order_i !== '') {
+    return me.store(function(cart_store_err, store) {
+      if (cart_store_err) {
+        console.error(cart_store_err.stack);
+        return socket.emit('cart:place:error', 'No se pudo acceder a la tienda para la esta orden');
+      } else {
+        return Setting.kapiqua(function(err, settings) {
+          var cart_request, pulse_com_error;
+          if (err) {
+            return console.error(err.stack);
+          } else {
+            pulse_com_error = function(comm_err) {
+              return socket.emit('cart:status:error', 'Un error impidio solicitar el status de la orden a pulse');
+            };
+            cart_request = new PulseBridge(me.toJSON(), store.storeid, store.ip, settings.pulse_port);
+            return cart_request.status(pulse_com_error, function(res_data) {
+              var doc;
+              if (res_data != null) {
+                doc = libxmljs.parseXmlString(res_data);
+                if (doc.get('//OrderProgress') != null) {
+                  return me.updateAttributes({
+                    order_progress: doc.get('//OrderProgress').text()
+                  }, function(cart_update_error, updated_cart) {
+                    if (cart_update_error) {
+                      return console.error(cart_update_error.stack);
+                    } else {
+                      return socket.emit('cart:status:pulse', {
+                        updated_cart: updated_cart
+                      });
+                    }
+                  });
+                }
+              }
+            });
+          }
+        });
+      }
+    });
+  }
 };
 
 Cart.prototype.price = function(socket) {
