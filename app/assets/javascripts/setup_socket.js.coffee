@@ -5,16 +5,15 @@ jQuery ->
   # # console.log window.telephony
   if window.telephony?
     window.telephony.on 'connect', ->
-      socket.emit "identificacion",{ cedula: '00118981216' }
-      console.log "conected as 00118981216"
-      # socket.emit "identificacion",{ cedula: $('#current_username').data('idnumber') }
+      socket.emit "identificacion",{ cedula: $('#current_username').data('idnumber') }
+      console.log "Connected to telefony as #{$('#current_username').data('idnumber')}"
 
-    socket.on 'bridge', (agente) ->
-      console.log agente
-      if $('#client_search_phone').size() > 0
-        $("input#yourinput").autocomplete("search","");
-        $('#client_search_phone').autocomplete("search","#{agente.cliente}")
-        if $('.ui-menu-item a').size == 1
-           $('.ui-menu-item a:first').trigger('click')
-      else 
-        windows.show_alert "Ha entrado una llamada desde #{agente.cliente} y no se encontro el formulario para colocarla", 'alert'
+      window.telephony.on 'bridge', (phone) ->
+        console.log phone
+        if $('#client_search_phone').size() > 0
+          $('#client_search_phone').autocomplete("search","#{phone}")
+          $('#client_search_phone').val(phone)
+          if $('.ui-menu-item a').size == 1
+             $('.ui-menu-item a:first').trigger('click')
+        else 
+          windows.show_alert "Ha entrado una llamada desde #{phone} y no se encontro el formulario para colocarla", 'alert'
