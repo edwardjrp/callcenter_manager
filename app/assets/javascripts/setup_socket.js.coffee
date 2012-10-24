@@ -5,8 +5,9 @@ jQuery ->
   # # console.log window.telephony
   if window.telephony?
     window.telephony.on 'connect', ->
-      socket.emit "identificacion",{ cedula: $('#current_username').data('idnumber') }
-      console.log "Connected to telefony as #{$('#current_username').data('idnumber')}"
+      agent_id = window.pad($('#current_username').data('idnumber'), 11)
+      socket.emit "identificacion",{ cedula: agent_id }
+      console.log "connected to telephony as #{agent_id}"
 
       window.telephony.on 'bridge', (phone) ->
         console.log phone

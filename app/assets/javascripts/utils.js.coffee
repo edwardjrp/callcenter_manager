@@ -30,6 +30,13 @@
   for key in _.keys(obj)
     delete obj[key] if obj[key] == val
   return obj
+
+
+@pad = (number, length) ->
+  str = '' + number
+  while (str.length < length)
+    str = '0' + str
+  str
   
 
 @objectIntersection = (array, rest) ->
