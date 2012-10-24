@@ -31,7 +31,8 @@
       %hr
       = will_paginate @carts
       -@carts.each do |cart|
-        .span3
+        .row
+          .span3
             %strong Agente:
             =cart.user.full_name
           .span3

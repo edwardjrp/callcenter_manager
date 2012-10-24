@@ -41,8 +41,7 @@ jQuery ->
         $('#client_tax_numbers_list').prepend(JST['clients/tax_number'](tax_number: tax_number))
         $('#add_tax_number_modal').modal('hide')
       error: (err)->
-        for error in JSON.parse(err.responseText)
-          $("<div class='purr'>#{error}<div>").purr()
+        $("<div class='purr'>#{err.responseText}<div>").purr()
 
 
 
@@ -131,7 +130,7 @@ jQuery ->
     modal.modal('show')
     modal.find('.modal-body').html(JST['clients/edit_phone'](phone: phone))
 
-   $('#client_tax_numbers_list').on 'click', '.btn_edit', (event)->
+  $('#client_tax_numbers_list').on 'click', '.btn_edit', (event)->
     event.preventDefault()
     target = $(event.currentTarget)
     modal = target.closest('.client_tax_number').prev()

@@ -144,8 +144,8 @@
       - unless @cart.cart_products.all? { | cart_product | cart_product.available_in_store(@cart.store) }
         .row
           .alert.span7
-            %strong advertencia 
-            Algunos productos no están disponible en esta tienda
+            %strong Advertencia:
+            Algunos productos de la orden no están disponibles en esta tienda
       - if @cart.coupons.count.nonzero?
         .row
           #checkout_client_side_coupons_list

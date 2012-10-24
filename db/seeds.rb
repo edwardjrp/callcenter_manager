@@ -41,15 +41,15 @@ addresses_data_file = Rails.root.join("tmp","direcciones2.csv")
 if File.exists? addresses_data_file
   CSV.foreach(addresses_data_file, :quote_char => '"', :col_sep =>',', :headers =>false) do |row|
     if row.length == 4
-      current_city = City.find_by_name(row[0])
+      current_city = City.find_by_name(row[0].strip)
       current_store = Store.find_by_storeid(row[3])
       Area.create do |area|
-        area.name = row[2]
+        area.name = row[2].strip
         area.city_id = current_city.id if current_city.present?
         area.store_id = current_store.id if current_store.present?
       end.tap do |current_area|
         Street.create do |street|
-          street.name = row[1]
+          street.name = row[1].strip
           street.area_id = current_area.id if current_area.present?
         end
       end

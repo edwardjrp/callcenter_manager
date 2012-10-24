@@ -145,8 +145,8 @@ jQuery ->
         $('#client_id').val(response.id)
         window.show_alert('Cliente creado.', 'success')
         $('#client_search_phone').focus()
-        window.show_popover($('#client_search_panel'), 'Cliente asignado', 'Presione ENTER para asignar el cliente creado a la orden actual.')
         clear_extra_data()
+        window.show_popover($('#client_search_panel'), 'Cliente asignado', 'Presione ENTER para asignar el cliente creado a la orden actual.')
       error: (response) ->
         window.show_alert(response.responseText, 'error')
 

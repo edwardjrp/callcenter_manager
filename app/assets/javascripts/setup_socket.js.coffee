@@ -5,8 +5,8 @@ jQuery ->
   # # console.log window.telephony
   if window.telephony?
     window.telephony.on 'connect', ->
-      socket.emit "identificacion",{ cedula: '116664541' }
-      console.log "conected as 116664541"
+      socket.emit "identificacion",{ cedula: '00118981216' }
+      console.log "conected as 00118981216"
       # socket.emit "identificacion",{ cedula: $('#current_username').data('idnumber') }
 
     socket.on 'bridge', (agente) ->
