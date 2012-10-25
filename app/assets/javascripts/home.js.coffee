@@ -19,6 +19,7 @@ jQuery ->
           if phones.length > 0
             query_client $("#client_search")
           else
+            $('.ui-autocomplete:visible').hide()
             window.hide_popover($('#client_search_panel'))
             client_create()
         window.show_alert("Llamada entrate", 'success')
