@@ -3,4 +3,15 @@
     #dash_title Dashboard
 .row
   .span12
+    %button.btn.bottom-margin-1#fullscreen Fullscreen
+.row
+  .span12
+    %select#dashboard_data_filter{ name: "data_filter"}
+      %option{ value:'all' } Todas
+      %option{ value:'users_carts_count' } Agentes por ordenes colocadas
+      %option{ value:'users_payment_average' } Agentes por monto promedio de la orden
+      %option{ value:'stores_carts_count' } Tiendas por ordenes colocadas
+      %option{ value:'stores_payment_average' } Tiendas por monto promedio de la orden
+.row#dashboard_screen
+  .span12#dashboard_data
     = render 'rankings'

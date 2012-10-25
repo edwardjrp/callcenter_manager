@@ -25,6 +25,7 @@
 //= require jquery.purr
 //= require best_in_place
 //= require underscore
+//= require jquery.fullscreen
 //= require jquery.smartWizard-2.0
 //= require backbone
 //= require backbone-relational
