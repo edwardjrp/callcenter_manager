@@ -1,3 +1,33 @@
 // Place all the styles related to the admin/dashboard controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+#dash_title{
+    font-family: Palatino, serif;
+    font-size: 3em;
+    margin-bottom: 20px;
+  }
+#dashboard_data{
+
+
+  table{  
+    font-family: Palatino, serif;
+    font-size: 1.5em;
+    thead{
+      tr{
+          color: #eee;
+          text-shadow: black 0 1px 0;
+          background-color: #6595ed;
+          background-image: -moz-linear-gradient(top, #7ba5f0, #447fe9);
+          background-image: -ms-linear-gradient(top, #7ba5f0, #447fe9);
+          background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#7ba5f0), to(#447fe9));
+          background-image: -webkit-linear-gradient(top, #7ba5f0, #447fe9);
+          background-image: -o-linear-gradient(top, #7ba5f0, #447fe9);
+          background-image: linear-gradient(top, #7ba5f0, #447fe9);
+          background-repeat: repeat-x;
+          filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FF7BA5F0', endColorstr='#FF447FE9', GradientType=0);
+
+      }
+    }
+  }
+}

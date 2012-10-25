@@ -1,33 +1,53 @@
-%table.table
-  %tbody
-    - @users_per_carts_by_counts.each do |user_carts|
-      / %li= debug user_carts
-      %tr
-        %td= user_carts["user"].full_name
-        %td= user_carts[:carts_count]
-        %td= number_to_currency user_carts[:payment_amount]
-%table.table
-  %tbody
-    - @users_per_carts_by_avgs.each do |user_carts|
-      / %li= debug user_carts
-      %tr
-        %td= user_carts["user"].full_name
-        %td= user_carts[:carts_count]
-        %td= number_to_currency user_carts[:payment_amount]
-
-%table.table
-  %tbody
-    - @store_per_carts_by_counts.each do |store_carts|
-      / %li= debug store_carts["store"].name
-      %tr
-        %td= store_carts["store"].name
-        %td= store_carts[:carts_count]
-        %td= number_to_currency store_carts[:payment_amount]
-%table.table
-  %tbody
-    - @store_per_carts_by_avgs.each do |store_carts|
-      / %li= debug user_carts
-      %tr
-        %td= store_carts["store"].name
-        %td= store_carts[:carts_count]
-        %td= number_to_currency store_carts[:payment_amount]
+#dashboard_data
+  %h3 Por ordenes colocadas
+  %table.table.table-striped.table-bordered
+    %thead
+      %th Nombre
+      %th Ordenes colocadas
+      %th Ordenes monto promedio de la orden
+    %tbody
+      - @users_per_carts_by_counts.each do |user_carts|
+        / %li= debug user_carts
+        %tr
+          %td= user_carts["user"].full_name
+          %td= user_carts[:carts_count]
+          %td= number_to_currency user_carts[:payment_amount]
+  %h3 Por monto promedio de la ordenes
+  %table.table.table-striped.table-bordered
+    %thead
+      %th Nombre
+      %th Ordenes colocadas
+      %th Ordenes monto promedio de la orden
+    %tbody
+      - @users_per_carts_by_avgs.each do |user_carts|
+        / %li= debug user_carts
+        %tr
+          %td= user_carts["user"].full_name
+          %td= user_carts[:carts_count]
+          %td= number_to_currency user_carts[:payment_amount]
+  %h3 Por ordenes colocadas
+  %table.table.table-striped.table-bordered
+    %thead
+      %th Nombre
+      %th Ordenes colocadas
+      %th Ordenes monto promedio de la orden
+    %tbody
+      - @store_per_carts_by_counts.each do |store_carts|
+        / %li= debug store_carts["store"].name
+        %tr
+          %td= store_carts["store"].name
+          %td= store_carts[:carts_count]
+          %td= number_to_currency store_carts[:payment_amount]
+  %h3 Por monto promedio de la ordenes
+  %table.table.table-striped.table-bordered
+    %thead
+      %th Nombre
+      %th Ordenes colocadas
+      %th Ordenes monto promedio de la orden
+    %tbody
+      - @store_per_carts_by_avgs.each do |store_carts|
+        / %li= debug user_carts
+        %tr
+          %td= store_carts["store"].name
+          %td= store_carts[:carts_count]
+          %td= number_to_currency store_carts[:payment_amount]
