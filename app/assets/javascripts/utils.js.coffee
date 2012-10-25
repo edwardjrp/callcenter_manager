@@ -59,7 +59,6 @@
   _.uniq(result)
 
 
-
 @getParameterByName = (name)->
   name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]")
   regexS = "[\\?&]" + name + "=([^&#]*)"

@@ -52,6 +52,7 @@ class Cart < ActiveRecord::Base
   scope :incomplete, where(:completed=>false)
   scope :abandoned, where('reason_id IS NOT NULL')
   scope :available, where('reason_id IS NULL')
+  scope :comm_failed, where(communication_failed: true)
   scope :finalized, where('completed = ? or reason_id IS NOT NULL', true)
   scope :latest, order('created_at DESC')
   belongs_to :user, :counter_cache => true
@@ -71,6 +72,10 @@ class Cart < ActiveRecord::Base
   scope :trashed, where(message_mask: 4)
   scope :criticals, where('message_mask = 8 or message_mask = 9 or message_mask = 10 or message_mask = 12')
   # self.per_page = 20
+
+  def self.filter_carts(filter)
+    self.send(filter.to_sym)
+  end
 
 
   def self.service_methods

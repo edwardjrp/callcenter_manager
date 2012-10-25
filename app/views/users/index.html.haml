@@ -29,6 +29,13 @@
     - if @carts.count.nonzero?
       %h3 Ordenes
       %hr
+      .btn-group.bottom-margin-2
+        =link_to 'Todas', users_path, class: 'btn search_cart_btn', id: 'btn_all'
+        =link_to 'Completadas', users_path(search: 'completed'), class: 'btn search_cart_btn', id: 'btn_completed'
+        =link_to 'Incompletas', users_path(search: 'incomplete'), class: 'btn search_cart_btn', id: 'btn_incomplete'
+        =link_to 'Anuladas', users_path(search: 'abandoned'), class: 'btn search_cart_btn', id: 'btn_abandoned'
+        =link_to 'Fallas de comunicación', users_path(search: 'comm_failed'), class: 'btn search_cart_btn', id: 'btn_comm_failed'
+
       = will_paginate @carts
       -@carts.each do |cart|
         .row
@@ -41,7 +48,7 @@
         .row
           .span3
             %strong Monto de la orden:
-            =number_to_currency(cart.payment_amount) || 'N/A'
+            = number_to_currency(cart.payment_amount) || 'N/A'
           .span3
             %strong Modo de servicio:
             =cart.service_method || 'N/A'
