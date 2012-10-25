@@ -31,14 +31,14 @@ CartProduct.addItem = function(data, respond, socket) {
       if (err) {
         return respond(err);
       } else {
-        result_cart_product.cart(function(c_err, cart) {
+        respond(err, result_cart_product);
+        return result_cart_product.cart(function(c_err, cart) {
           if (c_err) {
             return socket.emit('cart:pricing:error', 'No se pudo leer la orden actual');
           } else {
             return cart.price(socket);
           }
         });
-        return respond(err, result_cart_product);
       }
     });
   }

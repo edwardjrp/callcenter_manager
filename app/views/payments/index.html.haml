@@ -1,14 +1,19 @@
 = render 'administration'
-
-#actions
-  =link_to '<i class="icon-arrow-left"></i> Atras'.html_safe, builder_path, class: 'btn bottom-margin-1'
-  =link_to '<i class="icon-trash"></i> Anular'.html_safe, '#', class: 'btn bottom-margin-1', id: 'abandon_cart'
-  =render 'abandon'
-  =link_to '<i class="icon-gift"></i> Descuento'.html_safe, '#', class: 'btn bottom-margin-1', id: 'discount_cart'
-  = render 'discount'
-  =link_to '<i class="icon-briefcase"></i> Exoneración'.html_safe, '#', class: 'btn bottom-margin-1', id: 'exonerate_cart'
-  = render 'exonerate'
-  = link_to '<i class="icon-share"></i> Dejar incompleta'.html_safe, release_carts_path, data: { confirm: '¿Desea dejar esta orden incompleta?'}, method: :post, class: 'btn bottom-margin-1'
+.row#loader
+  .span3
+    =image_tag 'kapiqua_payment.gif', class: 'bottom-margin-1'
+.row
+  .span12    
+    #actions
+      =link_to '<i class="icon-arrow-left"></i> Atras'.html_safe, builder_path, class: 'btn bottom-margin-1'
+      =link_to '<i class="icon-trash"></i> Anular'.html_safe, '#', class: 'btn bottom-margin-1', id: 'abandon_cart'
+      =render 'abandon'
+      =link_to '<i class="icon-gift"></i> Descuento'.html_safe, '#', class: 'btn bottom-margin-1', id: 'discount_cart'
+      = render 'discount'
+      - if @cart.client.tax_numbers.with_verification.count.nonzero?
+        =link_to '<i class="icon-briefcase"></i> Exoneración'.html_safe, '#', class: 'btn bottom-margin-1', id: 'exonerate_cart'
+        = render 'exonerate'
+      = link_to '<i class="icon-share"></i> Dejar incompleta'.html_safe, release_carts_path, data: { confirm: '¿Desea dejar esta orden incompleta?'}, method: :post, class: 'btn bottom-margin-1'
 .row
   .span4
     .well

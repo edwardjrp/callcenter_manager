@@ -36,13 +36,21 @@ class CartsController < ApplicationController
 
   def abandon
     @cart = current_cart
-    @cart.reason = Reason.find(params[:cart][:reason_id])
+    @reason = Reason.find_by_id(params[:cart][:reason_id])
+    @cart.reason = @reason
+    authorizer = User.admins.find_by_username(params[:reason][:username])
+    autorization = authorizer.try(:authenticate, params[:reason][:password])
     respond_to do |format|
-      if @cart.save
+      if autorization && @reason && @cart.save
         flash['success'] = "Orden : #{@cart.id} Anulada"
         format.json { render json: @cart, :status => 200 }
       else
-        format.json { render json: @cart.errors.full_messages.to_sentence , :status => 422}
+        if autorization
+          msg = @cart.errors.any? ? @cart.errors.full_messages.to_sentence  : 'Debe seleccionar una razón'
+        else
+          msg = 'Las credenciales de autorización son incorrectas'
+        end
+        format.json { render json: msg , :status => 422}
       end
     end
   end

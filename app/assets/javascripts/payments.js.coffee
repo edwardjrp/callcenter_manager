@@ -21,14 +21,16 @@ jQuery ->
           payment_attributes['cardnumber'] = $('#cardnumber').val()
           payment_attributes['cardapproval'] = $('#cardapproval').val()
         else
-          $("<div class='purr'>La información de pago no esta completa.<div>").purr()
+          $("<div class='purr'>La información de pago no esta completa.<div>").purr({removeTimer: 15000})
       else
-        $("<div class='purr'>La información de pago no esta completa.<div>").purr()
+        $("<div class='purr'>La información de pago no esta completa.<div>").purr({removeTimer: 15000})
       if $('#fiscal_info').val()? and $('#fiscal_info').val() != ''
         payment_attributes['rnc'] = $('#fiscal_info').val().split('/')[0]
         payment_attributes['fiscal_type'] = $('#fiscal_info').val().split('/')[1]
         payment_attributes['fiscal_name'] = $('#fiscal_info').val().split('/')[2]
-      socket.emit('cart:place',  payment_attributes) unless target.hasClass('disabled')
+      unless target.hasClass('disabled')
+        socket.emit('cart:place',  payment_attributes) 
+        $('#loader img').show()
       target.addClass('disabled')
 
     $('.checkout_cart_remove_coupon').on 'click', (event) ->
@@ -62,15 +64,16 @@ jQuery ->
       $('#checkout_cart_total').html("<strong> Monto de la orden: </strong> #{window.to_money(data.order_reply.payment_amount)}")
       $('#checkout_cart_exoneration').html("<strong>Exonerado:</strong> N/A")
       $('#checkout_cart_discount').html("<strong>Descuento:</strong> RD$ 0.00")
+      $('#loader img').hide()
       _.each data.items, (item)->
         $("#cart_product_#{item.cart_product_id}").find('.item_price').html(window.to_money(item.priced_at))
       # console.log data.order_reply
       if data.order_reply.can_place == 'Yes'
         $('#actions').append('<a href="#" id="place_order_button" class="btn bottom-margin-1"><i class="icon-shopping-cart"></i> Colocar orden</a>') unless $('#place_order_button').size() > 0
-        $("<div class='purr'>Hay cupones incompletos.<div>").purr() if data.order_reply.status == '6'
+        $("<div class='purr'>Hay cupones incompletos.<div>").purr({removeTimer: 15000}) if data.order_reply.status == '6'
       else
         $('#place_order_button').remove() if $('#place_order_button').size() > 0
-        $("<div class='purr'>Esta order fue rechazada por Pulse, verifique los requisitos. La tienda puede estar cerrada.<div>").purr()
+        $("<div class='purr'>Esta order fue rechazada por Pulse, verifique los requisitos. La tienda puede estar cerrada.<div>").purr({removeTimer: 15000})
 
     $('#exonerate_cart').on 'click', (event)->
       event.preventDefault()
@@ -82,6 +85,7 @@ jQuery ->
       event.preventDefault()
       target = $(event.currentTarget)
       form = $('#exonerate_cart_form')
+      $('#loader img').show()
       $.ajax
         type: 'POST'
         url: form.attr('action')
@@ -94,7 +98,9 @@ jQuery ->
           $('#exonerate_cart_modal').modal('hide')
           $('#checkout_cart_exoneration').html("<strong>Exonerado:</strong> #{cart.exonerated}")
         error: (response) ->
-          $("<div class='purr'>#{response.responseText}<div>").purr()
+          $("<div class='purr'>#{response.responseText}<div>").purr({removeTimer: 15000})
+        complete: ->
+          $('#loader img').hide()
 
 
 
@@ -107,6 +113,7 @@ jQuery ->
       event.preventDefault()
       target = $(event.currentTarget)
       form = $('#discount_cart_form')
+      $('#loader img').show()
       $.ajax
         type: 'POST'
         url: form.attr('action')
@@ -118,7 +125,9 @@ jQuery ->
           $('#discount_cart_modal').modal('hide')
           $('#checkout_cart_discount').html("<strong>Descuento:</strong> RD$ #{(Number(cart.discount)).toFixed(2)}")
         error: (response) ->
-          $("<div class='purr'>#{response.responseText}<div>").purr()
+          $("<div class='purr'>#{response.responseText}<div>").purr({removeTimer: 15000})
+        complete: ->
+          $('#loader img').hide()
 
 
     $('#abandon_cart').on 'click', (event)->
@@ -140,7 +149,7 @@ jQuery ->
         success: (response) ->
           window.location = '/'
         error: (response) ->
-          $("<div class='purr'>#{response.responseText}<div>").purr()
+          $("<div class='purr'>#{response.responseText}<div>").purr({removeTimer: 15000})
 
     $('#cash_payment').on 'click', (event)->
       $('#creditcard_number').addClass('hidden')
@@ -159,12 +168,14 @@ jQuery ->
       table = target.closest('table')
       if confirm('¿Seguro que desea remover el producto de la orden?')
         $('#actions').find('#place_order_button').remove()
+        $('#loader img').show()
         socket.emit 'cart_products:delete', { id: target.closest('tr').data('cart-product-id') }, (error, cart_product_id) ->
+          $('#loader img').hide()
           if error
-            $("<div class='purr'>No se puedo remover el elemento<div>").purr()
+            $("<div class='purr'>No se puedo remover el elemento<div>").purr({removeTimer: 15000})
           else
             $("#cart_product_#{cart_product_id}").remove()
-            $("<div class='purr'>Los descuentos y exoneraciones deben ser solicitados luego de cada cambio a la orden<div>").purr()
+            $("<div class='purr'>Los descuentos y exoneraciones deben ser solicitados luego de cada cambio a la orden<div>").purr({removeTimer: 15000})
             table.find('td').effect('highlight', { color: '#1175AE'})
         
 
@@ -180,11 +191,16 @@ jQuery ->
       target = $(event.currentTarget)
       $('#actions').find('#place_order_button').remove()
       if Number(target.val()) < 1 then target.val('1')
+      $('#loader img').show()
       socket.emit 'cart_products:update', { id: target.closest('tr').data('cart-product-id'), quantity: target.val() }, (error, cart_product) ->
+        $('#loader img').hide()
         if error
-          $("<div class='purr'>No se puedo realizar la actualización<div>").purr()
+          $("<div class='purr'>No se puedo realizar la actualización<div>").purr({removeTimer: 15000})
           target.val(target.data('orig'))
         else
           target.data('orig', cart_product.quantity)
           target.css('background-color','white')
           target.closest('tr').find('td').effect('highlight', { color: '#1175AE'})
+
+    socket.on 'cart:place:error', (msg) ->
+      $("<div class='purr'>#{msg}<div>").purr({isSticky: true})

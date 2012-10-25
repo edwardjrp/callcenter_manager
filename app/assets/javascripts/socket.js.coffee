@@ -18,10 +18,6 @@ jQuery ->
     $(".blink").css("font-weight", 'normal')
     $(this).removeClass('blink')
 
-
-  socket.on 'cart:place:error', (msg) ->
-    $("<div class='purr'>#{msg}<div>").purr()
-
   socket.on 'register_client', (operators) ->  
     $('#chatbox').find('.operator_tab').remove()
     $('#chatbox').find('.operator_pane').remove()
@@ -77,6 +73,9 @@ jQuery ->
   socket.on 'cart:price:error', (msg)->
     $("<div class='purr'>#{msg}<div>").purr()
     
+  socket.on 'disconnect', () ->
+    $("<div class='purr'>Se perdio la conexión con el Webserver<div>").purr({removeTimer: 5000})
+
   socket.on 'reconnect', () ->
     $("<div class='purr'>Conexión con Webserver reestablecida<div>").purr()
     

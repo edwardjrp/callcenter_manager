@@ -7,8 +7,16 @@
       %fieldset
         %legend Seleccione una razón
         .control-group
+          =label_tag'reason[username]','Username' , class: 'control-label'
           .controls
-            = select_tag 'cart[reason_id]', options_for_select( Reason.all.map{|reason| [ reason.description, reason.id] } )
+            = text_field_tag 'reason[username]'
+        .control-group
+          =label_tag'reason[password]','Contraseña' , class: 'control-label'
+          .controls
+            = password_field_tag 'reason[password]'
+        .control-group
+          .controls
+            = select_tag 'cart[reason_id]', options_for_select( Reason.all.map{|reason| [ reason.description, reason.id] } ), prompt: 'Seleccione una razón'
 
   .modal-footer
     %a.btn{"data-dismiss" => "modal", :href => "#"} Cerrar

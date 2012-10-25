@@ -15,13 +15,13 @@ CartProduct.addItem = (data, respond, socket) ->
       if (err)
         respond(err)
       else
+        respond(err, result_cart_product)
         result_cart_product.cart (c_err, cart) ->
           if c_err
             socket.emit 'cart:pricing:error', 'No se pudo leer la orden actual'
           else
             cart.price(socket)
-        respond(err, result_cart_product)
-
+        
 
 CartProduct.addCollection = (data, respond, socket) ->
   if data?

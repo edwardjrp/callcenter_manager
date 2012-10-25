@@ -92,13 +92,14 @@ Cart.prototype.price = (socket)->
         current_cart  = me.toJSON()
         current_cart.cart_products = current_cart_products
         current_cart.cart_coupons = current_cart_coupons
-        pulse_com_error = (comm_err) ->
-          socket.emit 'cart:price:error', 'Un error de comunicación impidio solitar el precio de esta orden, la aplicacion no podra funcionar correctamente en este estado'
+        
         if current_cart_products.length > 0
           Setting.kapiqua (err, settings) ->
             if err
               console.error err.stack
             else
+              pulse_com_error = (comm_err) ->
+                socket.emit 'cart:price:error', 'Un error de comunicación impidio solitar el precio de esta orden, la aplicacion no podra funcionar correctamente en este estado'
               cart_request = new  PulseBridge(current_cart, settings.price_store_id, settings.price_store_ip,  settings.pulse_port)
               try
                 cart_request.price pulse_com_error, (res_data)->
@@ -226,10 +227,7 @@ Cart.prototype.place = (data, socket) ->
         console.error final_error.stack
         socket.emit 'cart:place:error', 'Un error impidio la colocación de la orden'
       else
-        pulse_com_error = (comm_err) ->
-          socket.emit 'cart:place:error', 'Falla en la comunicación con Pulse'
-          me.comm_failed(socket)
-          console.error comm_err.stack
+        
 
         unless me.completed == true
           current_cart  = me.toJSON()
@@ -260,6 +258,10 @@ Cart.prototype.place = (data, socket) ->
                   socket.emit 'cart:place:error', 'Falla Lectura de la configuración'
                   console.error err.stack
                 else
+                  pulse_com_error = (comm_err) ->
+                    socket.emit 'cart:place:error', 'Falla en la comunicación con Pulse'
+                    me.comm_failed(socket)
+                    console.error comm_err.stack
                   cart_request = new  PulseBridge(current_cart, current_cart.store.storeid, current_cart.store.ip,  settings.pulse_port)
                   try
                     cart_request.place pulse_com_error, (res_data)->
