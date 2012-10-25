@@ -15,17 +15,15 @@ jQuery ->
       if $('#client_search_phone').size() > 0
         $('#client_search_phone').val(phone)
         $('#client_search_phone').autocomplete("search","#{phone}")
-        if $('.ui-menu-item').size() == 1
-          console.log 'existing client'
-          $('.ui-autocomplete:visible').hide()
-          query_client()
-        if $('.ui-menu-item').size() < 1
-          if $("#client_search_phone").val() != ''
-            console.log 'new client'
+        query_phone $("#client_search"), (phones) ->
+          if phones.length > 0
+            query_client $("#client_search")
+          else
+            window.hide_popover($('#client_search_panel'))
             client_create()
-        window.show_alert "Llamada entrate", 'success'
+        window.show_alert("Llamada entrate", 'success')
       else 
-        window.show_alert "Ha entrado una llamada desde #{phone} y no se encontro el formulario para colocarla", 'alert'
+        window.show_alert("Ha entrado una llamada desde #{phone} y no se encontro el formulario para colocarla", 'alert')
 
 
 
@@ -397,8 +395,8 @@ query_client = (form) ->
         $('#client_search_first_name').val(client.first_name)
         $('#client_search_last_name').val(client.last_name)
         $('#client_id').val(client.id)
-        window.show_popover($('#client_search_panel'), "Cliente encontrado", 'Presione ENTER para asignar este cliente a la orden actual')
         clear_extra_data()
+        window.show_popover($('#client_search_panel'), "Cliente encontrado", 'Presione ENTER para asignar este cliente a la orden actual')
     error: (jqXHR, textStatus, errorThrown) ->
       console.log(errorThrown)
       console.log(jqXHR.responseText)
