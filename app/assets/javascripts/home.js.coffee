@@ -15,12 +15,12 @@ jQuery ->
       if $('#client_search_phone').size() > 0
         $('#client_search_phone').val(phone)
         $('#client_search_phone').autocomplete("search","#{phone}")
-        if $('.ui-menu-item a').size == 1
+        if $('.ui-menu-item a').size() == 1
           setTimeout ->
             $('.ui-menu-item a:first').trigger("mouseenter").click()
           ,
             1000
-        if $('.ui-menu-item a').size < 1
+        if $('.ui-menu-item a').size() < 1
           if $("#client_search_phone").val() != ''
             client_create()
       else 
