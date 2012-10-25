@@ -16,7 +16,7 @@ jQuery ->
         $('#client_search_phone').val(phone)
         $('#client_search_phone').autocomplete("search","#{phone}")
         if $('.ui-menu-item a').size == 1
-          $('.ui-menu-item a:first').trigger('click')
+          $('.ui-menu-item a:first').trigger("mouseenter").click()
         if $('.ui-menu-item a').size < 1
           if $("#client_search_phone").val() != ''
             client_create()
