@@ -29,7 +29,7 @@ gem 'jquery-rails'
 gem 'jbuilder'
 
 # Use unicorn as the app server
-gem 'unicorn', :group=> :production
+# gem 'unicorn', :group=> :production
 
 # Deploy with Capistrano
 # gem 'capistrano'
@@ -57,6 +57,8 @@ gem 'sidekiq'
 gem 'sinatra', require: false
 gem 'slim'
 gem 'prawn'
+gem 'redis-rails'
+
 
 
 # To use ActiveModel has_secure_password

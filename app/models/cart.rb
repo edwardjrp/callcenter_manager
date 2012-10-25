@@ -77,6 +77,22 @@ class Cart < ActiveRecord::Base
     %w( delivery pickup dinein )
   end
 
+  def self.average_and_count_per_group( group_column = 'user_id', start_time = 2.weeks.ago, order_column = 'carts_count', result_limit = 5)
+    carts = self.scoped
+    carts = carts.merge(self.completed)
+    carts = carts.merge(self.select('AVG(carts.payment_amount) as carts_payment_avg'))
+    carts = carts.merge(self.group("#{group_column}"))
+    carts = carts.merge(self.where('complete_on > ?', start_time.beginning_of_week))
+    carts = carts.merge(self.select("carts.#{group_column}, COUNT(carts.*) as carts_count"))
+    carts = carts.merge(self.order("#{order_column} DESC"))
+    carts = carts.merge(self.limit(result_limit))
+    group_column_name = group_column.gsub(/_id$/,'')
+    group_column_model = group_column.gsub(/_id$/,'').classify.constantize
+    carts.map do | user_carts |
+      { "#{group_column_name}"=> group_column_model.find( user_carts["#{group_column}"] ), :carts_count => user_carts.carts_count , :payment_amount => user_carts.carts_payment_avg }
+    end
+  end
+
   def perform_discount(username, password, discount_amount)
     admin = User.find_by_username(username)
     if admin 

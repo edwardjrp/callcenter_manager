@@ -31,6 +31,7 @@ class User < ActiveRecord::Base
   before_destroy :ensure_has_no_carts
   before_destroy :there_is_one_admin
   scope :admins, where('role_mask = ? ', 1)
+  scope :operators, where('role_mask = ? ', 2)
   
   def self.authenticate(username, password)
       user = find_by_username(username)
@@ -41,8 +42,6 @@ class User < ActiveRecord::Base
     "#{first_name} #{last_name}"
   end
   
- 
-
   def roles=(sent_roles)
     self.role_mask = (normalize_roles_type(sent_roles) & self.class.valid_roles).map { |r| 2**self.class.valid_roles.index(r) }.sum
   end
