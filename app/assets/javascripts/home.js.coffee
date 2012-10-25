@@ -13,16 +13,19 @@ jQuery ->
     window.telephony.on 'bridge', (phone) ->
       console.log phone
       if $('#client_search_phone').size() > 0
-        $('#client_search_phone').val(phone)
-        $('#client_search_phone').autocomplete("search","#{phone}")
-        query_phone $("#client_search"), (phones) ->
-          if phones.length > 0
-            query_client $("#client_search")
-          else
-            $('.ui-autocomplete:visible').hide()
-            window.hide_popover($('#client_search_panel'))
-            client_create()
-        window.show_alert("Llamada entrate", 'success')
+        if $('#client_search_idnumber_controls').size() > 0
+          window.show_alert("Ha entrado una llamada desde #{phone} pero el formulario esta en use", 'alert')
+        else 
+          $('#client_search_phone').val(phone)
+          $('#client_search_phone').autocomplete("search","#{phone}")
+          query_phone $("#client_search"), (phones) ->
+            if phones.length > 0
+              query_client $("#client_search")
+            else
+              $('.ui-autocomplete:visible').hide()
+              window.hide_popover($('#client_search_panel'))
+              client_create()
+          window.show_alert("Llamada entrate", 'success')
       else 
         window.show_alert("Ha entrado una llamada desde #{phone} y no se encontro el formulario para colocarla", 'alert')
 
