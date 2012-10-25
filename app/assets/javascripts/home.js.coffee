@@ -3,6 +3,28 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 jQuery ->
   socket = window.socket
+  
+  if window.telephony?
+    window.telephony.on 'connect', ->
+      agent_id = window.pad($('#current_username').data('idnumber'), 11)
+      window.telephony.emit "identificacion",{ cedula: agent_id }
+      console.log "connected to telephony as #{agent_id}"
+
+    window.telephony.on 'bridge', (phone) ->
+      console.log phone
+      if $('#client_search_phone').size() > 0
+        $('#client_search_phone').val(phone)
+        $('#client_search_phone').autocomplete("search","#{phone}")
+        if $('.ui-menu-item a').size == 1
+          $('.ui-menu-item a:first').trigger('click')
+        if $('.ui-menu-item a').size < 1
+          if $("#client_search_phone").val() != ''
+            client_create()
+      else 
+        windows.show_alert "Ha entrado una llamada desde #{phone} y no se encontro el formulario para colocarla", 'alert'
+
+
+
 
   $('#client_search_first_name').restric('numeric')
   $('#client_search_last_name').restric('numeric')
