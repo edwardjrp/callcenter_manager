@@ -15,16 +15,17 @@ jQuery ->
       if $('#client_search_phone').size() > 0
         $('#client_search_phone').val(phone)
         $('#client_search_phone').autocomplete("search","#{phone}")
-        if $('.ui-menu-item a').size() == 1
-          setTimeout ->
-            $('.ui-menu-item a:first').trigger("mouseenter").click()
-          ,
-            1000
-        if $('.ui-menu-item a').size() < 1
+        if $('.ui-menu-item').size() == 1
+          console.log 'existing client'
+          $('.ui-autocomplete:visible').hide()
+          query_client()
+        if $('.ui-menu-item').size() < 1
           if $("#client_search_phone").val() != ''
+            console.log 'new client'
             client_create()
+        window.show_alert "Llamada entrate", 'success'
       else 
-        windows.show_alert "Ha entrado una llamada desde #{phone} y no se encontro el formulario para colocarla", 'alert'
+        window.show_alert "Ha entrado una llamada desde #{phone} y no se encontro el formulario para colocarla", 'alert'
 
 
 
@@ -136,7 +137,7 @@ jQuery ->
       query_phone $("#client_search"), (phones) ->
         if phones.length > 0
           response($.map(phones, (phone) ->
-             phone_label = "No. #{@NumberFormatter.to_phone(phone.number)}"
+             phone_label = "#{@NumberFormatter.to_phone(phone.number)}"
              phone_label =  phone_label + " Ext. #{phone.ext}" if phone.ext?
              {label: phone_label, value: phone.number}  
           ))
