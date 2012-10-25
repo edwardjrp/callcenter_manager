@@ -26,4 +26,4 @@ jQuery ->
     setInterval ->
         $.getScript('/admin')
       ,
-      5000
+      30000
