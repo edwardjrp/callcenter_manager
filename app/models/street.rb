@@ -7,10 +7,12 @@
 #  area_id    :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  store_id   :integer
 #
 
 class Street < ActiveRecord::Base
   belongs_to :area
+  belongs_to :store
   has_many :addresses
   delegate :city, :to => :area, :prefix => true
   validates :name, :presence=> true, uniqueness: { scope: :area_id}

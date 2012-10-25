@@ -7,6 +7,7 @@
 #  area_id    :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  store_id   :integer
 #
 
 require 'spec_helper'
