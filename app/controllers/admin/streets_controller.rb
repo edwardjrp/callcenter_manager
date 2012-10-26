@@ -43,5 +43,18 @@ class Admin::StreetsController < ApplicationController
       end
     end
   end
-  
+
+  def merge
+    @street_destination = Street.find(params[:id])
+    @street_origin = Street.find(params[:origin_id])
+    respond_to do |format|
+      if Address.update_all({street_id: @street_destination.id}, {street_id: @street_origin.id })
+        @street_origin.destroy
+        format.json{ render json: {id: params[:origin_id]}}
+      else
+        format.json{ render json: @street_origin.errors.full_messages.to_sentence}
+      end
+    end
+  end
+
 end

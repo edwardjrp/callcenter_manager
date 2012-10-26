@@ -12,9 +12,23 @@ jQuery ->
 
       $("#streets table").droppable
         drop: (event, ui) ->
-          console.log $(this)
-          console.log ui
-          console.log ui.draggable
+          destination_street = {id: $(this).data('street-id'), name: $(this).data('street-name') }
+          origin_street =  {id: ui.draggable.data('street-id'), name: ui.draggable.data('street-name') }
+          unless destination_street.id is origin_street.id
+            if confirm("¿Desea mover todas las asignaciones de la calle #{origin_street.name} a la calle #{destination_street.name}?")
+              $.ajax
+                type: 'POST'
+                datatype: 'JSON'
+                url: "/admin/streets/#{destination_street.id}/merge"
+                data: { origin_id: origin_street.id }
+                beforeSend: (xhr) ->
+                  xhr.setRequestHeader("Accept", "application/json")
+                success: (response) ->
+                  $("#street_#{response.id}").remove()
+                error: (response) ->
+                  $("<div class='purr'>#{response.responseText}<div>").purr()
+                complete: ->
+                  $('#properties_controller').empty()
 
 
     $('.city_link').on 'click', (event) ->

@@ -89,9 +89,13 @@ Kapiqua25::Application.routes.draw do
       end
     end
     resources :addresses, :except => [:new, :show]
-    resources :cities, :only => [:index, :create, :update, :destroy] # crud is not complete
-    resources :areas, :only => [:index, :create, :update, :destroy]# crud is not complete
-    resources :streets, :only => [:index, :create, :update, :destroy]# crud is not complete
+    resources :cities, :only => [:index, :create, :update, :destroy]
+    resources :areas, :only => [:index, :create, :update, :destroy]
+    resources :streets, :only => [:index, :create, :update, :destroy] do
+      member do 
+        post 'merge'
+      end
+    end
     resources :clients do 
       collection do 
         get 'olo'
