@@ -3,6 +3,20 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 jQuery ->
   if $('#addresses_list').size() > 0
+
+    $("#streets").on 'mouseover','#streets_list' , ->
+      console.log 'attaching'
+      $('.drag').closest("tr").draggable
+        helper: 'clone'
+        handle: $(this)
+
+      $("#streets table").droppable
+        drop: (event, ui) ->
+          console.log $(this)
+          console.log ui
+          console.log ui.draggable
+
+
     $('.city_link').on 'click', (event) ->
       event.preventDefault()
       target = $(event.currentTarget)
