@@ -1,60 +1,182 @@
 =link_to '<i class="icon-arrow-left"></i> Ordenes'.html_safe, admin_carts_path, class: 'btn bottom-margin-1'
 .row
   .span4
-    .row
-      .span4.well
-        %h3 Datos de la orden
-        %dl
-          %dt Agente
-          %dd= @cart.user.full_name
-        %dl
-          %dt Ultima asignacion de cliente
-          %dd=l(@cart.started_on, :format=> :short)
-        %dl
-          %dt Tienda
-          - if @cart.store.present?
-            %dd=" #{@cart.store.storeid} - #{@cart.store.name}"
-          - else
-            %dd No se asigno una tienda
-        %dl
-          %dt Modo de servicio
-          - if @cart.service_method.present?
-            %dd= @cart.service_method
-          - else
-            %dd No se asigno un modo de servicio
-    - if @cart.client
+    .well
+      .row.bottom-margin-1
+        .span4
+          %h3 Agente
       .row
-        .span4.well
-          %h3 Datos del cliente
-          %dl
-            %dt Nombre Completo
-            %dd= @cart.client.full_name
-            %dt Telefono de contácto
-            -if @cart.client.phones.count.nonzero?
-              - @cart.client.phones.each do |phone|
-                %dd="#{number_to_phone phone.number} #{phone.ext}"
-            -else
-              %dd No hay numero disponibles
-    -else
+        .span4
+          %strong Nombre:
+          = @cart.user.first_name 
       .row
-        .span4.well
-          %h3 No se asigno cliente
-  .span8
-    %table.table.table-striped.table-bordered.table-condensed.span8
-      %thead
-        %tr
-          %th Cantidad
-          %th producto
-          %th Optiones
-          %th Precio              
-      %tbody
-        -@cart.cart_products.each do |cart_product|
-          %tr
-            %td= cart_product.quantity
-            %td= cart_product.product.productname
-            %td= cart_product.product.niffty_options
-            %td
-              - if cart_product.priced_at.present?
-                = number_to_currency cart_product.priced_at
+        .span4
+          %strong Apellido:
+          = @cart.user.last_name
+      .row
+        .span4
+          %strong Cedula:
+          =number_to_cedula @cart.user.idnumber
+      .row
+        .span4
+          %strong Roles:
+          =@cart.user.roles.to_a.to_sentence
 
+      .row
+        .span4
+          %strong Inicios de sesión:
+          =@cart.user.login_count
+    .well
+      .row.bottom-margin-1
+        .span4
+          %h3 Información del cliente
+      .row
+        .span4
+          %strong Nombre:
+          = @cart.client.first_name
+      .row
+        .span4
+          %strong Apellido:
+          = @cart.client.last_name
+      .row
+        .span4
+          %strong Cedula:
+          = number_to_cedula @cart.client.idnumber
+      .row
+        .span4
+          %strong Correo:
+          = @cart.client.email
+      %hr
+  
+    .well#phones_list
+      .row
+        .span4        
+          %h3 Datos de contacto
+      %hr
+      #client_phone_list
+        .client_phone{:id=> dom_id(@cart.client.last_phone), :data=> {'phone'=> @cart.client.last_phone.to_json}}
+          .row
+            .span4
+              %strong Numero:
+              =number_to_phone @cart.client.last_phone.number
+          - if @cart.client.last_phone.ext.present?
+            .row
+              .span4
+                %strong extensión:
+                = @cart.client.last_phone.ext
+          %hr 
+      #client_address_list
+        -if @cart.client.last_address
+          .client_address{:id=> dom_id(@cart.client.last_address)}
+            .row
+              .span4
+                %strong Ciudad:
+                %span#target_city= @cart.client.last_address.street_area.city.name
+            .row
+              .span4
+                %strong Sector:
+                %span#target_area= @cart.client.last_address.street_area.name
+            .row
+              .span4
+                %strong Calle:
+                %span#target_street= @cart.client.last_address.street.name
+            .row
+              .span4
+                %strong Numero:
+                = @cart.client.last_address.number
+            .row
+              .span4
+                %strong Tipo:
+                = @cart.client.last_address.unit_type
+            -if @cart.client.last_address.unit_number
+              .row
+                .span4
+                  %strong No. de apartamento:
+                  = @cart.client.last_address.unit_number
+            -if @cart.client.last_address.postal_code
+              .row
+                .span4
+                  %strong Codigo postal:
+                  =@cart.client.last_address.postal_code
 
+            -if @cart.client.last_address.delivery_instructions
+              .row
+                .span3
+                  %strong instrucciones de entrega:
+              .row
+                .span4
+                  = @cart.client.last_address.delivery_instructions
+            %hr 
+      
+  .span8#checkout_cart{data: {id: @cart.id }}
+    - if @cart
+      %h3 Orden
+      %hr 
+      .row
+        .span3
+          %strong Agente:
+          = @cart.user.full_name
+        .span3
+          %strong Orden iniciada en:
+          = l @cart.started_on, format: :short
+      .row
+        .span3#checkout_cart_net
+          %strong Monto neto:
+          = number_to_currency(@cart.net_amount) || 'N/A'
+        .span3
+          %strong Modo de servicio:
+          = @cart.service_method || 'N/A'
+      .row
+        .span3#checkout_cart_tax
+          %strong Impuestos:
+          = number_to_currency(@cart.tax_amount) || 'N/A'
+        .span3
+          %strong Tienda:
+          = @cart.store.name
+      .row
+        .span3#checkout_cart_total
+          %strong Monto de la orden:
+          = number_to_currency(@cart.payment_amount) || 'N/A'
+        .span3#checkout_cart_discount
+          %strong Descuento:
+          = number_to_currency(@cart.discount) || '0.0'
+      .row
+        .span3#checkout_cart_exoneration
+          %strong Exonerado:
+          = @cart.exonerated || 'N/A'
+      - if @cart.coupons.count.nonzero?
+        .row
+          #checkout_client_side_coupons_list
+            %table.table.table-striped.table-bordered.table-condensed.span8
+              %thead
+                %th Codigo
+                %th Descripcion Generada
+                %th Precio minimo
+              %tbody
+                - @cart.cart_coupons.each do |cart_coupon|
+                  %tr{:id=> dom_id(cart_coupon),:data=> { 'cart-coupon-id'=> cart_coupon.id }}
+                    %td.span1= cart_coupon.coupon.code
+                    %td= cart_coupon.coupon.generated_description
+                    %td
+                      - if cart_coupon.coupon.minimum_price
+                        = number_to_currency cart_coupon.coupon.minimum_price
+      .row
+        %table.table.table-striped.table-bordered.table-condensed.span8{:data=>{'cart-id'=> @cart.id}, :id=>dom_id(@cart)}
+          %thead
+            %tr
+              %th Cantidad
+              %th product
+              %th Optiones
+              %th Precio 
+          %tbody
+            - @cart.cart_products.each do |cart_product|
+              %tr{:id=> dom_id(cart_product), :data=> { 'cart-product-id'=> cart_product.id }, :class=> availability_class(cart_product.available_in_store(@cart.store))}
+                %td.span1=cart_product.quantity
+                %td= cart_product.product.productname
+                %td= cart_product.product.niffty_options
+                %td.item_price
+                  - if cart_product.priced_at
+                    = number_to_currency(cart_product.priced_at)
+                  - else
+                    'N/A'
+      %hr 
