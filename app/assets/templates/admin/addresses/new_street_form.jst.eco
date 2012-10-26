@@ -2,5 +2,5 @@
 <form action='/admin/streets' id ='street_for_area'>
   <input type="hidden" class='span2' name='street[area_id]' placeholder="Nombre"  value='<%=@area_id%>'>
   <input type="text" class='span2' id="new_street_name" name='street[name]' placeholder="Nombre">
-  <button type="submit" class="btn btn-primary" id='create_area'>Agregar a esta area</button>
+  <button type="submit" class="btn btn-primary" id='create_street'>Agregar a esta area</button>
 </form>

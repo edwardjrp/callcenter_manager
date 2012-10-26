@@ -1,7 +1,14 @@
-<h4 class = 'bottom-margin-1'> Editar Calle<%=@street.name%></h4>
+<h4 class = 'bottom-margin-1'> Editar Calle <%=@street.name%></h4>
 <br/>
 <form action='/admin/streets/<%=@street.id%>' id ='edit_street'>
+  <select id='street_store_select' name='street[store_id]'>
+    <option > Selecciones una tienda</option>
+    <%for store in @stores:%>
+      <option value='<%=store.id%>'><%=store.name%></option>
+    <%end%>
+  </select>
+  <br/>
   <input type="text" id="edit_street_name" name='street[name]' placeholder="Nombre" value='<%=@street.name%>'>
   <br/>
-  <button type="submit" class="btn btn-primary" id='edit_street'>Actualizar Calle</button>
+  <button type="submit" class="btn btn-primary" id='edit_street_button'>Actualizar Calle</button>
 </form>

@@ -157,23 +157,57 @@ jQuery ->
           success: (response) ->
             $("#area_#{response.id}").remove()
 
-
+    $('#streets').on 'click', '#create_street', (event) ->
+      event.preventDefault()
+      target = $(event.currentTarget)
+      form = target.closest('form')
+      $.ajax
+        type: 'POST'
+        datatype: 'JSON'
+        url: form.attr('action')
+        data: form.serialize()
+        beforeSend: (xhr) ->
+          xhr.setRequestHeader("Accept","application/json")
+        success: (street) ->
+          $('#streets_list').prepend(JST['admin/addresses/streets'](street: street))
+        complete: ->
+          form[0].reset()
 
     $('#streets').on 'click', '.edit', (event) ->
       event.preventDefault()
       target = $(event.currentTarget)
       data_location = target.closest('table')
       $('#properties_controller').empty()
-      $('#properties_controller').html(JST['admin/addresses/edit_street_form'](street: {name: data_location.data('street-name'), id: data_location.data('street-id')}))
+      $('#properties_controller').html(JST['admin/addresses/edit_street_form'](street: {name: data_location.data('street-name'), id: data_location.data('street-id')}, stores: $('#streets').data('stores')))
+      $("#street_store_select option[value=#{data_location.data('store-id')}]").attr("selected",true);
 
+    $('#properties_controller').on 'click', '#edit_street_button', (event) ->
+      event.preventDefault()
+      target = $(event.currentTarget)
+      form = target.closest('form')
+      $.ajax
+        type: 'PUT'
+        datatype: 'JSON'
+        url: form.attr('action')
+        data: form.serialize()
+        beforeSend: (xhr) ->
+          xhr.setRequestHeader("Accept","application/json")
+        success: (street) ->
+          $("#street_#{street.id}").html($(JST['admin/addresses/streets'](street: street)).html())
+        complete: ->
+          $('#properties_controller').empty()
 
-
-
-
-
-
-
-
-
-
-
+    $('#streets').on 'click', '.trash', (event) ->
+      event.preventDefault()
+      target = $(event.currentTarget)
+      data_location = target.closest('table')
+      $('#properties_controller').empty()
+      if confirm('¿Desea eliminar esta Calle y todos los elementos asignados a ella ?')
+        $.ajax
+          type: 'DELETE'
+          datatype: 'JSON'
+          url: "/admin/streets/#{data_location.data('street-id')}"
+          beforeSend: (xhr) ->
+            xhr.setRequestHeader("Accept","application/json")
+          success: (response) ->
+            $("#street_#{response.id}").remove()

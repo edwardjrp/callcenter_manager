@@ -1,6 +1,6 @@
 jQuery ->
 
-  if $('#dashboard').size() > 0
+  if $('#dashboard_screen').size() > 0
     $('#fullscreen').on 'click', (event)->
       event.preventDefault()
       $('#dashboard_screen').toggleFullScreen()
