@@ -1,8 +1,8 @@
-<table class="table table-striped table-bordered street_table" id="street_<%=@street.id%>" data-street-id='<%=@street.id%>' data-street-name='<%=@street.name%>'>
+<table class="table table-striped table-bordered city_table" id="city_<%=@city.id%>" data-city-id="<%=@city.id%>" data-city-name="<%=@city.name%>">
   <tbody>
     <tr>
       <td>
-        <a class="street_link"><%=@street.name%></a>
+        <a class="city_link"><%=@city.name%></a>
         <img alt="Spinner" class="hidden" src="/assets/spinner.gif">
       </td>
     </tr>

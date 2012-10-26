@@ -22,7 +22,13 @@ jQuery ->
           $('#stores_payment_average').show()
         else
           $('.dashboard_datatable').show()
- 
+          
+    window.dashboard_refresh()
+  else
+    clearInterval(window.dashboard_refresh)
+
+
+window.dashboard_refresh = ->
     setInterval ->
         $.getScript('/admin')
       ,

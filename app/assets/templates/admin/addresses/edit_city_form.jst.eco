@@ -1,0 +1,7 @@
+<h4 class = 'bottom-margin-1'> Editar Ciudad <%=@city.name%></h4>
+<br/>
+<form action='/admin/cities/<%=@city.id%>' id ='edit_city'>
+  <input type="text" id="edit_city_name" name='city[name]' placeholder="Nombre" value='<%=@city.name%>'>
+  <br/>
+  <button type="submit" class="btn btn-primary" id='edit_city'>Actualizar ciudad</button>
+</form>

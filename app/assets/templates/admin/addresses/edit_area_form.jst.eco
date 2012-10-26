@@ -1,0 +1,7 @@
+<h4 class = 'bottom-margin-1'> Editar Zona <%=@area.name%></h4>
+<br/>
+<form action='/admin/areas/<%=@area.id%>' id ='edit_area'>
+  <input type="text" id="edit_area_name" name='area[name]' placeholder="Nombre" value='<%=@area.name%>'>
+  <br/>
+  <button type="submit" class="btn btn-primary" id='edit_area'>Actualizar zona</button>
+</form>

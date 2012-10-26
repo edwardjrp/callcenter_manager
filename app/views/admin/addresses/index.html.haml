@@ -1,29 +1,31 @@
 = render 'administration'
-
-%h2 Direcciones
-#addresses_list{data: {cities: City.all.to_json(only: [:id, :name])}}
-  .btn-toolbar
-    -[['city','Ciudad'], ['area', 'Zona'], ['street', 'Calle']].each do |address_element|
-      .btn-group.bottom-margin-2{:class=> "#{address_element.first}_actions"}
-        %a.btn.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
-          =address_element.last
-          %span.caret
-        %ul.dropdown-menu
-          %li
-            %a{:href => '#', :id =>"add_#{address_element.first}"} Agregar
-          %li
-            %a{:href => '#', :id =>"merge_#{address_element.first}"} Fusionar
-          %li
-            %a{:href => '#', :id =>"delete_#{address_element.first}"} Borrar
-      =render 'modal', :modal_id => "admin_addresses_#{address_element.first}_actions", :title=>"#{address_element.last}"
-  #addresses_tab
-    .tabbable.tabs-left
-      %ul.nav.nav-tabs#cities_tabs
-        - @cities.each do |city|
-          %li
-            %a.city_tab{:href=>"#city_#{city.id}", :data=>{:toggle=>"tab", 'city-id'=> city.id}}
-              = city.name
-      .tab-content#cities_contents
-        - @cities.each do |city|
-          .tab-pane.city_pane{id: dom_id(city)}
-            Cargando ...
+.row
+  .span6
+    %h2.bottom-margin-1 Direcciones
+    #addresses_list
+      .row
+        .span2
+          %h4.bottom-margin-1.span2 Ciudades
+          %form{action: '/admin/cities'}
+            %input.span2.add_city{type:'text', placeholder: 'Nombre', name: 'city[name]'}
+            %botton.btn.btn-primary#add_city agregar ciudad
+          #cities_list
+            - @cities.each do |city|
+              %table.table.table-striped.table-bordered.city_table{:id=> dom_id(city), :data=> {'city-id'=> city.id, 'city-name' => city.name} }
+                %tbody
+                  %tr
+                    %td
+                      %a.city_link= city.name
+                      =image_tag 'spinner.gif', class: 'hidden'
+                  %tr
+                    %td
+                      .btn-group
+                        %a.btn.edit Editar
+                        %a.btn.trash Eliminar
+        .span2
+          #areas
+        .span2
+          #streets
+  .span6
+    #properties_controller
+  

@@ -1,21 +1,21 @@
 // Place all the styles related to the admin/addresses controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-#area_search_scroll{
-  max-height: 500px;
+#areas_list, #streets_list{
+  max-height: 600px;
   overflow:scroll;
 }
-#street_tab_content{
-  top:0px;
-  position:absolute;
-}
-#addresses_tab{
-  position:relative;
-}
-.tabs-left{
-  max-height: 500px;
-  overflow:scroll;
-  // .drag_street{
-  //   border-bottom: 1px solid #DDD;
-  // }
+#properties_controller{
+  margin-top: 40px;
+  min-height: 600px;
+  border: 1px solid #E5E5E5;
+  outline: 1px solid whitesmoke;
+  background-color: #f2f2f2;
+  padding: 20px;
+  background-image: -moz-linear-gradient(top, #f5f5f5, #eeeeee);
+  background-image: -ms-linear-gradient(top, #f5f5f5, #eeeeee);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f5f5f5), to(#eeeeee));
+  background-image: -webkit-linear-gradient(top, #f5f5f5, #eeeeee);
+  background-image: -o-linear-gradient(top, #f5f5f5, #eeeeee);
+  background-image: linear-gradient(top, #f5f5f5, #eeeeee);
 }

@@ -1,0 +1,7 @@
+<h4 class = 'bottom-margin-1'> Editar Calle<%=@street.name%></h4>
+<br/>
+<form action='/admin/streets/<%=@street.id%>' id ='edit_street'>
+  <input type="text" id="edit_street_name" name='street[name]' placeholder="Nombre" value='<%=@street.name%>'>
+  <br/>
+  <button type="submit" class="btn btn-primary" id='edit_street'>Actualizar Calle</button>
+</form>
