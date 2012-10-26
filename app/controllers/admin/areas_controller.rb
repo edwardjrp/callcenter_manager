@@ -22,6 +22,19 @@ class Admin::AreasController < ApplicationController
     end
   end
 
+  def update
+    @area = Area.find(params[:id])
+    respond_to do |format|
+      if @area.update_attributes(params[:area])
+        format.json{ render json: @area}
+      else
+        format.json{ render json: @area.errors.full_messages.to_sentence }
+      end
+    end
+  end
+
+
+
   def destroy
     @area =Area.find(params[:id])
     respond_to do |format|

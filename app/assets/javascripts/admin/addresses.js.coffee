@@ -72,8 +72,7 @@ jQuery ->
       $('#properties_controller').html(JST['admin/addresses/edit_city_form'](city: {name: data_location.data('city-name'), id: data_location.data('city-id')}))
 
     $('#properties_controller').on 'click', '#edit_city_button', (event) ->
-      event.preventDefault()
-      event.stopPropagation()
+      event.preventDefault()      
       target = $(event.currentTarget)
       form = target.closest('form')
       $.ajax
@@ -103,6 +102,21 @@ jQuery ->
           success: (response) ->
             $("#city_#{response.id}").remove()
 
+    $('#areas').on 'click', '#create_area', (event) ->
+      event.preventDefault()
+      target = $(event.currentTarget)
+      form = target.closest('form')
+      $.ajax
+        type: 'POST'
+        datatype: 'JSON'
+        url: form.attr('action')
+        data: form.serialize()
+        beforeSend: (xhr) ->
+          xhr.setRequestHeader("Accept","application/json")
+        success: (area) ->
+          $('#areas_list').prepend(JST['admin/addresses/areas'](area: area))
+        complete: ->
+          form[0].reset()
 
     $('#areas').on 'click', '.edit', (event) ->
       event.preventDefault()
@@ -111,6 +125,37 @@ jQuery ->
       $('#properties_controller').empty()
       $('#properties_controller').html(JST['admin/addresses/edit_area_form'](area: {name: data_location.data('area-name'), id: data_location.data('area-id')}))
 
+    $('#properties_controller').on 'click', '#edit_area_button', (event) ->
+      event.preventDefault()
+      target = $(event.currentTarget)
+      form = target.closest('form')
+      $.ajax
+        type: 'PUT'
+        datatype: 'JSON'
+        url: form.attr('action')
+        data: form.serialize()
+        beforeSend: (xhr) ->
+          xhr.setRequestHeader("Accept","application/json")
+        success: (area) ->
+          $("#area_#{area.id}").html($(JST['admin/addresses/areas'](area: area)).html())
+        complete: ->
+          $('#properties_controller').empty()
+
+
+    $('#areas').on 'click', '.trash', (event) ->
+      event.preventDefault()
+      target = $(event.currentTarget)
+      data_location = target.closest('table')
+      $('#properties_controller').empty()
+      if confirm('¿Desea eliminar esta zona y todos los elementos asignados a ella ?')
+        $.ajax
+          type: 'DELETE'
+          datatype: 'JSON'
+          url: "/admin/areas/#{data_location.data('area-id')}"
+          beforeSend: (xhr) ->
+            xhr.setRequestHeader("Accept","application/json")
+          success: (response) ->
+            $("#area_#{response.id}").remove()
 
 
 
