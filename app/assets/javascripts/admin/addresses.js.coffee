@@ -71,6 +71,23 @@ jQuery ->
       $('#properties_controller').empty()
       $('#properties_controller').html(JST['admin/addresses/edit_city_form'](city: {name: data_location.data('city-name'), id: data_location.data('city-id')}))
 
+    $('#properties_controller').on 'click', '#edit_city_button', (event) ->
+      event.preventDefault()
+      event.stopPropagation()
+      target = $(event.currentTarget)
+      form = target.closest('form')
+      $.ajax
+        type: 'PUT'
+        datatype: 'JSON'
+        url: form.attr('action')
+        data: form.serialize()
+        beforeSend: (xhr) ->
+          xhr.setRequestHeader("Accept","application/json")
+        success: (city) ->
+          $("#city_#{city.id}").html($(JST['admin/addresses/city'](city: city)).html())
+        complete: ->
+          $('#properties_controller').empty()
+
     $('#cities_list').on 'click', '.trash', (event) ->
       event.preventDefault()
       target = $(event.currentTarget)
@@ -85,7 +102,6 @@ jQuery ->
             xhr.setRequestHeader("Accept","application/json")
           success: (response) ->
             $("#city_#{response.id}").remove()
-    
 
 
     $('#areas').on 'click', '.edit', (event) ->
@@ -94,6 +110,8 @@ jQuery ->
       data_location = target.closest('table')
       $('#properties_controller').empty()
       $('#properties_controller').html(JST['admin/addresses/edit_area_form'](area: {name: data_location.data('area-name'), id: data_location.data('area-id')}))
+
+
 
 
     $('#streets').on 'click', '.edit', (event) ->

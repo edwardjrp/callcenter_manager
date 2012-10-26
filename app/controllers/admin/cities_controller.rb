@@ -17,6 +17,17 @@ class Admin::CitiesController < ApplicationController
     end
   end
 
+  def update
+    @city = City.find(params[:id])
+    respond_to do |format|
+      if @city.update_attributes(params[:city])
+        format.json{ render json: @city}
+      else
+        format.json{ render json: @city.errors.full_messages.to_sentence, status: 422}
+      end
+    end
+  end
+
   def destroy
     @city = City.find(params[:id])
     respond_to do |format|
