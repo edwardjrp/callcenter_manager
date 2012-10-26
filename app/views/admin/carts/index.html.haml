@@ -9,6 +9,7 @@
     = search_form_for [:admin,@search], :url => admin_carts_path, :html=>{:class=>'well form-search top-margin-1 filter'} do |f|
       =f.text_field :user_first_name_cont, :class=> 'input-medium search-query', :placeholder=>'Nombre del agente'
       =f.text_field :user_last_name_cont, :class=> 'input-medium search-query', :placeholder=>'Apellido del agente'
+      =f.text_field :client_phones_number_cont, :class=> 'input-medium search-query', :placeholder=>'Telefono del cliente'
       =f.text_field :created_at_gteq, :class=> 'input-medium search-query', :placeholder=>'Creado después de '
       =f.text_field :created_at_lteq, :class=> 'input-medium search-query', :placeholder=>'Creado antes de '
       =f.submit 'Buscar', :name=>nil, :class=> 'btn'
@@ -30,6 +31,7 @@
                   %th ID
                   %th ID orden Pulse
                   %th Cliente
+                  %th Telefono
                   %th Agente
                   %th Monto
                   %th 
@@ -44,6 +46,10 @@
                         %td
                           - if cart.client.present?
                             = cart.client.full_name
+                        %td
+                          - if cart.client.present?
+                            - if  cart.client.last_phone
+                              = number_to_phone cart.client.last_phone.number
                         %td= cart.user.full_name
                         %td= number_to_currency cart.payment_amount
                         %td= link_to 'Detalles', [:admin,cart]

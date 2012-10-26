@@ -48,13 +48,13 @@ require 'csv'
 class Cart < ActiveRecord::Base
   include Reports::Carts
   # attr_accessible :title, :body
-  scope :completed, where(:completed=>true)
-  scope :incomplete, where(:completed=>false)
-  scope :abandoned, where('reason_id IS NOT NULL')
-  scope :available, where('reason_id IS NULL')
-  scope :comm_failed, where(communication_failed: true)
-  scope :finalized, where('completed = ? or reason_id IS NOT NULL', true)
-  scope :latest, order('created_at DESC')
+  scope :completed, where(:completed=>true).where('message_mask IS NOT 4')
+  scope :incomplete, where(:completed=>false).where('message_mask IS NOT 4')
+  scope :abandoned, where('reason_id IS NOT NULL').where('message_mask IS NOT 4')
+  scope :available, where('reason_id IS NULL').where('message_mask IS NOT 4')
+  scope :comm_failed, where(communication_failed: true).where('message_mask IS NOT 4')
+  scope :finalized, where('completed = ? or reason_id IS NOT NULL', true).where('message_mask IS NOT 4')
+  scope :latest, order('created_at DESC').where('message_mask IS NOT 4')
   belongs_to :user, :counter_cache => true
   belongs_to :client
   belongs_to :store
