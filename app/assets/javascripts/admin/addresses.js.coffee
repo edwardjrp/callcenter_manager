@@ -22,6 +22,8 @@ jQuery ->
           $('#areas').append("<div id='areas_list'</div>")
           for area in areas
             $('#areas_list').append(JST['admin/addresses/areas'](area: area))
+        error: (response) ->
+          $("<div class='purr'>#{response.responseText}<div>").purr()
         complete: ->
           target.next('img').addClass('hidden')
 
@@ -43,6 +45,8 @@ jQuery ->
           $('#streets').append("<div id='streets_list'</div>")
           for street in streets
             $('#streets_list').append(JST['admin/addresses/streets'](street: street))
+        error: (response) ->
+          $("<div class='purr'>#{response.responseText}<div>").purr()
         complete: ->
           target.next('img').addClass('hidden')
 
@@ -60,6 +64,8 @@ jQuery ->
           xhr.setRequestHeader("Accept","application/json")
         success: (city) ->
           $('#cities_list').prepend(JST['admin/addresses/city'](city: city))
+        error: (response) ->
+          $("<div class='purr'>#{response.responseText}<div>").purr()
         complete: ->
           form.find('.add_city').text('')
           form[0].reset()
@@ -84,6 +90,8 @@ jQuery ->
           xhr.setRequestHeader("Accept","application/json")
         success: (city) ->
           $("#city_#{city.id}").html($(JST['admin/addresses/city'](city: city)).html())
+        error: (response) ->
+          $("<div class='purr'>#{response.responseText}<div>").purr()
         complete: ->
           $('#properties_controller').empty()
 
@@ -101,6 +109,8 @@ jQuery ->
             xhr.setRequestHeader("Accept","application/json")
           success: (response) ->
             $("#city_#{response.id}").remove()
+          error: (response) ->
+            $("<div class='purr'>#{response.responseText}<div>").purr()
 
     $('#areas').on 'click', '#create_area', (event) ->
       event.preventDefault()
@@ -115,6 +125,8 @@ jQuery ->
           xhr.setRequestHeader("Accept","application/json")
         success: (area) ->
           $('#areas_list').prepend(JST['admin/addresses/areas'](area: area))
+        error: (response) ->
+          $("<div class='purr'>#{response.responseText}<div>").purr()
         complete: ->
           form[0].reset()
 
@@ -138,6 +150,8 @@ jQuery ->
           xhr.setRequestHeader("Accept","application/json")
         success: (area) ->
           $("#area_#{area.id}").html($(JST['admin/addresses/areas'](area: area)).html())
+        error: (response) ->
+          $("<div class='purr'>#{response.responseText}<div>").purr()
         complete: ->
           $('#properties_controller').empty()
 
@@ -156,6 +170,8 @@ jQuery ->
             xhr.setRequestHeader("Accept","application/json")
           success: (response) ->
             $("#area_#{response.id}").remove()
+          error: (response) ->
+            $("<div class='purr'>#{response.responseText}<div>").purr()
 
     $('#streets').on 'click', '#create_street', (event) ->
       event.preventDefault()
@@ -170,6 +186,8 @@ jQuery ->
           xhr.setRequestHeader("Accept","application/json")
         success: (street) ->
           $('#streets_list').prepend(JST['admin/addresses/streets'](street: street))
+        error: (response) ->
+          $("<div class='purr'>#{response.responseText}<div>").purr()
         complete: ->
           form[0].reset()
 
@@ -194,6 +212,8 @@ jQuery ->
           xhr.setRequestHeader("Accept","application/json")
         success: (street) ->
           $("#street_#{street.id}").html($(JST['admin/addresses/streets'](street: street)).html())
+        error: (response) ->
+          $("<div class='purr'>#{response.responseText}<div>").purr()
         complete: ->
           $('#properties_controller').empty()
 
@@ -211,3 +231,5 @@ jQuery ->
             xhr.setRequestHeader("Accept","application/json")
           success: (response) ->
             $("#street_#{response.id}").remove()
+          error: (response) ->
+            $("<div class='purr'>#{response.responseText}<div>").purr()
