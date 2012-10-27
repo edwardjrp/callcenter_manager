@@ -137,6 +137,9 @@ io.sockets.on("connection", function(socket) {
   socket.on("clients:olo:phone", function(data, responder) {
     return Clients.olo_with_phone(data, responder, socket);
   });
+  socket.on("clients:olo:idnumber", function(data, responder) {
+    return Clients.olo_with_idnumber(data, responder, socket);
+  });
   socket.on("clients:olo:index", function(data, responder) {
     return Clients.olo_index(data, responder, socket);
   });

@@ -48,15 +48,5 @@ Setting.kapiqua = (cb)->
         kapiquaConfig[result.var] = YAML.parse(result.value)[0]
       cb(err, kapiquaConfig)
 
-# olo2 url
-# Setting.node_url = (cb)->
-#   @all {var: 'node_url'}, (err, result) ->
-#     if err
-#       console.error(err)
-#       cb(err)
-#     else
-#       cb(result)
-
-
 
 module.exports = Setting

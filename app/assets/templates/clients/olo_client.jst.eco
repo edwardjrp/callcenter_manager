@@ -1,0 +1,20 @@
+<form action='/clients/<%=@client_id%>' id='olo_client_form'>
+  <p>Marque los valores a sobre escribir</p>
+  <ul class ='unstyled'>
+    <li><input type="checkbox" name="client[first_name]" value="<%=@client.name%>"><strong> Nombre: </strong> <%=@client.name%></li>
+    <li><input type="checkbox" name="client[last_name]" value="<%=@client.name%>"><strong> Apellido: </strong><%=@client.last_name%></li>
+    <li><input type="checkbox" name="client[email_name]" value="<%=@client.name%>"><strong> Correo: </strong><%=@client.email%></li>
+    <li><strong>Estado: </strong><%=@client.state%></li>
+    <li><strong>Confirmado: </strong><%=@client.confirmed_at?%></li>
+  </ul>
+  <p>Marque los valores a agregar</p>
+  <%if _.any(@client.addresses):%>
+    <% i = 0%>
+    <%for address in @client.addresses:%>
+      <ul class ='unstyled'>
+        <li><input type="checkbox" name="client[phones_attributes][<%= i %>][number]" value="<%=address.phone%>"><strong> Telefono: </strong> <%=window.to_phone address.phone%></li>
+      </ul>
+       <% i += 1%>
+    <%end%>
+  <%end%>
+</form>

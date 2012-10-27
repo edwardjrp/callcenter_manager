@@ -6,6 +6,36 @@ jQuery ->
 
   $('.best_in_place').best_in_place()
 
+  $('#importar_values').on 'click', (event) ->
+    event.preventDefault()
+    target = $(event.currentTarget)
+    socket.emit "clients:olo:idnumber", { idnumber: window.pad(target.data('idnumber'))}, (response) ->
+      if _.isEmpty(response.data)
+        $("<div class='purr'>El usuario no se encuentra en el listado de olo<div>").purr()
+      else
+        client = response.data
+        modal = $('#olo_values_override')
+        modal.modal('show')
+        modal.find('.modal-body').html(JST['clients/olo_client'](client: client, client_id: target.data('client-id')))
+
+  $('#olo_values_override_button').on 'click' , (event) ->
+    event.preventDefault()
+    target = $(event.currentTarget)
+    $.ajax
+      type: 'PUT'
+      datatype: 'json'
+      data: $('#olo_client_form').serialize()
+      url: $('#olo_client_form').attr('action')
+      beforeSend: (xhr) ->
+        xhr.setRequestHeader("Accept", "application/json")
+      complete: (response) ->
+        switch response.status
+          when 200
+            window.location.reload(true)
+          else
+            $("<div class='purr'>#{err.responseText}<div>").purr()
+
+
   $('.get_pulse_status').on 'click', (event) ->
     event.preventDefault()
     target = $(event.currentTarget)

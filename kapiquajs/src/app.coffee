@@ -111,6 +111,9 @@ io.sockets.on "connection", (socket) ->
   socket.on "clients:olo:phone", (data, responder) ->
     Clients.olo_with_phone(data, responder, socket)  
 
+  socket.on "clients:olo:idnumber", (data, responder) ->
+    Clients.olo_with_idnumber(data, responder, socket)  
+
   socket.on "clients:olo:index", (data, responder) ->
     Clients.olo_index(data, responder, socket)  
 

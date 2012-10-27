@@ -3,8 +3,10 @@
     .well
       .row.bottom-margin-1
         .span4
-          %h3 Información del cliente
+          %h3.bottom-margin-1 Información del cliente
           %span.label.label-info Haga click en los diferentes campos para editarlos
+          =link_to "<i class='icon-share'></i> Consulta e importación de olo 2".html_safe, '#', class: 'btn top-margin-1', id: 'importar_values', data: { idnumber: @client.idnumber , client_id: @client.id } if @client.idnumber.present?
+          =render 'modal', :modal_id => "olo_values_override", :title=>'Traer valores'
       .row
         .span4
           %strong Nombre:

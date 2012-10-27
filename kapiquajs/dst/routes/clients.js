@@ -19,7 +19,7 @@ Client = (function() {
     page = data.page;
     return Setting.kapiqua(function(sett_err, settings) {
       if (sett_err) {
-        socket.emit('cart:place:error', 'Falla Lectura de la configuración');
+        socket.emit('cart:place:error', 'Fallo la lectura de la configuración');
         return console.error(sett_err.stack);
       } else {
         return request.get({
@@ -53,7 +53,7 @@ Client = (function() {
   Client.olo_show = function(data, respond, socket) {
     return Setting.kapiqua(function(sett_err, settings) {
       if (sett_err) {
-        socket.emit('cart:place:error', 'Falla Lectura de la configuración');
+        socket.emit('cart:place:error', 'Fallo la lectura de la configuración');
         return console.error(sett_err.stack);
       } else {
         return request.get({
@@ -87,12 +87,55 @@ Client = (function() {
   Client.olo_with_phone = function(data, respond, socket) {
     return Setting.kapiqua(function(sett_err, settings) {
       if (sett_err) {
-        socket.emit('cart:place:error', 'Falla Lectura de la configuración');
+        socket.emit('cart:place:error', 'Fallo la lectura de la configuración');
         return console.error(sett_err.stack);
       } else {
         return request.get({
           headers: {},
           uri: "http://" + settings.olo_url + "/api/users/with_phone.json?access_token=" + (Client.access_token()) + "&phone=" + data.phone + "&ext=" + data.ext
+        }, function(err, res, res_data) {
+          if (err) {
+            console.error(err.stack);
+            return respond({
+              type: 'error',
+              data: "Hubo un error opteniendo la respuesta desde olo: " + err
+            });
+          } else {
+            if ((res_data != null) && res_data !== 'null') {
+              return respond({
+                type: 'success',
+                data: JSON.parse(res_data)
+              });
+            } else {
+              return respond({
+                type: 'success',
+                data: []
+              });
+            }
+          }
+        });
+      }
+    });
+  };
+
+  Client.olo_with_idnumber = function(data, respond, socket) {
+    var pad;
+    pad = function(number, length) {
+      var str;
+      str = '' + number;
+      while (str.length < length) {
+        str = '0' + str;
+      }
+      return str;
+    };
+    return Setting.kapiqua(function(sett_err, settings) {
+      if (sett_err) {
+        socket.emit('cart:place:error', 'Fallo la lectura de la configuración');
+        return console.error(sett_err.stack);
+      } else {
+        return request.get({
+          headers: {},
+          uri: "http://" + settings.olo_url + "/api/users/with_idnumber.json?access_token=" + (Client.access_token()) + "&idnumber=" + (pad(data.idnumber, 11))
         }, function(err, res, res_data) {
           if (err) {
             console.error(err.stack);
