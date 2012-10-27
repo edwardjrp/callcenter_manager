@@ -68,6 +68,7 @@ class Cart < ActiveRecord::Base
   has_many :coupons, through: :cart_coupons
   has_many :cart_products, dependent: :destroy
   has_many :products, through: :cart_products
+  has_many :user_carts, dependent: :destroy
   before_create :set_default_mailbox
   
   validates :user_id, presence: true

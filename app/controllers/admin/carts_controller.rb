@@ -42,6 +42,7 @@ class Admin::CartsController < ApplicationController
           format.json{ render nothing: true, status: 422}
         end
       end
+      format.html{ redirect_to :back }
     end
   end
 end

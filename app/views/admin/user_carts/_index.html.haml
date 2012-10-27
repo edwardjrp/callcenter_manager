@@ -1,0 +1,9 @@
+%h4 Favoritos
+#favorites
+  %ul.unstyled
+    - current_user.user_carts.each do |user_cart|
+      %li
+        = link_to user_cart.info, [:admin, user_cart.cart]
+        |
+        = link_to 'remover', [:admin, user_cart], method: :delete
+
