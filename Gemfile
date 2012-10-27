@@ -58,6 +58,7 @@ gem 'sinatra', require: false
 gem 'slim'
 gem 'prawn'
 gem 'redis-rails'
+gem 'soundmanager-rails'
 
 
 

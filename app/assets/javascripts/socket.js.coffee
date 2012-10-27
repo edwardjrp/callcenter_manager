@@ -46,16 +46,18 @@ jQuery ->
       $(tab_contents).removeClass('active')
 
   socket.on 'server_message', (data) ->
-    if $('#chatbox').find("##{data.idnumber}")
+    console.log data
+    if $('#chatbox').find("##{data.idnumber}").size() > 0
       $('#chatbox').find("##{data.idnumber}").closest('.tab-content').prev('ul').find("a[href=##{data.idnumber}]").addClass('blink') unless $('#chatbox').find("##{data.idnumber}").is(':visible') 
       $('#chatbox').find("##{data.idnumber}").find('.chatdisplay').append($('<p>').append(window.truncate(data.msg, 30)))
       $('#chatbox').find("##{data.idnumber}").find('.chatdisplay').scrollTop($('#chatbox').find("##{data.idnumber}").find('.chatdisplay')[0].scrollHeight);
       $('#chatbox').find("##{data.idnumber}").find('.chatdisplay').children().first().remove() if $('#chatbox').find("##{data.idnumber}").find('.chatdisplay').children().size() > 50
 
-    if  $('#chatbox').find("#admin_pane")
+    if  $('#chatbox').find("#admin_pane").size() > 0
       $('#chatbox').find("#admin_pane").find('.chatdisplay').append($('<p>').append(window.truncate(data.msg, 30)))
       $('#chatbox').find("#admin_pane").find('.chatdisplay').scrollTop($('#chatbox').find("#admin_pane").find('.chatdisplay')[0].scrollHeight);
       $('#chatbox').find("#admin_pane").find('.chatdisplay').children().first().remove() if $('#chatbox').find("#admin_pane").find('.chatdisplay').children().size() > 50
+    window.chat_message.play()
 
   $('#chatbox').on 'submit', 'form', (event)->
     event.preventDefault()

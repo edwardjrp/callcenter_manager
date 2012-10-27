@@ -303,6 +303,7 @@ GEM
       temple (~> 0.4.1)
       tilt (~> 1.3.3)
     slop (3.3.2)
+    soundmanager-rails (0.1.2)
     sprockets (2.1.3)
       hike (~> 1.2)
       rack (~> 1.0)
@@ -385,6 +386,7 @@ DEPENDENCIES
   simplecov
   sinatra
   slim
+  soundmanager-rails
   thin
   uglifier (>= 1.0.3)
   will_paginate

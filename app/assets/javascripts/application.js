@@ -27,6 +27,7 @@
 //= require underscore
 //= require jquery.fullscreen
 //= require jquery.smartWizard-2.0
+//= require soundmanager
 //= require backbone
 //= require backbone-relational
 //= require backbone.iosync
