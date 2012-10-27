@@ -42,6 +42,8 @@
 #  exoneration_authorizer      :integer
 #  creditcard_number           :string(255)
 #  fiscal_company_name         :string(255)
+#  offline                     :boolean          default(FALSE)
+#  communication_failed_on     :datetime
 #
 
 require 'spec_helper'

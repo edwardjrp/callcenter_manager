@@ -54,6 +54,9 @@ jQuery ->
         complete: ->
           window.location = '/'
 
+    socket.on 'cart:place:comm_failed', (data) ->
+      $("<div class='purr'>Esta order fue rechazada por Pulse, verifique los requisitos. La tienda puede estar cerrada.<div>").purr({{isSticky: true}})
+
     $('.checkout_input').restric('alpha').restric('spaces')
 
     socket.emit 'cart:price', $('#checkout_cart').data('id')

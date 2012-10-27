@@ -14,6 +14,19 @@ class Admin::CartsController < ApplicationController
     @cart = Cart.find(params[:id])
   end
 
+  def complete_offline
+    @cart = Cart.find(params[:id])
+    @cart.offline = true
+    @cart.complete_on = Time.now
+    @cart.completed = true
+    if @cart.save
+      flash['success'] = 'Orden colocada fuera de linea'
+    else
+      flash['error'] = 'Un error impidio actualizar la orden'
+    end
+    redirect_to [:admin, @cart]
+  end
+
   def assign
     respond_to do |format|
       case params[:destination]

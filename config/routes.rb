@@ -88,6 +88,9 @@ Kapiqua25::Application.routes.draw do
       collection do 
         put 'assign'
       end
+      member do
+        put 'complete_offline'
+      end
     end
     resources :addresses, :except => [:new, :show]
     resources :cities, :only => [:index, :create, :update, :destroy]

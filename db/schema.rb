@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121027170937) do
+ActiveRecord::Schema.define(:version => 20121027180314) do
 
   create_table "addresses", :force => true do |t|
     t.integer  "client_id"
@@ -92,6 +92,8 @@ ActiveRecord::Schema.define(:version => 20121027170937) do
     t.integer  "exoneration_authorizer"
     t.string   "creditcard_number"
     t.string   "fiscal_company_name"
+    t.boolean  "offline",                     :default => false
+    t.datetime "communication_failed_on"
   end
 
   add_index "carts", ["client_id"], :name => "index_carts_on_client_id"

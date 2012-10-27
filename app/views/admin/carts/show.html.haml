@@ -9,5 +9,5 @@
       =link_to 'Archivar', assign_admin_carts_path(cart_ids: [@cart.id], destination: 'archivados'), class: 'btn message_mask_cart_btn', id: 'btn_archive', method: :put unless @cart.in? 'archivados'
       =link_to 'Eliminar', assign_admin_carts_path(cart_ids: [@cart.id], destination: 'eliminados'), class: 'btn message_mask_cart_btn', id: 'btn_trash', method: :put unless @cart.in? 'eliminados'
       =link_to 'Favoritos', admin_user_carts_path(cart_id: @cart), class: 'btn message_mask_cart_btn', id: 'btn_favorites', method: :post
-      =link_to 'Completar fuera de linea', '#', class: 'btn message_mask_cart_btn', id: 'btn_complete_offline'
+      =link_to 'Completar fuera de linea', complete_offline_admin_cart_path(@cart), class: 'btn message_mask_cart_btn', id: 'btn_complete_offline', method: :put if @cart.communication_failed? && !@cart.completed?
     = render @cart if @cart

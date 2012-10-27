@@ -38,11 +38,13 @@
           %th Tipo
           %th Tienda
           %th Estado en pulse (si aplica)
+          %th Completado Fuera de linea
       %tbody  
         %tr.cart_service
           %td= cart.service_method
           %td= cart.store_info
           %td{id: "pulse_status_#{cart.id}"}= cart.order_progress || 'N/A'
+          %td= cart.offline_info
     - if cart.store_order_id.present?
       .row
         .span3

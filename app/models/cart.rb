@@ -42,6 +42,8 @@
 #  exoneration_authorizer      :integer
 #  creditcard_number           :string(255)
 #  fiscal_company_name         :string(255)
+#  offline                     :boolean          default(FALSE)
+#  communication_failed_on     :datetime
 #
 
 require 'csv'
@@ -75,6 +77,11 @@ class Cart < ActiveRecord::Base
   
   
   # self.per_page = 20
+
+  def offline_info
+    return 'Si' if offline?
+    'No'
+  end
 
   def store_info
     return 'N/A' if store.nil?
