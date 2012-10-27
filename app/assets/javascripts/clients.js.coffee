@@ -14,7 +14,7 @@ jQuery ->
   socket.on 'cart:status:pulse',(data) ->
     if data
       cart = data.updated_cart
-      $("#pulse_status_#{cart.id}").html("<strong>Estado en pulse:</strong> #{cart.order_progress}")
+      $("#pulse_status_#{cart.id}").html("#{cart.order_progress}")
 
   $('#client_tax_numbers_list').on 'click', '.verified', (event)->
     event.preventDefault()

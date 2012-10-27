@@ -1,5 +1,5 @@
 .row 
-  .span9
+  .span8
     %h3= "Orden #{cart.id}"
     %hr 
     %h4 Tiempo  
@@ -42,11 +42,15 @@
         %tr.cart_service
           %td= cart.service_method
           %td= cart.store_info
-          %td= cart.order_progress || 'N/A'
+          %td{id: "pulse_status_#{cart.id}"}= cart.order_progress || 'N/A'
+    - if cart.store_order_id.present?
+      .row
+        .span3
+          = link_to 'Solicitar estado a Pulse', '#', class: 'get_pulse_status btn bottom-margin-1 top-margin-1' , data:{ cart_id: cart.id}
     %hr 
 - if cart.coupons.count.nonzero?
   .row
-    .span9
+    .span8
       %h4 Cupones 
       #coupons_list
         %table.table.table-striped.table-bordered.table-condensed
@@ -63,7 +67,7 @@
                   - if cart_coupon.coupon.minimum_price
                     = number_to_currency cart_coupon.coupon.minimum_price
 .row
-  .span9
+  .span8
     %h4 Productos 
     %table.table.table-striped.table-bordered.table-condensed{:id=>dom_id(cart)}
       %thead
@@ -74,7 +78,7 @@
           %th Precio 
       %tbody
         - cart.cart_products.each do |cart_product|
-          %tr{:id=> dom_id(cart_product), :data=> { 'cart-product-id'=> cart_product.id }, :class=> availability_class(cart_product.available_in_store(cart.store))}
+          %tr{:id=> dom_id(cart_product)}
             %td.span1=cart_product.quantity
             %td= cart_product.product.productname
             %td= cart_product.product.niffty_options
