@@ -269,7 +269,7 @@ Cart.prototype.place = (data, socket) ->
                       order_reply = new OrderReply(res_data)
                       console.info order_reply
                       if order_reply.status == '0'
-                        me.updateAttributes { store_order_id: order_reply.order_id, complete_on: Date.now(), completed: true }, (cart_update_err, updated_cart)->
+                        me.updateAttributes { store_order_id: order_reply.order_id, complete_on: Date.now(), completed: true, message_mask: 1 }, (cart_update_err, updated_cart)->
                           socket.emit 'cart:place:completed', updated_cart
                       else
                         if order_reply and order_reply.status_text then msg = order_reply.status_text else msg = 'La respuesta e pulse no pudo ser interpretada'

@@ -30,4 +30,8 @@ module ApplicationHelper
   def coupon_effective(coupon)
     coupon.effective_today? ? 'Disponible' : 'No disponible hoy'
   end
+
+  def critical_class(cart)
+    cart.message_mask == 9 ? 'error' : ''
+  end
 end

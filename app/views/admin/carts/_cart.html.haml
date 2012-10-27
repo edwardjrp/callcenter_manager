@@ -1,0 +1,67 @@
+%h3 Orden
+%hr 
+.row
+  .span3
+    %strong Orden iniciada en:
+    = cart.completion_info
+.row
+  .span3#checkout_cart_net
+    %strong Monto neto:
+    = number_to_currency(cart.net_amount) || 'N/A'
+  .span3
+    %strong Modo de servicio:
+    = cart.service_method || 'N/A'
+.row
+  .span3#checkout_cart_tax
+    %strong Impuestos:
+    = number_to_currency(cart.tax_amount) || 'N/A'
+  .span3
+    %strong Tienda:
+    = cart.store_info
+.row
+  .span3#checkout_cart_total
+    %strong Monto de la orden:
+    = number_to_currency(cart.payment_amount) || 'N/A'
+  .span3#checkout_cart_discount
+    %strong Descuento:
+    = number_to_currency(cart.discount) || '0.0'
+.row
+  .span3#checkout_cart_exoneration
+    %strong Exonerado:
+    = cart.exonerated || 'N/A'
+- if cart.coupons.count.nonzero?
+  .row
+    #checkout_client_side_coupons_list
+      %table.table.table-striped.table-bordered.table-condensed.span8
+        %thead
+          %th Codigo
+          %th Descripcion Generada
+          %th Precio minimo
+        %tbody
+          - cart.cart_coupons.each do |cart_coupon|
+            %tr{:id=> dom_id(cart_coupon),:data=> { 'cart-coupon-id'=> cart_coupon.id }}
+              %td.span1= cart_coupon.coupon.code
+              %td= cart_coupon.coupon.generated_description
+              %td
+                - if cart_coupon.coupon.minimum_price
+                  = number_to_currency cart_coupon.coupon.minimum_price
+.row
+  %table.table.table-striped.table-bordered.table-condensed.span8{:data=>{'cart-id'=> cart.id}, :id=>dom_id(cart)}
+    %thead
+      %tr
+        %th Cantidad
+        %th product
+        %th Optiones
+        %th Precio 
+    %tbody
+      - cart.cart_products.each do |cart_product|
+        %tr{:id=> dom_id(cart_product), :data=> { 'cart-product-id'=> cart_product.id }, :class=> availability_class(cart_product.available_in_store(cart.store))}
+          %td.span1=cart_product.quantity
+          %td= cart_product.product.productname
+          %td= cart_product.product.niffty_options
+          %td.item_price
+            - if cart_product.priced_at
+              = number_to_currency(cart_product.priced_at)
+            - else
+              'N/A'
+%hr 

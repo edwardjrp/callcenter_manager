@@ -48,7 +48,7 @@ require 'csv'
 class Cart < ActiveRecord::Base
   include Reports::Carts
   # attr_accessible :title, :body
-  scope :recents, where(message_mask: 1)
+  scope :recents, where('message_mask = 1 or message_mask = 9')
   scope :archived, where(message_mask: 2)
   scope :trashed, where(message_mask: 4)
   scope :untrashed, where('message_mask != 4')                                   
@@ -74,6 +74,43 @@ class Cart < ActiveRecord::Base
   
   
   # self.per_page = 20
+
+  def store_info
+    return 'N/A' if store.nil?
+    store.name
+  end
+
+  def new_client?
+    return 'N/A' if client.nil?
+    client.carts.count == 1 ? '*' : ''
+  end
+
+  def client_info
+    return 'N/A' if client.nil?
+    return "#{client.full_name} - #{client.last_phone.number.gsub(/([0-9]{3})([0-9]{3})([0-9]{4})/,'\\1-\\2-\\3')}" if client.phones.count.nonzero?
+    client.full_name
+  end
+
+  def completion_info
+    return 'N/A' if complete_on.nil?
+    complete_on.strftime('%Y-%m-%d %H:%M:%S')
+  end
+
+  def starting_info
+    return 'N/A' if started_on.nil?
+    started_on.strftime('%Y-%m-%d %H:%M:%S')
+  end
+
+  def agent_info
+    return 'N/A' if user.nil?
+    user.idnumber.gsub(/([0-9]{3})([0-9]{7})([0-9]{1})/,'\\1-\\2-\\3')
+  end
+
+  def take_time_info
+    return 'N/A' if complete_on.nil?
+    return 'N/A' if started_on.nil?
+    take_time
+  end
 
   def self.filter_carts(filter)
     self.send(filter.to_sym)
@@ -220,6 +257,15 @@ class Cart < ActiveRecord::Base
      #    1         2             4             8
      ['nuevos', 'archivados', 'eliminados', 'criticos']
   end
+
+  def self.available_mailboxes
+     #    1         2             4             8
+     ['recents', 'archived', 'trashed', 'criticals']
+  end
+
+  def self.translate_mailbox(mailbox)
+    self.available_mailboxes[self.valid_mailboxes.index(mailbox)]
+  end
   
   def mailboxes=(sent_mailboxes)
     current_mailboxes = []
@@ -232,6 +278,19 @@ class Cart < ActiveRecord::Base
   def mailboxes
     self.class.valid_mailboxes.reject do |r|
       ((message_mask || 0) & 2**self.class.valid_mailboxes.index(r)).zero?
+    end
+  end
+
+  def self.find_mailbox(mailbox)
+    case mailbox
+      when 'nuevos'
+        self.recents
+      when 'archivados'
+        self.archived
+      when 'eliminados'
+        self.trashed
+      when 'criticos'
+        self.criticals
     end
   end
 
