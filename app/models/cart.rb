@@ -48,13 +48,18 @@ require 'csv'
 class Cart < ActiveRecord::Base
   include Reports::Carts
   # attr_accessible :title, :body
-  scope :completed, where(:completed=>true).where('message_mask IS NOT 4')
-  scope :incomplete, where(:completed=>false).where('message_mask IS NOT 4')
-  scope :abandoned, where('reason_id IS NOT NULL').where('message_mask IS NOT 4')
-  scope :available, where('reason_id IS NULL').where('message_mask IS NOT 4')
-  scope :comm_failed, where(communication_failed: true).where('message_mask IS NOT 4')
-  scope :finalized, where('completed = ? or reason_id IS NOT NULL', true).where('message_mask IS NOT 4')
-  scope :latest, order('created_at DESC').where('message_mask IS NOT 4')
+  scope :recents, where(message_mask: 1)
+  scope :archived, where(message_mask: 2)
+  scope :trashed, where(message_mask: 4)
+  scope :untrashed, where('message_mask != 4')                                   
+  scope :criticals, where('message_mask = 8 or message_mask = 9 or message_mask = 10 or message_mask = 12')
+  scope :completed, where(:completed=>true).untrashed
+  scope :incomplete, where(:completed=>false).untrashed
+  scope :abandoned, where('reason_id IS NOT NULL').untrashed
+  scope :available, where('reason_id IS NULL').untrashed
+  scope :comm_failed, where(communication_failed: true).untrashed
+  scope :finalized, where('completed = ? or reason_id IS NOT NULL', true).untrashed
+  scope :latest, order('created_at DESC').untrashed
   belongs_to :user, :counter_cache => true
   belongs_to :client
   belongs_to :store
@@ -67,10 +72,7 @@ class Cart < ActiveRecord::Base
   
   validates :user_id, presence: true
   
-  scope :recents, where(message_mask: 1)
-  scope :archived, where(message_mask: 2)
-  scope :trashed, where(message_mask: 4)
-  scope :criticals, where('message_mask = 8 or message_mask = 9 or message_mask = 10 or message_mask = 12')
+  
   # self.per_page = 20
 
   def self.filter_carts(filter)
