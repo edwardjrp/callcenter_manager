@@ -46,7 +46,6 @@ jQuery ->
       $(tab_contents).removeClass('active')
 
   socket.on 'server_message', (data) ->
-    console.log data
     if $('#chatbox').find("##{data.idnumber}").size() > 0
       $('#chatbox').find("##{data.idnumber}").closest('.tab-content').prev('ul').find("a[href=##{data.idnumber}]").addClass('blink') unless $('#chatbox').find("##{data.idnumber}").is(':visible') 
       $('#chatbox').find("##{data.idnumber}").find('.chatdisplay').append($('<p>').append(window.truncate(data.msg, 30)))
@@ -67,7 +66,7 @@ jQuery ->
       target.prev('.chatdisplay').scrollTop(target.prev('.chatdisplay')[0].scrollHeight);
 
     target[0].reset()
-    target.find("input[type='text']").val('')
+    target.find("input[type='text']").val('')   
 
   socket.on "cart:status:error", (msg)->
     $("<div class='purr'>#{msg}<div>").purr()

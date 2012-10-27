@@ -21,22 +21,22 @@ class Carts
         else
           cart.status(socket)
 
-  @price: (data, respond, socket) =>
+  @price: (data, respond, socket, io) =>
     if data?
       Cart.find data, (cart_find_err, cart) ->
         if cart_find_err?
           console.error cart_find_err.stack
           socket.emit 'cart:price:error', 'La orden no se encontro en el sistema'
         else
-          cart.price(socket)
+          cart.price(socket, io)
 
-  @place: (data, respond, socket) =>
+  @place: (data, respond, socket, io) =>
     if data?
       Cart.find data.cart_id, (cart_find_err, cart) ->
         if cart_find_err?
           console.error cart_find_err.stack
           socket.emit 'cart:place:error', 'La orden no se encontro en el sistema'
         else
-          cart.place(data, socket)
+          cart.place(data, socket, io)
 
 module.exports  = Carts

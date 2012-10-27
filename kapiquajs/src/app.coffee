@@ -121,10 +121,10 @@ io.sockets.on "connection", (socket) ->
     Carts.status(data, responder, socket)
     
   socket.on "cart:price", (data, responder) ->
-    Carts.price(data, responder, socket)
+    Carts.price(data, responder, socket, io)
 
   socket.on "cart:place", (data, responder) ->
-    Carts.place(data, responder, socket)
+    Carts.place(data, responder, socket, io)
 
 
 process.on 'uncaughtException', (err)->

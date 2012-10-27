@@ -51,7 +51,7 @@ Cart.prototype.status = (socket)->
 
 
 
-Cart.prototype.price = (socket)->
+Cart.prototype.price = (socket, io)->
   me = this
   async.waterfall [
     (callback) ->
@@ -100,17 +100,18 @@ Cart.prototype.price = (socket)->
             else
               pulse_com_error = (comm_err) ->
                 socket.emit 'cart:price:error', 'Un error de comunicación impidio solitar el precio de esta orden, la aplicacion no podra funcionar correctamente en este estado'
+                io.sockets.in('admins').emit('system:cart:price:error',current_cart)
               cart_request = new  PulseBridge(current_cart, settings.price_store_id, settings.price_store_ip,  settings.pulse_port)
               try
                 cart_request.price pulse_com_error, (res_data)->
                   order_reply = new OrderReply(res_data, current_cart_products)
                   me.updatePrices(order_reply, socket) if order_reply.status == '0'  # mode emit into this function to emit after prices have been updated        
                   socket.emit 'cart:priced', {order_reply: order_reply, items: order_reply.products()}
-                  console.info order_reply # update can_place_order
                   if order_reply.status == '6'
                     socket.emit('cart:price:error', 'La orden tiene cupones incompletos')
               catch err_pricing
                 socket.emit 'cart:price:error', 'Un error impidio solitar el precio de esta orden'
+                io.sockets.in('admins').emit('system:cart:price:error',current_cart)
                 console.error err_pricing.stack
         else
           socket.emit 'cart:price:error', 'No se pudo acceder a la lista de productos para esta orden'
@@ -123,6 +124,7 @@ Cart.prototype.comm_failed = (socket) ->
       console.error err.stack
     else
       socket.emit 'cart:place:comm_failed', updated_cart
+      io.sockets.in('admins').emit('system:cart:comm_failed',updated_cart)
 
 
 Cart.prototype.updatePrices = (order_reply, socket) ->
@@ -152,7 +154,7 @@ Cart.prototype.updatePrices = (order_reply, socket) ->
                   console.error update_err
 
 
-Cart.prototype.place = (data, socket) ->
+Cart.prototype.place = (data, socket, io) ->
   me = this
   async.waterfall [
     (callback) ->
@@ -261,7 +263,7 @@ Cart.prototype.place = (data, socket) ->
                 else
                   pulse_com_error = (comm_err) ->
                     socket.emit 'cart:place:error', 'Falla en la comunicación con Pulse'
-                    me.comm_failed(socket)
+                    me.comm_failed(socket, io)
                     console.error comm_err.stack
                   cart_request = new  PulseBridge(current_cart, current_cart.store.storeid, current_cart.store.ip,  settings.pulse_port)
                   try
@@ -272,12 +274,13 @@ Cart.prototype.place = (data, socket) ->
                       if order_reply.status == '0'
                         me.updateAttributes { store_order_id: order_reply.order_id, complete_on: Date.now(), completed: true, message_mask: 1 }, (cart_update_err, updated_cart)->
                           socket.emit 'cart:place:completed', updated_cart
+                          io.sockets.in('admins').emit('system:cart:placed',updated_cart)
                       else
                         if order_reply and order_reply.status_text then msg = order_reply.status_text else msg = 'La respuesta e pulse no pudo ser interpretada'
                         socket.emit 'cart:place:error', "No se puede colocar la order, Pulse respondio: <br/> <strong>#{msg}</strong>"
                   catch err_pricing
                     socket.emit 'cart:place:error', 'Falla en la comunicación con Pulse'
-                    me.comm_failed(socket)
+                    me.comm_failed(socket, io)
                     console.error err_pricing.stack
         else
           socket.emit 'cart:place:error', 'Esta orden aparece como completada en el sistema'

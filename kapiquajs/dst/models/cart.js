@@ -83,7 +83,7 @@ Cart.prototype.status = function(socket) {
   }
 };
 
-Cart.prototype.price = function(socket) {
+Cart.prototype.price = function(socket, io) {
   var me;
   me = this;
   return async.waterfall([
@@ -144,7 +144,8 @@ Cart.prototype.price = function(socket) {
             return console.error(err.stack);
           } else {
             pulse_com_error = function(comm_err) {
-              return socket.emit('cart:price:error', 'Un error de comunicación impidio solitar el precio de esta orden, la aplicacion no podra funcionar correctamente en este estado');
+              socket.emit('cart:price:error', 'Un error de comunicación impidio solitar el precio de esta orden, la aplicacion no podra funcionar correctamente en este estado');
+              return io.sockets["in"]('admins').emit('system:cart:price:error', current_cart);
             };
             cart_request = new PulseBridge(current_cart, settings.price_store_id, settings.price_store_ip, settings.pulse_port);
             try {
@@ -158,13 +159,13 @@ Cart.prototype.price = function(socket) {
                   order_reply: order_reply,
                   items: order_reply.products()
                 });
-                console.info(order_reply);
                 if (order_reply.status === '6') {
                   return socket.emit('cart:price:error', 'La orden tiene cupones incompletos');
                 }
               });
             } catch (err_pricing) {
               socket.emit('cart:price:error', 'Un error impidio solitar el precio de esta orden');
+              io.sockets["in"]('admins').emit('system:cart:price:error', current_cart);
               return console.error(err_pricing.stack);
             }
           }
@@ -184,7 +185,8 @@ Cart.prototype.comm_failed = function(socket) {
     if (err) {
       return console.error(err.stack);
     } else {
-      return socket.emit('cart:place:comm_failed', updated_cart);
+      socket.emit('cart:place:comm_failed', updated_cart);
+      return io.sockets["in"]('admins').emit('system:cart:comm_failed', updated_cart);
     }
   });
 };
@@ -226,7 +228,7 @@ Cart.prototype.updatePrices = function(order_reply, socket) {
   });
 };
 
-Cart.prototype.place = function(data, socket) {
+Cart.prototype.place = function(data, socket, io) {
   var me;
   me = this;
   return async.waterfall([
@@ -351,7 +353,7 @@ Cart.prototype.place = function(data, socket) {
               } else {
                 pulse_com_error = function(comm_err) {
                   socket.emit('cart:place:error', 'Falla en la comunicación con Pulse');
-                  me.comm_failed(socket);
+                  me.comm_failed(socket, io);
                   return console.error(comm_err.stack);
                 };
                 cart_request = new PulseBridge(current_cart, current_cart.store.storeid, current_cart.store.ip, settings.pulse_port);
@@ -368,7 +370,8 @@ Cart.prototype.place = function(data, socket) {
                         completed: true,
                         message_mask: 1
                       }, function(cart_update_err, updated_cart) {
-                        return socket.emit('cart:place:completed', updated_cart);
+                        socket.emit('cart:place:completed', updated_cart);
+                        return io.sockets["in"]('admins').emit('system:cart:placed', updated_cart);
                       });
                     } else {
                       if (order_reply && order_reply.status_text) {
@@ -381,7 +384,7 @@ Cart.prototype.place = function(data, socket) {
                   });
                 } catch (err_pricing) {
                   socket.emit('cart:place:error', 'Falla en la comunicación con Pulse');
-                  me.comm_failed(socket);
+                  me.comm_failed(socket, io);
                   return console.error(err_pricing.stack);
                 }
               }

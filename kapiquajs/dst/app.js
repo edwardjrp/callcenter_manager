@@ -147,10 +147,10 @@ io.sockets.on("connection", function(socket) {
     return Carts.status(data, responder, socket);
   });
   socket.on("cart:price", function(data, responder) {
-    return Carts.price(data, responder, socket);
+    return Carts.price(data, responder, socket, io);
   });
   return socket.on("cart:place", function(data, responder) {
-    return Carts.place(data, responder, socket);
+    return Carts.place(data, responder, socket, io);
   });
 });
 

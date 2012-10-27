@@ -39,27 +39,27 @@ Carts = (function() {
     }
   };
 
-  Carts.price = function(data, respond, socket) {
+  Carts.price = function(data, respond, socket, io) {
     if (data != null) {
       return Cart.find(data, function(cart_find_err, cart) {
         if (cart_find_err != null) {
           console.error(cart_find_err.stack);
           return socket.emit('cart:price:error', 'La orden no se encontro en el sistema');
         } else {
-          return cart.price(socket);
+          return cart.price(socket, io);
         }
       });
     }
   };
 
-  Carts.place = function(data, respond, socket) {
+  Carts.place = function(data, respond, socket, io) {
     if (data != null) {
       return Cart.find(data.cart_id, function(cart_find_err, cart) {
         if (cart_find_err != null) {
           console.error(cart_find_err.stack);
           return socket.emit('cart:place:error', 'La orden no se encontro en el sistema');
         } else {
-          return cart.place(data, socket);
+          return cart.place(data, socket, io);
         }
       });
     }
