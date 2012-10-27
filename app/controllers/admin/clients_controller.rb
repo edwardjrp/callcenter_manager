@@ -11,7 +11,7 @@ class Admin::ClientsController < ApplicationController
     @search = @client.carts.completed.order('complete_on DESC').search(params[:q])
     respond_to do |format|
       format.html { @carts = @search.result(:distinct => true).page(params[:page]) }
-      format.csv { send_data @search.result(:distinct => true).page(params[:page]).to_csv, :filename => "Ordenes completadas #{@client.full_name} - #{l(Time.now, format: :short)}" }
+      format.csv { send_data @search.result(:distinct => true).to_csv, :filename => "Ordenes completadas #{@client.full_name} - #{l(Time.now, format: :short)}.csv" }
     end
   end
 

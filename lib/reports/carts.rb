@@ -226,9 +226,15 @@ module Reports
 
       def to_csv(options = {})
         CSV.generate(options) do |csv|
-          csv << column_names
+          csv << ['Completada en', 'Numero de orden', 'Forma de pago', 'Modo de servicio', 'Tipo fiscal']
           all.each do |cart|
-            csv << cart.attributes.values_at(*column_names)
+            csv << [
+              cart.completion_info,
+              cart.store_order_id_info,
+              cart.payment_type,
+              cart.service_method,
+              cart.fiscal_type
+            ]
           end
         end
       end

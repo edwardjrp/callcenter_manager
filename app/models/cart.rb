@@ -88,6 +88,11 @@ class Cart < ActiveRecord::Base
     store.name
   end
 
+  def store_order_id_info
+    return store_order_id if store_order_id.present?
+    'N/A'
+  end
+
   def new_client?
     return 'N/A' if client.nil?
     client.carts.count == 1 ? '*' : ''
@@ -122,7 +127,7 @@ class Cart < ActiveRecord::Base
   def take_time_info
     return 'N/A' if complete_on.nil?
     return 'N/A' if started_on.nil?
-    take_time
+    take_time.to_i
   end
 
   def self.filter_carts(filter)
