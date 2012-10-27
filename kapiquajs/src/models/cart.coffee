@@ -110,6 +110,7 @@ Cart.prototype.price = (socket)->
                   if order_reply.status == '6'
                     socket.emit('cart:price:error', 'La orden tiene cupones incompletos')
               catch err_pricing
+                socket.emit 'cart:price:error', 'Un error impidio solitar el precio de esta orden'
                 console.error err_pricing.stack
         else
           socket.emit 'cart:price:error', 'No se pudo acceder a la lista de productos para esta orden'

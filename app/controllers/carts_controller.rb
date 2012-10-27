@@ -58,7 +58,10 @@ class CartsController < ApplicationController
 
   def release
     cart_reset
-    redirect_to root_path
+    respond_to do |format|
+      format.js { render nothing: true, status: 200}
+      format.html{ redirect_to root_path }
+    end
   end
   
   # "discount"=>{"username"=>"admin", "password"=>"[FILTERED]", "amount"=>"200"}}

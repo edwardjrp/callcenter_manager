@@ -129,7 +129,7 @@ Cart.prototype.price = function(socket) {
       });
     }
   ], function(final_error, current_cart_products, current_cart_coupons) {
-    var current_cart, pulse_com_error;
+    var current_cart;
     if (final_error != null) {
       console.error(final_error.stack);
       return socket.emit('cart:price:error', 'Un error impidio solitar el precio de esta orden');
@@ -137,15 +137,15 @@ Cart.prototype.price = function(socket) {
       current_cart = me.toJSON();
       current_cart.cart_products = current_cart_products;
       current_cart.cart_coupons = current_cart_coupons;
-      pulse_com_error = function(comm_err) {
-        return socket.emit('cart:price:error', 'Un error de comunicación impidio solitar el precio de esta orden, la aplicacion no podra funcionar correctamente en este estado');
-      };
       if (current_cart_products.length > 0) {
         return Setting.kapiqua(function(err, settings) {
-          var cart_request;
+          var cart_request, pulse_com_error;
           if (err) {
             return console.error(err.stack);
           } else {
+            pulse_com_error = function(comm_err) {
+              return socket.emit('cart:price:error', 'Un error de comunicación impidio solitar el precio de esta orden, la aplicacion no podra funcionar correctamente en este estado');
+            };
             cart_request = new PulseBridge(current_cart, settings.price_store_id, settings.price_store_ip, settings.pulse_port);
             try {
               return cart_request.price(pulse_com_error, function(res_data) {
@@ -164,6 +164,7 @@ Cart.prototype.price = function(socket) {
                 }
               });
             } catch (err_pricing) {
+              socket.emit('cart:price:error', 'Un error impidio solitar el precio de esta orden');
               return console.error(err_pricing.stack);
             }
           }
@@ -314,16 +315,11 @@ Cart.prototype.place = function(data, socket) {
       });
     }
   ], function(final_error, current_cart_products, current_cart_coupons, client, user, phone, address, store) {
-    var current_cart, payment_attributes, pulse_com_error, _ref, _ref1, _ref2, _ref3, _ref4, _ref5;
+    var current_cart, payment_attributes, _ref, _ref1, _ref2, _ref3, _ref4, _ref5;
     if (final_error != null) {
       console.error(final_error.stack);
       return socket.emit('cart:place:error', 'Un error impidio la colocación de la orden');
     } else {
-      pulse_com_error = function(comm_err) {
-        socket.emit('cart:place:error', 'Falla en la comunicación con Pulse');
-        me.comm_failed(socket);
-        return console.error(comm_err.stack);
-      };
       if (me.completed !== true) {
         current_cart = me.toJSON();
         current_cart.cart_products = current_cart_products;
@@ -348,11 +344,16 @@ Cart.prototype.place = function(data, socket) {
             return socket.emit('cart:place:error', 'No fue posible actualizar los datos de pago');
           } else {
             return Setting.kapiqua(function(err, settings) {
-              var cart_request;
+              var cart_request, pulse_com_error;
               if (err) {
                 socket.emit('cart:place:error', 'Falla Lectura de la configuración');
                 return console.error(err.stack);
               } else {
+                pulse_com_error = function(comm_err) {
+                  socket.emit('cart:place:error', 'Falla en la comunicación con Pulse');
+                  me.comm_failed(socket);
+                  return console.error(comm_err.stack);
+                };
                 cart_request = new PulseBridge(current_cart, current_cart.store.storeid, current_cart.store.ip, settings.pulse_port);
                 try {
                   return cart_request.place(pulse_com_error, function(res_data) {
@@ -364,7 +365,8 @@ Cart.prototype.place = function(data, socket) {
                       return me.updateAttributes({
                         store_order_id: order_reply.order_id,
                         complete_on: Date.now(),
-                        completed: true
+                        completed: true,
+                        message_mask: 1
                       }, function(cart_update_err, updated_cart) {
                         return socket.emit('cart:place:completed', updated_cart);
                       });

@@ -55,7 +55,20 @@ jQuery ->
           window.location = '/'
 
     socket.on 'cart:place:comm_failed', (data) ->
-      $("<div class='purr'>Esta order fue rechazada por Pulse, verifique los requisitos. La tienda puede estar cerrada.<div>").purr({{isSticky: true}})
+      $("<div class='purr'>Un error de comunicacion ha impedido colocar la orden, esta orde sera procesada por un uservisor<div>").purr({isSticky: true})
+      setTimeout ->
+        $.ajax
+          type: 'POST'
+          url: "/carts/release"
+          dataType: "script"
+          beforeSend: (xhr) ->
+            xhr.setRequestHeader("Accept", "text/javascript")
+          complete: ->
+            window.location = '/'
+        ,
+          5000
+      
+
 
     $('.checkout_input').restric('alpha').restric('spaces')
 
