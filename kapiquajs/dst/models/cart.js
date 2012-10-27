@@ -177,7 +177,7 @@ Cart.prototype.price = function(socket, io) {
   });
 };
 
-Cart.prototype.comm_failed = function(socket) {
+Cart.prototype.comm_failed = function(socket, io) {
   return this.updateAttributes({
     communication_failed: true,
     message_mask: 9
@@ -339,7 +339,6 @@ Cart.prototype.place = function(data, socket, io) {
         payment_attributes['fiscal_type'] = ((_ref3 = current_cart.extra) != null ? _ref3.fiscal_type : void 0) || null;
         payment_attributes['fiscal_number'] = ((_ref4 = current_cart.extra) != null ? _ref4.rnc : void 0) || null;
         payment_attributes['fiscal_company_name'] = ((_ref5 = current_cart.extra) != null ? _ref5.fiscal_name : void 0) || null;
-        console.log(payment_attributes);
         return me.updateAttributes(payment_attributes, function(pay_error, cart_with_pay_detailes) {
           if (pay_error) {
             console.error(pay_error.stack);

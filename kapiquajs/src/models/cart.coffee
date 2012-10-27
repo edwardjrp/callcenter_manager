@@ -249,8 +249,6 @@ Cart.prototype.place = (data, socket, io) ->
           payment_attributes['fiscal_type'] = current_cart.extra?.fiscal_type || null
           payment_attributes['fiscal_number'] = current_cart.extra?.rnc || null
           payment_attributes['fiscal_company_name'] = current_cart.extra?.fiscal_name || null
-
-          console.log payment_attributes
           me.updateAttributes payment_attributes, (pay_error, cart_with_pay_detailes) ->
             if (pay_error)
               console.error pay_error.stack
