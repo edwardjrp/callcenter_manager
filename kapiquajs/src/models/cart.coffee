@@ -118,13 +118,13 @@ Cart.prototype.price = (socket, io)->
 
 
 
-Cart.prototype.comm_failed = (socket) ->
+Cart.prototype.comm_failed = (socket, io) ->
   this.updateAttributes { communication_failed: true, message_mask: 9 } , (err, updated_cart) ->
     if err
       console.error err.stack
     else
       socket.emit 'cart:place:comm_failed', updated_cart
-      io.sockets.in('admins').emit('system:cart:comm_failed',updated_cart)
+      io.sockets.in('admins').emit('system:cart:comm_failed', updated_cart)
 
 
 Cart.prototype.updatePrices = (order_reply, socket) ->
