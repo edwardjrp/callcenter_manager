@@ -1,119 +1,12 @@
 =link_to '<i class="icon-arrow-left"></i> Ordenes'.html_safe, admin_carts_path, class: 'btn bottom-margin-1'
 .row
-  .span4
-    .well
-      .row.bottom-margin-1
-        .span4
-          %h3 Agente
-      .row
-        .span4
-          %strong Nombre:
-          = @cart.user.first_name 
-      .row
-        .span4
-          %strong Apellido:
-          = @cart.user.last_name
-      .row
-        .span4
-          %strong Cedula:
-          =number_to_cedula @cart.user.idnumber
-      .row
-        .span4
-          %strong Roles:
-          =@cart.user.roles.to_a.to_sentence
-
-      .row
-        .span4
-          %strong Inicios de sesión:
-          =@cart.user.login_count
-    .well
-      - if @cart.client.present?
-        .row.bottom-margin-1
-          .span4
-            %h3 Información del cliente
-        .row
-          .span4
-            %strong Nombre:
-            = @cart.client.first_name
-        .row
-          .span4
-            %strong Apellido:
-            = @cart.client.last_name
-        .row
-          .span4
-            %strong Cedula:
-            = number_to_cedula @cart.client.idnumber
-        .row
-          .span4
-            %strong Correo:
-            = @cart.client.email
-        %hr
-    - if @cart.client.present?
-      .well#phones_list
-        .row
-          .span4        
-            %h3 Datos de contacto
-        %hr
-        #client_phone_list
-          .client_phone{:id=> dom_id(@cart.client.last_phone), :data=> {'phone'=> @cart.client.last_phone.to_json}}
-            .row
-              .span4
-                %strong Numero:
-                =number_to_phone @cart.client.last_phone.number
-            - if @cart.client.last_phone.ext.present?
-              .row
-                .span4
-                  %strong extensión:
-                  = @cart.client.last_phone.ext
-            %hr 
-        #client_address_list
-          -if @cart.client.last_address
-            .client_address{:id=> dom_id(@cart.client.last_address)}
-              .row
-                .span4
-                  %strong Ciudad:
-                  %span#target_city= @cart.client.last_address.street_area.city.name
-              .row
-                .span4
-                  %strong Sector:
-                  %span#target_area= @cart.client.last_address.street_area.name
-              .row
-                .span4
-                  %strong Calle:
-                  %span#target_street= @cart.client.last_address.street.name
-              .row
-                .span4
-                  %strong Numero:
-                  = @cart.client.last_address.number
-              .row
-                .span4
-                  %strong Tipo:
-                  = @cart.client.last_address.unit_type
-              -if @cart.client.last_address.unit_number
-                .row
-                  .span4
-                    %strong No. de apartamento:
-                    = @cart.client.last_address.unit_number
-              -if @cart.client.last_address.postal_code
-                .row
-                  .span4
-                    %strong Codigo postal:
-                    =@cart.client.last_address.postal_code
-
-              -if @cart.client.last_address.delivery_instructions
-                .row
-                  .span3
-                    %strong instrucciones de entrega:
-                .row
-                  .span4
-                    = @cart.client.last_address.delivery_instructions
-              %hr 
-      
+  .span3
+    = render @cart.user
+    = render @cart.client if @cart.client.present?
   .span8#checkout_cart{data: {id: @cart.id }}
     .btn-group.bottom-margin-2
       =link_to 'Archivar', '#', class: 'btn message_mask_cart_btn', id: 'btn_archive'
       =link_to 'Eliminar', '#', class: 'btn message_mask_cart_btn', id: 'btn_trash'
       =link_to 'Favoritos', '#', class: 'btn message_mask_cart_btn', id: 'btn_favorites'
       =link_to 'Completar fuera de linea', '#', class: 'btn message_mask_cart_btn', id: 'btn_complete_offline'
-    - if @cart
-      = render @cart
+    = render @cart if @cart

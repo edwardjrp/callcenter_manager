@@ -7,7 +7,6 @@ class Admin::CartsController < ApplicationController
     @carts_archived  = @search.result(:distinct => true).archived.paginate(:page => params[:page_archived], :per_page => 30)
     @carts_trashed = @search.result(:distinct => true).trashed.paginate(:page => params[:page_trashed], :per_page => 30)
     @carts_criticals  = @search.result(:distinct => true).criticals.paginate(:page => params[:page_criticals], :per_page => 30)
-
     flash['alert'] = 'No se ha encontrado ningún récord que coincida con los criterios de búsqueda' if @search.result(:distinct => true).count.zero? && params[:q].present?
   end
 

@@ -1,0 +1,17 @@
+.well{:id=> dom_id(phone)}
+  .row
+    .span3        
+      %h3 Telefono
+  %hr
+  .row.phone
+    .span3
+      .row
+        .span3
+          %strong Numero:
+          =number_to_phone phone.number
+      - if phone.ext.present?
+        .row
+          .span3
+            %strong extensión:
+            = phone.ext
+      %hr 

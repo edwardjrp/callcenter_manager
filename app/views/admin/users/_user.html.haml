@@ -1,0 +1,24 @@
+.well
+  .row
+    .span3
+      %h3.bottom-margin-1 Agente
+  .row
+    .span3
+      %strong Nombre:
+      = user.full_name 
+  .row
+    .span3
+      %strong Cedula:
+      =number_to_cedula user.idnumber
+  .row
+    .span3
+      %strong Roles:
+      = user.roles.to_a.to_sentence
+  .row
+    .span3
+      %strong Inicios de sesión:
+      = user.login_count
+  .row
+    .span3
+      %strong Total de Ordenes:
+      = user.carts_count

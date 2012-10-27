@@ -1,0 +1,46 @@
+.well{:id=> dom_id(address)}
+  .row
+    .span4        
+      %h3 Dirección
+  %hr
+  .row.address
+    .span3
+      .row
+        .span3
+          %strong Ciudad:
+          %span= address.street_area.city.name
+      .row
+        .span3
+          %strong Sector:
+          %span= address.street_area.name
+      .row
+        .span3
+          %strong Calle:
+          %span= address.street.name
+      .row
+        .span3
+          %strong Numero:
+          = address.number
+      .row
+        .span3
+          %strong Tipo:
+          = address.unit_type
+      -if address.unit_number
+        .row
+          .span3
+            %strong No. de apartamento:
+            = address.unit_number
+      -if address.postal_code
+        .row
+          .span3
+            %strong Codigo postal:
+            = address.postal_code
+
+      -if address.delivery_instructions
+        .row
+          .span3
+            %strong instrucciones de entrega:
+        .row
+          .span3
+            = address.delivery_instructions
+      %hr 

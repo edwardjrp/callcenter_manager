@@ -1,0 +1,25 @@
+.well
+  .row
+    .span3
+      %h3.bottom-margin-1 Cliente
+  .row
+    .span3
+      %strong Nombre:
+      = client.full_name
+  .row
+    .span3
+      %strong Importado:
+      = client.imported
+  .row
+    .span3
+      %strong Cedula:
+      = number_to_cedula client.idnumber
+  .row
+    .span3
+      %strong Correo:
+      = client.email
+
+  
+= render 'admin/clients/phone', phone: client.last_phone if  client.last_phone
+= render 'admin/clients/address', phone: client.last_address if  client.last_address
+  
