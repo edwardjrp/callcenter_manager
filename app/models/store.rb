@@ -26,4 +26,10 @@ class Store < ActiveRecord::Base
   validates :storeid, :presence =>true, :uniqueness => true
   validates :ip , :format => {:with=>/^([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])$/}
   attr_accessible :name, :address, :city_id, :ip, :storeid
+
+  def parse_schedule
+    return 'N/A' if store_schedule.blank?
+    parser_content = store_schedule.gsub(/<StoreSchedule>|<S\/toreSchedule>/, '').gsub(/Day/, 'tr').gsub(/OpenTime|CloseTime/, 'td').gsub(/<TimeZone>.*<HoursOfOperation>|<\/HoursOfOperation>/,'')
+    "<table><thead><th>Apertura</th><th>Cierre</th></thead><tbody>#{parser_content}</tbody></table>".html_safe
+  end
 end

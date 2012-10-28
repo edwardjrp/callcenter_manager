@@ -10,6 +10,7 @@
       %th Dirección
       %th ip
       %th ciudad
+      %th Horario
       %th ID
       %th Conexión
       %th 
@@ -20,6 +21,10 @@
           %td.span4= store.address
           %td= store.ip
           %td= store.city.name
+          %td
+            %a.hide_schedule{ href: '#'} Monstrar
+            .store_schedule.hidden= store.parse_schedule
+            =render 'modal', :modal_id => "store_schedule_modal_#{store.name}", :title=>"Horarios de la tiendas #{store.name}"
           %td= store.storeid
           %td=link_to 'Verificar', '#', class: 'btn test_store_connection', data: { store_id: store.id}
           %td
