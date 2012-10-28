@@ -3,15 +3,16 @@
 #
 # Table name: stores
 #
-#  id           :integer          not null, primary key
-#  name         :string(255)
-#  address      :string(255)
-#  ip           :string(255)
-#  city_id      :integer
-#  storeid      :integer
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  discontinued :boolean          default(FALSE)
+#  id             :integer          not null, primary key
+#  name           :string(255)
+#  address        :string(255)
+#  ip             :string(255)
+#  city_id        :integer
+#  storeid        :integer
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  discontinued   :boolean          default(FALSE)
+#  store_schedule :text
 #
 
 require 'spec_helper'

@@ -491,6 +491,9 @@ Store = DB.define("Store", {
     type: String,
     length: 255
   },
+  store_schedule: {
+    type: Schema.Text
+  },
   created_at: {
     type: Date,
     "default": Date.now

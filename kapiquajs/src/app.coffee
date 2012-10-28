@@ -10,6 +10,8 @@ CartProducts = require('./routes/cart_products')
 CartCoupons = require('./routes/cart_coupons')
 Carts = require('./routes/carts')
 Clients = require('./routes/clients')
+Stores = require('./routes/stores')
+
 
 app = module.exports = express.createServer()
 
@@ -119,6 +121,9 @@ io.sockets.on "connection", (socket) ->
 
   socket.on "clients:olo:show", (data, responder) ->
     Clients.olo_show(data, responder, socket)  
+
+  socket.on "stores:schedule", (data, responder) ->
+    Stores.schedule(data, responder, socket)
 
   socket.on "cart:status", (data, responder) ->
     Carts.status(data, responder, socket)

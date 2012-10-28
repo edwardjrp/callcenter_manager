@@ -35,6 +35,34 @@ class PulseBridge
       else
         cb(res_data)
 
+  schedule: (err_cb, cb) ->
+    @send('GetStoreInformation', @scheduleBody('GetStoreInformation'), err_cb, cb)
+
+  scheduleBody: (action) ->
+    doc = new libxml.Document()
+    envelope = new libxml.Element(doc,'env:Envelope').attr
+      'xmlns:xsd':"http://www.w3.org/2001/XMLSchema"
+      'xmlns:xsi':"http://www.w3.org/2001/XMLSchema-instance"
+      'xmlns:wsdlns':"http://www.dominos.com/wsdl/"
+      'xmlns:env':'http://schemas.xmlsoap.org/soap/envelope/'
+      'xmlns:ins0':'http://www.dominos.com/type'
+    header = new libxml.Element(doc,'env:Header')
+    auth = new libxml.Element(doc,'Authorization')
+    auth.addChild(new libxml.Element(doc,'FromURI', 'dominos.com'))
+    auth.addChild(new libxml.Element(doc,'User', 'TestingAndSupport'))
+    auth.addChild(new libxml.Element(doc,'Password', 'supp0rtivemeasures'))
+    auth.addChild(new libxml.Element(doc,'TimeStamp',''))
+    header.addChild(auth)
+    body = new libxml.Element(doc,'env:Body')
+    action = new libxml.Element(doc, "ns1:#{action}").attr({ 'xmlns:ns1':"http://www.dominos.com/message/", encodingStyle:"http://schemas.xmlsoap.org/soap/encoding/"})
+    store  = new libxml.Element(doc,'StoreID', @storeid.toString())
+    action.addChild(store)
+    body.addChild(action)
+    envelope.addChild(header)
+    envelope.addChild(body) 
+    doc.root(envelope)
+    doc.toString().replace(/\"/g, '\"')
+
 
   status: (err_cb, cb) ->
     @send('GetOrderStatus', @statusBody('GetOrderStatus'), err_cb, cb)
@@ -64,7 +92,6 @@ class PulseBridge
     envelope.addChild(header)
     envelope.addChild(body) 
     doc.root(envelope)
-    
     doc.toString().replace(/\"/g, '\"')
 
 

@@ -1,4 +1,4 @@
-var CartCoupons, CartProducts, Carts, Clients, administrators, app, express, io, operators, pg, util, _;
+var CartCoupons, CartProducts, Carts, Clients, Stores, administrators, app, express, io, operators, pg, util, _;
 
 express = require('express');
 
@@ -15,6 +15,8 @@ CartCoupons = require('./routes/cart_coupons');
 Carts = require('./routes/carts');
 
 Clients = require('./routes/clients');
+
+Stores = require('./routes/stores');
 
 app = module.exports = express.createServer();
 
@@ -145,6 +147,9 @@ io.sockets.on("connection", function(socket) {
   });
   socket.on("clients:olo:show", function(data, responder) {
     return Clients.olo_show(data, responder, socket);
+  });
+  socket.on("stores:schedule", function(data, responder) {
+    return Stores.schedule(data, responder, socket);
   });
   socket.on("cart:status", function(data, responder) {
     return Carts.status(data, responder, socket);
