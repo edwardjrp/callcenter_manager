@@ -12,5 +12,8 @@ jQuery ->
   $('.test_store_connection').on 'click', (event) ->
     event.preventDefault()
     target = $(event.currentTarget)
-    socket.emit "stores:schedule", {store_id: target.data('store-id')}, (response) ->
-      console.log response
+    socket.emit "stores:schedule", {store_id: target.data('store-id')}, (err, response) ->
+      if err
+        console.log err
+      else
+        console.log response

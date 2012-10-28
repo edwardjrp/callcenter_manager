@@ -123,7 +123,7 @@ io.sockets.on "connection", (socket) ->
     Clients.olo_show(data, responder, socket)  
 
   socket.on "stores:schedule", (data, responder) ->
-    Stores.schedule(data, responder, socket)
+    Stores.schedule(data, responder)
 
   socket.on "cart:status", (data, responder) ->
     Carts.status(data, responder, socket)

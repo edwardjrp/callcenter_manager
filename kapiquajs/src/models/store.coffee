@@ -4,7 +4,7 @@ libxmljs = require("libxmljs")
 PulseBridge = require('../pulse_bridge/pulse_bridge')
 Setting = require('../models/setting')
 
-Store.prototype.schedule = (respond, socket) ->
+Store.prototype.schedule = (respond) ->
   me = this
   Setting.kapiqua (err, settings) ->
     if err
@@ -16,11 +16,14 @@ Store.prototype.schedule = (respond, socket) ->
       store_request = new PulseBridge(null, me.storeid, me.ip, settings.pulse_port)
       store_request.schedule pulse_com_error, (res_data)->
         doc = libxmljs.parseXmlString(res_data)
-        schedule = doc.get('//StoreSchedule')
-        console.log res_data
-        console.log schedule.toString()
-        console.log schedule.text()
-        respond res_data
+        schedule = doc.get('//StoreSchedule').toString()
+        if schedule?
+          me.updateAttributes { store_schedule: schedule }, (update_store_error, updated_store) ->
+            if update_store_error
+              console.log update_store_error.stack
+              respond update_store_error
+            else
+              respond( null, updated_store)
 
 
 
