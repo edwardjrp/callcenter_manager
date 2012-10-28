@@ -15,7 +15,11 @@ Store.prototype.schedule = (respond, socket) ->
         respond comm_err
       store_request = new PulseBridge(null, me.storeid, me.ip, settings.pulse_port)
       store_request.schedule pulse_com_error, (res_data)->
+        doc = libxmljs.parseXmlString(res_data)
+        schedule = doc.get('//StoreSchedule')
         console.log res_data
+        console.log schedule
+        console.log schedule.text()
         respond res_data
 
 
