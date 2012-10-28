@@ -18,7 +18,7 @@ Store.prototype.schedule = (respond, socket) ->
         doc = libxmljs.parseXmlString(res_data)
         schedule = doc.get('//StoreSchedule')
         console.log res_data
-        console.log schedule
+        console.log schedule.toString()
         console.log schedule.text()
         respond res_data
 
