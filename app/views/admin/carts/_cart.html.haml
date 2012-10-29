@@ -1,6 +1,9 @@
 .row 
   .span8
-    %h3= "Orden #{cart.id}"
+    - if cart.store_order_id
+      %h3= "Orden #{cart.id} id en pulse #{cart.store_order_id}"
+    - else
+      %h3= "Orden #{cart.id}"
     %hr 
     %h4 Tiempo  
     %table.table.table-bordered
@@ -21,7 +24,7 @@
         %thead
           %tr
             %th Autorizado
-            %th Candidad
+            %th Cantidad
             %th Exonerado
             %th Exonerado Autorizado por
         %tbody      

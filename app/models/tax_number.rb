@@ -21,6 +21,7 @@ class TaxNumber < ActiveRecord::Base
   attr_accessible :rnc, :client_id, :verified, :fiscal_type, :company_name
 
   scope :with_verification, where(verified: true)
+  scope :exonarable, where('fiscal_type = ? or fiscal_type = ?', 'Government', 'SpecialRegme')
 
   def self.fiscal_types
     ["Consumidor Final","Crédito Fiscal","Regímenes Especiales","Gubernamental"]

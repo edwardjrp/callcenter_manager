@@ -20,7 +20,7 @@ class Street < ActiveRecord::Base
   
   
   def self.find_street(params)
-    streets = self.scoped
+    streets = self.scoped.order(:name)
     streets = streets.merge(self.where('lower(name) like ?', "#{params[:q].downcase}%")) if params[:q].present?
     streets = streets.merge(self.where(:area_id=> params[:area_id])) if params[:area_id].present?
     return streets

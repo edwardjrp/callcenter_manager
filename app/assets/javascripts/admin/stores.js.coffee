@@ -12,6 +12,7 @@ jQuery ->
   $('.test_store_connection').on 'click', (event) ->
     event.preventDefault()
     target = $(event.currentTarget)
+    target.next('img').removeClass('hidden')
     socket.emit "stores:schedule", {store_id: target.data('store-id')}, (err, response) ->
       if err
         if err.code == "ETIMEDOUT"
@@ -19,7 +20,8 @@ jQuery ->
         else
           $("<div class='purr'>Un error no permitio contactar esta tienda.<div>").purr({removeTimer: 15000})
       else
-        console.log response
+        window.show_alert("Comunicación con #{response.name} establecida", 'success')
+      target.next('img').addClass('hidden')
 
 
   $('.hide_schedule').on 'click', (event)->
@@ -28,9 +30,10 @@ jQuery ->
     schedule = target.next()
     wdays = ['Lunes','Martes','Miercoles','Jueves','Viernes','Sabado','Domingo']
     i = 0
-    _.each $(schedule).find('tr'), (row) ->
+    $(schedule).find('thead').find('th:first').before('<th>Dia</th>') if $(schedule).find('thead').find('tr').size() < 3
+    _.each $(schedule).find('tbody').find('tr'), (row) ->
       if wdays[i]
-        $(row).find('td:first').before("<td>#{wdays[i]}</td>")
+        $(row).find('td:first').before("<td>#{wdays[i]}</td>") if $(row).find('td').size() < 3
       else
         $(row).remove()
       i += 1

@@ -22,11 +22,13 @@
           %td= store.ip
           %td= store.city.name
           %td
-            %a.hide_schedule{ href: '#'} Monstrar
+            %a.hide_schedule{ href: '#'} Mostrar
             .store_schedule.hidden= store.parse_schedule
             =render 'modal', :modal_id => "store_schedule_modal_#{store.name}", :title=>"Horarios de la tiendas #{store.name}"
           %td= store.storeid
-          %td=link_to 'Verificar', '#', class: 'btn test_store_connection', data: { store_id: store.id}
+          %td
+            =link_to 'Verificar', '#', class: 'btn test_store_connection', data: { store_id: store.id}
+            =image_tag 'spinner.gif', class: 'hidden'
           %td
             .btn-group
               =link_to 'Productos', [:admin, store], class: 'btn'

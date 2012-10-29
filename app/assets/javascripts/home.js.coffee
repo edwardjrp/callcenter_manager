@@ -174,7 +174,7 @@ jQuery ->
         window.show_alert('Cliente creado.', 'success')
         $('#client_search_phone').focus()
         clear_extra_data()
-        window.show_popover($('#client_search_panel'), 'Cliente asignado', 'Presione ENTER para asignar el cliente creado a la orden actual.')
+        window.show_popover($('#client_search_panel'), 'Cliente creado', 'Presione ENTER para asignar el cliente creado a la orden actual.')
       error: (response) ->
         window.show_alert(response.responseText, 'error')
 

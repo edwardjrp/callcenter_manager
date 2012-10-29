@@ -10,7 +10,7 @@
       =render 'abandon'
       =link_to '<i class="icon-gift"></i> Descuento'.html_safe, '#', class: 'btn bottom-margin-1', id: 'discount_cart'
       = render 'discount'
-      - if @cart.client.tax_numbers.with_verification.count.nonzero?
+      - if @cart.client.tax_numbers.with_verification.exonarable.count.nonzero?
         =link_to '<i class="icon-briefcase"></i> Exoneración'.html_safe, '#', class: 'btn bottom-margin-1', id: 'exonerate_cart'
         = render 'exonerate'
       = link_to '<i class="icon-share"></i> Dejar incompleta'.html_safe, release_carts_path, data: { confirm: '¿Desea dejar esta orden incompleta?'}, method: :post, class: 'btn bottom-margin-1'
@@ -59,7 +59,7 @@
         .client_phone{:id=> dom_id(@cart.client.last_phone), :data=> {'phone'=> @cart.client.last_phone.to_json}}
           .row
             .span4
-              %strong Numero:
+              %strong Número:
               =number_to_phone @cart.client.last_phone.number
           - if @cart.client.last_phone.ext.present?
             .row
@@ -84,7 +84,7 @@
                 %span#target_street= @cart.client.last_address.street.name
             .row
               .span4
-                %strong Numero:
+                %strong Número:
                 = @cart.client.last_address.number
             .row
               .span4

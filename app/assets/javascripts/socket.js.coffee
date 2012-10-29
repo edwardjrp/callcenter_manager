@@ -34,7 +34,7 @@ jQuery ->
   
   $('#utils_labels a').on 'click', (event)->
     event.preventDefault()
-    $(this).tab('show')
+    $(this).tab('show')  
 
   $('#quick_coupons').on 'click' , '.add_coupon', (event) ->
     event.preventDefault()
@@ -42,6 +42,8 @@ jQuery ->
     socket.emit 'cart_coupons:create', {cart_id: target.data('cart-id'), coupon_code: target.data('coupon-code'), coupon_id: target.data('coupon-id'), target_products: target.data('coupon-products')}
 
   $('#close_utils').on 'click', (event)->
+    for tab in $('#utils_labels').find('li')
+      $(tab).removeClass('active')
     for tab_contents in $('#utils_labels').next().find('.tab-pane')
       $(tab_contents).removeClass('active')
 

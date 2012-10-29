@@ -19,7 +19,7 @@ class Area < ActiveRecord::Base
   
   
   def self.find_area(params)
-    areas = self.scoped
+    areas = self.scoped.order(:name)
     areas = areas.merge(self.where('lower(name) like ?', "#{params[:q].downcase}%")) if params[:q].present?
     areas = areas.merge(self.where(:city_id=> params[:city_id])) if params[:city_id].present?
     return areas

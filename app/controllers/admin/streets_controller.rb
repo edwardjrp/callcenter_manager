@@ -4,7 +4,7 @@ class Admin::StreetsController < ApplicationController
   def index
     @area = Area.find_by_id(params[:area_id])
     if params[:area_id]
-      respond_with @area.streets
+      respond_with @area.streets.order(:name)
     else
       respond_with Street.all
     end

@@ -3,7 +3,7 @@ class Admin::StoresController < ApplicationController
   before_filter {|c| c.accessible_by([:admin], root_path)}
   
   def index
-    @stores = Store.order(:id).page(params[:page])
+    @stores = Store.order(:name).page(params[:page])
   end
 
   def new
