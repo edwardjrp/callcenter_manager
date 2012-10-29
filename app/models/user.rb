@@ -33,6 +33,12 @@ class User < ActiveRecord::Base
   before_destroy :there_is_one_admin
   scope :admins, where('role_mask = ? ', 1)
   scope :operators, where('role_mask = ? ', 2)
+
+
+  def self.carts_completed_in_range(start_date, end_date)
+    joins(:carts).where('carts.completed = true AND carts.message_mask != 4').where('carts.created_at > ? and carts.created_at < ?', start_date, end_date)
+  end
+  
   
   def self.authenticate(username, password)
       user = find_by_username(username)

@@ -24,6 +24,7 @@ class Product < ActiveRecord::Base
   has_many :stores, :through=> :store_products
   scope :are_option, where(:options=>'OPTION')
   scope :are_main, where('options != ?  or options is NULL', 'OPTION')
+  scope :per_cart, joins(:carts).where('carts.completed = true AND carts.message_mask != 4').group('products.id').select('products.id, COUNT(*) as product_total')
   # attr_accessible :title, :body
   
   def available_options

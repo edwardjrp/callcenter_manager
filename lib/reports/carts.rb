@@ -45,7 +45,7 @@ module Reports
             cart.client_info,
             monetize(cart.payment_amount),
             monetize(cart.discount),
-            monetize((cart.payment_amount - cart.discount).to_d),
+            monetize((cart.payment_amount - cart.discount).to_d)
           ]
         end
 
@@ -63,6 +63,10 @@ module Reports
 
       def monetize(amount)
         ActionController::Base.helpers.number_to_currency(amount)
+      end
+
+      def percentize(amount, options = {})
+        ActionController::Base.helpers.number_to_percentage(amount, options)
       end
 
       def pdf_coupons_report(start_date, end_date)
@@ -107,8 +111,8 @@ module Reports
         pdf.move_down 20
 
         sale_table = []
-        sale_table << [   'Ventas Brutas', ActionController::Base.helpers.number_to_currency(self.completed.sum('payment_amount'))  ]
-        sale_table << [   'Ventas Netas', ActionController::Base.helpers.number_to_currency(self.completed.sum('net_amount'))  ]
+        sale_table << [   'Ventas Brutas', monetize(self.completed.sum('payment_amount'))  ]
+        sale_table << [   'Ventas Netas', monetize(self.completed.sum('net_amount'))  ]
         sale_table << [   'Canceladas', self.abandoned.count  ]
 
         pdf.table sale_table do
@@ -128,8 +132,8 @@ module Reports
         dinner = completed.where("date_part('hour',complete_on) > 16")
 
         time_table = []
-        time_table << [   'Almuerzo', lunch.count , ActionController::Base.helpers.number_to_currency(lunch.sum('payment_amount'))  ]
-        time_table << [   'Cena', dinner.count, ActionController::Base.helpers.number_to_currency(dinner.sum('net_amount'))  ]
+        time_table << [   'Almuerzo', lunch.count , monetize(lunch.sum('payment_amount'))  ]
+        time_table << [   'Cena', dinner.count, monetize(dinner.sum('net_amount'))  ]
     
 
         pdf.table time_table do
@@ -148,7 +152,7 @@ module Reports
 
         service_table = []
         completed.group(:service_method).count.each do | service_method, service_count |
-          service_table << [ service_method, ActionController::Base.helpers.number_to_percentage((service_count.to_d / self.completed.count.to_d) * 100,:delimiter => ',', :separator => '.', :precision => 2),  ActionController::Base.helpers.number_to_currency(self.completed.group(:service_method).sum('payment_amount')[service_method])]
+          service_table << [ service_method, percentize((service_count.to_d / self.completed.count.to_d) * 100,:delimiter => ',', :separator => '.', :precision => 2),  monetize(self.completed.group(:service_method).sum('payment_amount')[service_method])]
         end
         pdf.move_down 20
 
@@ -176,11 +180,11 @@ module Reports
         request = Net::HTTP.get(url)
         total_call = JSON.parse(request)["result"]["totalincoming"]
         # {"resultcode"=>0, "result"=>{"totalincoming"=>16573}}
-        user_with_completed_in_range = User.joins(:carts).where('carts.completed = true').where('carts.created_at > ? and carts.created_at < ?', start_date, end_date)
+        # user_with_completed_in_range = User.carts_completed_in_range(start_date, end_date)
 
         other_table = []
-        other_table << [ 'Orden promedio', ActionController::Base.helpers.number_to_currency(completed.average('payment_amount')) ]
-        avg_cart_per_user = user_with_completed_in_range.average('carts_count')
+        other_table << [ 'Orden promedio', monetize(completed.average('payment_amount')) ]
+        avg_cart_per_user = User.carts_completed_in_range(start_date, end_date).average('carts_count')
         other_table << [ 'Ventas por agente promedio', avg_cart_per_user ]
         other_table << [ 'Tiempo de orde promedio', (completed.sum(&:take_time) / completed.count) ]
         other_table << [ 'Llamadas entrantes', total_call ]
@@ -231,7 +235,7 @@ module Reports
               cart.service_method,
               cart.agent_info,
               cart.take_time_info,
-              ActionController::Base.helpers.number_to_currency(cart.payment_amount),
+              monetize(cart.payment_amount),
               cart.payment_type,
               cart.fiscal_type,
               cart.order_progress,
@@ -260,7 +264,7 @@ module Reports
             cart.service_method,
             cart.agent_info,
             cart.take_time_info,
-            ActionController::Base.helpers.number_to_currency(cart.payment_amount),
+            monetize(cart.payment_amount),
             cart.payment_type,
             cart.fiscal_type,
             cart.order_progress,
