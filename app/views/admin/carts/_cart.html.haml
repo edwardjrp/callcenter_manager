@@ -1,9 +1,6 @@
 .row 
   .span8
-    - if cart.store_order_id
-      %h3= "Orden #{cart.id} id en pulse #{cart.store_order_id}"
-    - else
-      %h3= "Orden #{cart.id}"
+    %h3= "Orden #{cart.complete_id}"
     %hr 
     %h4 Tiempo  
     %table.table.table-bordered
@@ -29,10 +26,10 @@
             %th Exonerado Autorizado por
         %tbody      
           %tr.cart_discount
-            %td= number_to_cedula User.find_by_id(cart.discount_auth_id).try(:idnumber) || 'N/A'
+            %td= cart.discount_authorizer || 'N/A'
             %td= cart.discount || '0.0'
             %td= cart.exonerated_info
-            %td= number_to_cedula User.find_by_id(cart.exoneration_authorizer).try(:idnumber) || 'N/A'
+            %td= cart.exoneration_authorizer_info || 'N/A'
       %hr 
     %h4 Servicio  
     %table.table.table-bordered
@@ -48,6 +45,18 @@
           %td= cart.store_info
           %td{id: "pulse_status_#{cart.id}"}= cart.order_progress || 'N/A'
           %td= cart.offline_info
+    %h4 Razón social  
+    %table.table.table-bordered
+      %thead
+        %tr
+          %th Tipo
+          %th Nombre
+          %th ID
+      %tbody  
+        %tr.cart_tax_number
+          %td= cart.fiscal_type || 'FinalConsumer'
+          %td= cart.fiscal_number || 'N/A'
+          %td= cart.fiscal_company_name || 'N/A'
     - if cart.store_order_id.present?
       .row
         .span3

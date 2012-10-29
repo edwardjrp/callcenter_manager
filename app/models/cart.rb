@@ -62,6 +62,7 @@ class Cart < ActiveRecord::Base
   scope :comm_failed, where(communication_failed: true).untrashed
   scope :finalized, where('completed = ? or reason_id IS NOT NULL', true).untrashed
   scope :latest, order('created_at DESC').untrashed
+  scope :discounted, where('discount > ?', 0).untrashed
   belongs_to :user, :counter_cache => true
   belongs_to :client
   belongs_to :store
@@ -78,6 +79,24 @@ class Cart < ActiveRecord::Base
   
   # self.per_page = 20
 
+  def discount_authorizer
+    return nil if discount_auth_id.nil?
+    return 'No encontrado' unless User.exists? discount_auth_id
+    User.find(discount_auth_id).idnumber.gsub(/([0-9]{3})([0-9]{7})([0-9]{1})/,"\\1-\\2-\\3")
+  end
+
+  def discount_authorizer_name
+    return nil if discount_auth_id.nil?
+    return 'No encontrado' unless User.exists? discount_auth_id
+    User.find(discount_auth_id).full_name
+  end
+
+  def exoneration_authorizer_info
+    return nil if exoneration_authorizer.nil?
+    return 'No encontrado' unless User.exists? exoneration_authorizer
+    User.find(exoneration_authorizer).idnumber.gsub(/([0-9]{3})([0-9]{7})([0-9]{1})/,"\\1-\\2-\\3")
+  end
+
   def offline_info
     return 'Si' if offline?
     'No'
@@ -86,6 +105,16 @@ class Cart < ActiveRecord::Base
   def store_info
     return 'N/A' if store.nil?
     store.name
+  end
+
+  def store_info_id
+    return 'N/A' if store.nil?
+    store.storeid
+  end
+
+  def complete_id
+    return id if store_order_id.blank?
+    "#{id} id en Pulse #{store_order_id}"
   end
 
   def store_order_id_info
@@ -122,6 +151,11 @@ class Cart < ActiveRecord::Base
   def agent_info
     return 'N/A' if user.nil?
     user.idnumber.gsub(/([0-9]{3})([0-9]{7})([0-9]{1})/,'\\1-\\2-\\3')
+  end
+
+  def agent_info_name
+    return 'N/A' if user.nil?
+    user.full_name
   end
 
   def take_time_info

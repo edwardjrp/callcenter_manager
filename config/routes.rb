@@ -78,6 +78,10 @@ Kapiqua25::Application.routes.draw do
     get "reports/coupons" => "reports#coupons", as: :report_coupons
     post "reports/coupons" => "reports#generate_coupons"
 
+    get "reports/discounts" => "reports#discounts", as: :report_discounts
+    post "reports/discounts" => "reports#generate_discounts"
+
+
     resources :users
     resources :coupons, except: [:new, :create, :show]
     resources :taxpayer_identifications, only: [:index, :create]

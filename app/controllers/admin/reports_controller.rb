@@ -15,7 +15,7 @@ class Admin::ReportsController < ApplicationController
         @report.process_detailed(@search.result(:distinct => true))
         flash['success'] = "Reporte generado"
       rescue => error
-        Rails.logger.info error
+        Rails.logger.error error
         flash['error'] = "Un error impidio la generación del reporte"
       end
       redirect_to admin_reports_detailed_path
@@ -36,7 +36,7 @@ class Admin::ReportsController < ApplicationController
         @report.process_sumary(Cart.date_range(start_date, end_date), start_date, end_date)
         flash['success'] = "Reporte generado"
       rescue => error
-        Rails.logger.info error
+        Rails.logger.error error
         flash['error'] = "Un error impidio la generación del reporte"
       end
       redirect_to admin_report_sumary_path
@@ -53,13 +53,34 @@ class Admin::ReportsController < ApplicationController
       (params[:coupons_report].present? && params[:coupons_report][:start_date].present?) ? start_date = Date.parse(params[:coupons_report][:start_date]) : start_date = 1.month.ago.to_date
       (params[:coupons_report].present? && params[:coupons_report][:end_date].present?) ? end_date = Date.parse(params[:coupons_report][:end_date]) : end_date = Date.today
       @report = Report.new(name: 'Cupones')
-      # begin
+      begin
+          flash['success'] = "Reporte generado"
         @report.process_coupons(Cart.date_range(start_date, end_date), start_date, end_date)
-        # flash['success'] = "Reporte generado"
-      # rescue => error
-      #   Rails.logger.info error
-      #   flash['error'] = "Un error impidio la generación del reporte"
-      # end
+      rescue => error
+        Rails.logger.error error
+        flash['error'] = "Un error impidio la generación del reporte"
+      end
       redirect_to admin_report_coupons_path
+    end
+
+    def discounts
+      @reports = Report.discounts.order('created_at DESC').page(params[:page])
+      (params[:discount_report].present? && params[:discount_report][:start_date].present?) ? start_date = Date.parse(params[:discount_report][:start_date]) : start_date = 1.month.ago.to_date
+      (params[:discount_report].present? && params[:discount_report][:end_date].present?) ? end_date = Date.parse(params[:discount_report][:end_date]) : end_date = Date.today
+      @carts = Cart.discounted.date_range(start_date, end_date).limit(5)
+    end
+
+    def generate_discounts
+      (params[:discount_report].present? && params[:discount_report][:start_date].present?) ? start_date = Date.parse(params[:discount_report][:start_date]) : start_date = 1.month.ago.to_date
+      (params[:discount_report].present? && params[:discount_report][:end_date].present?) ? end_date = Date.parse(params[:discount_report][:end_date]) : end_date = Date.today
+      @report = Report.new(name: 'Descuentos')
+      begin
+          flash['success'] = "Reporte generado"
+        @report.process_discounts(Cart.date_range(start_date, end_date), start_date, end_date)
+      rescue => error
+        Rails.logger.error error
+        flash['error'] = "Un error impidio la generación del reporte"
+      end
+      redirect_to admin_report_discounts_path
     end
 end

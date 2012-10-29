@@ -10,6 +10,61 @@ module Reports
     module ClassMethods
 
 
+      def pdf_discounts_report(start_date, end_date)
+        pdf = Prawn::Document.new(top_margin: 70, :page_layout => :landscape)
+        pdf.font "Helvetica", :size => 6
+        pdf.text "Reporte Consolidado", size: 20, style: :bold
+        pdf.move_down 20
+        pdf.text "Inicio #{start_date.strftime('%d %B %Y')}", size: 10, style: :bold
+        pdf.text "Conclusión #{end_date.strftime('%d %B %Y')}", size: 10, style: :bold
+        pdf.move_down 20
+
+        discounts_table = []
+        discounts_table << [
+          'Agente',
+          'Nombre del Agente',
+          'Autorizado por',
+          'Nombre del autorizador',
+          'Fecha y hora de la orden',
+          'Tienda',
+          'Orden',
+          'Info Cliente',
+          'Total sin descuento',
+          'Total descontado',
+          'Total con descuento'
+        ]
+        discounted.each do |cart|
+          discounts_table << [
+            cart.agent_info,
+            cart.agent_info_name,
+            cart.discount_authorizer,
+            cart.discount_authorizer_name,
+            cart.completion_info,
+            cart.store_info_id,
+            cart.complete_id,
+            cart.client_info,
+            monetize(cart.payment_amount),
+            monetize(cart.discount),
+            monetize((cart.payment_amount - cart.discount).to_d),
+          ]
+        end
+
+        pdf.table discounts_table do
+          row(0).font_style = :bold
+          style(row(0), :background_color => '4682B4')
+          cells.borders = []
+          # columns(1..3).align = :right
+          self.row_colors = ["F8F8FF", "ADD8E6"]
+          self.header = true
+        end
+
+        pdf
+      end
+
+      def monetize(amount)
+        ActionController::Base.helpers.number_to_currency(amount)
+      end
+
       def pdf_coupons_report(start_date, end_date)
         pdf = Prawn::Document.new(top_margin: 70)
         pdf.font "Helvetica", :size => 10
