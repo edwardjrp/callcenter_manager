@@ -18,9 +18,10 @@ class Report < ActiveRecord::Base
   scope :sumary, where(:name=>'Consolidado')
   scope :coupons, where(:name=>'Cupones')
   scope :discounts, where(:name=>'Descuentos')
+  scope :products_mix, where(:name=>'ProductsMix')
 
   def self.report_types
-    %W( Detallado Consolidado Cupones Descuentos )
+    %W( Detallado Consolidado Cupones Descuentos ProductsMix )
   end
 
   def output_file_name
@@ -63,6 +64,15 @@ class Report < ActiveRecord::Base
     pdf_temp_file = Tempfile.new(["reporte descuentos", '.pdf'])
     pdf_temp_file.binmode
     pdf_temp_file.write(relation.pdf_discounts_report(start_date, end_date).render)
+    self.pdf_file = pdf_temp_file
+    self.save
+    ensure pdf_temp_file.close!
+  end
+
+  def process_products_mix(relation, start_date, end_date)
+    pdf_temp_file = Tempfile.new(["reporte descuentos", '.pdf'])
+    pdf_temp_file.binmode
+    pdf_temp_file.write(relation.pdf_products_mix_report(start_date, end_date).render)
     self.pdf_file = pdf_temp_file
     self.save
     ensure pdf_temp_file.close!

@@ -81,6 +81,9 @@ Kapiqua25::Application.routes.draw do
     get "reports/discounts" => "reports#discounts", as: :report_discounts
     post "reports/discounts" => "reports#generate_discounts"
 
+    get "reports/products_mix" => "reports#products_mix", as: :report_products_mix
+    post "reports/products_mix" => "reports#generate_products_mix"
+
 
     resources :users
     resources :coupons, except: [:new, :create, :show]

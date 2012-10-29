@@ -10,6 +10,73 @@ module Reports
     module ClassMethods
 
 
+      def pdf_products_mix_report(start_date, end_date)
+        pdf = Prawn::Document.new(top_margin: 70, :page_layout => :landscape)
+        pdf.font "Helvetica", :size => 7
+        pdf.text "Reporte Consolidado", size: 20, style: :bold
+        pdf.move_down 20
+        pdf.text "Inicio #{start_date.strftime('%d %B %Y')}", size: 10, style: :bold
+        pdf.text "Conclusión #{end_date.strftime('%d %B %Y')}", size: 10, style: :bold
+        pdf.move_down 20
+
+        products_mix_table = []
+        products_mix_table << [
+          'Categoría',
+          'Ítem de Menú',
+          'Tamaño',
+          'Sabor/Masa',
+          'Ventas Netas',
+          'Cantidad',
+          'Product Mix',
+          'Sales Mix',
+          'Ordenes',
+          'Percent of Orders'
+        ]
+
+        mix = CartProduct.products_mix(start_date, end_date)
+
+        mix.each do |category, products|
+          products_mix_table << [
+            category,
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            ''
+          ]
+          products.each do |product, cart_products|
+            products_mix_table << [
+              '',
+              product[:product].productname,
+              product[:product].sizecode,
+              product[:product].flavorcode,
+              monetize(product[:cart_products][:total_sales]),
+              product[:cart_products][:total_count],
+              percentize(product[:cart_products][:total_sales].to_d / completed.date_range(start_date, end_date).sum('payment_amount')),
+              percentize(product[:cart_products][:total_count].to_d / CartProduct.total_items_sold(start_date, end_date)),
+              product[:total_carts],
+              percentize( product[:total_carts].to_d / completed.date_range(start_date, end_date).count.to_d)
+            ]
+          end
+        end
+
+        pdf.table products_mix_table do
+          row(0).font_style = :bold
+          style(row(0), :background_color => '4682B4')
+          cells.borders = []
+          # columns(1..3).align = :right
+          self.row_colors = ["F8F8FF", "ADD8E6"]
+          self.header = true
+        end
+
+        pdf
+
+      end
+
       def pdf_discounts_report(start_date, end_date)
         pdf = Prawn::Document.new(top_margin: 70, :page_layout => :landscape)
         pdf.font "Helvetica", :size => 6
@@ -65,8 +132,8 @@ module Reports
         ActionController::Base.helpers.number_to_currency(amount)
       end
 
-      def percentize(amount, options = {})
-        ActionController::Base.helpers.number_to_percentage(amount, options)
+      def percentize(amount)
+        ActionController::Base.helpers.number_to_percentage(amount * 100,:delimiter => ',', :separator => '.', :precision => 2)
       end
 
       def pdf_coupons_report(start_date, end_date)
@@ -152,7 +219,7 @@ module Reports
 
         service_table = []
         completed.group(:service_method).count.each do | service_method, service_count |
-          service_table << [ service_method, percentize((service_count.to_d / self.completed.count.to_d) * 100,:delimiter => ',', :separator => '.', :precision => 2),  monetize(self.completed.group(:service_method).sum('payment_amount')[service_method])]
+          service_table << [ service_method, percentize(service_count.to_d / self.completed.count.to_d),  monetize(self.completed.group(:service_method).sum('payment_amount')[service_method])]
         end
         pdf.move_down 20
 
