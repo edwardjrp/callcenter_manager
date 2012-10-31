@@ -1,7 +1,7 @@
 jQuery ->
   socket = window.socket
-  socket.on 'connect', () -> 
-    socket.emit 'register', { full_name: $('#chatbox').data('full_name'), idnumber: $('#chatbox').data('idnumber'), role: $('#chatbox').data('role') }, (response)->
+  socket.on 'connect', () ->
+    socket.emit 'register', { full_name: window.user_name, idnumber: window.user_id, role: window.user_role }, (response)->
       # console.log response
       
   if $(".chatdisplay").size() > 0
@@ -48,11 +48,12 @@ jQuery ->
       $(tab_contents).removeClass('active')
 
   socket.on 'server_message', (data) ->
-    if $('#chatbox').find("##{data.idnumber}").size() > 0
-      $('#chatbox').find("##{data.idnumber}").closest('.tab-content').prev('ul').find("a[href=##{data.idnumber}]").addClass('blink') unless $('#chatbox').find("##{data.idnumber}").is(':visible') 
-      $('#chatbox').find("##{data.idnumber}").find('.chatdisplay').append($('<p>').append(window.truncate(data.msg, 30)))
-      $('#chatbox').find("##{data.idnumber}").find('.chatdisplay').scrollTop($('#chatbox').find("##{data.idnumber}").find('.chatdisplay')[0].scrollHeight);
-      $('#chatbox').find("##{data.idnumber}").find('.chatdisplay').children().first().remove() if $('#chatbox').find("##{data.idnumber}").find('.chatdisplay').children().size() > 50
+    messanger_id = window.pad(data.idnumber,11)
+    if $('#chatbox').find("##{messanger_id}").size() > 0
+      $('#chatbox').find("##{messanger_id}").closest('.tab-content').prev('ul').find("a[href=##{messanger_id}]").addClass('blink') unless $('#chatbox').find("##{messanger_id}").is(':visible') 
+      $('#chatbox').find("##{messanger_id}").find('.chatdisplay').append($('<p>').append(window.truncate(data.msg, 30)))
+      $('#chatbox').find("##{messanger_id}").find('.chatdisplay').scrollTop($('#chatbox').find("##{messanger_id}").find('.chatdisplay')[0].scrollHeight);
+      $('#chatbox').find("##{messanger_id}").find('.chatdisplay').children().first().remove() if $('#chatbox').find("##{messanger_id}").find('.chatdisplay').children().size() > 50
 
     if  $('#chatbox').find("#admin_pane").size() > 0
       $('#chatbox').find("#admin_pane").find('.chatdisplay').append($('<p>').append(window.truncate(data.msg, 30)))
