@@ -56,7 +56,7 @@ class Product < ActiveRecord::Base
   end
 
   private
-    # Ensure that there are no line items referencing this product
+    # Ensure that there are no cart_products referencing this product
     def ensure_not_referenced_by_any_cart
         if self.cart_products.count.zero?
           return true

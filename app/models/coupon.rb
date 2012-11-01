@@ -1,3 +1,4 @@
+# encoding:utf-8
 # == Schema Information
 #
 # Table name: coupons
@@ -42,7 +43,7 @@ class Coupon < ActiveRecord::Base
   end
 
   private
-    # Ensure that there are no line items referencing this product
+    # Ensure that there are no cart_coupons referencing this product
     def ensure_not_referenced_by_any_cart
         if self.cart_coupons.count.zero?
           return true
