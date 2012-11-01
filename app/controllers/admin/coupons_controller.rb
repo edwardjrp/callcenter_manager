@@ -16,7 +16,7 @@ class Admin::CouponsController < ApplicationController
     if @coupon.destroy
       flash[:success] = 'Cupón eliminado'
     else
-      flash[:error] = 'No se pudo eliminar el Cupón: #{@coupon.errors.full_messages.to_sentence}'
+      flash[:error] = "No se pudo eliminar el Cupón: #{@coupon.errors.full_messages.to_sentence}"
     end
     redirect_to admin_coupons_path
   end
