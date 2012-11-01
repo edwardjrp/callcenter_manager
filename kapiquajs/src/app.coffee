@@ -66,7 +66,10 @@ io.sockets.on "connection", (socket) ->
       socket.emit('set_admin', 'connected')
       for admin in administrators
         admin_socket = _.find( io.sockets.clients(), (skt) -> skt.idnumber == admin.idnumber )
-        admin_socket.join("admins-#{data.idnumber}")
+        if admin_socket?
+          admin_socket.join("admins-#{data.idnumber}")
+        else
+          administrators = _.without(administrators, admin)
     io.sockets.in('admins').emit('register_client', operators)
 
   socket.on 'disconnect', () ->

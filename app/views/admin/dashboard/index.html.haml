@@ -5,13 +5,30 @@
   .span12
     %button.btn.bottom-margin-1#fullscreen Fullscreen
 .row
-  .span12
-    %select#dashboard_data_filter{ name: "data_filter"}
-      %option{ value:'all' } Todas
-      %option{ value:'users_carts_count' } Agentes por ordenes colocadas
-      %option{ value:'users_payment_average' } Agentes por monto promedio de la orden
-      %option{ value:'stores_carts_count' } Tiendas por ordenes colocadas
-      %option{ value:'stores_payment_average' } Tiendas por monto promedio de la orden
+  .span5
+    %ul.unstyled
+      %li
+        %input.data_filter{type: "checkbox", name: "global_indicators", value: "global_indicators", checked: 'checked'} Indicadores del día
+      %li
+        %input.data_filter{type: "checkbox", name: "users_carts_count_day", value: "users_carts_count_day", checked: 'checked'} Ranking agentes por órdenes colocadas para este día
+      %li
+        %input.data_filter{type: "checkbox", name: "users_payment_average_day", value: "users_payment_average_day", checked: 'checked'} Ranking agentes por monto promedio de las órdenes para este día
+      %li
+        %input.data_filter{type: "checkbox", name: "stores_carts_count_day", value: "stores_carts_count_day", checked: 'checked'} Ranking tiendas por órdenes colocadas para este día
+      %li
+        %input.data_filter{type: "checkbox", name: "stores_payment_average_day", value: "stores_payment_average_day", checked: 'checked'} Ranking tiendas por monto promedio de las órdenes para este día
+  .span5
+    %ul.unstyled
+      %li
+        %input.data_filter{type: "checkbox", name: "services_indicators", value: "services_indicators", checked: 'checked'} Modos de servicio
+      %li
+        %input.data_filter{type: "checkbox", name: "users_carts_count", value: "users_carts_count", checked: 'checked'} Ranking agentes por órdenes colocadas para la última hora
+      %li
+        %input.data_filter{type: "checkbox", name: "users_payment_average", value: "users_payment_average", checked: 'checked'} Ranking agentes por monto promedio de las órdenes para la última hora
+      %li
+        %input.data_filter{type: "checkbox", name: "stores_carts_count", value: "stores_carts_count", checked: 'checked'} Ranking tiendas por órdenes colocadas para la última hora
+      %li
+        %input.data_filter{type: "checkbox", name: "stores_payment_average", value: "stores_payment_average", checked: 'checked'} Ranking tiendas por monto promedio de las órdenes para la última hora
 .row#dashboard_screen
   .span12#dashboard_data
-    = render 'rankings'
+    =render 'rankings'

@@ -1,22 +1,9 @@
 $('#dashboard_data').html("<%= escape_javascript(render 'rankings') %>");
-switch ($('#dashboard_data_filter').val()) {
-  case 'users_carts_count':
-    $('.dashboard_datatable').hide();
-    $('#users_carts_count').show();
-    return
-  case 'users_payment_average':
-    $('.dashboard_datatable').hide();
-    $('#users_payment_average').show();
-    return 
-  case 'stores_carts_count':
-    $('.dashboard_datatable').hide();
-    $('#stores_carts_count').show();
-    return 
-  case 'stores_payment_average':
-    $('.dashboard_datatable').hide();
-    $('#stores_payment_average').show();
-    return 
-  default:
-    $('.dashboard_datatable').show();
-    return 
-}
+_.each($('.data_filter'), function(checkbox){
+  var target = $(checkbox);
+  if (target.is(':checked')) {
+    return $("#" + (target.val())).show();
+  } else {
+    return $("#" + (target.val())).hide();
+  }
+});

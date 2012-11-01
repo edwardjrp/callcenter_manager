@@ -1,54 +1,162 @@
 .row
   .span12
+    #global_indicators.dashboard_datatable
+      %h3 Indicadores del día
+      %table.table.table-striped.table-bordered
+        %tbody
+          %tr
+            %th Ventas Brutas
+            %td= number_to_currency @total_sells_for_today
+          %tr
+            %th Ventas Netas
+            %td= number_to_currency @net_sells_for_today
+          %tr
+            %th Ordenes Canceladas
+            %td= @abandone_for_today
+
+    #services_indicators.dashboard_datatable
+      %h3 Modos de servicios
+      %table.table.table-striped.table-bordered
+        %tbody
+          - @service_methods.each do |service_method, service_count|
+            %tr
+              %th= service_method
+              %th= service_count
+            
+
+    #users_carts_count_day.dashboard_datatable
+      %h3 Ranking agentes por órdenes colocadas este día
+      %table.table.table-striped.table-bordered
+        %thead
+          %th Nombre
+          %th Ordenes colocadas
+          %th Monto promedio
+        %tbody
+          - if @users_per_carts_by_counts_day.count.nonzero?
+            - @users_per_carts_by_counts_day.each do |user_carts|
+              %tr
+                %td= user_carts["user"].full_name
+                %td= user_carts[:carts_count]
+                %td= number_to_currency user_carts[:payment_amount]
+          -else
+            %tr
+              %td No hay datos para el dia
+    #users_payment_average_day.dashboard_datatable
+      %h3 Ranking agentes por monto promedio de las órdenes para este día
+      %table.table.table-striped.table-bordered
+        %thead
+          %th Nombre
+          %th Ordenes colocadas
+          %th Monto promedio
+        %tbody
+          - if @users_per_carts_by_avgs_day.count.nonzero?
+            - @users_per_carts_by_avgs_day.each do |user_carts|
+              %tr
+                %td= user_carts["user"].full_name
+                %td= user_carts[:carts_count]
+                %td= number_to_currency user_carts[:payment_amount]
+          -else
+            %tr
+              %td No hay datos para el dia
+    #stores_carts_count_day.dashboard_datatable
+      %h3 Ranking tiendas por órdenes colocadas este día
+      %table.table.table-striped.table-bordered
+        %thead
+          %th Nombre
+          %th Ordenes colocadas
+          %th Monto promedio
+        %tbody
+          - if @store_per_carts_by_counts_day.count.nonzero?
+            - @store_per_carts_by_counts_day.each do |store_carts|
+              %tr
+                %td= store_carts["store"].name
+                %td= store_carts[:carts_count]
+                %td= number_to_currency store_carts[:payment_amount]
+          -else
+            %tr
+              %td No hay datos para el dia
+    #stores_payment_average_day.dashboard_datatable
+      %h3 Ranking tiendas por monto promedio de las órdenes para este día
+      %table.table.table-striped.table-bordered
+        %thead
+          %th Nombre
+          %th Ordenes colocadas
+          %th Monto promedio
+        %tbody
+          - if @store_per_carts_by_avgs_day.count.nonzero?
+            - @store_per_carts_by_avgs_day.each do |store_carts|
+              %tr
+                %td= store_carts["store"].name
+                %td= store_carts[:carts_count]
+                %td= number_to_currency store_carts[:payment_amount]
+          -else
+            %tr
+              %td No hay datos para el dia
     #users_carts_count.dashboard_datatable
-      %h3 Por ordenes colocadas
+      %h3 Ranking agentes por órdenes colocadas para la última hora
       %table.table.table-striped.table-bordered
         %thead
           %th Nombre
           %th Ordenes colocadas
-          %th Ordenes monto promedio de la orden
+          %th Monto promedio
         %tbody
-          - @users_per_carts_by_counts.each do |user_carts|
+          - if @users_per_carts_by_counts.count.nonzero?
+            - @users_per_carts_by_counts.each do |user_carts|
+              %tr
+                %td= user_carts["user"].full_name
+                %td= user_carts[:carts_count]
+                %td= number_to_currency user_carts[:payment_amount]
+          -else
             %tr
-              %td= user_carts["user"].full_name
-              %td= user_carts[:carts_count]
-              %td= number_to_currency user_carts[:payment_amount]
+              %td No hay datos para la última hora
     #users_payment_average.dashboard_datatable
-      %h3 Por monto promedio de la ordenes
+      %h3 Ranking agentes por monto promedio de las órdenes para la última hora
       %table.table.table-striped.table-bordered
         %thead
           %th Nombre
           %th Ordenes colocadas
-          %th Ordenes monto promedio de la orden
+          %th Monto promedio
         %tbody
-          - @users_per_carts_by_avgs.each do |user_carts|
+          - if @users_per_carts_by_avgs.count.nonzero?
+            - @users_per_carts_by_avgs.each do |user_carts|
+              %tr
+                %td= user_carts["user"].full_name
+                %td= user_carts[:carts_count]
+                %td= number_to_currency user_carts[:payment_amount]
+          -else
             %tr
-              %td= user_carts["user"].full_name
-              %td= user_carts[:carts_count]
-              %td= number_to_currency user_carts[:payment_amount]
+              %td No hay datos para la última hora
     #stores_carts_count.dashboard_datatable
-      %h3 Por ordenes colocadas
+      %h3 Ranking tiendas por órdenes colocadas para la última hora
       %table.table.table-striped.table-bordered
         %thead
           %th Nombre
           %th Ordenes colocadas
-          %th Ordenes monto promedio de la orden
+          %th Monto promedio
         %tbody
-          - @store_per_carts_by_counts.each do |store_carts|
+          - if @store_per_carts_by_counts.count.nonzero?
+            - @store_per_carts_by_counts.each do |store_carts|
+              %tr
+                %td= store_carts["store"].name
+                %td= store_carts[:carts_count]
+                %td= number_to_currency store_carts[:payment_amount]
+          -else
             %tr
-              %td= store_carts["store"].name
-              %td= store_carts[:carts_count]
-              %td= number_to_currency store_carts[:payment_amount]
+              %td No hay datos para la última hora
     #stores_payment_average.dashboard_datatable
-      %h3 Por monto promedio de la ordenes
+      %h3 Ranking tiendas por monto promedio de las órdenes para la última hora
       %table.table.table-striped.table-bordered
         %thead
           %th Nombre
           %th Ordenes colocadas
-          %th Ordenes monto promedio de la orden
+          %th Monto promedio
         %tbody
-          - @store_per_carts_by_avgs.each do |store_carts|
+          - if @store_per_carts_by_avgs.count.nonzero?
+            - @store_per_carts_by_avgs.each do |store_carts|
+              %tr
+                %td= store_carts["store"].name
+                %td= store_carts[:carts_count]
+                %td= number_to_currency store_carts[:payment_amount]
+          -else
             %tr
-              %td= store_carts["store"].name
-              %td= store_carts[:carts_count]
-              %td= number_to_currency store_carts[:payment_amount]
+              %td No hay datos para la última hora

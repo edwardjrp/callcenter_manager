@@ -247,7 +247,6 @@ module Reports
         request = Net::HTTP.get(url)
         total_call = JSON.parse(request)["result"]["totalincoming"]
         # {"resultcode"=>0, "result"=>{"totalincoming"=>16573}}
-        # user_with_completed_in_range = User.carts_completed_in_range(start_date, end_date)
 
         other_table = []
         other_table << [ 'Orden promedio', monetize(completed.average('payment_amount')) ]

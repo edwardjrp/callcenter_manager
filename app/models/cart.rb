@@ -173,7 +173,23 @@ class Cart < ActiveRecord::Base
     %w( delivery pickup dinein )
   end
 
-  def self.average_and_count_per_group( group_column = 'user_id', start_time = 2.weeks.ago, order_column = 'carts_count', result_limit = 5)
+  def self.before_hour(hour)
+    where("date_part('hour',complete_on) < ?", hour)
+  end
+
+  def self.after_hour(hour)
+    where("date_part('hour',complete_on) >= ?", hour)
+  end
+
+  def self.lunch
+    before_hour(16)
+  end
+
+  def self.dinner
+    after_hour(16)
+  end
+
+  def self.average_and_count_per_group( group_column = 'user_id', start_time = 1.hour.ago, order_column = 'carts_count', result_limit = 5)
     carts = self.scoped
     carts = carts.merge(self.completed)
     carts = carts.merge(self.select('AVG(carts.payment_amount) as carts_payment_avg'))
@@ -213,6 +229,9 @@ class Cart < ActiveRecord::Base
     where('carts.created_at > ? and carts.created_at < ?', start_date, end_date)
   end
 
+  def self.complete_in_date_range(start_date, end_date)
+    where('carts.complete_on > ? and carts.complete_on < ?', start_date, end_date)
+  end
 
   def placeable?
     errors.add :base, 'No ha seleccionado una tienda' if self.store.nil?
