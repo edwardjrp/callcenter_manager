@@ -6,10 +6,10 @@
   %table.table.table-striped.table-bordered.table-condensed#reason_carts_list
     %thead
       %th Agente
-      %th Abandonado en 
+      %th Orden
     %tbody
       -@carts.each do |cart|
         %tr{:data=>{'cart-id'=> cart.id}, :id=>dom_id(cart)}
           %td= cart.user.full_name
-          %td Fecha de abandono
+          %td= link_to "id #{cart.complete_id} ",  [:admin, cart]
   =will_paginate @carts
