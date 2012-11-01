@@ -25,6 +25,8 @@ class Product < ActiveRecord::Base
   scope :are_option, where(:options=>'OPTION')
   scope :are_main, where('options != ?  or options is NULL', 'OPTION')
   scope :per_cart, joins(:carts).where('carts.completed = true AND carts.message_mask != 4').group('products.id').select('products.id, COUNT(*) as product_total')
+  before_destroy :ensure_not_referenced_by_any_cart
+
   # attr_accessible :title, :body
   
 
@@ -52,4 +54,15 @@ class Product < ActiveRecord::Base
       end.to_sentence
     end
   end
+
+  private
+    # Ensure that there are no line items referencing this product
+    def ensure_not_referenced_by_any_cart
+        if self.cart_products.count.zero?
+          return true
+       else
+         errors.add(:base, 'Este producto aun esta presente en una orden')
+         return false
+       end
+    end
 end
