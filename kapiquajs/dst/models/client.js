@@ -39,7 +39,7 @@ Client.prototype.last_address = function(cb) {
         target = _.find(addresses, function(address) {
           return address.id === me.target_address_id;
         });
-        target_address = target || _.first(address);
+        target_address = target || _.first(addresses);
         return cb(err, target_address);
       } else {
         return cb(err, null);

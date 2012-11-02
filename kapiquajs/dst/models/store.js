@@ -10,7 +10,7 @@ PulseBridge = require('../pulse_bridge/pulse_bridge');
 
 Setting = require('../models/setting');
 
-Store.prototype.schedule = function(respond, socket) {
+Store.prototype.schedule = function(respond) {
   var me;
   me = this;
   return Setting.kapiqua(function(err, settings) {
@@ -24,8 +24,21 @@ Store.prototype.schedule = function(respond, socket) {
       };
       store_request = new PulseBridge(null, me.storeid, me.ip, settings.pulse_port);
       return store_request.schedule(pulse_com_error, function(res_data) {
-        console.log(res_data);
-        return respond(res_data);
+        var doc, schedule;
+        doc = libxmljs.parseXmlString(res_data);
+        schedule = doc.get('//StoreSchedule').toString();
+        if (schedule != null) {
+          return me.updateAttributes({
+            store_schedule: schedule
+          }, function(update_store_error, updated_store) {
+            if (update_store_error) {
+              console.log(update_store_error.stack);
+              return respond(update_store_error);
+            } else {
+              return respond(null, updated_store);
+            }
+          });
+        }
       });
     }
   });

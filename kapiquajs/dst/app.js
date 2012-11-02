@@ -84,7 +84,11 @@ io.sockets.on("connection", function(socket) {
         admin_socket = _.find(io.sockets.clients(), function(skt) {
           return skt.idnumber === admin.idnumber;
         });
-        admin_socket.join("admins-" + data.idnumber);
+        if (admin_socket != null) {
+          admin_socket.join("admins-" + data.idnumber);
+        } else {
+          administrators = _.without(administrators, admin);
+        }
       }
     }
     return io.sockets["in"]('admins').emit('register_client', operators);
@@ -149,7 +153,7 @@ io.sockets.on("connection", function(socket) {
     return Clients.olo_show(data, responder, socket);
   });
   socket.on("stores:schedule", function(data, responder) {
-    return Stores.schedule(data, responder, socket);
+    return Stores.schedule(data, responder);
   });
   socket.on("cart:status", function(data, responder) {
     return Carts.status(data, responder, socket);
