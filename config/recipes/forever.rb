@@ -12,7 +12,7 @@ namespace :forever do
   end
   
   desc "restart forever"
-  task restart,roles: :web do
+  task :restart,roles: :web do
     stop
     start
   end
