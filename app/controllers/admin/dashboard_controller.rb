@@ -8,10 +8,10 @@ class Admin::DashboardController < ApplicationController
     @store_per_carts_by_counts = Cart.average_and_count_per_group('store_id')
     @store_per_carts_by_avgs = Cart.average_and_count_per_group('store_id', 1.hour.ago,'carts_payment_avg', 5)
 
-    @users_per_carts_by_counts_day = Cart.average_and_count_per_group('user_id',Date.today.beginning_of_day,'carts_payment_avg', 5)
+    @users_per_carts_by_counts_day = Cart.average_and_count_per_group('user_id',Date.today.beginning_of_day,'carts_count', 5)
     @users_per_carts_by_avgs_day = Cart.average_and_count_per_group('user_id',Date.today.beginning_of_day,'carts_payment_avg', 5)
 
-    @store_per_carts_by_counts_day = Cart.average_and_count_per_group('store_id', Date.today.beginning_of_day,'carts_payment_avg', 5)
+    @store_per_carts_by_counts_day = Cart.average_and_count_per_group('store_id', Date.today.beginning_of_day,'carts_count', 5)
     @store_per_carts_by_avgs_day = Cart.average_and_count_per_group('store_id', Date.today.beginning_of_day,'carts_payment_avg', 5)
 
     @total_sells_for_today = Cart.completed.complete_in_date_range(Date.today.beginning_of_day, Time.now).sum('payment_amount')
