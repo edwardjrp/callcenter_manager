@@ -1,10 +1,18 @@
 #!/bin/bash
 APP_ROOT=/Library/WebServer/kapiqua25/current/
-forever_bin= "/usr/local/share/npm/bin/forever"
-pidfile= "/Library/WebServer/kapiqua25/shared/pids/forever.pid"
-outputlog= "/Library/WebServer/kapiqua25/shared/log/node_out.log"
-errorlog= "/Library/WebServer/kapiqua25/shared/log/node_err.log"
-app_script= "/Library/WebServer/kapiqua25/current/kapiquajs/dst/app.js"
-CMD="$forever_bin start $app_script --pidfile $pidfile -l $outputlog -e $errorlog"
+forever_bin="/usr/local/share/npm/bin/forever"
+pidfile="/Library/WebServer/kapiqua25/shared/pids/forever.pid"
+outputlog="/Library/WebServer/kapiqua25/shared/log/node_out.log"
+errorlog="/Library/WebServer/kapiqua25/shared/log/node_err.log"
+app_script="/Library/WebServer/kapiqua25/current/kapiquajs/dst/app.js"
 
-su -c "$CMD" - proteus
+touch $outputlog
+
+touch $errorlog
+
+touch $pidfile
+
+CMD="NODE_ENV=production $forever_bin start  --pidfile $pidfile -l $outputlog -e $errorlog -a $app_script"
+
+
+$CMD
