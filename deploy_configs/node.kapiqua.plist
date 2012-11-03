@@ -1,26 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-  <dict>
-    <key>Label</key>
-    <string>kapiqua.forever</string>
-    <key>RunAtLoad</key>
-    <true/>
-    <key>KeepAlive</key>
-    <false/>
-    <key>UserName</key>
-    <string>proteus</string>
-    <key>ProgramArguments</key>
-    <array>
-        <string>/usr/local/share/npm/bin/forever</string>
-        <string>start</string>
-        <string>-o</string>
-        <string>/Library/WebServer/kapiqua25/shared/log/node_out.log</string>
-        <string>-e</string>
-        <string>/Library/WebServer/kapiqua25/shared/log/node_err.log</string>
-        <string>/Library/WebServer/kapiqua25/current/kapiquajs/dst/app.js</string>
-    </array>
-    <key>WorkingDirectory</key>
-    <string>/Library/WebServer/kapiqua25/current/kapiquajs/dst/</string>
-  </dict>
+<dict>
+<key>Label</key>
+<string>forever</string>
+<key>UserName</key>
+<string>proteus</string>
+<key>Program</key>
+<string>/Library/WebServer/kapiqua25/current/deploy_configs/forever</string>
+<key>KeepAlive</key>
+<true/>
+<key>StandardErrorPath</key>
+<string>/opt/nginx/logs/error.log</string>
+<key>LaunchOnlyOnce</key>
+<true/>
+</dict>
 </plist>
