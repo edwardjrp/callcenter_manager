@@ -194,7 +194,7 @@ class Cart < ActiveRecord::Base
     carts = carts.merge(self.completed)
     carts = carts.merge(self.select('AVG(carts.payment_amount) as carts_payment_avg'))
     carts = carts.merge(self.group("#{group_column}"))
-    carts = carts.merge(self.where('complete_on > ?', start_time.beginning_of_week))
+    carts = carts.merge(self.where('complete_on > ?', start_time))
     carts = carts.merge(self.select("carts.#{group_column}, COUNT(carts.*) as carts_count"))
     carts = carts.merge(self.order("#{order_column} DESC"))
     carts = carts.merge(self.limit(result_limit))
