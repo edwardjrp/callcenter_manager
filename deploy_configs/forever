@@ -14,5 +14,4 @@ touch $pidfile
 
 CMD="NODE_ENV=production $forever_bin start  --pidfile $pidfile -l $outputlog -e $errorlog -a $app_script"
 
-
 $CMD
