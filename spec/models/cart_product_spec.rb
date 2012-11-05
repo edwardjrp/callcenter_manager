@@ -58,4 +58,16 @@ describe CartProduct do
 
   end
 
+  describe '.products_mix' do
+    pending('Missing test code')
+  end
+
+  describe '.total_items_sold' do
+    pending('Missing test code')
+  end
+
+  describe '#available_in_store?' do
+    pending('Missing test code')
+  end
+
 end

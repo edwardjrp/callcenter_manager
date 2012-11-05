@@ -41,10 +41,8 @@ gem 'ransack'
 gem 'backbone-on-rails'
 gem 'savon'
 gem "zip"
-gem "cancan"
 gem "simple-navigation"
 gem 'simple-navigation-bootstrap'
-gem 'exception_notification'
 gem 'acts_as_list'
 gem 'simple_form'
 gem 'nokogiri'
@@ -76,7 +74,6 @@ group :development do
   gem "thin"
   gem 'yard'
   gem 'capistrano'
-  gem 'letter_opener'
   gem 'awesome_print'
   gem 'annotate', :git => 'git://github.com/ctran/annotate_models.git',:group => :development
 end
@@ -85,8 +82,6 @@ end
 group :development, :test do
   gem 'jasminerice'
   gem 'pry-rails'
-  # gem 'vcr', '~> 2.0.0'
-  # gem 'webmock', '~> 1.8.3'
   gem 'capybara'
   gem "poltergeist"
   gem "shoulda-matchers"
