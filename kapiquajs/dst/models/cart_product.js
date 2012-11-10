@@ -108,6 +108,8 @@ CartProduct.updateItem = function(data, respond, socket, trigger_pricing) {
       } else {
         if (cart_product != null) {
           attributes = {};
+          attributes['product_id'] = data.product_id;
+          attributes['bind_id'] = data.bind_id || null;
           if ((data != null) && (data.quantity != null)) {
             attributes['quantity'] = Number(data.quantity);
           }

@@ -72,14 +72,16 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     item = new ItemFactory(@el, @model, @options.cart, {selected_matchups: @selected_matchups, selected_flavor: @selected_flavor, selected_size: @selected_size, item_quantity: $(@el).find('.cart_product_quantity').val()}).build()
     # console.log @options.cart
     if @editing
-      cart_product = @edit_cart_product.set({options: item.options , quantity: item.quantity }) # falta editar productos
+      console.log item.product
+      cart_product = @edit_cart_product.set({ product: item.product ,product_id: item.product_id, cart_id: item.cart_id, options: item.options, bind_id: item.bind_id }) # falta editar productos
+      cart_product.save()
     else 
       cart_product = _.first(@options.cart.get('cart_products').where({ product_id: item.product_id, cart_id: item.cart_id, options: item.options, bind_id: item.bind_id }))
       if cart_product?
         cart_product.set({ quantity: (Number(cart_product.get('quantity')) + Number(item.quantity)) })
         cart_product.save()
       else
-        @options.cart.get('cart_products').create({ product_id: item.product_id, product: item.product, quantity: item.quantity, options: item.options, cart_id: item.cart_id,bind_id: item.bind_id })
+        @options.cart.get('cart_products').create({ product_id: item.product_id, product: item.product, quantity: item.quantity, options: item.options, cart_id: item.cart_id, bind_id: item.bind_id })
     @clear()
     @clear_edit() if @editing
     @render()

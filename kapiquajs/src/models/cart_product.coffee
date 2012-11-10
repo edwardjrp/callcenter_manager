@@ -62,6 +62,8 @@ CartProduct.updateItem =  (data, respond, socket, trigger_pricing) ->
         else
           if cart_product?
             attributes = {}
+            attributes['product_id'] = data.product_id
+            attributes['bind_id'] = data.bind_id || null
             attributes['quantity'] = Number(data.quantity) if data? and data.quantity?
             attributes['options'] = data.options if data? and data.options?
             attributes['updated_at'] = new Date()
