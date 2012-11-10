@@ -45,7 +45,7 @@ describe "Home::Indices" do
       subject { page }
 
       before do
-        Capybara.current_driver = :selenium_chrome
+        Capybara.current_driver = :selenium
         login( user )
         visit root_path
       end
@@ -107,7 +107,7 @@ describe "Home::Indices" do
 
 
       before(:each) do
-        Capybara.current_driver = :selenium_chrome
+        Capybara.current_driver = :selenium
         login( user )
         visit root_path 
       end

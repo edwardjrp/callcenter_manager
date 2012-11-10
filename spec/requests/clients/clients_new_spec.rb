@@ -11,7 +11,7 @@ describe "Client::New" do
     subject { page }
 
     before do
-      Capybara.current_driver = :selenium_chrome
+      Capybara.current_driver = :selenium
       login(create(:user))
       visit root_path 
     end

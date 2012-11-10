@@ -15,7 +15,7 @@ describe "client delete phone and address" do
 
 
     before do
-      Capybara.current_driver = :selenium_chrome
+      Capybara.current_driver = :selenium
       login(user)
       visit root_path
       selector = '.ui-menu-item  a:first'

@@ -13,7 +13,7 @@ describe "Client::Show" do
     let!(:phone2) { create :phone, client: client, number: '8095552134', ext: '99' }
 
     before(:each) do
-      Capybara.current_driver = :selenium_chrome
+      Capybara.current_driver = :selenium
       login( user )
       visit root_path 
       selector = '.ui-menu-item  a:first'
