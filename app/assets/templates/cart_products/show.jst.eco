@@ -11,13 +11,13 @@
     <div class='remove_options_and_pricing'>
       <span class='item_remove' rel='tooltip' title='Eliminar'><i class="icon-trash icon-white"></i></span>
       <% if  @cart_product.get('product').get('category').hasOptions():%>
-        <%if _.any(@cart_product.options):%><span class='show_options' rel='tooltip' title='Monstrar opciones'><i class="icon-list icon-white left-margin-1"></i></span><%end%>
+        <%unless _.isEmpty(@cart_product.get('options')):%><span class='show_options' rel='tooltip' title='Monstrar opciones'><i class="icon-list icon-white left-margin-1"></i></span><%end%>
         <span class='edit_options' rel='tooltip' title='Editar opciones'><i class="icon-edit icon-white left-margin-1"></i></span>
       <%end%>
       <span class='pricing' data-options='<%=@cart_product.options_array()%>'>$ <%=@cart_product.price()%></span>
     </div>
   </div>
   <p>
-    <%if _.any(@cart_product.options):%><%=@cart_product.niffty_opions()%><%end%>
+    <%unless _.isEmpty(@cart_product.get('options')):%><%=@cart_product.niffty_opions()%><%end%>
   </p>
 </li>
