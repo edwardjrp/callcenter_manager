@@ -7,7 +7,7 @@ class @ItemFactory
     errors.push 'No ha seleccionado un producto' unless _.values(@options['selected_matchups']).length > 0 and _.values(@options['selected_matchups']).length <=2
     errors.push 'No ha seleccionado un sabor' unless @options['selected_flavor']?
     errors.push 'No ha seleccionado un tamaño' unless @options['selected_size']?
-    if @category.hasOptions()
+    if @category.hasOptions() and not @category.typeUnit()
       errors.push 'No ha establecido opciones' unless @scan()? and _.any(@scan())
       errors.push 'La catidad a agregar al carrito no es valida' unless @options['item_quantity'] > 0 
       errors.push 'Ha seleccionado deben ser mayores a cero' unless @validate_quantities()
