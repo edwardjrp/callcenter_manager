@@ -8,6 +8,7 @@ Client = require('../models/client')
 Store = require('../models/store')
 libxmljs = require("libxmljs")
 Phone = require('../models/phone')
+Product = require('../models/product')
 User = require('../models/user')
 Address = require('../models/address')
 Setting = require('../models/setting')
@@ -60,8 +61,21 @@ Cart.prototype.price = (socket, io)->
           console.error c_cp_err.stack
           socket.emit 'cart:price:error', 'No se pudo acceder a la lista de productos para esta orden'
         else
-          current_cart_products = _.map(cart_products, (cart_product)-> cart_product.toJSON())
-          callback(null, current_cart_products)
+          # current_cart_products = _.map(cart_products, (cart_product)-> cart_product.toJSON())
+          json_and_binded = (cart_product, callback) ->
+            if cart_product.bind_id?
+              Product.find cart_product.bind_id, (error, product) ->
+                if error
+                  console.error error.stack
+                else
+                  current_cart_product = cart_product.toJSON()
+                  current_cart_product.binded_product = product.toJSON()
+                  callback(error, current_cart_product)
+            else
+              callback(error, cart_product.toJSON())
+
+          async.map cart_products, json_and_binded, (error, current_cart_products) ->
+            callback(null, current_cart_products)
     ,
     (current_cart_products, callback) ->
       me.products (c_p_err, products) ->

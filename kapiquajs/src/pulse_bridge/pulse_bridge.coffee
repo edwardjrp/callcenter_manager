@@ -239,11 +239,12 @@ class PulseBridge
     if _.any(@cart.cart_products)
       for cart_product in @cart.cart_products
         order_item = new libxml.Element(doc,'OrderItem')
-        order_item.addChild(new libxml.Element(doc,'ProductCode', cart_product.product.productcode))
+        if cart_product.binded_product? then current_product_code = "#{cart_product.product.productcode}/#{cart_product.binded_product.productcode}" else current_product_code = cart_product.product.productcode
+        order_item.addChild(new libxml.Element(doc,'ProductCode', current_product_code))
         order_item.addChild(new libxml.Element(doc,'ProductName').attr('xsi:nil':"true"))
         order_item.addChild(new libxml.Element(doc,'ItemQuantity', (cart_product.quantity.toString() || '1')))
         if cart_product.priced_at? then cart_item_price = cart_product.priced_at.toString() else cart_item_price = '0'
-        order_item.addChild(new libxml.Element(doc,'PricedAt', @fallback_values(action, cart_item_price,'0')))# @fallback_values(action, cart_product.priced_at,'0')
+        order_item.addChild(new libxml.Element(doc,'PricedAt', @fallback_values(action, cart_item_price,'0')))
         order_item.addChild(new libxml.Element(doc,'OverrideAmount').attr('xsi:nil':"true"))
         order_item.addChild(new libxml.Element(doc,'CookingInstructions').attr('xsi:nil':"true"))
         

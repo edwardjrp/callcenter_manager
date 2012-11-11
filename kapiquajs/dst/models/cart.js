@@ -1,4 +1,4 @@
-var Address, Cart, CartProduct, Client, OrderReply, Phone, PulseBridge, Setting, Store, User, async, libxmljs, _;
+var Address, Cart, CartProduct, Client, OrderReply, Phone, Product, PulseBridge, Setting, Store, User, async, libxmljs, _;
 
 Cart = require('./schema').Cart;
 
@@ -19,6 +19,8 @@ Store = require('../models/store');
 libxmljs = require("libxmljs");
 
 Phone = require('../models/phone');
+
+Product = require('../models/product');
 
 User = require('../models/user');
 
@@ -89,15 +91,30 @@ Cart.prototype.price = function(socket, io) {
   return async.waterfall([
     function(callback) {
       return me.cart_products({}, function(c_cp_err, cart_products) {
-        var current_cart_products;
+        var json_and_binded;
         if (c_cp_err) {
           console.error(c_cp_err.stack);
           return socket.emit('cart:price:error', 'No se pudo acceder a la lista de productos para esta orden');
         } else {
-          current_cart_products = _.map(cart_products, function(cart_product) {
-            return cart_product.toJSON();
+          json_and_binded = function(cart_product, callback) {
+            if (cart_product.bind_id != null) {
+              return Product.find(cart_product.bind_id, function(error, product) {
+                var current_cart_product;
+                if (error) {
+                  return console.error(error.stack);
+                } else {
+                  current_cart_product = cart_product.toJSON();
+                  current_cart_product.binded_product = product.toJSON();
+                  return callback(error, current_cart_product);
+                }
+              });
+            } else {
+              return callback(error, cart_product.toJSON());
+            }
+          };
+          return async.map(cart_products, json_and_binded, function(error, current_cart_products) {
+            return callback(null, current_cart_products);
           });
-          return callback(null, current_cart_products);
         }
       });
     }, function(current_cart_products, callback) {

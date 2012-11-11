@@ -158,7 +158,7 @@ PulseBridge = (function() {
   };
 
   PulseBridge.prototype.body = function(action) {
-    var ap, auth, body, cart_coupon, cart_item_price, cart_option_quantity, cart_product, coupon, coupons, customer, customer_address, customer_name, customer_type_info, discount_present, doc, envelope, exoneration_present, header, item_modifier, item_modifiers, orde_info_collection, order, orderOverrrideAmount, order_info_1, order_info_2, order_info_3, order_item, order_items, order_source, payment, payment_type, product_option, product_options, take_time, tax, tc, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref10, _ref11, _ref12, _ref13, _ref14, _ref15, _ref16, _ref17, _ref18, _ref19, _ref2, _ref20, _ref21, _ref22, _ref23, _ref24, _ref25, _ref26, _ref27, _ref28, _ref29, _ref3, _ref30, _ref31, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
+    var ap, auth, body, cart_coupon, cart_item_price, cart_option_quantity, cart_product, coupon, coupons, current_product_code, customer, customer_address, customer_name, customer_type_info, discount_present, doc, envelope, exoneration_present, header, item_modifier, item_modifiers, orde_info_collection, order, orderOverrrideAmount, order_info_1, order_info_2, order_info_3, order_item, order_items, order_source, payment, payment_type, product_option, product_options, take_time, tax, tc, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref10, _ref11, _ref12, _ref13, _ref14, _ref15, _ref16, _ref17, _ref18, _ref19, _ref2, _ref20, _ref21, _ref22, _ref23, _ref24, _ref25, _ref26, _ref27, _ref28, _ref29, _ref3, _ref30, _ref31, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
     doc = new libxml.Document();
     envelope = new libxml.Element(doc, 'env:Envelope').attr({
       'xmlns:xsd': "http://www.w3.org/2001/XMLSchema",
@@ -331,7 +331,14 @@ PulseBridge = (function() {
       for (_j = 0, _len1 = _ref21.length; _j < _len1; _j++) {
         cart_product = _ref21[_j];
         order_item = new libxml.Element(doc, 'OrderItem');
-        order_item.addChild(new libxml.Element(doc, 'ProductCode', cart_product.product.productcode));
+        console.log("" + cart_product.product.productcode + "/" + cart_product.binded_product.productcode);
+        if (cart_product.binded_product != null) {
+          current_product_code = "" + cart_product.product.productcode + "/" + cart_product.binded_product.productcode;
+        } else {
+          current_product_code = cart_product.product.productcode;
+        }
+        console.log(current_product_code);
+        order_item.addChild(new libxml.Element(doc, 'ProductCode', current_product_code));
         order_item.addChild(new libxml.Element(doc, 'ProductName').attr({
           'xsi:nil': "true"
         }));
