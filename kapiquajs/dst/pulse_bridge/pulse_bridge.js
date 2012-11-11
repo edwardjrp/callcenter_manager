@@ -331,13 +331,11 @@ PulseBridge = (function() {
       for (_j = 0, _len1 = _ref21.length; _j < _len1; _j++) {
         cart_product = _ref21[_j];
         order_item = new libxml.Element(doc, 'OrderItem');
-        console.log("" + cart_product.product.productcode + "/" + cart_product.binded_product.productcode);
         if (cart_product.binded_product != null) {
           current_product_code = "" + cart_product.product.productcode + "/" + cart_product.binded_product.productcode;
         } else {
           current_product_code = cart_product.product.productcode;
         }
-        console.log(current_product_code);
         order_item.addChild(new libxml.Element(doc, 'ProductCode', current_product_code));
         order_item.addChild(new libxml.Element(doc, 'ProductName').attr({
           'xsi:nil': "true"

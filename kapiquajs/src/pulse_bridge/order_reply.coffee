@@ -31,6 +31,8 @@ class OrderReply
     results = []
     for order_item in @order_items
       for cart_product in @cart_products
+        order_item.code = order_item.code.split('/')[0]
+        order_item.binded_product = order_item.code.split('/')[1] || null
         if cart_product.quantity? and not _.isUndefined(cart_product.quantity) then quantity = cart_product.quantity else quantity = null
         if order_item.quantity? and not _.isUndefined(cart_product.quantity) then reply_quantity = Number(order_item.quantity) else reply_quantity = null
         if order_item.code == cart_product.product.productcode and reply_quantity == quantity and _.isEmpty(objectDifference(Option.pulseCollection(cart_product.options), order_item.options))

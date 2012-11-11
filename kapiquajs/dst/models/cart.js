@@ -109,7 +109,7 @@ Cart.prototype.price = function(socket, io) {
                 }
               });
             } else {
-              return callback(error, cart_product.toJSON());
+              return callback(null, cart_product.toJSON());
             }
           };
           return async.map(cart_products, json_and_binded, function(error, current_cart_products) {

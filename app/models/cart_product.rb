@@ -42,6 +42,13 @@ class CartProduct < ActiveRecord::Base
     store.products.include?(self.product)
   end
 
+  def combined_product_name
+    return '' if product_id.nil?
+    return "Mitad #{product.productname} y mitad #{Product.find(bind_id).productname}".html_safe if bind_id and Product.exists? bind_id
+    
+    product.productname.html_safe
+  end
+
   def parsed_options
     return [] if product && product.category.nil?
     if options.present? and options.split(',').any?

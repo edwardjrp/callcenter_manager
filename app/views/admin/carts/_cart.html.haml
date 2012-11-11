@@ -94,7 +94,7 @@
         - cart.cart_products.each do |cart_product|
           %tr{:id=> dom_id(cart_product)}
             %td.span1=cart_product.quantity
-            %td= cart_product.product.productname
+            %td= cart_product.combined_product_name
             %td= cart_product.product.niffty_options
             %td.item_price
               - if cart_product.priced_at

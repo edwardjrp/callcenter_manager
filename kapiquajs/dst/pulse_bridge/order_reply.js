@@ -50,6 +50,8 @@ OrderReply = (function() {
       _ref1 = this.cart_products;
       for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
         cart_product = _ref1[_j];
+        order_item.code = order_item.code.split('/')[0];
+        order_item.binded_product = order_item.code.split('/')[1] || null;
         if ((cart_product.quantity != null) && !_.isUndefined(cart_product.quantity)) {
           quantity = cart_product.quantity;
         } else {

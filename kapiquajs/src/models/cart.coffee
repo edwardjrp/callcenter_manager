@@ -61,7 +61,6 @@ Cart.prototype.price = (socket, io)->
           console.error c_cp_err.stack
           socket.emit 'cart:price:error', 'No se pudo acceder a la lista de productos para esta orden'
         else
-          # current_cart_products = _.map(cart_products, (cart_product)-> cart_product.toJSON())
           json_and_binded = (cart_product, callback) ->
             if cart_product.bind_id?
               Product.find cart_product.bind_id, (error, product) ->
@@ -72,7 +71,7 @@ Cart.prototype.price = (socket, io)->
                   current_cart_product.binded_product = product.toJSON()
                   callback(error, current_cart_product)
             else
-              callback(error, cart_product.toJSON())
+              callback(null, cart_product.toJSON())
 
           async.map cart_products, json_and_binded, (error, current_cart_products) ->
             callback(null, current_cart_products)
@@ -125,7 +124,7 @@ Cart.prototype.price = (socket, io)->
                     socket.emit('cart:price:error', 'La orden tiene cupones incompletos')
               catch err_pricing
                 socket.emit 'cart:price:error', 'Un error impidio solitar el precio de esta orden'
-                io.sockets.in('admins').emit('system:cart:price:error',current_cart)
+                io.sockets.in('admins').emit('system:cart:price:error', current_cart)
                 console.error err_pricing.stack
         else
           socket.emit 'cart:price:error', 'No se pudo acceder a la lista de productos para esta orden'
@@ -177,8 +176,20 @@ Cart.prototype.place = (data, socket, io) ->
           console.error c_cp_err.stack
           socket.emit 'cart:place:error', 'No se pudo acceder a la lista de productos para esta orden'
         else
-          current_cart_products = _.map(cart_products, (cart_product)-> cart_product.toJSON())
-          callback(null, current_cart_products)
+          json_and_binded = (cart_product, callback) ->
+            if cart_product.bind_id?
+              Product.find cart_product.bind_id, (error, product) ->
+                if error
+                  console.error error.stack
+                else
+                  current_cart_product = cart_product.toJSON()
+                  current_cart_product.binded_product = product.toJSON()
+                  callback(error, current_cart_product)
+            else
+              callback(null, cart_product.toJSON())
+
+          async.map cart_products, json_and_binded, (error, current_cart_products) ->
+            callback(null, current_cart_products)
     ,
     (current_cart_products, callback) ->
       me.products (c_p_err, products) ->
