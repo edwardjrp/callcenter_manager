@@ -144,13 +144,12 @@ class PulseBridge
         else
             tax = 'CF:ConsFinal'
 
-    zero_width_space = "&#8203;"
     delivery_instructions = 'D_I'
     if @cart.address?.delivery_instructions?
       if ( @cart.address.delivery_instructions.length < 30)
         delivery_instructions = @cart.address.delivery_instructions
       else
-        delivery_instructions = @cart.address.delivery_instructions.match(new RegExp(".{1,30}", 'g')).join(zero_width_space)
+        delivery_instructions = @cart.address.delivery_instructions.match(/.{1,30}/g)[0]
 
     order.addChild(new libxml.Element(doc,'DeliveryInstructions', "TC:#{tc.toString()};AP:#{ap.toString()};#{@fallback_values(action, tax, 'CF:ConsFinal')};#{delivery_instructions}."))  # delivery instructions
     #order source
