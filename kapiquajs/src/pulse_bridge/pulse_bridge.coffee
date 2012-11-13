@@ -144,12 +144,20 @@ class PulseBridge
         else
             tax = 'CF:ConsFinal'
 
-    order.addChild(new libxml.Element(doc,'DeliveryInstructions', "Edf:;TC:#{tc.toString()};AP:#{ap.toString()};#{@fallback_values(action, tax, 'CF:ConsFinal')};D_I."))  # delivery instructions
+    zero_width_space = "&#8203;"
+    delivery_instructions = 'D_I'
+    if @cart.address?.delivery_instructions?
+      if ( @cart.address.delivery_instructions.length < 30)
+        delivery_instructions = @cart.address.delivery_instructions
+      else
+        delivery_instructions = @cart.address.delivery_instructions.match(new RegExp(".{1,30}", 'g')).join(zero_width_space)
+
+    order.addChild(new libxml.Element(doc,'DeliveryInstructions', "TC:#{tc.toString()};AP:#{ap.toString()};#{@fallback_values(action, tax, 'CF:ConsFinal')};#{delivery_instructions}."))  # delivery instructions
     #order source
     order_source  = new libxml.Element(doc,'OrderSource')
     order_source.addChild(new libxml.Element(doc,'OrganizationURI', 'proteus.dominos.com.do'))
     order_source.addChild(new libxml.Element(doc,'OrderMethod', 'Internet'))
-    order_source.addChild(new libxml.Element(doc,'OrderTaker', "#{@cart.user?.first_name} #{@cart.user?.last_name}")) # agent idnumber
+    order_source.addChild(new libxml.Element(doc,'OrderTaker', @fallback_values(action, "#{@cart.user?.first_name} #{@cart.user?.last_name}", "price_query"))) # agent idnumber
     order.addChild(order_source)
     # end order source
     #customer info

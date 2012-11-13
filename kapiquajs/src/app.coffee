@@ -92,9 +92,6 @@ io.sockets.on "connection", (socket) ->
   socket.on 'chat', (data)->
     io.sockets.emit('chat', data);
 
-  # socket.on "carts:read", (data, responder) ->
-  #   Carts.read(data, responder, socket)
-
   socket.on "cart_products:create", (data, responder) ->
     CartProducts.create(data, responder, socket)
     
@@ -140,6 +137,7 @@ io.sockets.on "connection", (socket) ->
 
 process.on 'uncaughtException', (err)->
     console.log(err.stack)
+    process.exit(1)
 
 app.listen app.settings.port, ->
   console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env)

@@ -106,7 +106,7 @@
                 .span3
                   %strong instrucciones de entrega:
               .row
-                .span4
+                .span3
                   = @cart.client.last_address.delivery_instructions
             %hr 
       
@@ -182,7 +182,7 @@
             - @cart.cart_products.each do |cart_product|
               %tr{:id=> dom_id(cart_product), :data=> { 'cart-product-id'=> cart_product.id }, :class=> availability_class(cart_product.available_in_store(@cart.store))}
                 %td.span1=text_field_tag 'cart_product[quantity]', cart_product.quantity, class: 'checkout_input', data: { orig: cart_product.quantity }
-                %td= cart_product.product.productname
+                %td= cart_product.combined_product_name
                 %td= cart_product.niffty_options
                 %td.item_price
                   - if cart_product.priced_at

@@ -167,7 +167,8 @@ io.sockets.on("connection", function(socket) {
 });
 
 process.on('uncaughtException', function(err) {
-  return console.log(err.stack);
+  console.log(err.stack);
+  return process.exit(1);
 });
 
 app.listen(app.settings.port, function() {
