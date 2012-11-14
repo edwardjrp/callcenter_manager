@@ -25,6 +25,7 @@ class Address < ActiveRecord::Base
   
   def client_target?
     return false if client.nil?
+    return false if client.target_address_id.nil?
     client.target_address_id == self.id
   end
 

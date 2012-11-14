@@ -105,8 +105,7 @@ class CartsController < ApplicationController
     @store = Store.find(params[:order_target][:store_id])
     if params[:order_target][:address_id].present? && @cart.client.present?
       @address = Address.find(params[:order_target][:address_id])
-      @cart.client.target_address_id = @address.id
-      @cart.client.save
+      @cart.client.set_last_address(@address)
     end
     @cart.store = @store
     respond_to do |format|
