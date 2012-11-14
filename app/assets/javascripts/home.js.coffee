@@ -73,7 +73,7 @@ jQuery ->
           else
             $("<div class='purr'>#{response.data}<div>").purr()
     
-  $('.set_target_store_address').on 'click', (event)->
+  $('#cart_info').on 'click', '.set_target_store_address', (event)->
     target = $(event.currentTarget)
     $.ajax
       type: 'POST'
@@ -89,7 +89,7 @@ jQuery ->
         $(".set_target_store_address[data-address-id=#{cart.client.target_address_id}]").prepend('<i class="icon-bookmark">')
         $(".set_target_store[data-store-id=#{cart.store.id}]").prepend('<i class="icon-ok">')
         
-  $('.set_target_store').on 'click', (event)->
+  $('#cart_info').on 'click', '.set_target_store', (event)->
     target = $(event.currentTarget)
     $.ajax
       type: 'POST'
