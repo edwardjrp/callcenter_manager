@@ -37,7 +37,7 @@ class Kapiqua25.Views.CartIndex extends Backbone.View
       @model.get('cart_products').add(cart_product)
 
   addCartProduct: (cart_product) ->
-    unless _.isUnidefined
+    unless _.isUndefined(cart_product)
       view = new Kapiqua25.Views.CartProductsShow(model: cart_product)
       @$('#current_carts_items').append(view.render().el)
 
