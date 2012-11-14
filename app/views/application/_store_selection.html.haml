@@ -1,0 +1,26 @@
+%a#choose_store.dropdown-toggle{"data-toggle" => "dropdown", :href=>'#'}
+  Tienda:
+  - if current_cart.store.present? && current_cart.store.name
+    = current_cart.store.name
+  - else
+    N/A
+  %b.caret
+%ul#store_list.dropdown-menu.scrollable_dropdown
+  - if current_cart.present? && current_cart.client.present?
+    -if current_cart.client.addresses.count.nonzero?
+      -current_cart.client.addresses.each do |address|
+        -if address.store.present?
+          %li
+            %a.set_target_store_address{:data=> { "address-id"=> address.id , "store-id"=> address.store.id}}
+              - if address.client_target?
+                %i.icon-bookmark
+              ="#{address.store.storeid} #{address.store.name} - Calle #{address.street.name}, No. #{address.number} "
+      %hr
+  %li
+    %input{type: 'text' , id: 'filter_store'}
+  - Store.all.each do |store|
+    %li.filterable
+      %a.set_target_store{id: dom_id(store, store.storeid), :data=> { "store-id"=> store.id }}
+        - if current_cart.present? && current_cart.store.present? && store == current_cart.store
+          %i.icon-ok
+        ="#{store.storeid} | #{store.name} "

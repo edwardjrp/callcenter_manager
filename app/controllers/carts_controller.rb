@@ -10,9 +10,9 @@ class CartsController < ApplicationController
          @cart.client = @client unless @cart.client == @client
          @cart.reset_for_new_client!
          @cart.save!
-         format.json{render :json => @cart.as_json(only: [:service_method, :store_id], include: [client: {only: [:id, :first_name, :last_name]}])}
+         format.js
       else
-        format.json{render :nothing =>true, :status => 422}
+        format.js{ render :nothing =>true, :status => 422 }
       end
     end
   end
@@ -93,9 +93,9 @@ class CartsController < ApplicationController
     @cart.service_method = params[:service_method]
     respond_to do |format|
       if @cart.save
-        format.json{render :json => @cart.as_json(only: [:service_method, :store_id])}
+        format.js
       else
-         format.json{render :nothing =>true, :status => 422}
+        format.js{ render :nothing =>true, :status => 422 }
       end
     end
   end

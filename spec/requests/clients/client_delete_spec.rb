@@ -23,7 +23,8 @@ describe "client delete phone and address" do
       sleep(1)
       page.execute_script " $('#{selector}').trigger(\"mouseenter\").click();"
       page.find_by_id('client_search_phone').native.send_keys([:return])
-      within('.subnav-fixed'){click_link(client.full_name)}
+      has_content? '.subnav-fixed'
+      within('.subnav-fixed') { click_link(client.full_name) }
     end
 
     after do

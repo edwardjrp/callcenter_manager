@@ -36,7 +36,10 @@ describe "Client::Show" do
 
     describe "whe editing the client" do
 
-      before { within('.subnav-fixed') { click_link(client.full_name) } }
+      before do 
+        has_content? '.subnav-fixed'
+        within('.subnav-fixed') { click_link(client.full_name) }
+      end
 
       it "should edit the name" do
 

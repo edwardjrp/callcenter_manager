@@ -7,10 +7,10 @@ jQuery ->
   if window.telephony?
     window.telephony.on 'connect', ->
       window.telephony.emit "identificacion",{ cedula: window.user_id }
-      console.log "connected to telephony as #{window.user_id}"
+      console.log "connected to telephony as #{window.user_id}" unless _.isUndefined(window.user_id)
 
     window.telephony.on 'bridge', (phone) ->
-      console.log phone
+      console.log phone unless _.isUndefined(phone)
       if $('#client_search_phone').size() > 0
         if $('#client_search_idnumber_controls').size() > 0
           window.show_alert("Ha entrado una llamada desde #{phone} pero el formulario esta en use", 'alert')

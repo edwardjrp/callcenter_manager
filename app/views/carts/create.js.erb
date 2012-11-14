@@ -1,0 +1,4 @@
+$('#cart_info').html("<%= j render 'cart_info' %>");
+$('#cart_info li').effect('highlight',  {}, 500);
+window.hide_popover($('#client_search_panel'));
+window.show_alert('Cliente asignado.', 'success');
