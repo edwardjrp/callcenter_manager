@@ -29,7 +29,7 @@ class Option
 
   def to_s
     return '' if product.nil?
-    q = 'SIN ' if quantity == 0
+    quantity == 0 ? q = 'SIN ' : q = quantity
     part == 'W' ? "#{q}#{product.productname}" : "#{q}#{product.productname} a la #{part_map}"
   end
 
