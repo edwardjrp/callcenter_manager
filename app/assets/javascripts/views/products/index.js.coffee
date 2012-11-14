@@ -76,7 +76,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
       cart_product = @edit_cart_product.set({ product: item.product ,product_id: item.product_id, cart_id: item.cart_id, options: item.options, bind_id: item.bind_id }) # falta editar productos
       cart_product.save()
     else 
-      cart_product = _.first(@options.cart.get('cart_products').where({ product_id: item.product_id, cart_id: item.cart_id, options: item.options, bind_id: item.bind_id }))
+      cart_product = _.first(@options.cart.get('cart_products').where({ product_id: item?.product_id, cart_id: item?.cart_id, options: item?.options, bind_id: item?.bind_id }))
       if cart_product?
         cart_product.set({ quantity: (Number(cart_product.get('quantity')) + Number(item.quantity)) })
         cart_product.save()
