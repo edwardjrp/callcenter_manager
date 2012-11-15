@@ -9,6 +9,7 @@ class CartsController < ApplicationController
          @cart.user = current_user unless @cart.user == current_user
          @cart.client = @client unless @cart.client == @client
          @cart.reset_for_new_client!
+         @cart.set_default_store!
          @cart.save!
          format.js
       else

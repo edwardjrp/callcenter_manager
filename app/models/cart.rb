@@ -263,6 +263,16 @@ class Cart < ActiveRecord::Base
     self.errors.empty?
   end
 
+  def set_default_store!
+    unless client.nil?
+      address = client.last_address
+      if address.present? && address.store.present?
+        self.store = address.store
+        self.save!
+      end
+    end
+  end
+
   def reset_for_new_client!
     self.started_on = Time.now
     clear_store!
