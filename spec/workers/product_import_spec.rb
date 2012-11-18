@@ -52,6 +52,7 @@ describe ProductsImport do
       sand.products.where(productcode: 'H').count.should == 1
       pasta.products.where(productcode: 'H').count.should == 1
       ProductsImport.new.perform
+      ProductsImport.new.perform
       pizza.products.where(productcode: 'H').count.should == 1
       sand.products.where(productcode: 'H').count.should == 1
       pasta.products.where(productcode: 'H').count.should == 1
@@ -68,6 +69,7 @@ describe ProductsImport do
       pizza.products.where(productcode: 'E').count.should == 1
       sand.products.where(productcode: 'E').count.should == 1
       pasta.products.where(productcode: 'E').count.should == 1
+      ProductsImport.new.perform
       ProductsImport.new.perform
       pizza.products.where(productcode: 'E').count.should == 1
       sand.products.where(productcode: 'E').count.should == 1
