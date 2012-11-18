@@ -1,0 +1,753 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><SOAP-ENV:Envelope xmlns:SOAPSDK1="http://www.w3.org/2001/XMLSchema" xmlns:SOAPSDK2="http://www.w3.org/2001/XMLSchema-instance" xmlns:SOAPSDK3="http://schemas.xmlsoap.org/soap/encoding/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"><SOAP-ENV:Body SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"><SOAPSDK4:GetStoreProductsResponse xmlns:SOAPSDK4="http://www.dominos.com/message/"><StoreProducts><StoreID>99998</StoreID><Products>CategoryCode	ProductCode	ProductName	Options	ProductGroupSize	Price1-0	Price1-1	Price1-2	Price1-3	Price1-4	Price2-0	Price2-1	Price2-2	Price2-3	Price2-4	SurchargeAmount	IsSurchargeOnlyFirstProduct	IsMasterType	SizeCode	FlavorCode	IsTaxable	IsPrepared	IsSpecialtyPizza	OptionSelectionGroupType	ProductOptionSelectionGroup	IsShortcut	OptionType
+Bread	8TWISTY	Order Breadsticks	SIDMAR	1	160	180	200	220	240	160	180	200	220	240	0	No	Yes	BRD8	TWISTBRD	Yes	Yes	No	DEFBread	TWISTBRD	No	
+Bread	B16PBIT	16 Piezas Parm Bites	SIDMAR	1	200	200	200	200	200	200	200	200	200	200	0	No	Yes	BRD16	PBITES	Yes	Yes	No	DEFBread	CHEBRD	No	
+Bread	CHSBREAD	Order Cheesybread	SIDMAR	1	200	220	240	260	280	200	220	240	260	280	0	No	Yes	BRD8	CHEBRD	Yes	Yes	No	DEFBread	CHEBRD	No	
+Bread	CINNASTIX8	Order Canelitos	SIDICE	1	160	180	200	220	240	160	180	200	220	240	0	No	Yes	BRD8	CINBRD	Yes	Yes	No	DEFBread	CINBRD	No	
+Bread	SBRDBJ	Order Stuffed Cheesy Bacon/Jalapeno		1	299	319	339	359	379	299	319	339	359	379	0	No	Yes	BRD8	SCBRDBJ	Yes	Yes	No	DEFBread	DEFBread	No	
+Bread	SBRDSF	Order SCB Espinaca Feta		1	299	319	339	359	379	299	319	339	359	379	0	No	Yes	BRD8	SCBRDSF	Yes	Yes	No	DEFBread	DEFBread	No	
+Bread	SCBREAD	Order Stuffed Cheesy Bread		1	299	319	339	359	379	299	319	339	359	379	0	No	Yes	BRD8	SCBRD	Yes	Yes	No	DEFBread	DEFBread	No	
+Bread	SIDICE	Cremita de Azucar	OPTION														Yes									CutTable
+Bread	SIDMAR	Marinara Dip	OPTION														Yes									CutTable
+CALZON	CALZN	Calzone Clasico Calzone	Qr,C	2	200	245	290	335	380	200	245	290	335	380	0	No	Yes	ORDER	CLASICO	Yes	Yes	Yes	CALZ	CALZ	No	
+CALZON	ADEMA	Maiz	OPTION														Yes									MakeLine
+CALZON	Ac	Queso Americano	OPTION														Yes									MakeLine
+CALZON	C	Queso Mozzarella	OPTION														Yes									MakeLine
+CALZON	Cp	Queso Provolone Rayado	OPTION														Yes									MakeLine
+CALZON	D	Pollo Parilla	OPTION														Yes									MakeLine
+CALZON	Du	Pollo BBQ	OPTION														Yes									MakeLine
+CALZON	E	Queso Cheddar	OPTION														Yes									MakeLine
+CALZON	Fe	Queso Feta	OPTION														Yes									MakeLine
+CALZON	G	Pimientos Verdes	OPTION														Yes									MakeLine
+CALZON	H	Jamon	OPTION														Yes									MakeLine
+CALZON	J	Jalapeño	OPTION														Yes									MakeLine
+CALZON	K	Tocineta	OPTION														Yes									MakeLine
+CALZON	M	Hongos	OPTION														Yes									MakeLine
+CALZON	N	Piña	OPTION														Yes									MakeLine
+CALZON	O	Cebolla	OPTION														Yes									MakeLine
+CALZON	P	Pepperoni	OPTION														Yes									MakeLine
+CALZON	Pr	Pimientos Rojos	OPTION														Yes									MakeLine
+CALZON	Qc	Queso Parmesano/Asiago	OPTION														Yes									MakeLine
+CALZON	Qr	Queso Ricotta	OPTION														Yes									MakeLine
+CALZON	R	Aceitunas Negras	OPTION														Yes									MakeLine
+CALZON	Sa	Salami	OPTION														Yes									MakeLine
+CALZON	T	Tomates Frescos	OPTION														Yes									MakeLine
+CALZON	Td	Tomate en cuadro	OPTION														Yes									MakeLine
+CALZON	Xe	Espinaca 	OPTION														Yes									MakeLine
+CALZON	Z	Pimiento Amarillo	OPTION														Yes									MakeLine
+CHARGES	DLVRYFEE	Delivery Charge		1	0	0	0	0	0	0	0	0	0	0	0	No	Yes	DLVRYFEE	CHARGES	No	No	No			No	
+CUMPLE	BISCOCHO	Order Bizcocho 1/2 Libra		1	500	500	500	500	500	500	500	500	500	500	0	No	Yes	ORDER	BIZCOCHO	Yes	No	No			No	
+CUMPLE	DECO10	Order Decoración Plan 10 niños		1	3220	3220	3220	3220	3220	3220	3220	3220	3220	3220	0	No	Yes	ORDER	DECO10	Yes	No	No			No	
+CUMPLE	DECO15	Order Decoración Plan 15 niños		1	3425	3425	3425	3425	3425	3425	3425	3425	3425	3425	0	No	Yes	ORDER	DECO15	Yes	No	No			No	
+CUMPLE	DECO20	Order Decoración Plan 20 niños		1	3470	3470	3470	3470	3470	3470	3470	3470	3470	3470	0	No	Yes	ORDER	DECO20	Yes	No	No			No	
+CUMPLE	DECO25	Order Decoración Plan 25 niños		1	4435	4435	4435	4435	4435	4435	4435	4435	4435	4435	0	No	Yes	ORDER	DECO25	Yes	No	No			No	
+CUMPLE	DECO30	Order Decoración Plan 30 niños		1	3980	3980	3980	3980	3980	3980	3980	3980	3980	3980	0	No	Yes	ORDER	DECO30	Yes	No	No			No	
+CUMPLE	DULCE	Order Funditas de Dulces		1	50	50	50	50	50	50	50	50	50	50	0	No	Yes	ORDER	DULCES	Yes	No	No			No	
+CUMPLE	PAYASO	Order Payaso / Anfitrión		1	1700	1700	1700	1700	1700	1700	1700	1700	1700	1700	0	No	Yes	ORDER	PAYASO	Yes	No	No			No	
+Drinks	16OZMMAP	16-oz Bottle Manzana Minute Maid		1	40	40	40	40	40	40	40	40	40	40	0	No	Yes	16OZB	APPLE	Yes	No	No			No	
+Drinks	16OZMMCP	16-oz Bottle Citrus Punch Minute Maid		1	40	40	40	40	40	40	40	40	40	40	0	No	Yes	16OZB	MMCPUNCH	Yes	No	No			No	
+Drinks	16OZMMFP	16-oz Bottle Fruit Punch Minute Maid		1	40	40	40	40	40	40	40	40	40	40	0	No	Yes	16OZB	FRUITMM	Yes	No	No			No	
+Drinks	16OZMMGR	16-oz Bottle Uva Minute Maid		1	40	40	40	40	40	40	40	40	40	40	0	No	Yes	16OZB	MMGRAP	Yes	No	No			No	
+Drinks	20BCOKE	20-oz Bottle Coca Cola		1	60	60	60	60	60	60	60	60	60	60	0	No	Yes	20OZB	COKE	Yes	No	No			No	
+Drinks	20BDCOKE	20-oz Bottle Coca Cola Light		1	60	60	60	60	60	60	60	60	60	60	0	No	Yes	20OZB	DIET	Yes	No	No			No	
+Drinks	20BORNG	20-oz Bottle Fanta Naranja		1	60	60	60	60	60	60	60	60	60	60	0	No	Yes	20OZB	ORANGE	Yes	No	No			No	
+Drinks	20BSPRITE	20-oz Bottle Sprite		1	60	60	60	60	60	60	60	60	60	60	0	No	Yes	20OZB	SPRITE	Yes	No	No			No	
+Drinks	20OZMERG	20-oz Bottle Merengue		1	60	60	60	60	60	60	60	60	60	60	0	No	Yes	20OZB	MERG	Yes	No	No			No	
+Drinks	20OZPWAA	20-oz Bottle Avalancha Alpina Powerade		1	60	60	60	60	60	60	60	60	60	60	0	No	Yes	20OZB	ALPINA	Yes	No	No			No	
+Drinks	20OZPWFP	20-oz Bottle Fruit Punch Powerade		1	60	60	60	60	60	60	60	60	60	60	0	No	Yes	20OZB	FRUITP	Yes	No	No			No	
+Drinks	20OZPWGR	20-oz Bottle Uva Powerade		1	60	60	60	60	60	60	60	60	60	60	0	No	Yes	20OZB	PWGRPB	Yes	No	No			No	
+Drinks	20OZPWOR	20-oz Bottle Naranja Powerade		1	60	60	60	60	60	60	60	60	60	60	0	No	Yes	20OZB	PWORAN	Yes	No	No			No	
+Drinks	20OZROJO	20-oz Bottle Frambruesa		1	60	60	60	60	60	60	60	60	60	60	0	No	Yes	20OZB	STRAW	Yes	No	No			No	
+Drinks	20OZUVA	20-oz Bottle Fanta Uva		1	60	60	60	60	60	60	60	60	60	60	0	No	Yes	20OZB	GRAPE	Yes	No	No			No	
+Drinks	2LCOKE	2-Liter Bottle Coca Cola		1	90	90	90	90	90	90	90	90	90	90	0	No	Yes	2LTB	COKE	Yes	No	No			No	
+Drinks	2LDCOKE	2-Liter Bottle Coca Cola Light		1	90	90	90	90	90	90	90	90	90	90	0	No	Yes	2LTB	DIET	Yes	No	No			No	
+Drinks	2LMMORANGE	2-Liter Bottle Fanta Naranja		1	90	90	90	90	90	90	90	90	90	90	0	No	Yes	2LTB	ORANGE	Yes	No	No			No	
+Drinks	2LSPRITE	2-Liter Bottle Sprite		1	90	90	90	90	90	90	90	90	90	90	0	No	Yes	2LTB	SPRITE	Yes	No	No			No	
+Drinks	2LTMERG	2-Liter Bottle Merengue		1	90	90	90	90	90	90	90	90	90	90	0	No	Yes	2LTB	MERG	Yes	No	No			No	
+Drinks	2LTSTRAW	2-Liter Bottle Frambruesa		1	90	90	90	90	90	90	90	90	90	90	0	No	Yes	2LTB	STRAW	Yes	No	No			No	
+Drinks	2LTUVA	2-Liter Bottle Fanta Uva		1	90	90	90	90	90	90	90	90	90	90	0	No	Yes	2LTB	GRAPE	Yes	No	No			No	
+Drinks	BOTTLWATER	20-oz Bottle Agua		1	35	35	35	35	35	35	35	35	35	35	0	No	Yes	20OZB	WATER	Yes	No	No			No	
+Drinks	D20BZRO	20-oz Bottle Coca Cola ZERO		1	60	60	60	60	60	60	60	60	60	60	0	No	Yes	20OZB	ZERO	Yes	No	No			No	
+Drinks	D2LBZRO	2-Liter Bottle Coca Cola ZERO		1	90	90	90	90	90	90	90	90	90	90	0	No	Yes	2LTB	ZERO	Yes	No	No			No	
+Drinks	FWATAP	20-oz Bottle Agua Saborizada Manzana		1	40	40	40	40	40	40	40	40	40	40	0	No	Yes	20OZB	FWATAP	Yes	No	No			No	
+Drinks	FWATJF	20-oz Bottle Agua Flor de Jamaica		1	40	40	40	40	40	40	40	40	40	40	0	No	Yes	20OZB	FWATJF	Yes	No	No			No	
+Drinks	FWATLM	20-oz Bottle Agua Saborizada Limon		1	40	40	40	40	40	40	40	40	40	40	0	No	Yes	20OZB	FWATLM	Yes	No	No			No	
+Drinks	FWATMAN	20-oz Bottle Agua Saborizada Mandarina 		1	40	40	40	40	40	40	40	40	40	40	0	No	Yes	20OZB	FWATMA	Yes	No	No			No	
+Drinks	FWTTB	20-oz Bottle Agua Saborizada Toronja		1	40	40	40	40	40	40	40	40	40	40	0	No	Yes	20OZB	FWATTB	Yes	No	No			No	
+Drinks	V12COKE	12oz Vaso Coca Cola		1	35	35	35	35	35	35	35	35	35	35	0	No	Yes	12OZ	COKE	Yes	Yes	No			No	
+Drinks	V12COKEL	12oz Vaso Coca Cola Light		1	35	35	35	35	35	35	35	35	35	35	0	No	Yes	12OZ	DIET	Yes	Yes	No			No	
+Drinks	V12COKEZ	12oz Vaso Coca Cola ZERO		1	35	35	35	35	35	35	35	35	35	35	0	No	Yes	12OZ	ZERO	Yes	Yes	No			No	
+Drinks	V12MERENGU	12oz Vaso Merengue		1	35	35	35	35	35	35	35	35	35	35	0	No	Yes	12OZ	MERG	Yes	Yes	No			No	
+Drinks	V12NARANJA	12oz Vaso Fanta Naranja		1	35	35	35	35	35	35	35	35	35	35	0	No	Yes	12OZ	ORANGE	Yes	Yes	No			No	
+Drinks	V12ROJO	12oz Vaso Frambruesa		1	35	35	35	35	35	35	35	35	35	35	0	No	Yes	12OZ	STRAW	Yes	Yes	No			No	
+Drinks	V12SPRITE	12oz Vaso Sprite		1	35	35	35	35	35	35	35	35	35	35	0	No	Yes	12OZ	SPRITE	Yes	Yes	No			No	
+Drinks	V12UVA	12oz Vaso Fanta Uva		1	35	35	35	35	35	35	35	35	35	35	0	No	Yes	12OZ	GRAPE	Yes	Yes	No			No	
+GSalad	GRKSAL	Medium Ensalada Griega	Tc,It,Fe,Z,R	1	225	270	315	360	405	225	270	315	360	405	0	No	Yes	MDS	GRKSAL	Yes	Yes	No	GRKSAL	GRKSAL	No	
+GSalad	MAGCSAL	Medium House Salad	Tc,It,E,Pr,R,ADEMA,Za	1	225	270	315	360	405	225	270	315	360	405	0	No	Yes	MDS	GFSAL	Yes	Yes	No	GFSAL	GFSAL	No	
+GSalad	MAGGFSAL	Medium Cesar Salad	CAESAR,Tc,Qc,D	1	225	270	315	360	405	225	270	315	360	405	0	No	Yes	MDS	CHCSAL	Yes	Yes	No	CHCSAL	CHCSAL	No	
+GSalad	ADEMA	Maiz	OPTION														Yes									MakeLine
+GSalad	CAESAR	Caesar Dressing	OPTION														Yes									CutTable
+GSalad	D	Pollo Parilla	OPTION														Yes									MakeLine
+GSalad	E	Queso Cheddar	OPTION														Yes									MakeLine
+GSalad	Fe	Queso Feta	OPTION														Yes									MakeLine
+GSalad	It	Italian Dressing	OPTION														Yes									CutTable
+GSalad	Pr	Pimientos Rojos	OPTION														Yes									MakeLine
+GSalad	Qc	Queso Parmesano/Asiago	OPTION														Yes									MakeLine
+GSalad	R	Aceitunas Negras	OPTION														Yes									MakeLine
+GSalad	Tc	Tomates Barcelo	OPTION														Yes									MakeLine
+GSalad	Z	Pimiento Amarillo	OPTION														Yes									MakeLine
+GSalad	Za	Zanahoria Rayada	OPTION														Yes									MakeLine
+PAPOTAS	8OZPAPOTAS	8oz Papotas	SIDRAN	1	160	160	160	160	160	160	160	160	160	160	0	No	Yes	P08OZ	PAPOTAS	Yes	Yes	No	DEFPAP	DEFPAP	No	
+PAPOTAS	BBQCUP	BBQ Dip Cup	OPTION														Yes									CutTable
+PAPOTAS	HOTCUP	Hot Dip Cup	OPTION														Yes									CutTable
+PAPOTAS	MANGOCUP	Mango Habanero Dip Cup	OPTION														Yes									CutTable
+PAPOTAS	SIDBLE	Blue Cheese Dip Cup	OPTION														Yes									CutTable
+PAPOTAS	SIDGAR	Garlic Dip Cup	OPTION														Yes									CutTable
+PAPOTAS	SIDMAR	Marinara Dip	OPTION														Yes									CutTable
+PAPOTAS	SIDRAN	Ranch Dip Cup	OPTION														Yes									CutTable
+Pasta	PASTAAP	Pasta Aluminio Alfredo con Pollo	Xf,D	2	299	334	369	404	439	299	334	369	404	439	0	No	Yes	PASTA	ABOWL	Yes	Yes	Yes	ALFR	ALFR	No	
+Pasta	PASTABA	Pasta Aluminio BYO Alfredo	Xf	2	299	299	299	299	299	299	299	299	299	299	0	No	Yes	PASTA	ABOWL	Yes	Yes	Yes	BUILA	BUILA	No	
+Pasta	PASTABC	Pasta Aluminio BYO Tres Quesos	Xd,Ac	2	299	299	299	299	299	299	299	299	299	299	0	No	Yes	PASTA	ABOWL	Yes	Yes	Yes	BUILC	BUILC	No	
+Pasta	PASTABM	Pasta Aluminio BYO Marinara	Xm	2	299	299	299	299	299	299	299	299	299	299	0	No	Yes	PASTA	ABOWL	Yes	Yes	Yes	BUILM	BUILM	No	
+Pasta	PASTACP	Pasta Aluminio Carbonara con Pollo	Xf,K,D,O,M	2	299	334	369	404	439	299	334	369	404	439	0	No	Yes	PASTA	ABOWL	Yes	Yes	Yes	CARB	CARB	No	
+Pasta	PASTAMS	Pasta Aluminio Marinara Tomates Salchicha	Xm,Cp,S	2	299	334	369	404	439	299	334	369	404	439	0	No	Yes	PASTA	ABOWL	Yes	Yes	Yes	MARIN	MARIN	No	
+Pasta	PASTAP	Pasta Aluminio Primavera	Xf,Td,O,M,Xe	2	299	334	369	404	439	299	334	369	404	439	0	No	Yes	PASTA	ABOWL	Yes	Yes	Yes	PRIM	PRIM	No	
+Pasta	PASTATQ	Pasta Aluminio Tres Quesos	Xd,E,C	2	299	334	369	404	439	299	334	369	404	439	0	No	Yes	PASTA	ABOWL	Yes	Yes	Yes	MACC	MACC	No	
+Pasta	PASTMAP	Pasta Masa Alfredo con Pollo	Xf,D	2	299	334	369	404	439	299	334	369	404	439	0	No	Yes	PASTA	MBOWL	Yes	Yes	Yes	ALFR	ALFR	No	
+Pasta	PASTMBA	Pasta Masa BYO Alfredo	Xf	2	299	299	299	299	299	299	299	299	299	299	0	No	Yes	PASTA	MBOWL	Yes	Yes	Yes	BUILA	BUILA	No	
+Pasta	PASTMBC	Pasta Masa BYO Tres Quesos	Xd,Ac	2	299	299	299	299	299	299	299	299	299	299	0	No	Yes	PASTA	MBOWL	Yes	Yes	Yes	BUILC	BUILC	No	
+Pasta	PASTMBM	Pasta Masa BYO Marinara	Xm	2	299	299	299	299	299	299	299	299	299	299	0	No	Yes	PASTA	MBOWL	Yes	Yes	Yes	BUILM	BUILM	No	
+Pasta	PASTMCP	Pasta Masa Carbonara con Pollo	Xf,K,D,O,M	2	299	334	369	404	439	299	334	369	404	439	0	No	Yes	PASTA	MBOWL	Yes	Yes	Yes	CARB	CARB	No	
+Pasta	PASTMMS	Pasta Masa Marinara Tomates Salchicha	Xm,Cp,S	2	299	334	369	404	439	299	334	369	404	439	0	No	Yes	PASTA	MBOWL	Yes	Yes	Yes	MARIN	MARIN	No	
+Pasta	PASTMP	Pasta Masa Primavera	Xf,Td,O,M,Xe	2	299	334	369	404	439	299	334	369	404	439	0	No	Yes	PASTA	MBOWL	Yes	Yes	Yes	PRIM	PRIM	No	
+Pasta	PASTMTQ	Pasta Masa Tres Quesos	Xd,E,C	2	299	334	369	404	439	299	334	369	404	439	0	No	Yes	PASTA	MBOWL	Yes	Yes	Yes	MACC	MACC	No	
+Pasta	ADEMA	Maiz	OPTION														Yes									MakeLine
+Pasta	Ac	Queso Americano	OPTION														Yes									MakeLine
+Pasta	C	Queso Mozzarella	OPTION														Yes									MakeLine
+Pasta	Cp	Queso Provolone Rayado	OPTION														Yes									MakeLine
+Pasta	D	Pollo Parilla	OPTION														Yes									MakeLine
+Pasta	Du	Pollo BBQ	OPTION														Yes									MakeLine
+Pasta	E	Queso Cheddar	OPTION														Yes									MakeLine
+Pasta	Fe	Queso Feta	OPTION														Yes									MakeLine
+Pasta	G	Pimientos Verdes	OPTION														Yes									MakeLine
+Pasta	H	Jamon	OPTION														Yes									MakeLine
+Pasta	J	Jalapeño	OPTION														Yes									MakeLine
+Pasta	K	Tocineta	OPTION														Yes									MakeLine
+Pasta	M	Hongos	OPTION														Yes									MakeLine
+Pasta	N	Piña	OPTION														Yes									MakeLine
+Pasta	O	Cebolla	OPTION														Yes									MakeLine
+Pasta	P	Pepperoni	OPTION														Yes									MakeLine
+Pasta	Pr	Pimientos Rojos	OPTION														Yes									MakeLine
+Pasta	Pv	Queso Provolone Rebanado	OPTION														Yes									MakeLine
+Pasta	Qc	Queso Parmesano/Asiago	OPTION														Yes									MakeLine
+Pasta	R	Aceitunas Negras	OPTION														Yes									MakeLine
+Pasta	S	Salchicha Italiana	OPTION														Yes									MakeLine
+Pasta	Sa	Salami	OPTION														Yes									MakeLine
+Pasta	Td	Tomate en cuadro	OPTION														Yes									MakeLine
+Pasta	Xd	Cheddar Pasta Sauce	OPTION														Yes									MakeLine
+Pasta	Xe	Espinaca 	OPTION														Yes									MakeLine
+Pasta	Xf	Alfredo Pasta Sauce	OPTION														Yes									MakeLine
+Pasta	Xm	Marinara Pasta Sauce	OPTION														Yes									MakeLine
+Pasta	Z	Pimiento Amarillo	OPTION														Yes									MakeLine
+Pizza	08SCFH	8&quot; Tradicional Ham Feast	X,1.5C,1.5H	2	305	355	405	455	505	305	355	405	455	505	0	No	Yes	8	HANDTOSS	Yes	Yes	Yes	PIZJX	PIZJX	No	
+Pizza	08SCIT	8&quot; Tradicional Italiana	X,1.5C,P,S,M,R,T	2	360	410	460	510	560	360	410	460	510	560	0	No	Yes	8	HANDTOSS	Yes	Yes	Yes	PIZIT	PIZIT	No	
+Pizza	12DDFH	12&quot; Gordita Ham Feast	X,1.5C,1.5H	2	490	555	620	685	750	490	555	620	685	750	0	No	Yes	12	DEEPDISH	Yes	Yes	Yes	PIZJX	PIZJX	No	
+Pizza	12DDITAL	12&quot; Gordita Italiana	X,1.5C,P,S,M,R,T	2	590	655	720	785	850	590	655	720	785	850	0	No	Yes	12	DEEPDISH	Yes	Yes	Yes	PIZIT	PIZIT	No	
+Pizza	12FHTC	12&quot; Finita Ham Feast	X,1.5C,1.5H	2	490	555	620	685	750	490	555	620	685	750	0	No	Yes	12	THIN	Yes	Yes	Yes	PIZJX	PIZJX	No	
+Pizza	12HDFH	12&quot; Tradicional Ham Feast	X,1.5C,1.5H	2	490	555	620	685	750	490	555	620	685	750	0	No	Yes	12	HANDTOSS	Yes	Yes	Yes	PIZJX	PIZJX	No	
+Pizza	12PAFEAST	12&quot; Gordita American Feast	X,C,P,S,M	2	490	555	620	685	750	490	555	620	685	750	0	No	Yes	12	DEEPDISH	Yes	Yes	Yes	PIZAX	PIZAX	No	
+Pizza	12PAN	12&quot; Gordita Napolitana	X,C	2	360	425	490	555	620	360	425	490	555	620	0	No	Yes	12	DEEPDISH	Yes	Yes	No	PIZZA	PIZZA	No	
+Pizza	12PBACCHB	12&quot; Gordita Bacon Cheeseburger	X,C,E,K,S	2	590	655	720	785	850	590	655	720	785	850	0	No	Yes	12	DEEPDISH	Yes	Yes	Yes	PIZBX	PIZBX	No	
+Pizza	12PDELUX	12&quot; Gordita Deluxe	X,C,P,S,O,G,M	2	590	655	720	785	850	590	655	720	785	850	0	No	Yes	12	DEEPDISH	Yes	Yes	Yes	PIZDX	PIZDX	No	
+Pizza	12PEXTRAV	12&quot; Gordita Extravaganzza	X,1.5C,P,H,S,O,G,M,R	2	590	655	720	785	850	590	655	720	785	850	0	No	Yes	12	DEEPDISH	Yes	Yes	Yes	PIZZZ	PIZZZ	No	
+Pizza	12PHAWIN	12&quot; Gordita Hawaiian Feast	X,1.5C,H,N	2	490	555	620	685	750	490	555	620	685	750	0	No	Yes	12	DEEPDISH	Yes	Yes	Yes	PIZHX	PIZHX	No	
+Pizza	12PMEATZA	12&quot; Gordita Meatzza Pizza	X,1.5C,P,H,K,S	2	590	655	720	785	850	590	655	720	785	850	0	No	Yes	12	DEEPDISH	Yes	Yes	Yes	PIZMX	PIZMX	No	
+Pizza	12PPFEAST	12&quot; Gordita Pepperoni Feast	X,1.5C,1.5P	2	490	555	620	685	750	490	555	620	685	750	0	No	Yes	12	DEEPDISH	Yes	Yes	Yes	PIZPX	PIZPX	No	
+Pizza	12PVEGGIE	12&quot; Gordita Veggie Feast	X,1.5C,O,G,M,R	2	490	555	620	685	750	490	555	620	685	750	0	No	Yes	12	DEEPDISH	Yes	Yes	Yes	PIZVX	PIZVX	No	
+Pizza	12SCAFEAST	12&quot; Tradicional American Feast	X,C,P,S,M	2	490	555	620	685	750	490	555	620	685	750	0	No	Yes	12	HANDTOSS	Yes	Yes	Yes	PIZAX	PIZAX	No	
+Pizza	12SCBACCHB	12&quot; Tradicional Bacon Cheeseburger	X,C,E,K,S	2	590	655	720	785	850	590	655	720	785	850	0	No	Yes	12	HANDTOSS	Yes	Yes	Yes	PIZBX	PIZBX	No	
+Pizza	12SCDELUX	12&quot; Tradicional Deluxe	X,C,P,S,O,G,M	2	590	655	720	785	850	590	655	720	785	850	0	No	Yes	12	HANDTOSS	Yes	Yes	Yes	PIZDX	PIZDX	No	
+Pizza	12SCEXTRAV	12&quot; Tradicional Extravaganzza	X,1.5C,P,H,S,O,G,M,R	2	590	655	720	785	850	590	655	720	785	850	0	No	Yes	12	HANDTOSS	Yes	Yes	Yes	PIZZZ	PIZZZ	No	
+Pizza	12SCHAWIN	12&quot; Tradicional Hawaiian Feast	X,1.5C,H,N	2	490	555	620	685	750	490	555	620	685	750	0	No	Yes	12	HANDTOSS	Yes	Yes	Yes	PIZHX	PIZHX	No	
+Pizza	12SCIT	12&quot; Tradicional Italiana	X,1.5C,P,S,M,R,T	2	590	655	720	785	850	590	655	720	785	850	0	No	Yes	12	HANDTOSS	Yes	Yes	Yes	PIZIT	PIZIT	No	
+Pizza	12SCMEATZA	12&quot; Tradicional Meatzza Pizza	X,1.5C,P,H,K,S	2	590	655	720	785	850	590	655	720	785	850	0	No	Yes	12	HANDTOSS	Yes	Yes	Yes	PIZMX	PIZMX	No	
+Pizza	12SCPFEAST	12&quot; Tradicional Pepperoni Feast	X,1.5C,1.5P	2	490	555	620	685	750	490	555	620	685	750	0	No	Yes	12	HANDTOSS	Yes	Yes	Yes	PIZPX	PIZPX	No	
+Pizza	12SCREEN	12&quot; Tradicional Napolitana	X,C	2	360	425	490	555	620	360	425	490	555	620	0	No	Yes	12	HANDTOSS	Yes	Yes	No	PIZZA	PIZZA	No	
+Pizza	12SCVEGGIE	12&quot; Tradicional Veggie Feast	X,1.5C,O,G,M,R	2	490	555	620	685	750	490	555	620	685	750	0	No	Yes	12	HANDTOSS	Yes	Yes	Yes	PIZVX	PIZVX	No	
+Pizza	12TAFEAST	12&quot; Finita American Feast	X,C,P,S,M	2	490	555	620	685	750	490	555	620	685	750	0	No	Yes	12	THIN	Yes	Yes	Yes	PIZAX	PIZAX	No	
+Pizza	12TBACCHB	12&quot; Finita Bacon Cheeseburger	X,C,E,K,S	2	590	655	720	785	850	590	655	720	785	850	0	No	Yes	12	THIN	Yes	Yes	Yes	PIZBX	PIZBX	No	
+Pizza	12TCITAL	12&quot; Finita Italiana	X,1.5C,P,S,M,R,T	2	590	655	720	785	850	590	655	720	785	850	0	No	Yes	12	THIN	Yes	Yes	Yes	PIZIT	PIZIT	No	
+Pizza	12TDELUX	12&quot; Finita Deluxe	X,C,P,S,O,G,M	2	590	655	720	785	850	590	655	720	785	850	0	No	Yes	12	THIN	Yes	Yes	Yes	PIZDX	PIZDX	No	
+Pizza	12TEXTRAV	12&quot; Finita Extravaganzza	X,1.5C,P,H,S,O,G,M,R	2	590	655	720	785	850	590	655	720	785	850	0	No	Yes	12	THIN	Yes	Yes	Yes	PIZZZ	PIZZZ	No	
+Pizza	12THAWIN	12&quot; Finita Hawaiian Feast	X,1.5C,H,N	2	490	555	620	685	750	490	555	620	685	750	0	No	Yes	12	THIN	Yes	Yes	Yes	PIZHX	PIZHX	No	
+Pizza	12THIN	12&quot; Finita Napolitana	X,C	2	360	425	490	555	620	360	425	490	555	620	0	No	Yes	12	THIN	Yes	Yes	No	PIZZA	PIZZA	No	
+Pizza	12TMEATZA	12&quot; Finita Meatzza Pizza	X,1.5C,P,H,K,S	2	590	655	720	785	850	590	655	720	785	850	0	No	Yes	12	THIN	Yes	Yes	Yes	PIZMX	PIZMX	No	
+Pizza	12TPFEAST	12&quot; Finita Pepperoni Feast	X,1.5C,1.5P	2	490	555	620	685	750	490	555	620	685	750	0	No	Yes	12	THIN	Yes	Yes	Yes	PIZPX	PIZPX	No	
+Pizza	12TVEGGIE	12&quot; Finita Veggie Feast	X,1.5C,O,G,M,R	2	490	555	620	685	750	490	555	620	685	750	0	No	Yes	12	THIN	Yes	Yes	Yes	PIZVX	PIZVX	No	
+Pizza	14DDITAL	14&quot; Gordita Italiana	X,1.5C,P,S,M,R,T	2	745	820	895	970	1045	745	820	895	970	1045	0	No	Yes	14	DEEPDISH	Yes	Yes	Yes	PIZIT	PIZIT	No	
+Pizza	14FHDD	14&quot; Gordita Ham Feast	X,1.5C,1.5H	2	620	695	770	845	920	620	695	770	845	920	0	No	Yes	14	DEEPDISH	Yes	Yes	Yes	PIZJX	PIZJX	No	
+Pizza	14FHHT	14&quot; Tradicional Ham Feast	X,1.5C,1.5H	2	620	695	770	845	920	620	695	770	845	920	0	No	Yes	14	HANDTOSS	Yes	Yes	Yes	PIZJX	PIZJX	No	
+Pizza	14FHTC	14&quot; Finita Ham Feast	X,1.5C,1.5H	2	620	695	770	845	920	620	695	770	845	920	0	No	Yes	14	THIN	Yes	Yes	Yes	PIZJX	PIZJX	No	
+Pizza	14PAFEAST	14&quot; Gordita American Feast	X,C,P,S,M	2	620	695	770	845	920	620	695	770	845	920	0	No	Yes	14	DEEPDISH	Yes	Yes	Yes	PIZAX	PIZAX	No	
+Pizza	14PAN	14&quot; Gordita Napolitana	X,C	2	480	555	630	705	780	480	555	630	705	780	0	No	Yes	14	DEEPDISH	Yes	Yes	No	PIZZA	PIZZA	No	
+Pizza	14PBACCHB	14&quot; Gordita Bacon Cheeseburger	X,C,E,K,S	2	745	820	895	970	1045	745	820	895	970	1045	0	No	Yes	14	DEEPDISH	Yes	Yes	Yes	PIZBX	PIZBX	No	
+Pizza	14PDELUX	14&quot; Gordita Deluxe	X,C,P,S,O,G,M	2	745	820	895	970	1045	745	820	895	970	1045	0	No	Yes	14	DEEPDISH	Yes	Yes	Yes	PIZDX	PIZDX	No	
+Pizza	14PEXTRAV	14&quot; Gordita Extravaganzza	X,1.5C,P,H,S,O,G,M,R	2	745	820	895	970	1045	745	820	895	970	1045	0	No	Yes	14	DEEPDISH	Yes	Yes	Yes	PIZZZ	PIZZZ	No	
+Pizza	14PHAWIN	14&quot; Gordita Hawaiian Feast	X,1.5C,H,N	2	620	695	770	845	920	620	695	770	845	920	0	No	Yes	14	DEEPDISH	Yes	Yes	Yes	PIZHX	PIZHX	No	
+Pizza	14PMEATZA	14&quot; Gordita Meatzza Pizza	X,1.5C,P,H,K,S	2	745	820	895	970	1045	745	820	895	970	1045	0	No	Yes	14	DEEPDISH	Yes	Yes	Yes	PIZMX	PIZMX	No	
+Pizza	14PPFEAST	14&quot; Gordita Pepperoni Feast	X,1.5C,1.5P	2	620	695	770	845	920	620	695	770	845	920	0	No	Yes	14	DEEPDISH	Yes	Yes	Yes	PIZPX	PIZPX	No	
+Pizza	14PVEGGIE	14&quot; Gordita Veggie Feast	X,1.5C,O,G,M,R	2	620	695	770	845	920	620	695	770	845	920	0	No	Yes	14	DEEPDISH	Yes	Yes	Yes	PIZVX	PIZVX	No	
+Pizza	14SCAFEAST	14&quot; Tradicional American Feast	X,C,P,S,M	2	620	695	770	845	920	620	695	770	845	920	0	No	Yes	14	HANDTOSS	Yes	Yes	Yes	PIZAX	PIZAX	No	
+Pizza	14SCBACCHB	14&quot; Tradicional Bacon Cheeseburger	X,C,E,K,S	2	745	820	895	970	1045	745	820	895	970	1045	0	No	Yes	14	HANDTOSS	Yes	Yes	Yes	PIZBX	PIZBX	No	
+Pizza	14SCDELUX	14&quot; Tradicional Deluxe	X,C,P,S,O,G,M	2	745	820	895	970	1045	745	820	895	970	1045	0	No	Yes	14	HANDTOSS	Yes	Yes	Yes	PIZDX	PIZDX	No	
+Pizza	14SCEXTRAV	14&quot; Tradicional Extravaganzza	X,1.5C,P,H,S,O,G,M,R	2	745	820	895	970	1045	745	820	895	970	1045	0	No	Yes	14	HANDTOSS	Yes	Yes	Yes	PIZZZ	PIZZZ	No	
+Pizza	14SCHAWIN	14&quot; Tradicional Hawaiian Feast	X,1.5C,H,N	2	620	695	770	845	920	620	695	770	845	920	0	No	Yes	14	HANDTOSS	Yes	Yes	Yes	PIZHX	PIZHX	No	
+Pizza	14SCITAL	14&quot; Tradicional Italiana	X,1.5C,P,S,M,R,T	2	745	820	895	970	1045	745	820	895	970	1045	0	No	Yes	14	HANDTOSS	Yes	Yes	Yes	PIZIT	PIZIT	No	
+Pizza	14SCMEATZA	14&quot; Tradicional Meatzza Pizza	X,1.5C,P,H,K,S	2	745	820	895	970	1045	745	820	895	970	1045	0	No	Yes	14	HANDTOSS	Yes	Yes	Yes	PIZMX	PIZMX	No	
+Pizza	14SCPFEAST	14&quot; Tradicional Pepperoni Feast	X,1.5C,1.5P	2	620	695	770	845	920	620	695	770	845	920	0	No	Yes	14	HANDTOSS	Yes	Yes	Yes	PIZPX	PIZPX	No	
+Pizza	14SCREEN	14&quot; Tradicional Napolitana	X,C	2	480	555	630	705	780	480	555	630	705	780	0	No	Yes	14	HANDTOSS	Yes	Yes	No	PIZZA	PIZZA	No	
+Pizza	14SCVEGGIE	14&quot; Tradicional Veggie Feast	X,1.5C,O,G,M,R	2	620	695	770	845	920	620	695	770	845	920	0	No	Yes	14	HANDTOSS	Yes	Yes	Yes	PIZVX	PIZVX	No	
+Pizza	14TAFEAST	14&quot; Finita American Feast	X,C,P,S,M	2	620	695	770	845	920	620	695	770	845	920	0	No	Yes	14	THIN	Yes	Yes	Yes	PIZAX	PIZAX	No	
+Pizza	14TBACCHB	14&quot; Finita Bacon Cheeseburger	X,C,E,K,S	2	745	820	895	970	1045	745	820	895	970	1045	0	No	Yes	14	THIN	Yes	Yes	Yes	PIZBX	PIZBX	No	
+Pizza	14TCITAL	14&quot; Finita Italiana	X,1.5C,P,S,M,R,T	2	745	820	895	970	1045	745	820	895	970	1045	0	No	Yes	14	THIN	Yes	Yes	Yes	PIZIT	PIZIT	No	
+Pizza	14TDELUX	14&quot; Finita Deluxe	X,C,P,S,O,G,M	2	745	820	895	970	1045	745	820	895	970	1045	0	No	Yes	14	THIN	Yes	Yes	Yes	PIZDX	PIZDX	No	
+Pizza	14TEXTRAV	14&quot; Finita Extravaganzza	X,1.5C,P,H,S,O,G,M,R	2	745	820	895	970	1045	745	820	895	970	1045	0	No	Yes	14	THIN	Yes	Yes	Yes	PIZZZ	PIZZZ	No	
+Pizza	14THAWIN	14&quot; Finita Hawaiian Feast	X,1.5C,H,N	2	620	695	770	845	920	620	695	770	845	920	0	No	Yes	14	THIN	Yes	Yes	Yes	PIZHX	PIZHX	No	
+Pizza	14THIN	14&quot; Finita Napolitana	X,C	2	480	555	630	705	780	480	555	630	705	780	0	No	Yes	14	THIN	Yes	Yes	No	PIZZA	PIZZA	No	
+Pizza	14TMEATZA	14&quot; Finita Meatzza Pizza	X,1.5C,P,H,K,S	2	745	820	895	970	1045	745	820	895	970	1045	0	No	Yes	14	THIN	Yes	Yes	Yes	PIZMX	PIZMX	No	
+Pizza	14TPFEAST	14&quot; Finita Pepperoni Feast	X,1.5C,1.5P	2	620	695	770	845	920	620	695	770	845	920	0	No	Yes	14	THIN	Yes	Yes	Yes	PIZPX	PIZPX	No	
+Pizza	14TVEGGIE	14&quot; Finita Veggie Feast	X,1.5C,O,G,M,R	2	620	695	770	845	920	620	695	770	845	920	0	No	Yes	14	THIN	Yes	Yes	Yes	PIZVX	PIZVX	No	
+Pizza	6PAN	6&quot; Gordita Napolitana	X,C	2	105	140	175	210	245	105	140	175	210	245	0	No	Yes	6	DEEPDISH	Yes	Yes	No	PIZZA	PIZZA	No	
+Pizza	8SCAFEAST	8&quot; Tradicional American Feast	X,C,P,S,M	2	305	355	405	455	505	305	355	405	455	505	0	No	Yes	8	HANDTOSS	Yes	Yes	Yes	PIZAX	PIZAX	No	
+Pizza	8SCBACCHB	8&quot; Tradicional Bacon Cheeseburger	X,C,E,K,S	2	360	410	460	510	560	360	410	460	510	560	0	No	Yes	8	HANDTOSS	Yes	Yes	Yes	PIZBX	PIZBX	No	
+Pizza	8SCDELUX	8&quot; Tradicional Deluxe	X,C,P,S,O,G,M	2	360	410	460	510	560	360	410	460	510	560	0	No	Yes	8	HANDTOSS	Yes	Yes	Yes	PIZDX	PIZDX	No	
+Pizza	8SCEXTRAV	8&quot; Tradicional Extravaganzza	X,1.5C,P,H,S,O,G,M,R	2	360	410	460	510	560	360	410	460	510	560	0	No	Yes	8	HANDTOSS	Yes	Yes	Yes	PIZZZ	PIZZZ	No	
+Pizza	8SCHAWIN	8&quot; Tradicional Hawaiian Feast	X,1.5C,H,N	2	305	355	405	455	505	305	355	405	455	505	0	No	Yes	8	HANDTOSS	Yes	Yes	Yes	PIZHX	PIZHX	No	
+Pizza	8SCMEATZA	8&quot; Tradicional Meatzza Pizza	X,1.5C,P,H,K,S	2	360	410	460	510	560	360	410	460	510	560	0	No	Yes	8	HANDTOSS	Yes	Yes	Yes	PIZMX	PIZMX	No	
+Pizza	8SCPFEAST	8&quot; Tradicional Pepperoni Feast	X,1.5C,1.5P	2	305	355	405	455	505	305	355	405	455	505	0	No	Yes	8	HANDTOSS	Yes	Yes	Yes	PIZPX	PIZPX	No	
+Pizza	8SCREEN	8&quot; Tradicional Napolitana	X,C	2	200	250	300	350	400	200	250	300	350	400	0	No	Yes	8	HANDTOSS	Yes	Yes	No	PIZZA	PIZZA	No	
+Pizza	8SCVEGGIE	8&quot; Tradicional Veggie Feast	X,1.5C,O,G,M,R	2	305	355	405	455	505	305	355	405	455	505	0	No	Yes	8	HANDTOSS	Yes	Yes	Yes	PIZVX	PIZVX	No	
+Pizza	P12IDDBP	12&quot; Gordita Buffalo Chicken	E,2Ac,Cp,2D,O	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	DEEPDISH	Yes	Yes	Yes	PIZBP	PIZBP	No	
+Pizza	P12IDDCK	12&quot; Gordita Memphis BBQ Chicken	C,E,Cp,2Du,O,Bq	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	DEEPDISH	Yes	Yes	Yes	PIZCK	PIZCK	No	
+Pizza	P12IDDCR	12&quot; Gordita Cali Chicken Bacon Ranch	C,Cp,K,2D,1.5Td	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	DEEPDISH	Yes	Yes	Yes	PIZCR	PIZCR	No	
+Pizza	P12IDDD6	12&quot; Gordita Doble Seis	X,C,0.75P,0.75H	2	425	490	555	620	685	425	490	555	620	685	0	No	Yes	12	DEEPDISH	Yes	Yes	Yes	PD6	PD6	No	
+Pizza	P12IDDPV	12&quot; Gordita Pacific Veggie	X,C,Fe,Cp,Qc,O,Pr,M,R,Td,Xe	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	DEEPDISH	Yes	Yes	Yes	PIZPV	PIZPV	No	
+Pizza	P12IDDSU	12&quot; Gordita Fiery Hawaiian	X,C,Cp,Qc,H,K,Pr,N,J	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	DEEPDISH	Yes	Yes	Yes	PIZSU	PIZSU	No	
+Pizza	P12IDDUH	12&quot; Gordita Honolulu Hawaiian	X,C,Cp,Qc,H,K,Pr,N	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	DEEPDISH	Yes	Yes	Yes	PIZUH	PIZUH	No	
+Pizza	P12IDDWI	12&quot; Gordita Wisconsin	X,C,E,Fe,Cp,Qc	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	DEEPDISH	Yes	Yes	Yes	PIZWI	PIZWI	No	
+Pizza	P12IREBP	12&quot; Tradicional Buffalo Chicken	E,2Ac,Cp,2D,O	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	HANDTOSS	Yes	Yes	Yes	PIZBP	PIZBP	No	
+Pizza	P12IRECK	12&quot; Tradicional Memphis BBQ Chicken	C,E,Cp,2Du,O,Bq	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	HANDTOSS	Yes	Yes	Yes	PIZCK	PIZCK	No	
+Pizza	P12IRECR	12&quot; Tradicional Cali Chicken Bacon Ranch	C,Cp,K,2D,1.5Td	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	HANDTOSS	Yes	Yes	Yes	PIZCR	PIZCR	No	
+Pizza	P12IREPV	12&quot; Tradicional Pacific Veggie	X,C,Fe,Cp,Qc,O,Pr,M,R,Td,Xe	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	HANDTOSS	Yes	Yes	Yes	PIZPV	PIZPV	No	
+Pizza	P12IRESU	12&quot; Tradicional Fiery Hawaiian	X,C,Cp,Qc,H,K,Pr,N,J	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	HANDTOSS	Yes	Yes	Yes	PIZSU	PIZSU	No	
+Pizza	P12IREUH	12&quot; Tradicional Honolulu Hawaiian	X,C,Cp,Qc,H,K,Pr,N	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	HANDTOSS	Yes	Yes	Yes	PIZUH	PIZUH	No	
+Pizza	P12IREWI	12&quot; Tradicional Wisconsin	X,C,E,Fe,Cp,Qc	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	HANDTOSS	Yes	Yes	Yes	PIZWI	PIZWI	No	
+Pizza	P12ITHBP	12&quot; Finita Buffalo Chicken	E,2Ac,Cp,2D,O	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	THIN	Yes	Yes	Yes	PIZBP	PIZBP	No	
+Pizza	P12ITHCK	12&quot; Finita Memphis BBQ Chicken	C,E,Cp,2Du,O,Bq	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	THIN	Yes	Yes	Yes	PIZCK	PIZCK	No	
+Pizza	P12ITHCR	12&quot; Finita Cali Chicken Bacon Ranch	C,Cp,K,2D,1.5Td	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	THIN	Yes	Yes	Yes	PIZCR	PIZCR	No	
+Pizza	P12ITHPV	12&quot; Finita Pacific Veggie	X,C,Fe,Cp,Qc,O,Pr,M,R,Td,Xe	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	THIN	Yes	Yes	Yes	PIZPV	PIZPV	No	
+Pizza	P12ITHSU	12&quot; Finita Fiery Hawaiian	X,C,Cp,Qc,H,K,Pr,N,J	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	THIN	Yes	Yes	Yes	PIZSU	PIZSU	No	
+Pizza	P12ITHUH	12&quot; Finita Honolulu Hawaiian	X,C,Cp,Qc,H,K,Pr,N	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	THIN	Yes	Yes	Yes	PIZUH	PIZUH	No	
+Pizza	P12ITHWI	12&quot; Finita Wisconsin	X,C,E,Fe,Cp,Qc	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	THIN	Yes	Yes	Yes	PIZWI	PIZWI	No	
+Pizza	P14IDDBP	14&quot; Gordita Buffalo Chicken	E,2Ac,Cp,2D,O	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	DEEPDISH	Yes	Yes	Yes	PIZBP	PIZBP	No	
+Pizza	P14IDDCK	14&quot; Gordita Memphis BBQ Chicken	C,E,Cp,2Du,O,Bq	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	DEEPDISH	Yes	Yes	Yes	PIZCK	PIZCK	No	
+Pizza	P14IDDCR	14&quot; Gordita Cali Chicken Bacon Ranch	C,Cp,K,2D,1.5Td	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	DEEPDISH	Yes	Yes	Yes	PIZCR	PIZCR	No	
+Pizza	P14IDDPV	14&quot; Gordita Pacific Veggie	X,C,Fe,Cp,Qc,O,Pr,M,R,Td,Xe	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	DEEPDISH	Yes	Yes	Yes	PIZPV	PIZPV	No	
+Pizza	P14IDDSU	14&quot; Gordita Fiery Hawaiian	X,C,Cp,Qc,H,K,Pr,N,J	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	DEEPDISH	Yes	Yes	Yes	PIZSU	PIZSU	No	
+Pizza	P14IDDUH	14&quot; Gordita Honolulu Hawaiian	X,C,Cp,Qc,H,K,Pr,N	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	DEEPDISH	Yes	Yes	Yes	PIZUH	PIZUH	No	
+Pizza	P14IDDWI	14&quot; Gordita Wisconsin	X,C,E,Fe,Cp,Qc	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	DEEPDISH	Yes	Yes	Yes	PIZWI	PIZWI	No	
+Pizza	P14IREBP	14&quot; Tradicional Buffalo Chicken	E,2Ac,Cp,2D,O	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	HANDTOSS	Yes	Yes	Yes	PIZBP	PIZBP	No	
+Pizza	P14IRECK	14&quot; Tradicional Memphis BBQ Chicken	C,E,Cp,2Du,O,Bq	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	HANDTOSS	Yes	Yes	Yes	PIZCK	PIZCK	No	
+Pizza	P14IRECR	14&quot; Tradicional Cali Chicken Bacon Ranch	C,Cp,K,2D,1.5Td	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	HANDTOSS	Yes	Yes	Yes	PIZCR	PIZCR	No	
+Pizza	P14IREPV	14&quot; Tradicional Pacific Veggie	X,C,Fe,Cp,Qc,O,Pr,M,R,Td,Xe	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	HANDTOSS	Yes	Yes	Yes	PIZPV	PIZPV	No	
+Pizza	P14IRESU	14&quot; Tradicional Fiery Hawaiian	X,C,Cp,Qc,H,K,Pr,N,J	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	HANDTOSS	Yes	Yes	Yes	PIZSU	PIZSU	No	
+Pizza	P14IREUH	14&quot; Tradicional Honolulu Hawaiian	X,C,Cp,Qc,H,K,Pr,N	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	HANDTOSS	Yes	Yes	Yes	PIZUH	PIZUH	No	
+Pizza	P14IREWI	14&quot; Tradicional Wisconsin	X,C,E,Fe,Cp,Qc	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	HANDTOSS	Yes	Yes	Yes	PIZWI	PIZWI	No	
+Pizza	P14ITHBP	14&quot; Finita Buffalo Chicken	E,2Ac,Cp,2D,O	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	THIN	Yes	Yes	Yes	PIZBP	PIZBP	No	
+Pizza	P14ITHCK	14&quot; Finita Memphis BBQ Chicken	C,E,Cp,2Du,O,Bq	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	THIN	Yes	Yes	Yes	PIZCK	PIZCK	No	
+Pizza	P14ITHCR	14&quot; Finita Cali Chicken Bacon Ranch	C,Cp,K,2D,1.5Td	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	THIN	Yes	Yes	Yes	PIZCR	PIZCR	No	
+Pizza	P14ITHPV	14&quot; Finita Pacific Veggie	X,C,Fe,Cp,Qc,O,Pr,M,R,Td,Xe	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	THIN	Yes	Yes	Yes	PIZPV	PIZPV	No	
+Pizza	P14ITHSU	14&quot; Finita Fiery Hawaiian	X,C,Cp,Qc,H,K,Pr,N,J	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	THIN	Yes	Yes	Yes	PIZSU	PIZSU	No	
+Pizza	P14ITHUH	14&quot; Finita Honolulu Hawaiian	X,C,Cp,Qc,H,K,Pr,N	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	THIN	Yes	Yes	Yes	PIZUH	PIZUH	No	
+Pizza	P14ITHWI	14&quot; Finita Wisconsin	X,C,E,Fe,Cp,Qc	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	THIN	Yes	Yes	Yes	PIZWI	PIZWI	No	
+Pizza	SLICE	Pedazo Tradicional Napolitana	X,C	2	90	90	90	90	90	90	90	90	90	90	0	No	Yes	SLICE	HANDTOSS	Yes	Yes	No	PIZZA	PIZZA	No	
+Pizza	ADEMA	Maiz	OPTION														Yes									MakeLine
+Pizza	Ac	Queso Americano	OPTION														Yes									MakeLine
+Pizza	Bq	BBQ Sauce	OPTION														Yes									MakeLine
+Pizza	C	Queso Mozzarella	OPTION														Yes									MakeLine
+Pizza	Cp	Queso Provolone Rayado	OPTION														Yes									MakeLine
+Pizza	D	Pollo Parilla	OPTION														Yes									MakeLine
+Pizza	Du	Pollo BBQ	OPTION														Yes									MakeLine
+Pizza	E	Queso Cheddar	OPTION														Yes									MakeLine
+Pizza	Fe	Queso Feta	OPTION														Yes									MakeLine
+Pizza	G	Pimientos Verdes	OPTION														Yes									MakeLine
+Pizza	H	Jamon	OPTION														Yes									MakeLine
+Pizza	J	Jalapeño	OPTION														Yes									MakeLine
+Pizza	K	Tocineta	OPTION														Yes									MakeLine
+Pizza	M	Hongos	OPTION														Yes									MakeLine
+Pizza	N	Piña	OPTION														Yes									MakeLine
+Pizza	O	Cebolla	OPTION														Yes									MakeLine
+Pizza	P	Pepperoni	OPTION														Yes									MakeLine
+Pizza	Pr	Pimientos Rojos	OPTION														Yes									MakeLine
+Pizza	Qc	Queso Parmesano/Asiago	OPTION														Yes									MakeLine
+Pizza	R	Aceitunas Negras	OPTION														Yes									MakeLine
+Pizza	S	Salchicha Italiana	OPTION														Yes									MakeLine
+Pizza	Sa	Salami	OPTION														Yes									MakeLine
+Pizza	Sl	Extra Large Italian Sausage	OPTION														Yes									MakeLine
+Pizza	T	Tomates Frescos	OPTION														Yes									MakeLine
+Pizza	Td	Tomate en cuadro	OPTION														Yes									MakeLine
+Pizza	X	Salsa Pizza	OPTION														Yes									MakeLine
+Pizza	Xe	Espinaca 	OPTION														Yes									MakeLine
+Pizza	Z	Pimiento Amarillo	OPTION														Yes									MakeLine
+SAND	SANDBC	Sandwich Foccacia Buffalo Chicken w/ Blue Cheese	E,D,2O,Pv,Cp	2	329	374	419	464	509	329	374	419	464	509	0	No	Yes	SAND	FOCA	Yes	Yes	Yes	SANDBC	SANDBC	No	
+SAND	SANDCBR	Sandwich Foccacia Chicken Bacon Ranch	K,D,2Pv,Cp	2	329	374	419	464	509	329	374	419	464	509	0	No	Yes	SAND	FOCA	Yes	Yes	Yes	SANDCBR	SANDCBR	No	
+SAND	SANDCH	Sandwich Foccacia Chicken Habanero	2E,D,J,N,Pv,1.5Cp,Mh	2	329	374	419	464	509	329	374	419	464	509	0	No	Yes	SAND	FOCA	Yes	Yes	Yes	SANDCH	SANDCH	No	
+SAND	SANDCP	Sandwich Foccacia Chicken Parm	Qc,D,2Pv,Cp,X	2	329	374	419	464	509	329	374	419	464	509	0	No	Yes	SAND	FOCA	Yes	Yes	Yes	SANDCP	SANDCP	No	
+SAND	SANDIT	Sandwich Foccacia Italian	Z,G,H,O,P,2Pv,3Cp,Sa	2	329	374	419	464	509	329	374	419	464	509	0	No	Yes	SAND	FOCA	Yes	Yes	Yes	SANDIT	SANDIT	No	
+SAND	SANDITSP	Sandwich Foccacia Italian Sausage And Peppers	Z,G,2O,2Pv,3Cp,Pr,Sl	2	329	374	419	464	509	329	374	419	464	509	0	No	Yes	SAND	FOCA	Yes	Yes	Yes	SANDITSP	SANDITSP	No	
+SAND	SANDVGM	Sandwich Foccacia Veggie Mediterraneo	Ac,Z,Td,Fe,2O,2Pv,Xe,Pr	2	329	374	419	464	509	329	374	419	464	509	0	No	Yes	SAND	FOCA	Yes	Yes	Yes	SANDVGM	SANDVGM	No	
+SAND	ADEMA	Maiz	OPTION														Yes									MakeLine
+SAND	Ac	Queso Americano	OPTION														Yes									MakeLine
+SAND	B	Carne Molida	OPTION														Yes									MakeLine
+SAND	BBQCUP	BBQ Dip Cup	OPTION														Yes									CutTable
+SAND	Cp	Queso Provolone Rayado	OPTION														Yes									MakeLine
+SAND	D	Pollo Parilla	OPTION														Yes									MakeLine
+SAND	Du	Pollo BBQ	OPTION														Yes									MakeLine
+SAND	E	Queso Cheddar	OPTION														Yes									MakeLine
+SAND	Fe	Queso Feta	OPTION														Yes									MakeLine
+SAND	G	Pimientos Verdes	OPTION														Yes									MakeLine
+SAND	H	Jamon	OPTION														Yes									MakeLine
+SAND	HOTCUP	Hot Dip Cup	OPTION														Yes									CutTable
+SAND	J	Jalapeño	OPTION														Yes									MakeLine
+SAND	K	Tocineta	OPTION														Yes									MakeLine
+SAND	MANGOCUP	Mango Habanero Dip Cup	OPTION														Yes									CutTable
+SAND	Mh	Salsa de Mango Habanero	OPTION														Yes									MakeLine
+SAND	N	Piña	OPTION														Yes									MakeLine
+SAND	O	Cebolla	OPTION														Yes									MakeLine
+SAND	P	Pepperoni	OPTION														Yes									MakeLine
+SAND	Pm	Philly Steak	OPTION														Yes									MakeLine
+SAND	Pr	Pimientos Rojos	OPTION														Yes									MakeLine
+SAND	Pv	Queso Provolone Rebanado	OPTION														Yes									MakeLine
+SAND	Qc	Queso Parmesano/Asiago	OPTION														Yes									MakeLine
+SAND	Rd	Salsa Ranch	OPTION														Yes									MakeLine
+SAND	SIDBLE	Blue Cheese Dip Cup	OPTION														Yes									CutTable
+SAND	SIDGAR	Garlic Dip Cup	OPTION														Yes									CutTable
+SAND	SIDMAR	Marinara Dip	OPTION														Yes									CutTable
+SAND	SIDRAN	Ranch Dip Cup	OPTION														Yes									CutTable
+SAND	Sa	Salami	OPTION														Yes									MakeLine
+SAND	Sb	Salsa Blue Cheese	OPTION														Yes									MakeLine
+SAND	Sl	Extra Large Italian Sausage	OPTION														Yes									MakeLine
+SAND	Spicante	Salsa Picante	OPTION														Yes									MakeLine
+SAND	Td	Tomate en cuadro	OPTION														Yes									MakeLine
+SAND	X	Salsa Pizza	OPTION														Yes									MakeLine
+SAND	Xe	Espinaca 	OPTION														Yes									MakeLine
+SAND	Z	Pimiento Amarillo	OPTION														Yes									MakeLine
+Sides	AGCAESAR	Extra Aderezo Cesar		1	25	25	25	25	25	25	25	25	25	25	0	No	Yes	EACH	CAESARP	Yes	No	No	DEFSides	DEFSides	No	
+Sides	BLUECHS	Extra Blue Cheese Dip Cup		1	25	25	25	25	25	25	25	25	25	25	0	No	Yes	EACH	SIDBLE	Yes	No	No	DEFSides	DEFSides	No	
+Sides	CBALAYS	Lays Lays Chips		1	30	30	30	30	30	30	30	30	30	30	0	No	Yes	BAG	LAYS	Yes	No	No			No	
+Sides	CEABBQC	Extra BBQ Dip Cup		1	25	25	25	25	25	25	25	25	25	25	0	No	Yes	EACH	SIDBBQC	Yes	No	No	DEFSides	DEFSides	No	
+Sides	CEACROUP	Extra Croutons		1	25	25	25	25	25	25	25	25	25	25	0	No	Yes	EACH	CROU	Yes	No	No	DEFSides	DEFSides	No	
+Sides	CEAHABC	Extra Mango Habanero Dip Cup		1	25	25	25	25	25	25	25	25	25	25	0	No	Yes	EACH	SIDHABC	Yes	No	No	DEFSides	DEFSides	No	
+Sides	GARLIC	Extra Garlic Dip Cup		1	25	25	25	25	25	25	25	25	25	25	0	No	Yes	EACH	SIDGAR	Yes	No	No	DEFSides	DEFSides	No	
+Sides	HOTSAUCE	Extra Hot Dip Cup		1	25	25	25	25	25	25	25	25	25	25	0	No	Yes	EACH	HOTCUP	Yes	No	No	DEFSides	DEFSides	No	
+Sides	ICING	Extra Cremita de Azucar		1	25	25	25	25	25	25	25	25	25	25	0	No	Yes	EACH	SIDICE	Yes	Yes	No			No	
+Sides	ITALIANG	Extra Italian Golden Dressing		1	25	25	25	25	25	25	25	25	25	25	0	No	Yes	EACH	SIDITA	Yes	No	No	DEFSides	DEFSides	No	
+Sides	MARINARA	Extra Marinara Dip Cup		1	25	25	25	25	25	25	25	25	25	25	0	No	Yes	EACH	SIDMAR	Yes	No	No	DEFSides	DEFSides	No	
+Sides	RANCH	Extra Ranch Dip Cup		1	25	25	25	25	25	25	25	25	25	25	0	No	Yes	EACH	SIDRAN	Yes	No	No	DEFSides	DEFSides	No	
+Sides	REDPEPPER	Extra Red Peppers		1	0	0	0	0	0	0	0	0	0	0	0	No	Yes	EACH	SIDRED	Yes	No	No	DEFSides	DEFSides	No	
+Sides	VCHIELO	Extra Vaso con Hielo		1	5	5	5	5	5	5	5	5	5	5	0	No	Yes	EACH	VCHIELO	No	No	No	DEFSides	DEFSides	No	
+Wings	14CHUNKS	Grande Chicken Chunks	2SIDBLE	1	450	450	450	450	450	450	450	450	450	450	0	No	Yes	14PCW	BCHICK	Yes	Yes	No	DEFWings	WING	No	
+Wings	14WINGBBQ	Grande Wings BBQ	2SIDBLE	1	450	450	450	450	450	450	450	450	450	450	0	No	Yes	14PCW	BBQWINGS	Yes	Yes	No	DEFWings	WING	No	
+Wings	14WINGHH	Grande Wings Mitad y Mitad	2SIDBLE	1	450	450	450	450	450	450	450	450	450	450	0	No	Yes	14PCW	HHWINGS	Yes	Yes	No	DEFWings	WING	No	
+Wings	14WINGHOT	Grande Wings Hot	2SIDBLE	1	450	450	450	450	450	450	450	450	450	450	0	No	Yes	14PCW	HOTWINGS	Yes	Yes	No	DEFWings	WING	No	
+Wings	14WINGMANG	Grande Wings Mango Habanero	2SIDBLE	1	450	450	450	450	450	450	450	450	450	450	0	No	Yes	14PCW	SMANG	Yes	Yes	No	DEFWings	WING	No	
+Wings	14WINGPLN	Grande Wings Plain	2SIDBLE	1	450	450	450	450	450	450	450	450	450	450	0	No	Yes	14PCW	PLNWINGS	Yes	Yes	No	DEFWings	WING	No	
+Wings	8CHUNKS	Regular Chicken Chunks	SIDBLE	1	285	305	325	345	365	285	305	325	345	365	0	No	Yes	8PCW	BCHICK	Yes	Yes	No	DEFWings	DEFWings	No	
+Wings	8WINGBBQ	Regular Wings BBQ	SIDBLE	1	285	305	325	345	365	285	305	325	345	365	0	No	Yes	8PCW	BBQWINGS	Yes	Yes	No	DEFWings	DEFWings	No	
+Wings	8WINGHH	Regular Wings Mitad y Mitad	SIDBLE	1	285	305	325	345	365	285	305	325	345	365	0	No	Yes	8PCW	HHWINGS	Yes	Yes	No	DEFWings	DEFWings	No	
+Wings	8WINGHOT	Regular Wings Hot	SIDBLE	1	285	305	325	345	365	285	305	325	345	365	0	No	Yes	8PCW	HOTWINGS	Yes	Yes	No	DEFWings	DEFWings	No	
+Wings	8WINGMANGO	Regular Wings Mango Habanero	SIDBLE	1	285	305	325	345	365	285	305	325	345	365	0	No	Yes	8PCW	SMANG	Yes	Yes	No	DEFWings	DEFWings	No	
+Wings	8WINGPLN	Regular Wings Plain	SIDBLE	1	285	305	325	345	365	285	305	325	345	365	0	No	Yes	8PCW	PLNWINGS	Yes	Yes	No	DEFWings	DEFWings	No	
+Wings	BBQCUP	BBQ Dip Cup	OPTION														Yes									CutTable
+Wings	HOTCUP	Hot Dip Cup	OPTION														Yes									CutTable
+Wings	MANGOCUP	Mango Habanero Dip Cup	OPTION														Yes									CutTable
+Wings	SIDBLE	Blue Cheese Dip Cup	OPTION														Yes									CutTable
+Wings	SIDGAR	Garlic Dip Cup	OPTION														Yes									CutTable
+Wings	SIDRAN	Ranch Dip Cup	OPTION														Yes									CutTable</Products></StoreProducts></SOAPSDK4:GetStoreProductsResponse></SOAP-ENV:Body></SOAP-ENV:Envelope>
+
+
+[1m[35m<?xml version="1.0" encoding="UTF-8" standalone="no"?><SOAP-ENV:Envelope xmlns:SOAPSDK1="http://www.w3.org/2001/XMLSchema" xmlns:SOAPSDK2="http://www.w3.org/2001/XMLSchema-instance" xmlns:SOAPSDK3="http://schemas.xmlsoap.org/soap/encoding/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"><SOAP-ENV:Body SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"><SOAPSDK4:GetStoreProductsResponse xmlns:SOAPSDK4="http://www.dominos.com/message/"><StoreProducts><StoreID>99998</StoreID><Products>CategoryCode	ProductCode	ProductName	Options	ProductGroupSize	Price1-0	Price1-1	Price1-2	Price1-3	Price1-4	Price2-0	Price2-1	Price2-2	Price2-3	Price2-4	SurchargeAmount	IsSurchargeOnlyFirstProduct	IsMasterType	SizeCode	FlavorCode	IsTaxable	IsPrepared	IsSpecialtyPizza	OptionSelectionGroupType	ProductOptionSelectionGroup	IsShortcut	OptionType
+Bread	8TWISTY	Order Breadsticks	SIDMAR	1	160	180	200	220	240	160	180	200	220	240	0	No	Yes	BRD8	TWISTBRD	Yes	Yes	No	DEFBread	TWISTBRD	No	
+Bread	B16PBIT	16 Piezas Parm Bites	SIDMAR	1	200	200	200	200	200	200	200	200	200	200	0	No	Yes	BRD16	PBITES	Yes	Yes	No	DEFBread	CHEBRD	No	
+Bread	CHSBREAD	Order Cheesybread	SIDMAR	1	200	220	240	260	280	200	220	240	260	280	0	No	Yes	BRD8	CHEBRD	Yes	Yes	No	DEFBread	CHEBRD	No	
+Bread	CINNASTIX8	Order Canelitos	SIDICE	1	160	180	200	220	240	160	180	200	220	240	0	No	Yes	BRD8	CINBRD	Yes	Yes	No	DEFBread	CINBRD	No	
+Bread	SBRDBJ	Order Stuffed Cheesy Bacon/Jalapeno		1	299	319	339	359	379	299	319	339	359	379	0	No	Yes	BRD8	SCBRDBJ	Yes	Yes	No	DEFBread	DEFBread	No	
+Bread	SBRDSF	Order SCB Espinaca Feta		1	299	319	339	359	379	299	319	339	359	379	0	No	Yes	BRD8	SCBRDSF	Yes	Yes	No	DEFBread	DEFBread	No	
+Bread	SCBREAD	Order Stuffed Cheesy Bread		1	299	319	339	359	379	299	319	339	359	379	0	No	Yes	BRD8	SCBRD	Yes	Yes	No	DEFBread	DEFBread	No	
+Bread	SIDICE	Cremita de Azucar	OPTION														Yes									CutTable
+Bread	SIDMAR	Marinara Dip	OPTION														Yes									CutTable
+CALZON	CALZN	Calzone Clasico Calzone	Qr,C	2	200	245	290	335	380	200	245	290	335	380	0	No	Yes	ORDER	CLASICO	Yes	Yes	Yes	CALZ	CALZ	No	
+CALZON	ADEMA	Maiz	OPTION														Yes									MakeLine
+CALZON	Ac	Queso Americano	OPTION														Yes									MakeLine
+CALZON	C	Queso Mozzarella	OPTION														Yes									MakeLine
+CALZON	Cp	Queso Provolone Rayado	OPTION														Yes									MakeLine
+CALZON	D	Pollo Parilla	OPTION														Yes									MakeLine
+CALZON	Du	Pollo BBQ	OPTION														Yes									MakeLine
+CALZON	E	Queso Cheddar	OPTION														Yes									MakeLine
+CALZON	Fe	Queso Feta	OPTION														Yes									MakeLine
+CALZON	G	Pimientos Verdes	OPTION														Yes									MakeLine
+CALZON	H	Jamon	OPTION														Yes									MakeLine
+CALZON	J	Jalapeño	OPTION														Yes									MakeLine
+CALZON	K	Tocineta	OPTION														Yes									MakeLine
+CALZON	M	Hongos	OPTION														Yes									MakeLine
+CALZON	N	Piña	OPTION														Yes									MakeLine
+CALZON	O	Cebolla	OPTION														Yes									MakeLine
+CALZON	P	Pepperoni	OPTION														Yes									MakeLine
+CALZON	Pr	Pimientos Rojos	OPTION														Yes									MakeLine
+CALZON	Qc	Queso Parmesano/Asiago	OPTION														Yes									MakeLine
+CALZON	Qr	Queso Ricotta	OPTION														Yes									MakeLine
+CALZON	R	Aceitunas Negras	OPTION														Yes									MakeLine
+CALZON	Sa	Salami	OPTION														Yes									MakeLine
+CALZON	T	Tomates Frescos	OPTION														Yes									MakeLine
+CALZON	Td	Tomate en cuadro	OPTION														Yes									MakeLine
+CALZON	Xe	Espinaca 	OPTION														Yes									MakeLine
+CALZON	Z	Pimiento Amarillo	OPTION														Yes									MakeLine
+CHARGES	DLVRYFEE	Delivery Charge		1	0	0	0	0	0	0	0	0	0	0	0	No	Yes	DLVRYFEE	CHARGES	No	No	No			No	
+CUMPLE	BISCOCHO	Order Bizcocho 1/2 Libra		1	500	500	500	500	500	500	500	500	500	500	0	No	Yes	ORDER	BIZCOCHO	Yes	No	No			No	
+CUMPLE	DECO10	Order Decoración Plan 10 niños		1	3220	3220	3220	3220	3220	3220	3220	3220	3220	3220	0	No	Yes	ORDER	DECO10	Yes	No	No			No	
+CUMPLE	DECO15	Order Decoración Plan 15 niños		1	3425	3425	3425	3425	3425	3425	3425	3425	3425	3425	0	No	Yes	ORDER	DECO15	Yes	No	No			No	
+CUMPLE	DECO20	Order Decoración Plan 20 niños		1	3470	3470	3470	3470	3470	3470	3470	3470	3470	3470	0	No	Yes	ORDER	DECO20	Yes	No	No			No	
+CUMPLE	DECO25	Order Decoración Plan 25 niños		1	4435	4435	4435	4435	4435	4435	4435	4435	4435	4435	0	No	Yes	ORDER	DECO25	Yes	No	No			No	
+CUMPLE	DECO30	Order Decoración Plan 30 niños		1	3980	3980	3980	3980	3980	3980	3980	3980	3980	3980	0	No	Yes	ORDER	DECO30	Yes	No	No			No	
+CUMPLE	DULCE	Order Funditas de Dulces		1	50	50	50	50	50	50	50	50	50	50	0	No	Yes	ORDER	DULCES	Yes	No	No			No	
+CUMPLE	PAYASO	Order Payaso / Anfitrión		1	1700	1700	1700	1700	1700	1700	1700	1700	1700	1700	0	No	Yes	ORDER	PAYASO	Yes	No	No			No	
+Drinks	16OZMMAP	16-oz Bottle Manzana Minute Maid		1	40	40	40	40	40	40	40	40	40	40	0	No	Yes	16OZB	APPLE	Yes	No	No			No	
+Drinks	16OZMMCP	16-oz Bottle Citrus Punch Minute Maid		1	40	40	40	40	40	40	40	40	40	40	0	No	Yes	16OZB	MMCPUNCH	Yes	No	No			No	
+Drinks	16OZMMFP	16-oz Bottle Fruit Punch Minute Maid		1	40	40	40	40	40	40	40	40	40	40	0	No	Yes	16OZB	FRUITMM	Yes	No	No			No	
+Drinks	16OZMMGR	16-oz Bottle Uva Minute Maid		1	40	40	40	40	40	40	40	40	40	40	0	No	Yes	16OZB	MMGRAP	Yes	No	No			No	
+Drinks	20BCOKE	20-oz Bottle Coca Cola		1	60	60	60	60	60	60	60	60	60	60	0	No	Yes	20OZB	COKE	Yes	No	No			No	
+Drinks	20BDCOKE	20-oz Bottle Coca Cola Light		1	60	60	60	60	60	60	60	60	60	60	0	No	Yes	20OZB	DIET	Yes	No	No			No	
+Drinks	20BORNG	20-oz Bottle Fanta Naranja		1	60	60	60	60	60	60	60	60	60	60	0	No	Yes	20OZB	ORANGE	Yes	No	No			No	
+Drinks	20BSPRITE	20-oz Bottle Sprite		1	60	60	60	60	60	60	60	60	60	60	0	No	Yes	20OZB	SPRITE	Yes	No	No			No	
+Drinks	20OZMERG	20-oz Bottle Merengue		1	60	60	60	60	60	60	60	60	60	60	0	No	Yes	20OZB	MERG	Yes	No	No			No	
+Drinks	20OZPWAA	20-oz Bottle Avalancha Alpina Powerade		1	60	60	60	60	60	60	60	60	60	60	0	No	Yes	20OZB	ALPINA	Yes	No	No			No	
+Drinks	20OZPWFP	20-oz Bottle Fruit Punch Powerade		1	60	60	60	60	60	60	60	60	60	60	0	No	Yes	20OZB	FRUITP	Yes	No	No			No	
+Drinks	20OZPWGR	20-oz Bottle Uva Powerade		1	60	60	60	60	60	60	60	60	60	60	0	No	Yes	20OZB	PWGRPB	Yes	No	No			No	
+Drinks	20OZPWOR	20-oz Bottle Naranja Powerade		1	60	60	60	60	60	60	60	60	60	60	0	No	Yes	20OZB	PWORAN	Yes	No	No			No	
+Drinks	20OZROJO	20-oz Bottle Frambruesa		1	60	60	60	60	60	60	60	60	60	60	0	No	Yes	20OZB	STRAW	Yes	No	No			No	
+Drinks	20OZUVA	20-oz Bottle Fanta Uva		1	60	60	60	60	60	60	60	60	60	60	0	No	Yes	20OZB	GRAPE	Yes	No	No			No	
+Drinks	2LCOKE	2-Liter Bottle Coca Cola		1	90	90	90	90	90	90	90	90	90	90	0	No	Yes	2LTB	COKE	Yes	No	No			No	
+Drinks	2LDCOKE	2-Liter Bottle Coca Cola Light		1	90	90	90	90	90	90	90	90	90	90	0	No	Yes	2LTB	DIET	Yes	No	No			No	
+Drinks	2LMMORANGE	2-Liter Bottle Fanta Naranja		1	90	90	90	90	90	90	90	90	90	90	0	No	Yes	2LTB	ORANGE	Yes	No	No			No	
+Drinks	2LSPRITE	2-Liter Bottle Sprite		1	90	90	90	90	90	90	90	90	90	90	0	No	Yes	2LTB	SPRITE	Yes	No	No			No	
+Drinks	2LTMERG	2-Liter Bottle Merengue		1	90	90	90	90	90	90	90	90	90	90	0	No	Yes	2LTB	MERG	Yes	No	No			No	
+Drinks	2LTSTRAW	2-Liter Bottle Frambruesa		1	90	90	90	90	90	90	90	90	90	90	0	No	Yes	2LTB	STRAW	Yes	No	No			No	
+Drinks	2LTUVA	2-Liter Bottle Fanta Uva		1	90	90	90	90	90	90	90	90	90	90	0	No	Yes	2LTB	GRAPE	Yes	No	No			No	
+Drinks	BOTTLWATER	20-oz Bottle Agua		1	35	35	35	35	35	35	35	35	35	35	0	No	Yes	20OZB	WATER	Yes	No	No			No	
+Drinks	D20BZRO	20-oz Bottle Coca Cola ZERO		1	60	60	60	60	60	60	60	60	60	60	0	No	Yes	20OZB	ZERO	Yes	No	No			No	
+Drinks	D2LBZRO	2-Liter Bottle Coca Cola ZERO		1	90	90	90	90	90	90	90	90	90	90	0	No	Yes	2LTB	ZERO	Yes	No	No			No	
+Drinks	FWATAP	20-oz Bottle Agua Saborizada Manzana		1	40	40	40	40	40	40	40	40	40	40	0	No	Yes	20OZB	FWATAP	Yes	No	No			No	
+Drinks	FWATJF	20-oz Bottle Agua Flor de Jamaica		1	40	40	40	40	40	40	40	40	40	40	0	No	Yes	20OZB	FWATJF	Yes	No	No			No	
+Drinks	FWATLM	20-oz Bottle Agua Saborizada Limon		1	40	40	40	40	40	40	40	40	40	40	0	No	Yes	20OZB	FWATLM	Yes	No	No			No	
+Drinks	FWATMAN	20-oz Bottle Agua Saborizada Mandarina 		1	40	40	40	40	40	40	40	40	40	40	0	No	Yes	20OZB	FWATMA	Yes	No	No			No	
+Drinks	FWTTB	20-oz Bottle Agua Saborizada Toronja		1	40	40	40	40	40	40	40	40	40	40	0	No	Yes	20OZB	FWATTB	Yes	No	No			No	
+Drinks	V12COKE	12oz Vaso Coca Cola		1	35	35	35	35	35	35	35	35	35	35	0	No	Yes	12OZ	COKE	Yes	Yes	No			No	
+Drinks	V12COKEL	12oz Vaso Coca Cola Light		1	35	35	35	35	35	35	35	35	35	35	0	No	Yes	12OZ	DIET	Yes	Yes	No			No	
+Drinks	V12COKEZ	12oz Vaso Coca Cola ZERO		1	35	35	35	35	35	35	35	35	35	35	0	No	Yes	12OZ	ZERO	Yes	Yes	No			No	
+Drinks	V12MERENGU	12oz Vaso Merengue		1	35	35	35	35	35	35	35	35	35	35	0	No	Yes	12OZ	MERG	Yes	Yes	No			No	
+Drinks	V12NARANJA	12oz Vaso Fanta Naranja		1	35	35	35	35	35	35	35	35	35	35	0	No	Yes	12OZ	ORANGE	Yes	Yes	No			No	
+Drinks	V12ROJO	12oz Vaso Frambruesa		1	35	35	35	35	35	35	35	35	35	35	0	No	Yes	12OZ	STRAW	Yes	Yes	No			No	
+Drinks	V12SPRITE	12oz Vaso Sprite		1	35	35	35	35	35	35	35	35	35	35	0	No	Yes	12OZ	SPRITE	Yes	Yes	No			No	
+Drinks	V12UVA	12oz Vaso Fanta Uva		1	35	35	35	35	35	35	35	35	35	35	0	No	Yes	12OZ	GRAPE	Yes	Yes	No			No	
+GSalad	GRKSAL	Medium Ensalada Griega	Tc,It,Fe,Z,R	1	225	270	315	360	405	225	270	315	360	405	0	No	Yes	MDS	GRKSAL	Yes	Yes	No	GRKSAL	GRKSAL	No	
+GSalad	MAGCSAL	Medium House Salad	Tc,It,E,Pr,R,ADEMA,Za	1	225	270	315	360	405	225	270	315	360	405	0	No	Yes	MDS	GFSAL	Yes	Yes	No	GFSAL	GFSAL	No	
+GSalad	MAGGFSAL	Medium Cesar Salad	CAESAR,Tc,Qc,D	1	225	270	315	360	405	225	270	315	360	405	0	No	Yes	MDS	CHCSAL	Yes	Yes	No	CHCSAL	CHCSAL	No	
+GSalad	ADEMA	Maiz	OPTION														Yes									MakeLine
+GSalad	CAESAR	Caesar Dressing	OPTION														Yes									CutTable
+GSalad	D	Pollo Parilla	OPTION														Yes									MakeLine
+GSalad	E	Queso Cheddar	OPTION														Yes									MakeLine
+GSalad	Fe	Queso Feta	OPTION														Yes									MakeLine
+GSalad	It	Italian Dressing	OPTION														Yes									CutTable
+GSalad	Pr	Pimientos Rojos	OPTION														Yes									MakeLine
+GSalad	Qc	Queso Parmesano/Asiago	OPTION														Yes									MakeLine
+GSalad	R	Aceitunas Negras	OPTION														Yes									MakeLine
+GSalad	Tc	Tomates Barcelo	OPTION														Yes									MakeLine
+GSalad	Z	Pimiento Amarillo	OPTION														Yes									MakeLine
+GSalad	Za	Zanahoria Rayada	OPTION														Yes									MakeLine
+PAPOTAS	8OZPAPOTAS	8oz Papotas	SIDRAN	1	160	160	160	160	160	160	160	160	160	160	0	No	Yes	P08OZ	PAPOTAS	Yes	Yes	No	DEFPAP	DEFPAP	No	
+PAPOTAS	BBQCUP	BBQ Dip Cup	OPTION														Yes									CutTable
+PAPOTAS	HOTCUP	Hot Dip Cup	OPTION														Yes									CutTable
+PAPOTAS	MANGOCUP	Mango Habanero Dip Cup	OPTION														Yes									CutTable
+PAPOTAS	SIDBLE	Blue Cheese Dip Cup	OPTION														Yes									CutTable
+PAPOTAS	SIDGAR	Garlic Dip Cup	OPTION														Yes									CutTable
+PAPOTAS	SIDMAR	Marinara Dip	OPTION														Yes									CutTable
+PAPOTAS	SIDRAN	Ranch Dip Cup	OPTION														Yes									CutTable
+Pasta	PASTAAP	Pasta Aluminio Alfredo con Pollo	Xf,D	2	299	334	369	404	439	299	334	369	404	439	0	No	Yes	PASTA	ABOWL	Yes	Yes	Yes	ALFR	ALFR	No	
+Pasta	PASTABA	Pasta Aluminio BYO Alfredo	Xf	2	299	299	299	299	299	299	299	299	299	299	0	No	Yes	PASTA	ABOWL	Yes	Yes	Yes	BUILA	BUILA	No	
+Pasta	PASTABC	Pasta Aluminio BYO Tres Quesos	Xd,Ac	2	299	299	299	299	299	299	299	299	299	299	0	No	Yes	PASTA	ABOWL	Yes	Yes	Yes	BUILC	BUILC	No	
+Pasta	PASTABM	Pasta Aluminio BYO Marinara	Xm	2	299	299	299	299	299	299	299	299	299	299	0	No	Yes	PASTA	ABOWL	Yes	Yes	Yes	BUILM	BUILM	No	
+Pasta	PASTACP	Pasta Aluminio Carbonara con Pollo	Xf,K,D,O,M	2	299	334	369	404	439	299	334	369	404	439	0	No	Yes	PASTA	ABOWL	Yes	Yes	Yes	CARB	CARB	No	
+Pasta	PASTAMS	Pasta Aluminio Marinara Tomates Salchicha	Xm,Cp,S	2	299	334	369	404	439	299	334	369	404	439	0	No	Yes	PASTA	ABOWL	Yes	Yes	Yes	MARIN	MARIN	No	
+Pasta	PASTAP	Pasta Aluminio Primavera	Xf,Td,O,M,Xe	2	299	334	369	404	439	299	334	369	404	439	0	No	Yes	PASTA	ABOWL	Yes	Yes	Yes	PRIM	PRIM	No	
+Pasta	PASTATQ	Pasta Aluminio Tres Quesos	Xd,E,C	2	299	334	369	404	439	299	334	369	404	439	0	No	Yes	PASTA	ABOWL	Yes	Yes	Yes	MACC	MACC	No	
+Pasta	PASTMAP	Pasta Masa Alfredo con Pollo	Xf,D	2	299	334	369	404	439	299	334	369	404	439	0	No	Yes	PASTA	MBOWL	Yes	Yes	Yes	ALFR	ALFR	No	
+Pasta	PASTMBA	Pasta Masa BYO Alfredo	Xf	2	299	299	299	299	299	299	299	299	299	299	0	No	Yes	PASTA	MBOWL	Yes	Yes	Yes	BUILA	BUILA	No	
+Pasta	PASTMBC	Pasta Masa BYO Tres Quesos	Xd,Ac	2	299	299	299	299	299	299	299	299	299	299	0	No	Yes	PASTA	MBOWL	Yes	Yes	Yes	BUILC	BUILC	No	
+Pasta	PASTMBM	Pasta Masa BYO Marinara	Xm	2	299	299	299	299	299	299	299	299	299	299	0	No	Yes	PASTA	MBOWL	Yes	Yes	Yes	BUILM	BUILM	No	
+Pasta	PASTMCP	Pasta Masa Carbonara con Pollo	Xf,K,D,O,M	2	299	334	369	404	439	299	334	369	404	439	0	No	Yes	PASTA	MBOWL	Yes	Yes	Yes	CARB	CARB	No	
+Pasta	PASTMMS	Pasta Masa Marinara Tomates Salchicha	Xm,Cp,S	2	299	334	369	404	439	299	334	369	404	439	0	No	Yes	PASTA	MBOWL	Yes	Yes	Yes	MARIN	MARIN	No	
+Pasta	PASTMP	Pasta Masa Primavera	Xf,Td,O,M,Xe	2	299	334	369	404	439	299	334	369	404	439	0	No	Yes	PASTA	MBOWL	Yes	Yes	Yes	PRIM	PRIM	No	
+Pasta	PASTMTQ	Pasta Masa Tres Quesos	Xd,E,C	2	299	334	369	404	439	299	334	369	404	439	0	No	Yes	PASTA	MBOWL	Yes	Yes	Yes	MACC	MACC	No	
+Pasta	ADEMA	Maiz	OPTION														Yes									MakeLine
+Pasta	Ac	Queso Americano	OPTION														Yes									MakeLine
+Pasta	C	Queso Mozzarella	OPTION														Yes									MakeLine
+Pasta	Cp	Queso Provolone Rayado	OPTION														Yes									MakeLine
+Pasta	D	Pollo Parilla	OPTION														Yes									MakeLine
+Pasta	Du	Pollo BBQ	OPTION														Yes									MakeLine
+Pasta	E	Queso Cheddar	OPTION														Yes									MakeLine
+Pasta	Fe	Queso Feta	OPTION														Yes									MakeLine
+Pasta	G	Pimientos Verdes	OPTION														Yes									MakeLine
+Pasta	H	Jamon	OPTION														Yes									MakeLine
+Pasta	J	Jalapeño	OPTION														Yes									MakeLine
+Pasta	K	Tocineta	OPTION														Yes									MakeLine
+Pasta	M	Hongos	OPTION														Yes									MakeLine
+Pasta	N	Piña	OPTION														Yes									MakeLine
+Pasta	O	Cebolla	OPTION														Yes									MakeLine
+Pasta	P	Pepperoni	OPTION														Yes									MakeLine
+Pasta	Pr	Pimientos Rojos	OPTION														Yes									MakeLine
+Pasta	Pv	Queso Provolone Rebanado	OPTION														Yes									MakeLine
+Pasta	Qc	Queso Parmesano/Asiago	OPTION														Yes									MakeLine
+Pasta	R	Aceitunas Negras	OPTION														Yes									MakeLine
+Pasta	S	Salchicha Italiana	OPTION														Yes									MakeLine
+Pasta	Sa	Salami	OPTION														Yes									MakeLine
+Pasta	Td	Tomate en cuadro	OPTION														Yes									MakeLine
+Pasta	Xd	Cheddar Pasta Sauce	OPTION														Yes									MakeLine
+Pasta	Xe	Espinaca 	OPTION														Yes									MakeLine
+Pasta	Xf	Alfredo Pasta Sauce	OPTION														Yes									MakeLine
+Pasta	Xm	Marinara Pasta Sauce	OPTION														Yes									MakeLine
+Pasta	Z	Pimiento Amarillo	OPTION														Yes									MakeLine
+Pizza	08SCFH	8&quot; Tradicional Ham Feast	X,1.5C,1.5H	2	305	355	405	455	505	305	355	405	455	505	0	No	Yes	8	HANDTOSS	Yes	Yes	Yes	PIZJX	PIZJX	No	
+Pizza	08SCIT	8&quot; Tradicional Italiana	X,1.5C,P,S,M,R,T	2	360	410	460	510	560	360	410	460	510	560	0	No	Yes	8	HANDTOSS	Yes	Yes	Yes	PIZIT	PIZIT	No	
+Pizza	12DDFH	12&quot; Gordita Ham Feast	X,1.5C,1.5H	2	490	555	620	685	750	490	555	620	685	750	0	No	Yes	12	DEEPDISH	Yes	Yes	Yes	PIZJX	PIZJX	No	
+Pizza	12DDITAL	12&quot; Gordita Italiana	X,1.5C,P,S,M,R,T	2	590	655	720	785	850	590	655	720	785	850	0	No	Yes	12	DEEPDISH	Yes	Yes	Yes	PIZIT	PIZIT	No	
+Pizza	12FHTC	12&quot; Finita Ham Feast	X,1.5C,1.5H	2	490	555	620	685	750	490	555	620	685	750	0	No	Yes	12	THIN	Yes	Yes	Yes	PIZJX	PIZJX	No	
+Pizza	12HDFH	12&quot; Tradicional Ham Feast	X,1.5C,1.5H	2	490	555	620	685	750	490	555	620	685	750	0	No	Yes	12	HANDTOSS	Yes	Yes	Yes	PIZJX	PIZJX	No	
+Pizza	12PAFEAST	12&quot; Gordita American Feast	X,C,P,S,M	2	490	555	620	685	750	490	555	620	685	750	0	No	Yes	12	DEEPDISH	Yes	Yes	Yes	PIZAX	PIZAX	No	
+Pizza	12PAN	12&quot; Gordita Napolitana	X,C	2	360	425	490	555	620	360	425	490	555	620	0	No	Yes	12	DEEPDISH	Yes	Yes	No	PIZZA	PIZZA	No	
+Pizza	12PBACCHB	12&quot; Gordita Bacon Cheeseburger	X,C,E,K,S	2	590	655	720	785	850	590	655	720	785	850	0	No	Yes	12	DEEPDISH	Yes	Yes	Yes	PIZBX	PIZBX	No	
+Pizza	12PDELUX	12&quot; Gordita Deluxe	X,C,P,S,O,G,M	2	590	655	720	785	850	590	655	720	785	850	0	No	Yes	12	DEEPDISH	Yes	Yes	Yes	PIZDX	PIZDX	No	
+Pizza	12PEXTRAV	12&quot; Gordita Extravaganzza	X,1.5C,P,H,S,O,G,M,R	2	590	655	720	785	850	590	655	720	785	850	0	No	Yes	12	DEEPDISH	Yes	Yes	Yes	PIZZZ	PIZZZ	No	
+Pizza	12PHAWIN	12&quot; Gordita Hawaiian Feast	X,1.5C,H,N	2	490	555	620	685	750	490	555	620	685	750	0	No	Yes	12	DEEPDISH	Yes	Yes	Yes	PIZHX	PIZHX	No	
+Pizza	12PMEATZA	12&quot; Gordita Meatzza Pizza	X,1.5C,P,H,K,S	2	590	655	720	785	850	590	655	720	785	850	0	No	Yes	12	DEEPDISH	Yes	Yes	Yes	PIZMX	PIZMX	No	
+Pizza	12PPFEAST	12&quot; Gordita Pepperoni Feast	X,1.5C,1.5P	2	490	555	620	685	750	490	555	620	685	750	0	No	Yes	12	DEEPDISH	Yes	Yes	Yes	PIZPX	PIZPX	No	
+Pizza	12PVEGGIE	12&quot; Gordita Veggie Feast	X,1.5C,O,G,M,R	2	490	555	620	685	750	490	555	620	685	750	0	No	Yes	12	DEEPDISH	Yes	Yes	Yes	PIZVX	PIZVX	No	
+Pizza	12SCAFEAST	12&quot; Tradicional American Feast	X,C,P,S,M	2	490	555	620	685	750	490	555	620	685	750	0	No	Yes	12	HANDTOSS	Yes	Yes	Yes	PIZAX	PIZAX	No	
+Pizza	12SCBACCHB	12&quot; Tradicional Bacon Cheeseburger	X,C,E,K,S	2	590	655	720	785	850	590	655	720	785	850	0	No	Yes	12	HANDTOSS	Yes	Yes	Yes	PIZBX	PIZBX	No	
+Pizza	12SCDELUX	12&quot; Tradicional Deluxe	X,C,P,S,O,G,M	2	590	655	720	785	850	590	655	720	785	850	0	No	Yes	12	HANDTOSS	Yes	Yes	Yes	PIZDX	PIZDX	No	
+Pizza	12SCEXTRAV	12&quot; Tradicional Extravaganzza	X,1.5C,P,H,S,O,G,M,R	2	590	655	720	785	850	590	655	720	785	850	0	No	Yes	12	HANDTOSS	Yes	Yes	Yes	PIZZZ	PIZZZ	No	
+Pizza	12SCHAWIN	12&quot; Tradicional Hawaiian Feast	X,1.5C,H,N	2	490	555	620	685	750	490	555	620	685	750	0	No	Yes	12	HANDTOSS	Yes	Yes	Yes	PIZHX	PIZHX	No	
+Pizza	12SCIT	12&quot; Tradicional Italiana	X,1.5C,P,S,M,R,T	2	590	655	720	785	850	590	655	720	785	850	0	No	Yes	12	HANDTOSS	Yes	Yes	Yes	PIZIT	PIZIT	No	
+Pizza	12SCMEATZA	12&quot; Tradicional Meatzza Pizza	X,1.5C,P,H,K,S	2	590	655	720	785	850	590	655	720	785	850	0	No	Yes	12	HANDTOSS	Yes	Yes	Yes	PIZMX	PIZMX	No	
+Pizza	12SCPFEAST	12&quot; Tradicional Pepperoni Feast	X,1.5C,1.5P	2	490	555	620	685	750	490	555	620	685	750	0	No	Yes	12	HANDTOSS	Yes	Yes	Yes	PIZPX	PIZPX	No	
+Pizza	12SCREEN	12&quot; Tradicional Napolitana	X,C	2	360	425	490	555	620	360	425	490	555	620	0	No	Yes	12	HANDTOSS	Yes	Yes	No	PIZZA	PIZZA	No	
+Pizza	12SCVEGGIE	12&quot; Tradicional Veggie Feast	X,1.5C,O,G,M,R	2	490	555	620	685	750	490	555	620	685	750	0	No	Yes	12	HANDTOSS	Yes	Yes	Yes	PIZVX	PIZVX	No	
+Pizza	12TAFEAST	12&quot; Finita American Feast	X,C,P,S,M	2	490	555	620	685	750	490	555	620	685	750	0	No	Yes	12	THIN	Yes	Yes	Yes	PIZAX	PIZAX	No	
+Pizza	12TBACCHB	12&quot; Finita Bacon Cheeseburger	X,C,E,K,S	2	590	655	720	785	850	590	655	720	785	850	0	No	Yes	12	THIN	Yes	Yes	Yes	PIZBX	PIZBX	No	
+Pizza	12TCITAL	12&quot; Finita Italiana	X,1.5C,P,S,M,R,T	2	590	655	720	785	850	590	655	720	785	850	0	No	Yes	12	THIN	Yes	Yes	Yes	PIZIT	PIZIT	No	
+Pizza	12TDELUX	12&quot; Finita Deluxe	X,C,P,S,O,G,M	2	590	655	720	785	850	590	655	720	785	850	0	No	Yes	12	THIN	Yes	Yes	Yes	PIZDX	PIZDX	No	
+Pizza	12TEXTRAV	12&quot; Finita Extravaganzza	X,1.5C,P,H,S,O,G,M,R	2	590	655	720	785	850	590	655	720	785	850	0	No	Yes	12	THIN	Yes	Yes	Yes	PIZZZ	PIZZZ	No	
+Pizza	12THAWIN	12&quot; Finita Hawaiian Feast	X,1.5C,H,N	2	490	555	620	685	750	490	555	620	685	750	0	No	Yes	12	THIN	Yes	Yes	Yes	PIZHX	PIZHX	No	
+Pizza	12THIN	12&quot; Finita Napolitana	X,C	2	360	425	490	555	620	360	425	490	555	620	0	No	Yes	12	THIN	Yes	Yes	No	PIZZA	PIZZA	No	
+Pizza	12TMEATZA	12&quot; Finita Meatzza Pizza	X,1.5C,P,H,K,S	2	590	655	720	785	850	590	655	720	785	850	0	No	Yes	12	THIN	Yes	Yes	Yes	PIZMX	PIZMX	No	
+Pizza	12TPFEAST	12&quot; Finita Pepperoni Feast	X,1.5C,1.5P	2	490	555	620	685	750	490	555	620	685	750	0	No	Yes	12	THIN	Yes	Yes	Yes	PIZPX	PIZPX	No	
+Pizza	12TVEGGIE	12&quot; Finita Veggie Feast	X,1.5C,O,G,M,R	2	490	555	620	685	750	490	555	620	685	750	0	No	Yes	12	THIN	Yes	Yes	Yes	PIZVX	PIZVX	No	
+Pizza	14DDITAL	14&quot; Gordita Italiana	X,1.5C,P,S,M,R,T	2	745	820	895	970	1045	745	820	895	970	1045	0	No	Yes	14	DEEPDISH	Yes	Yes	Yes	PIZIT	PIZIT	No	
+Pizza	14FHDD	14&quot; Gordita Ham Feast	X,1.5C,1.5H	2	620	695	770	845	920	620	695	770	845	920	0	No	Yes	14	DEEPDISH	Yes	Yes	Yes	PIZJX	PIZJX	No	
+Pizza	14FHHT	14&quot; Tradicional Ham Feast	X,1.5C,1.5H	2	620	695	770	845	920	620	695	770	845	920	0	No	Yes	14	HANDTOSS	Yes	Yes	Yes	PIZJX	PIZJX	No	
+Pizza	14FHTC	14&quot; Finita Ham Feast	X,1.5C,1.5H	2	620	695	770	845	920	620	695	770	845	920	0	No	Yes	14	THIN	Yes	Yes	Yes	PIZJX	PIZJX	No	
+Pizza	14PAFEAST	14&quot; Gordita American Feast	X,C,P,S,M	2	620	695	770	845	920	620	695	770	845	920	0	No	Yes	14	DEEPDISH	Yes	Yes	Yes	PIZAX	PIZAX	No	
+Pizza	14PAN	14&quot; Gordita Napolitana	X,C	2	480	555	630	705	780	480	555	630	705	780	0	No	Yes	14	DEEPDISH	Yes	Yes	No	PIZZA	PIZZA	No	
+Pizza	14PBACCHB	14&quot; Gordita Bacon Cheeseburger	X,C,E,K,S	2	745	820	895	970	1045	745	820	895	970	1045	0	No	Yes	14	DEEPDISH	Yes	Yes	Yes	PIZBX	PIZBX	No	
+Pizza	14PDELUX	14&quot; Gordita Deluxe	X,C,P,S,O,G,M	2	745	820	895	970	1045	745	820	895	970	1045	0	No	Yes	14	DEEPDISH	Yes	Yes	Yes	PIZDX	PIZDX	No	
+Pizza	14PEXTRAV	14&quot; Gordita Extravaganzza	X,1.5C,P,H,S,O,G,M,R	2	745	820	895	970	1045	745	820	895	970	1045	0	No	Yes	14	DEEPDISH	Yes	Yes	Yes	PIZZZ	PIZZZ	No	
+Pizza	14PHAWIN	14&quot; Gordita Hawaiian Feast	X,1.5C,H,N	2	620	695	770	845	920	620	695	770	845	920	0	No	Yes	14	DEEPDISH	Yes	Yes	Yes	PIZHX	PIZHX	No	
+Pizza	14PMEATZA	14&quot; Gordita Meatzza Pizza	X,1.5C,P,H,K,S	2	745	820	895	970	1045	745	820	895	970	1045	0	No	Yes	14	DEEPDISH	Yes	Yes	Yes	PIZMX	PIZMX	No	
+Pizza	14PPFEAST	14&quot; Gordita Pepperoni Feast	X,1.5C,1.5P	2	620	695	770	845	920	620	695	770	845	920	0	No	Yes	14	DEEPDISH	Yes	Yes	Yes	PIZPX	PIZPX	No	
+Pizza	14PVEGGIE	14&quot; Gordita Veggie Feast	X,1.5C,O,G,M,R	2	620	695	770	845	920	620	695	770	845	920	0	No	Yes	14	DEEPDISH	Yes	Yes	Yes	PIZVX	PIZVX	No	
+Pizza	14SCAFEAST	14&quot; Tradicional American Feast	X,C,P,S,M	2	620	695	770	845	920	620	695	770	845	920	0	No	Yes	14	HANDTOSS	Yes	Yes	Yes	PIZAX	PIZAX	No	
+Pizza	14SCBACCHB	14&quot; Tradicional Bacon Cheeseburger	X,C,E,K,S	2	745	820	895	970	1045	745	820	895	970	1045	0	No	Yes	14	HANDTOSS	Yes	Yes	Yes	PIZBX	PIZBX	No	
+Pizza	14SCDELUX	14&quot; Tradicional Deluxe	X,C,P,S,O,G,M	2	745	820	895	970	1045	745	820	895	970	1045	0	No	Yes	14	HANDTOSS	Yes	Yes	Yes	PIZDX	PIZDX	No	
+Pizza	14SCEXTRAV	14&quot; Tradicional Extravaganzza	X,1.5C,P,H,S,O,G,M,R	2	745	820	895	970	1045	745	820	895	970	1045	0	No	Yes	14	HANDTOSS	Yes	Yes	Yes	PIZZZ	PIZZZ	No	
+Pizza	14SCHAWIN	14&quot; Tradicional Hawaiian Feast	X,1.5C,H,N	2	620	695	770	845	920	620	695	770	845	920	0	No	Yes	14	HANDTOSS	Yes	Yes	Yes	PIZHX	PIZHX	No	
+Pizza	14SCITAL	14&quot; Tradicional Italiana	X,1.5C,P,S,M,R,T	2	745	820	895	970	1045	745	820	895	970	1045	0	No	Yes	14	HANDTOSS	Yes	Yes	Yes	PIZIT	PIZIT	No	
+Pizza	14SCMEATZA	14&quot; Tradicional Meatzza Pizza	X,1.5C,P,H,K,S	2	745	820	895	970	1045	745	820	895	970	1045	0	No	Yes	14	HANDTOSS	Yes	Yes	Yes	PIZMX	PIZMX	No	
+Pizza	14SCPFEAST	14&quot; Tradicional Pepperoni Feast	X,1.5C,1.5P	2	620	695	770	845	920	620	695	770	845	920	0	No	Yes	14	HANDTOSS	Yes	Yes	Yes	PIZPX	PIZPX	No	
+Pizza	14SCREEN	14&quot; Tradicional Napolitana	X,C	2	480	555	630	705	780	480	555	630	705	780	0	No	Yes	14	HANDTOSS	Yes	Yes	No	PIZZA	PIZZA	No	
+Pizza	14SCVEGGIE	14&quot; Tradicional Veggie Feast	X,1.5C,O,G,M,R	2	620	695	770	845	920	620	695	770	845	920	0	No	Yes	14	HANDTOSS	Yes	Yes	Yes	PIZVX	PIZVX	No	
+Pizza	14TAFEAST	14&quot; Finita American Feast	X,C,P,S,M	2	620	695	770	845	920	620	695	770	845	920	0	No	Yes	14	THIN	Yes	Yes	Yes	PIZAX	PIZAX	No	
+Pizza	14TBACCHB	14&quot; Finita Bacon Cheeseburger	X,C,E,K,S	2	745	820	895	970	1045	745	820	895	970	1045	0	No	Yes	14	THIN	Yes	Yes	Yes	PIZBX	PIZBX	No	
+Pizza	14TCITAL	14&quot; Finita Italiana	X,1.5C,P,S,M,R,T	2	745	820	895	970	1045	745	820	895	970	1045	0	No	Yes	14	THIN	Yes	Yes	Yes	PIZIT	PIZIT	No	
+Pizza	14TDELUX	14&quot; Finita Deluxe	X,C,P,S,O,G,M	2	745	820	895	970	1045	745	820	895	970	1045	0	No	Yes	14	THIN	Yes	Yes	Yes	PIZDX	PIZDX	No	
+Pizza	14TEXTRAV	14&quot; Finita Extravaganzza	X,1.5C,P,H,S,O,G,M,R	2	745	820	895	970	1045	745	820	895	970	1045	0	No	Yes	14	THIN	Yes	Yes	Yes	PIZZZ	PIZZZ	No	
+Pizza	14THAWIN	14&quot; Finita Hawaiian Feast	X,1.5C,H,N	2	620	695	770	845	920	620	695	770	845	920	0	No	Yes	14	THIN	Yes	Yes	Yes	PIZHX	PIZHX	No	
+Pizza	14THIN	14&quot; Finita Napolitana	X,C	2	480	555	630	705	780	480	555	630	705	780	0	No	Yes	14	THIN	Yes	Yes	No	PIZZA	PIZZA	No	
+Pizza	14TMEATZA	14&quot; Finita Meatzza Pizza	X,1.5C,P,H,K,S	2	745	820	895	970	1045	745	820	895	970	1045	0	No	Yes	14	THIN	Yes	Yes	Yes	PIZMX	PIZMX	No	
+Pizza	14TPFEAST	14&quot; Finita Pepperoni Feast	X,1.5C,1.5P	2	620	695	770	845	920	620	695	770	845	920	0	No	Yes	14	THIN	Yes	Yes	Yes	PIZPX	PIZPX	No	
+Pizza	14TVEGGIE	14&quot; Finita Veggie Feast	X,1.5C,O,G,M,R	2	620	695	770	845	920	620	695	770	845	920	0	No	Yes	14	THIN	Yes	Yes	Yes	PIZVX	PIZVX	No	
+Pizza	6PAN	6&quot; Gordita Napolitana	X,C	2	105	140	175	210	245	105	140	175	210	245	0	No	Yes	6	DEEPDISH	Yes	Yes	No	PIZZA	PIZZA	No	
+Pizza	8SCAFEAST	8&quot; Tradicional American Feast	X,C,P,S,M	2	305	355	405	455	505	305	355	405	455	505	0	No	Yes	8	HANDTOSS	Yes	Yes	Yes	PIZAX	PIZAX	No	
+Pizza	8SCBACCHB	8&quot; Tradicional Bacon Cheeseburger	X,C,E,K,S	2	360	410	460	510	560	360	410	460	510	560	0	No	Yes	8	HANDTOSS	Yes	Yes	Yes	PIZBX	PIZBX	No	
+Pizza	8SCDELUX	8&quot; Tradicional Deluxe	X,C,P,S,O,G,M	2	360	410	460	510	560	360	410	460	510	560	0	No	Yes	8	HANDTOSS	Yes	Yes	Yes	PIZDX	PIZDX	No	
+Pizza	8SCEXTRAV	8&quot; Tradicional Extravaganzza	X,1.5C,P,H,S,O,G,M,R	2	360	410	460	510	560	360	410	460	510	560	0	No	Yes	8	HANDTOSS	Yes	Yes	Yes	PIZZZ	PIZZZ	No	
+Pizza	8SCHAWIN	8&quot; Tradicional Hawaiian Feast	X,1.5C,H,N	2	305	355	405	455	505	305	355	405	455	505	0	No	Yes	8	HANDTOSS	Yes	Yes	Yes	PIZHX	PIZHX	No	
+Pizza	8SCMEATZA	8&quot; Tradicional Meatzza Pizza	X,1.5C,P,H,K,S	2	360	410	460	510	560	360	410	460	510	560	0	No	Yes	8	HANDTOSS	Yes	Yes	Yes	PIZMX	PIZMX	No	
+Pizza	8SCPFEAST	8&quot; Tradicional Pepperoni Feast	X,1.5C,1.5P	2	305	355	405	455	505	305	355	405	455	505	0	No	Yes	8	HANDTOSS	Yes	Yes	Yes	PIZPX	PIZPX	No	
+Pizza	8SCREEN	8&quot; Tradicional Napolitana	X,C	2	200	250	300	350	400	200	250	300	350	400	0	No	Yes	8	HANDTOSS	Yes	Yes	No	PIZZA	PIZZA	No	
+Pizza	8SCVEGGIE	8&quot; Tradicional Veggie Feast	X,1.5C,O,G,M,R	2	305	355	405	455	505	305	355	405	455	505	0	No	Yes	8	HANDTOSS	Yes	Yes	Yes	PIZVX	PIZVX	No	
+Pizza	P12IDDBP	12&quot; Gordita Buffalo Chicken	E,2Ac,Cp,2D,O	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	DEEPDISH	Yes	Yes	Yes	PIZBP	PIZBP	No	
+Pizza	P12IDDCK	12&quot; Gordita Memphis BBQ Chicken	C,E,Cp,2Du,O,Bq	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	DEEPDISH	Yes	Yes	Yes	PIZCK	PIZCK	No	
+Pizza	P12IDDCR	12&quot; Gordita Cali Chicken Bacon Ranch	C,Cp,K,2D,1.5Td	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	DEEPDISH	Yes	Yes	Yes	PIZCR	PIZCR	No	
+Pizza	P12IDDD6	12&quot; Gordita Doble Seis	X,C,0.75P,0.75H	2	425	490	555	620	685	425	490	555	620	685	0	No	Yes	12	DEEPDISH	Yes	Yes	Yes	PD6	PD6	No	
+Pizza	P12IDDPV	12&quot; Gordita Pacific Veggie	X,C,Fe,Cp,Qc,O,Pr,M,R,Td,Xe	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	DEEPDISH	Yes	Yes	Yes	PIZPV	PIZPV	No	
+Pizza	P12IDDSU	12&quot; Gordita Fiery Hawaiian	X,C,Cp,Qc,H,K,Pr,N,J	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	DEEPDISH	Yes	Yes	Yes	PIZSU	PIZSU	No	
+Pizza	P12IDDUH	12&quot; Gordita Honolulu Hawaiian	X,C,Cp,Qc,H,K,Pr,N	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	DEEPDISH	Yes	Yes	Yes	PIZUH	PIZUH	No	
+Pizza	P12IDDWI	12&quot; Gordita Wisconsin	X,C,E,Fe,Cp,Qc	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	DEEPDISH	Yes	Yes	Yes	PIZWI	PIZWI	No	
+Pizza	P12IREBP	12&quot; Tradicional Buffalo Chicken	E,2Ac,Cp,2D,O	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	HANDTOSS	Yes	Yes	Yes	PIZBP	PIZBP	No	
+Pizza	P12IRECK	12&quot; Tradicional Memphis BBQ Chicken	C,E,Cp,2Du,O,Bq	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	HANDTOSS	Yes	Yes	Yes	PIZCK	PIZCK	No	
+Pizza	P12IRECR	12&quot; Tradicional Cali Chicken Bacon Ranch	C,Cp,K,2D,1.5Td	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	HANDTOSS	Yes	Yes	Yes	PIZCR	PIZCR	No	
+Pizza	P12IREPV	12&quot; Tradicional Pacific Veggie	X,C,Fe,Cp,Qc,O,Pr,M,R,Td,Xe	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	HANDTOSS	Yes	Yes	Yes	PIZPV	PIZPV	No	
+Pizza	P12IRESU	12&quot; Tradicional Fiery Hawaiian	X,C,Cp,Qc,H,K,Pr,N,J	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	HANDTOSS	Yes	Yes	Yes	PIZSU	PIZSU	No	
+Pizza	P12IREUH	12&quot; Tradicional Honolulu Hawaiian	X,C,Cp,Qc,H,K,Pr,N	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	HANDTOSS	Yes	Yes	Yes	PIZUH	PIZUH	No	
+Pizza	P12IREWI	12&quot; Tradicional Wisconsin	X,C,E,Fe,Cp,Qc	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	HANDTOSS	Yes	Yes	Yes	PIZWI	PIZWI	No	
+Pizza	P12ITHBP	12&quot; Finita Buffalo Chicken	E,2Ac,Cp,2D,O	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	THIN	Yes	Yes	Yes	PIZBP	PIZBP	No	
+Pizza	P12ITHCK	12&quot; Finita Memphis BBQ Chicken	C,E,Cp,2Du,O,Bq	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	THIN	Yes	Yes	Yes	PIZCK	PIZCK	No	
+Pizza	P12ITHCR	12&quot; Finita Cali Chicken Bacon Ranch	C,Cp,K,2D,1.5Td	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	THIN	Yes	Yes	Yes	PIZCR	PIZCR	No	
+Pizza	P12ITHPV	12&quot; Finita Pacific Veggie	X,C,Fe,Cp,Qc,O,Pr,M,R,Td,Xe	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	THIN	Yes	Yes	Yes	PIZPV	PIZPV	No	
+Pizza	P12ITHSU	12&quot; Finita Fiery Hawaiian	X,C,Cp,Qc,H,K,Pr,N,J	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	THIN	Yes	Yes	Yes	PIZSU	PIZSU	No	
+Pizza	P12ITHUH	12&quot; Finita Honolulu Hawaiian	X,C,Cp,Qc,H,K,Pr,N	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	THIN	Yes	Yes	Yes	PIZUH	PIZUH	No	
+Pizza	P12ITHWI	12&quot; Finita Wisconsin	X,C,E,Fe,Cp,Qc	2	645	710	775	840	905	645	710	775	840	905	0	No	Yes	12	THIN	Yes	Yes	Yes	PIZWI	PIZWI	No	
+Pizza	P14IDDBP	14&quot; Gordita Buffalo Chicken	E,2Ac,Cp,2D,O	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	DEEPDISH	Yes	Yes	Yes	PIZBP	PIZBP	No	
+Pizza	P14IDDCK	14&quot; Gordita Memphis BBQ Chicken	C,E,Cp,2Du,O,Bq	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	DEEPDISH	Yes	Yes	Yes	PIZCK	PIZCK	No	
+Pizza	P14IDDCR	14&quot; Gordita Cali Chicken Bacon Ranch	C,Cp,K,2D,1.5Td	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	DEEPDISH	Yes	Yes	Yes	PIZCR	PIZCR	No	
+Pizza	P14IDDPV	14&quot; Gordita Pacific Veggie	X,C,Fe,Cp,Qc,O,Pr,M,R,Td,Xe	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	DEEPDISH	Yes	Yes	Yes	PIZPV	PIZPV	No	
+Pizza	P14IDDSU	14&quot; Gordita Fiery Hawaiian	X,C,Cp,Qc,H,K,Pr,N,J	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	DEEPDISH	Yes	Yes	Yes	PIZSU	PIZSU	No	
+Pizza	P14IDDUH	14&quot; Gordita Honolulu Hawaiian	X,C,Cp,Qc,H,K,Pr,N	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	DEEPDISH	Yes	Yes	Yes	PIZUH	PIZUH	No	
+Pizza	P14IDDWI	14&quot; Gordita Wisconsin	X,C,E,Fe,Cp,Qc	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	DEEPDISH	Yes	Yes	Yes	PIZWI	PIZWI	No	
+Pizza	P14IREBP	14&quot; Tradicional Buffalo Chicken	E,2Ac,Cp,2D,O	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	HANDTOSS	Yes	Yes	Yes	PIZBP	PIZBP	No	
+Pizza	P14IRECK	14&quot; Tradicional Memphis BBQ Chicken	C,E,Cp,2Du,O,Bq	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	HANDTOSS	Yes	Yes	Yes	PIZCK	PIZCK	No	
+Pizza	P14IRECR	14&quot; Tradicional Cali Chicken Bacon Ranch	C,Cp,K,2D,1.5Td	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	HANDTOSS	Yes	Yes	Yes	PIZCR	PIZCR	No	
+Pizza	P14IREPV	14&quot; Tradicional Pacific Veggie	X,C,Fe,Cp,Qc,O,Pr,M,R,Td,Xe	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	HANDTOSS	Yes	Yes	Yes	PIZPV	PIZPV	No	
+Pizza	P14IRESU	14&quot; Tradicional Fiery Hawaiian	X,C,Cp,Qc,H,K,Pr,N,J	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	HANDTOSS	Yes	Yes	Yes	PIZSU	PIZSU	No	
+Pizza	P14IREUH	14&quot; Tradicional Honolulu Hawaiian	X,C,Cp,Qc,H,K,Pr,N	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	HANDTOSS	Yes	Yes	Yes	PIZUH	PIZUH	No	
+Pizza	P14IREWI	14&quot; Tradicional Wisconsin	X,C,E,Fe,Cp,Qc	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	HANDTOSS	Yes	Yes	Yes	PIZWI	PIZWI	No	
+Pizza	P14ITHBP	14&quot; Finita Buffalo Chicken	E,2Ac,Cp,2D,O	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	THIN	Yes	Yes	Yes	PIZBP	PIZBP	No	
+Pizza	P14ITHCK	14&quot; Finita Memphis BBQ Chicken	C,E,Cp,2Du,O,Bq	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	THIN	Yes	Yes	Yes	PIZCK	PIZCK	No	
+Pizza	P14ITHCR	14&quot; Finita Cali Chicken Bacon Ranch	C,Cp,K,2D,1.5Td	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	THIN	Yes	Yes	Yes	PIZCR	PIZCR	No	
+Pizza	P14ITHPV	14&quot; Finita Pacific Veggie	X,C,Fe,Cp,Qc,O,Pr,M,R,Td,Xe	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	THIN	Yes	Yes	Yes	PIZPV	PIZPV	No	
+Pizza	P14ITHSU	14&quot; Finita Fiery Hawaiian	X,C,Cp,Qc,H,K,Pr,N,J	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	THIN	Yes	Yes	Yes	PIZSU	PIZSU	No	
+Pizza	P14ITHUH	14&quot; Finita Honolulu Hawaiian	X,C,Cp,Qc,H,K,Pr,N	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	THIN	Yes	Yes	Yes	PIZUH	PIZUH	No	
+Pizza	P14ITHWI	14&quot; Finita Wisconsin	X,C,E,Fe,Cp,Qc	2	825	900	975	1050	1125	825	900	975	1050	1125	0	No	Yes	14	THIN	Yes	Yes	Yes	PIZWI	PIZWI	No	
+Pizza	SLICE	Pedazo Tradicional Napolitana	X,C	2	90	90	90	90	90	90	90	90	90	90	0	No	Yes	SLICE	HANDTOSS	Yes	Yes	No	PIZZA	PIZZA	No	
+Pizza	ADEMA	Maiz	OPTION														Yes									MakeLine
+Pizza	Ac	Queso Americano	OPTION														Yes									MakeLine
+Pizza	Bq	BBQ Sauce	OPTION														Yes									MakeLine
+Pizza	C	Queso Mozzarella	OPTION														Yes									MakeLine
+Pizza	Cp	Queso Provolone Rayado	OPTION														Yes									MakeLine
+Pizza	D	Pollo Parilla	OPTION														Yes									MakeLine
+Pizza	Du	Pollo BBQ	OPTION														Yes									MakeLine
+Pizza	E	Queso Cheddar	OPTION														Yes									MakeLine
+Pizza	Fe	Queso Feta	OPTION														Yes									MakeLine
+Pizza	G	Pimientos Verdes	OPTION														Yes									MakeLine
+Pizza	H	Jamon	OPTION														Yes									MakeLine
+Pizza	J	Jalapeño	OPTION														Yes									MakeLine
+Pizza	K	Tocineta	OPTION														Yes									MakeLine
+Pizza	M	Hongos	OPTION														Yes									MakeLine
+Pizza	N	Piña	OPTION														Yes									MakeLine
+Pizza	O	Cebolla	OPTION														Yes									MakeLine
+Pizza	P	Pepperoni	OPTION														Yes									MakeLine
+Pizza	Pr	Pimientos Rojos	OPTION														Yes									MakeLine
+Pizza	Qc	Queso Parmesano/Asiago	OPTION														Yes									MakeLine
+Pizza	R	Aceitunas Negras	OPTION														Yes									MakeLine
+Pizza	S	Salchicha Italiana	OPTION														Yes									MakeLine
+Pizza	Sa	Salami	OPTION														Yes									MakeLine
+Pizza	Sl	Extra Large Italian Sausage	OPTION														Yes									MakeLine
+Pizza	T	Tomates Frescos	OPTION														Yes									MakeLine
+Pizza	Td	Tomate en cuadro	OPTION														Yes									MakeLine
+Pizza	X	Salsa Pizza	OPTION														Yes									MakeLine
+Pizza	Xe	Espinaca 	OPTION														Yes									MakeLine
+Pizza	Z	Pimiento Amarillo	OPTION														Yes									MakeLine
+SAND	SANDBC	Sandwich Foccacia Buffalo Chicken w/ Blue Cheese	E,D,2O,Pv,Cp	2	329	374	419	464	509	329	374	419	464	509	0	No	Yes	SAND	FOCA	Yes	Yes	Yes	SANDBC	SANDBC	No	
+SAND	SANDCBR	Sandwich Foccacia Chicken Bacon Ranch	K,D,2Pv,Cp	2	329	374	419	464	509	329	374	419	464	509	0	No	Yes	SAND	FOCA	Yes	Yes	Yes	SANDCBR	SANDCBR	No	
+SAND	SANDCH	Sandwich Foccacia Chicken Habanero	2E,D,J,N,Pv,1.5Cp,Mh	2	329	374	419	464	509	329	374	419	464	509	0	No	Yes	SAND	FOCA	Yes	Yes	Yes	SANDCH	SANDCH	No	
+SAND	SANDCP	Sandwich Foccacia Chicken Parm	Qc,D,2Pv,Cp,X	2	329	374	419	464	509	329	374	419	464	509	0	No	Yes	SAND	FOCA	Yes	Yes	Yes	SANDCP	SANDCP	No	
+SAND	SANDIT	Sandwich Foccacia Italian	Z,G,H,O,P,2Pv,3Cp,Sa	2	329	374	419	464	509	329	374	419	464	509	0	No	Yes	SAND	FOCA	Yes	Yes	Yes	SANDIT	SANDIT	No	
+SAND	SANDITSP	Sandwich Foccacia Italian Sausage And Peppers	Z,G,2O,2Pv,3Cp,Pr,Sl	2	329	374	419	464	509	329	374	419	464	509	0	No	Yes	SAND	FOCA	Yes	Yes	Yes	SANDITSP	SANDITSP	No	
+SAND	SANDVGM	Sandwich Foccacia Veggie Mediterraneo	Ac,Z,Td,Fe,2O,2Pv,Xe,Pr	2	329	374	419	464	509	329	374	419	464	509	0	No	Yes	SAND	FOCA	Yes	Yes	Yes	SANDVGM	SANDVGM	No	
+SAND	ADEMA	Maiz	OPTION														Yes									MakeLine
+SAND	Ac	Queso Americano	OPTION														Yes									MakeLine
+SAND	B	Carne Molida	OPTION														Yes									MakeLine
+SAND	BBQCUP	BBQ Dip Cup	OPTION														Yes									CutTable
+SAND	Cp	Queso Provolone Rayado	OPTION														Yes									MakeLine
+SAND	D	Pollo Parilla	OPTION														Yes									MakeLine
+SAND	Du	Pollo BBQ	OPTION														Yes									MakeLine
+SAND	E	Queso Cheddar	OPTION														Yes									MakeLine
+SAND	Fe	Queso Feta	OPTION														Yes									MakeLine
+SAND	G	Pimientos Verdes	OPTION														Yes									MakeLine
+SAND	H	Jamon	OPTION														Yes									MakeLine
+SAND	HOTCUP	Hot Dip Cup	OPTION														Yes									CutTable
+SAND	J	Jalapeño	OPTION														Yes									MakeLine
+SAND	K	Tocineta	OPTION														Yes									MakeLine
+SAND	MANGOCUP	Mango Habanero Dip Cup	OPTION														Yes									CutTable
+SAND	Mh	Salsa de Mango Habanero	OPTION														Yes									MakeLine
+SAND	N	Piña	OPTION														Yes									MakeLine
+SAND	O	Cebolla	OPTION														Yes									MakeLine
+SAND	P	Pepperoni	OPTION														Yes									MakeLine
+SAND	Pm	Philly Steak	OPTION														Yes									MakeLine
+SAND	Pr	Pimientos Rojos	OPTION														Yes									MakeLine
+SAND	Pv	Queso Provolone Rebanado	OPTION														Yes									MakeLine
+SAND	Qc	Queso Parmesano/Asiago	OPTION														Yes									MakeLine
+SAND	Rd	Salsa Ranch	OPTION														Yes									MakeLine
+SAND	SIDBLE	Blue Cheese Dip Cup	OPTION														Yes									CutTable
+SAND	SIDGAR	Garlic Dip Cup	OPTION														Yes									CutTable
+SAND	SIDMAR	Marinara Dip	OPTION														Yes									CutTable
+SAND	SIDRAN	Ranch Dip Cup	OPTION														Yes									CutTable
+SAND	Sa	Salami	OPTION														Yes									MakeLine
+SAND	Sb	Salsa Blue Cheese	OPTION														Yes									MakeLine
+SAND	Sl	Extra Large Italian Sausage	OPTION														Yes									MakeLine
+SAND	Spicante	Salsa Picante	OPTION														Yes									MakeLine
+SAND	Td	Tomate en cuadro	OPTION														Yes									MakeLine
+SAND	X	Salsa Pizza	OPTION														Yes									MakeLine
+SAND	Xe	Espinaca 	OPTION														Yes									MakeLine
+SAND	Z	Pimiento Amarillo	OPTION														Yes									MakeLine
+Sides	AGCAESAR	Extra Aderezo Cesar		1	25	25	25	25	25	25	25	25	25	25	0	No	Yes	EACH	CAESARP	Yes	No	No	DEFSides	DEFSides	No	
+Sides	BLUECHS	Extra Blue Cheese Dip Cup		1	25	25	25	25	25	25	25	25	25	25	0	No	Yes	EACH	SIDBLE	Yes	No	No	DEFSides	DEFSides	No	
+Sides	CBALAYS	Lays Lays Chips		1	30	30	30	30	30	30	30	30	30	30	0	No	Yes	BAG	LAYS	Yes	No	No			No	
+Sides	CEABBQC	Extra BBQ Dip Cup		1	25	25	25	25	25	25	25	25	25	25	0	No	Yes	EACH	SIDBBQC	Yes	No	No	DEFSides	DEFSides	No	
+Sides	CEACROUP	Extra Croutons		1	25	25	25	25	25	25	25	25	25	25	0	No	Yes	EACH	CROU	Yes	No	No	DEFSides	DEFSides	No	
+Sides	CEAHABC	Extra Mango Habanero Dip Cup		1	25	25	25	25	25	25	25	25	25	25	0	No	Yes	EACH	SIDHABC	Yes	No	No	DEFSides	DEFSides	No	
+Sides	GARLIC	Extra Garlic Dip Cup		1	25	25	25	25	25	25	25	25	25	25	0	No	Yes	EACH	SIDGAR	Yes	No	No	DEFSides	DEFSides	No	
+Sides	HOTSAUCE	Extra Hot Dip Cup		1	25	25	25	25	25	25	25	25	25	25	0	No	Yes	EACH	HOTCUP	Yes	No	No	DEFSides	DEFSides	No	
+Sides	ICING	Extra Cremita de Azucar		1	25	25	25	25	25	25	25	25	25	25	0	No	Yes	EACH	SIDICE	Yes	Yes	No			No	
+Sides	ITALIANG	Extra Italian Golden Dressing		1	25	25	25	25	25	25	25	25	25	25	0	No	Yes	EACH	SIDITA	Yes	No	No	DEFSides	DEFSides	No	
+Sides	MARINARA	Extra Marinara Dip Cup		1	25	25	25	25	25	25	25	25	25	25	0	No	Yes	EACH	SIDMAR	Yes	No	No	DEFSides	DEFSides	No	
+Sides	RANCH	Extra Ranch Dip Cup		1	25	25	25	25	25	25	25	25	25	25	0	No	Yes	EACH	SIDRAN	Yes	No	No	DEFSides	DEFSides	No	
+Sides	REDPEPPER	Extra Red Peppers		1	0	0	0	0	0	0	0	0	0	0	0	No	Yes	EACH	SIDRED	Yes	No	No	DEFSides	DEFSides	No	
+Sides	VCHIELO	Extra Vaso con Hielo		1	5	5	5	5	5	5	5	5	5	5	0	No	Yes	EACH	VCHIELO	No	No	No	DEFSides	DEFSides	No	
+Wings	14CHUNKS	Grande Chicken Chunks	2SIDBLE	1	450	450	450	450	450	450	450	450	450	450	0	No	Yes	14PCW	BCHICK	Yes	Yes	No	DEFWings	WING	No	
+Wings	14WINGBBQ	Grande Wings BBQ	2SIDBLE	1	450	450	450	450	450	450	450	450	450	450	0	No	Yes	14PCW	BBQWINGS	Yes	Yes	No	DEFWings	WING	No	
+Wings	14WINGHH	Grande Wings Mitad y Mitad	2SIDBLE	1	450	450	450	450	450	450	450	450	450	450	0	No	Yes	14PCW	HHWINGS	Yes	Yes	No	DEFWings	WING	No	
+Wings	14WINGHOT	Grande Wings Hot	2SIDBLE	1	450	450	450	450	450	450	450	450	450	450	0	No	Yes	14PCW	HOTWINGS	Yes	Yes	No	DEFWings	WING	No	
+Wings	14WINGMANG	Grande Wings Mango Habanero	2SIDBLE	1	450	450	450	450	450	450	450	450	450	450	0	No	Yes	14PCW	SMANG	Yes	Yes	No	DEFWings	WING	No	
+Wings	14WINGPLN	Grande Wings Plain	2SIDBLE	1	450	450	450	450	450	450	450	450	450	450	0	No	Yes	14PCW	PLNWINGS	Yes	Yes	No	DEFWings	WING	No	
+Wings	8CHUNKS	Regular Chicken Chunks	SIDBLE	1	285	305	325	345	365	285	305	325	345	365	0	No	Yes	8PCW	BCHICK	Yes	Yes	No	DEFWings	DEFWings	No	
+Wings	8WINGBBQ	Regular Wings BBQ	SIDBLE	1	285	305	325	345	365	285	305	325	345	365	0	No	Yes	8PCW	BBQWINGS	Yes	Yes	No	DEFWings	DEFWings	No	
+Wings	8WINGHH	Regular Wings Mitad y Mitad	SIDBLE	1	285	305	325	345	365	285	305	325	345	365	0	No	Yes	8PCW	HHWINGS	Yes	Yes	No	DEFWings	DEFWings	No	
+Wings	8WINGHOT	Regular Wings Hot	SIDBLE	1	285	305	325	345	365	285	305	325	345	365	0	No	Yes	8PCW	HOTWINGS	Yes	Yes	No	DEFWings	DEFWings	No	
+Wings	8WINGMANGO	Regular Wings Mango Habanero	SIDBLE	1	285	305	325	345	365	285	305	325	345	365	0	No	Yes	8PCW	SMANG	Yes	Yes	No	DEFWings	DEFWings	No	
+Wings	8WINGPLN	Regular Wings Plain	SIDBLE	1	285	305	325	345	365	285	305	325	345	365	0	No	Yes	8PCW	PLNWINGS	Yes	Yes	No	DEFWings	DEFWings	No	
+Wings	BBQCUP	BBQ Dip Cup	OPTION														Yes									CutTable
+Wings	HOTCUP	Hot Dip Cup	OPTION														Yes									CutTable
+Wings	MANGOCUP	Mango Habanero Dip Cup	OPTION														Yes									CutTable
+Wings	SIDBLE	Blue Cheese Dip Cup	OPTION														Yes									CutTable
+Wings	SIDGAR	Garlic Dip Cup	OPTION														Yes									CutTable
+Wings	SIDRAN	Ranch Dip Cup	OPTION														Yes									CutTable</Products></StoreProducts></SOAPSDK4:GetStoreProductsResponse></SOAP-ENV:Body></SOAP-ENV:Envelope>
+

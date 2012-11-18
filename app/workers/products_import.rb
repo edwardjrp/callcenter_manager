@@ -22,11 +22,14 @@ class ProductsImport
       doc= Nokogiri::XML(xml_string)
       products_table = doc.css('Products').first.inner_text.gsub(/"/,'&quot;')
       CSV.parse(products_table, {:col_sep=>"\t", :headers=>true}) do |row|
+        Category.create(name: row['CategoryCode'])
+      end
+      CSV.parse(products_table, {:col_sep=>"\t", :headers=>true}) do |row|
         # find product and check if descontinued
         product_to_find = product_present?( row['CategoryCode'], row['ProductCode'], row['ProductName'], row['Options'], row['SizeCode'], row['FlavorCode'], row['OptionSelectionGroupType'], row['ProductOptionSelectionGroup'])
         unless product_to_find.present? && product_to_find.discontinued == false
           Product.create do |product|
-            product.category_id = Category.find_or_create_by_name(row['CategoryCode']).id
+            product.category_id = Category.where(name: row['CategoryCode']).first.id
             product.productcode = row['ProductCode']
             product.productname = row['ProductName']
             product.options = row['Options']
@@ -45,9 +48,10 @@ class ProductsImport
     end
 
     def product_present?(categorycode, productcode, producname, options, sizecode, flavorcode, optionselectiongrouptype, productoptionselectiongroup)
-      found = Product.where(productcode: productcode, productname: producname, options: options,
+      category = Category.where(name: categorycode).first
+      found = category.products.where(productcode: productcode, productname: producname, options: options,
        sizecode: sizecode, flavorcode: flavorcode, optionselectiongrouptype: optionselectiongrouptype,
        productoptionselectiongroup: productoptionselectiongroup).first
-      return found if (found && found.category && found.category.name == categorycode)
+      return found
     end
 end
