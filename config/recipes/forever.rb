@@ -7,7 +7,7 @@ namespace :forever do
   %w[start stop].each do |command|
     desc "#{command} forever"
     task command, roles: :web do
-      run "#{sudo} NODE_ENV=production forever -o #{shared_path}/node_out.log -e #{shared_path}/node_err.log -a #{command} #{current_path}/kapiquajs/dst/app.js"
+      run "#{sudo} /Library/WebServer/kapiqua25/current/deploy_configs/forever #{command}"
     end
   end
   

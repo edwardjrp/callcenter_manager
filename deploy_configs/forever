@@ -12,6 +12,35 @@ touch $errorlog
 
 touch $pidfile
 
-CMD="NODE_ENV=production $forever_bin start  --pidfile $pidfile -l $outputlog -e $errorlog -a $app_script"
+sig () {
+  test -s "$pidfile" && kill -$1 `cat $pidfile`
+}
+
+cd $APP_ROOT || exit 1
+
+export NODE_ENV=production
+
+echo $NODE_ENV
+
+CMD="$forever_bin --pidfile $pidfile -l $outputlog -e $errorlog -a start $app_script"
 
 $CMD
+
+case $action in
+start)
+  sig 0 && echo >&2 "Already running" && exit 0
+  $CMD
+  ;;
+stop)
+  sig QUIT && exit 0
+  echo >&2 "Not running"
+  ;;
+force-stop)
+  sig TERM && exit 0
+  echo >&2 "Not running"
+  ;;
+*)
+  echo >&2 "Usage: $0 <start|stop>"
+  exit 1
+  ;;
+esac
