@@ -7,7 +7,7 @@ namespace :forever do
   %w[start stop].each do |command|
     desc "#{command} forever"
     task command, roles: :web do
-      run "#{sudo} /Library/WebServer/kapiqua25/current/deploy_configs/forever #{command}"
+      run "#{sudo} #{release_path}/deploy_configs/forever #{command}"
     end
   end
   
