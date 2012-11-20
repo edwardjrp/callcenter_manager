@@ -115,7 +115,11 @@ Kapiqua25::Application.routes.draw do
       end
     end
     resources :stores
-    resources :store_products, :only =>[:create, :update]
+    resources :store_products, :only =>[:create, :update] do
+      collection do 
+        post 'assign_all'
+      end
+    end
     root :to => 'dashboard#index'
   end
 

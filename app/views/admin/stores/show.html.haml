@@ -9,7 +9,8 @@
     %a.btn#clear_product_search{ href: '#'} Limpiar
 - if @products.any?
   %h3= "Productos para #{@store.name}"
-  =will_paginate @products
+  = link_to 'Habilitar todos los productos', assign_all_admin_store_products_path(store_id: @store.id), class: 'btn', method: :post
+  = will_paginate @products
   %table.table.table-striped.table-bordered.table-condensed#products_list{:data=>{"store-id"=> @store.id}}
     %thead
       %th Categoría
@@ -20,17 +21,17 @@
       %th Flavorcode
       %th Sizecode
     %tbody
-      -@products.each do |product|
+      - @products.each do |product|
         %tr{:data=>{'product-id'=> product.id}, :id=>dom_id(product)}
           %td= product.category.name
           %td
-            -if store_product(@store, product).present?
-              =link_to store_product(@store, product).available.to_s , "/admin/store_products/#{store_product(@store, product).id}", class: "store_product_change_state_available  btn #{store_product_class(@store, product)}"
-            -else
-              =link_to 'Asignar', '/admin/store_products', class: 'create_store_product'
+            - if store_product(@store, product).present?
+              = link_to store_product(@store, product).available.to_s , "/admin/store_products/#{store_product(@store, product).id}", class: "store_product_change_state_available  btn #{store_product_class(@store, product)}"
+            - else
+              = link_to 'Asignar', '/admin/store_products', class: 'create_store_product'
           %td= product.productname.html_safe
           %td= product.productcode
           %td= product.niffty_options
           %td= product.flavorcode
           %td= product.sizecode
-  =will_paginate @products
+  = will_paginate @products
