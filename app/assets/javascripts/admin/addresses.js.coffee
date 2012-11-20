@@ -4,8 +4,40 @@
 jQuery ->
   if $('#addresses_list').size() > 0
 
+    $('#filter_city').on 'keyup', (event)->
+      if $(this).val() == ''
+        for item in $('#cities_list').find('.filterable')
+          $(item).show()
+      else
+        for item in $('#cities_list').find('.filterable')
+          unless $(item).find('.city_link').text().toLowerCase().match(new RegExp($(this).val().toLowerCase()))?
+            $(item).hide()
+          else
+            $(item).show()
+
+    $('#addresses_list').on 'keyup', '#filter_area', (event)->
+      if $(this).val() == ''
+        for item in $('#areas').find('.filterable')
+          $(item).show()
+      else
+        for item in $('#areas').find('.filterable')
+          unless $(item).find('.area_link').text().toLowerCase().match(new RegExp($(this).val().toLowerCase()))?
+            $(item).hide()
+          else
+            $(item).show()
+
+    $('#addresses_list').on 'keyup', '#filter_street', (event)->
+      if $(this).val() == ''
+        for item in $('#streets').find('.filterable')
+          $(item).show()
+      else
+        for item in $('#streets').find('.filterable')
+          unless $(item).find('.street_link').text().toLowerCase().match(new RegExp($(this).val().toLowerCase()))?
+            $(item).hide()
+          else
+            $(item).show()
+
     $("#streets").on 'mouseover','#streets_list' , ->
-      console.log 'attaching'
       $('.drag').closest("tr").draggable
         helper: 'clone'
         handle: $(this)

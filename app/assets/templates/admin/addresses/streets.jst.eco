@@ -1,4 +1,4 @@
-<table class="table table-striped table-bordered street_table" id="street_<%=@street.id%>" data-street-id='<%=@street.id%>' data-street-name='<%=@street.name%>'  data-store-id='<%=@street.store_id%>'>
+<table class="table table-striped table-bordered street_table filterable" id="street_<%=@street.id%>" data-street-id='<%=@street.id%>' data-street-name='<%=@street.name%>'  data-store-id='<%=@street.store_id%>'>
   <tbody>
     <tr data-street-id='<%=@street.id%>'  data-street-name='<%=@street.name%>' >
       <td>

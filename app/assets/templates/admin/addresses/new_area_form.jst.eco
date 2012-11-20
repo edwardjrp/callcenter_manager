@@ -4,3 +4,5 @@
   <input type="text" class='span2' id="new_area_name" name='area[name]' placeholder="Nombre">
   <button type="submit" class="btn btn-primary" id='create_area'>Agregar a esta ciudad</button>
 </form>
+<input class="span2" id="filter_area" placeholder="filtrar zona" type="text">
+<hr>

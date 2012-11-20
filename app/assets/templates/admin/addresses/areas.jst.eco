@@ -1,4 +1,4 @@
-<table class="table table-striped table-bordered area_table" id="area_<%=@area.id%>" data-area-id='<%=@area.id%>' data-area-name='<%=@area.name%>'>
+<table class="table table-striped table-bordered area_table filterable" id="area_<%=@area.id%>" data-area-id='<%=@area.id%>' data-area-name='<%=@area.name%>'>
   <tbody>
     <tr>
       <td>

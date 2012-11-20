@@ -35,9 +35,11 @@
           %form{action: '/admin/cities'}
             %input.span2.add_city{type:'text', placeholder: 'Nombre', name: 'city[name]'}
             %botton.btn.btn-primary#add_city agregar ciudad
+          %input#filter_city.span2{type: 'text', placeholder: 'filtrar ciudad'}
+          %hr
           #cities_list
             - @cities.each do |city|
-              %table.table.table-striped.table-bordered.city_table{:id=> dom_id(city), :data=> {'city-id'=> city.id, 'city-name' => city.name} }
+              %table.table.table-striped.table-bordered.city_table.filterable{:id=> dom_id(city), :data=> {'city-id'=> city.id, 'city-name' => city.name} }
                 %tbody
                   %tr
                     %td

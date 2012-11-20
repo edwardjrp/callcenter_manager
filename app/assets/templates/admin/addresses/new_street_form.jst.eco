@@ -4,3 +4,5 @@
   <input type="text" class='span2' id="new_street_name" name='street[name]' placeholder="Nombre">
   <button type="submit" class="btn btn-primary" id='create_street'>Agregar a esta area</button>
 </form>
+<input class="span2" id="filter_street" placeholder="filtrar calle" type="text">
+<hr>
