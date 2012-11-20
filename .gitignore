@@ -19,3 +19,4 @@ config/database.yml
 /kapiquajs/node_modules
 coverage
 chromedriver.log
+public/system/uploads/report
