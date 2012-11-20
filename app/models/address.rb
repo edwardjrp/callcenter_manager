@@ -35,4 +35,16 @@ class Address < ActiveRecord::Base
     return nil if street.store.nil?
     street.store
   end
+
+  def self.find_address(query)
+    areas = Area.where("areas.name ILIKE ?", "%#{query['area']}%")
+    areas = areas.merge(Area.where(city_id: City.find(query['city_id']))) if query['city_id'] and City.exists? query['city_id']
+    if areas.count.nonzero?
+      areas_ids = areas.map(&:id)
+      streets = Street.where("name ILIKE ?", "%#{query['street']}%").where(area_id: areas_ids) if query['street'].present?
+    else
+      streets = Street.where("name ILIKE ?", "%#{query['street']}%") if query['street'].present?
+    end
+    streets
+  end
 end

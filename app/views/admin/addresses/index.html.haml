@@ -1,6 +1,32 @@
 = render 'administration'
 .row
   .span6
+    = form_for :q, url: admin_addresses_path, class: 'form-horizontal', method: :get do |f|
+      %fieldset
+        %legend Buscar dirección
+        .control-group
+          %label.control-label Ciudad
+          .controls
+            =f.select 'city_id', options_for_select(City.all.map{|city| [city.name, city.id]})
+        .control-group
+          %label.control-label Zona
+          .controls
+            = f.text_field 'area', class: 'input-xlarge'
+        .control-group
+          %label.control-label Calle
+          .controls
+            = f.text_field 'street', class: 'input-xlarge'
+        .form-actions
+          =f.submit 'Buscar', class: 'btn'
+  .span6
+    - if @streets.present?
+      = will_paginate @streets
+      %ul.well.unstyled
+        - @streets.each do |street|
+          %li= "#{street.area_city.name} > #{street.area.name} > #{street.name}"
+
+.row
+  .span6
     %h2.bottom-margin-1 Direcciones
     #addresses_list
       .row

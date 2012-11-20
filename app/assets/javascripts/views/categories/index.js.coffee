@@ -30,6 +30,8 @@ class Kapiqua25.Views.CategoriesIndex extends Backbone.View
           window.socket.emit 'cart_products:add_collection', { coupon_products: cart_missing_products, cart_id: @options.cart.id }
         else
           window.socket.emit 'cart_products:add_collection', { coupon_products: coupon_products, cart_id: @options.cart.id }
+      else
+        window.socket.emit 'cart_products:add_collection', { coupon_products: coupon_products, cart_id: @options.cart.id }       
 
 
   onEditing: (data)->
