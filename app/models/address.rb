@@ -37,6 +37,7 @@ class Address < ActiveRecord::Base
   end
 
   def self.find_address(query)
+    return nil if query.blank?
     areas = Area.where("areas.name ILIKE ?", "%#{query['area']}%")
     areas = areas.merge(Area.where(city_id: City.find(query['city_id']))) if query['city_id'] and City.exists? query['city_id']
     if areas.count.nonzero?
