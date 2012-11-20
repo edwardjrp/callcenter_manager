@@ -86,11 +86,14 @@
               .span4
                 %strong RNC:
                 = tax_number.rnc
-            .row
+            .row{class: "#{tax_number.verified? ? '' : 'hidden'}"}
               .span4
                 %strong Tipo fiscal:
                 = tax_number.tipo_fiscal
-            
+            .row{class: "#{tax_number.verified? ? '' : 'hidden'}"}
+              .span4
+                %strong Nombre: 
+                = tax_number.company_name
             .row
               .span4
                 %strong Verificado:

@@ -30,10 +30,16 @@
         <%=@tax_number.rnc%>
     </div>
   </div>
-  <div class= 'row'>
+  <div class= 'row hidden'>
     <div class= 'span4'>
         <strong> Tipo fiscal: </strong>
         <%=@tax_number.tipo_fiscal%>
+    </div>
+  </div>
+  <div class="row hidden">
+    <div class="span4">
+      <strong>Nombre: </strong>
+      <%=@tax_number.company_name%>
     </div>
   </div>
   <div class= 'row'>

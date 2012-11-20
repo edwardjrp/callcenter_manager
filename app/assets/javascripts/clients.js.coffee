@@ -51,9 +51,18 @@ jQuery ->
     target = $(event.currentTarget)
     $.ajax
       type: 'POST'
+      datatype: 'json'
       url: "/tax_numbers/#{target.closest('.client_tax_number').data('tax-number').id}/verify"
+      beforeSend: (xhr) ->
+        xhr.setRequestHeader("Accept", "application/json")
       success: (tax_number)->
-        target.text(tax_number)
+        # tax_number = JSON.parse(response.responseText)
+        console.log tax_number
+        console.log target
+        console.log target.closest('.row').prev('.row').find('strong')
+        target.text(tax_number.verified)
+        target.closest('.row').prev('.row').prev('.row').removeClass('hidden').find('strong').after(tax_number.fiscal_type)
+        target.closest('.row').prev('.row').removeClass('hidden').find('strong').after(tax_number.company_name)
       error: (err)->
         console.log err
         $("<div class='purr'>#{err.responseText}<div>").purr()

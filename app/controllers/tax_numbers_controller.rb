@@ -27,7 +27,7 @@ class TaxNumbersController < ApplicationController
     @tax_number = TaxNumber.find(params[:id])
     @tax_number.verify
     respond_to do |format|
-      format.js { render text: @tax_number.verified }
+      format.json { render json: @tax_number }
     end
   end
 
