@@ -25,7 +25,7 @@ describe User do
     before { create :user, :username=> 'test', :password=>'please' }
     
     it { should validate_presence_of :username }
-    it { should validate_uniqueness_of :username }
+    it { should validate_uniqueness_of(:username).scoped_to(:role_mask) }
     it { should validate_presence_of :first_name }
     it { should validate_presence_of :last_name }
     it { should validate_presence_of :idnumber }

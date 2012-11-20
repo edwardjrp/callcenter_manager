@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121027235627) do
+ActiveRecord::Schema.define(:version => 20121120185912) do
 
   create_table "addresses", :force => true do |t|
     t.integer  "client_id"
@@ -310,7 +310,5 @@ ActiveRecord::Schema.define(:version => 20121027235627) do
   end
 
   add_index "users", ["auth_token"], :name => "index_users_on_auth_token"
-  add_index "users", ["idnumber"], :name => "index_users_on_idnumber", :unique => true
-  add_index "users", ["username"], :name => "index_users_on_username", :unique => true
 
 end
