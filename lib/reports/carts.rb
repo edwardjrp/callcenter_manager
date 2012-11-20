@@ -250,11 +250,10 @@ module Reports
 
         other_table = []
         other_table << [ 'Orden promedio', monetize(completed.average('payment_amount')) ]
-        avg_cart_per_user = User.carts_completed_in_range(start_date, end_date).average('carts_count')
-        other_table << [ 'Ventas por agente promedio', avg_cart_per_user ]
-        other_table << [ 'Tiempo de orde promedio', (completed.sum(&:take_time) / completed.count) ]
+        other_table << [ 'Ventas por agente promedio', User.carts_completed_in_range(start_date, end_date).average('carts_count').round(2) ]
+        other_table << [ 'Tiempo de orde promedio', (completed.sum(&:take_time) / completed.count).round(2) ]
         other_table << [ 'Llamadas entrantes', total_call ]
-        other_table << [ 'Llamadas por agente', (total_call / user_with_completed_in_range.count) ]
+        other_table << [ 'Llamadas por agente', (total_call / User.carts_completed_in_range(start_date, end_date).count) ]
 
         pdf.table other_table do
           row(0).font_style = :bold

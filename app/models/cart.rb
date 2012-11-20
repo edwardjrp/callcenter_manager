@@ -161,7 +161,7 @@ class Cart < ActiveRecord::Base
   def take_time_info
     return 'N/A' if complete_on.nil?
     return 'N/A' if started_on.nil?
-    take_time.to_i
+    "#{take_time.to_i} segundos "
   end
 
   def self.filter_carts(filter)
@@ -305,7 +305,7 @@ class Cart < ActiveRecord::Base
   # no test - perform in node
   def take_time
     if self.completed?
-      "#{(complete_on - started_on).round} segundos" if complete_on && started_on
+      (complete_on - started_on) if complete_on && started_on
     end
   end
 

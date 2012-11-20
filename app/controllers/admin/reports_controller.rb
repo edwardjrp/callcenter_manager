@@ -32,13 +32,13 @@ class Admin::ReportsController < ApplicationController
       (params[:sumary_report].present? && params[:sumary_report][:start_date].present?) ? start_date = Date.parse(params[:sumary_report][:start_date]) : start_date = 1.month.ago.to_date
       (params[:sumary_report].present? && params[:sumary_report][:end_date].present?) ? end_date = Date.parse(params[:sumary_report][:end_date]) : end_date = Date.today
       @report = Report.new(name: 'Consolidado')
-      begin
+      # begin
         @report.process_sumary(Cart.date_range(start_date, end_date), start_date, end_date)
         flash['success'] = "Reporte generado"
-      rescue => error
-        Rails.logger.error error
-        flash['error'] = "Un error impidio la generación del reporte"
-      end
+      # rescue => error
+      #   Rails.logger.error error
+      #   flash['error'] = "Un error impidio la generación del reporte"
+      # end
       redirect_to admin_report_sumary_path
     end
 
