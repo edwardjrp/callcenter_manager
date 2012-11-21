@@ -31,7 +31,11 @@ class Kapiqua25.Views.CategoriesIndex extends Backbone.View
         else
           window.socket.emit 'cart_products:add_collection', { coupon_products: coupon_products, cart_id: @options.cart.id }
       else
-        window.socket.emit 'cart_products:add_collection', { coupon_products: coupon_products, cart_id: @options.cart.id }       
+        if _.filter(@options.cart.get('cart_coupons').models, (coupon) -> coupon.get('code') == cart_coupons.code).length > 1
+          if confirm('¿ El cupón ya esta presente, desea reintroducir los productos ?')
+            window.socket.emit 'cart_products:add_collection', { coupon_products: coupon_products, cart_id: @options.cart.id }       
+        else
+          window.socket.emit 'cart_products:add_collection', { coupon_products: coupon_products, cart_id: @options.cart.id }       
 
 
   onEditing: (data)->
