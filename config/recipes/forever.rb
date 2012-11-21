@@ -7,7 +7,7 @@ namespace :forever do
   %w[start stop].each do |command|
     desc "#{command} forever"
     task command, roles: :web do
-      run "#{sudo} #{current_path}/deploy_configs/forever #{command}"
+      run "#{sudo} /bin/bash -c '#{current_path}/deploy_configs/forever #{command}'"
     end
   end
   

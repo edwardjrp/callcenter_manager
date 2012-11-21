@@ -41,9 +41,9 @@ namespace :deploy do
     run "coffee #{current_path}/kapiquajs/build.coffee"
     puts "done."
   end
-  # before "forever:restart", "deploy:coffee_compile"
-  # after "deploy:restart", "forever:restart" 
-  after "deploy:restart", "deploy:coffee_compile"
+  before "forever:restart", "deploy:coffee_compile"
+  after "deploy:restart", "forever:restart" 
+  # after "deploy:restart", "deploy:coffee_compile"
   
   task :db_config, roles: :app do
     run "mkdir -p #{shared_path}/config"
