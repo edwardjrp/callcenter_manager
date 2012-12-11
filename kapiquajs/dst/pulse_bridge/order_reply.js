@@ -125,9 +125,9 @@ ReplyItem = (function() {
     this.priced_at = order_item.childNodes()[3].text();
     if (order_item.childNodes()[4] != null) {
       this.options = _.map(order_item.childNodes()[4].childNodes(), function(item_modifier) {
-        var code, part, quantity;
-        quantity = item_modifier.childNodes()[1].text();
-        part = item_modifier.childNodes()[2].text();
+        var code, part, quantity, _ref, _ref1;
+        quantity = (_ref = item_modifier.childNodes()[1]) != null ? _ref.text() : void 0;
+        part = (_ref1 = item_modifier.childNodes()[2]) != null ? _ref1.text() : void 0;
         code = item_modifier.attr('code').value();
         return {
           quantity: quantity,

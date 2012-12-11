@@ -162,7 +162,9 @@ Cart.prototype.price = function(socket, io) {
           } else {
             pulse_com_error = function(comm_err) {
               socket.emit('cart:price:error', 'Un error de comunicación impidio solitar el precio de esta orden, la aplicacion no podra funcionar correctamente en este estado');
-              return io.sockets["in"]('admins').emit('system:cart:price:error', current_cart);
+              if (io != null) {
+                return io.sockets["in"]('admins').emit('system:cart:price:error', current_cart);
+              }
             };
             cart_request = new PulseBridge(current_cart, settings.price_store_id, settings.price_store_ip, settings.pulse_port);
             try {

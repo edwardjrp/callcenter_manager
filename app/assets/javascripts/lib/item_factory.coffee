@@ -80,18 +80,20 @@ class @ItemFactory
 
     else
       recipe = _.map options_first, (opt) ->
-        if _.isNaN($(opt).data('quantity-first')) or $(opt).data('quantity-first') == 1 then q = '' else q = $(opt).data('quantity-first')
+        console.log $(opt).find('.amount_control_multi_sides_first:first').data('quantity-first')
+        if _.isNaN($(opt).find('.amount_control_multi_sides_first:first').data('quantity-first')) or $(opt).find('.amount_control_multi_sides_first:first').data('quantity-first') == 1 then q = '' else q = $(opt).find('.amount_control_multi_sides_first:first').data('quantity-first')
         unless $(opt).data('part-first') == 'W'
           "#{q}#{$(opt).data('code')}-#{$(opt).data('part-first')}"
         else
           "#{q}#{$(opt).data('code')}"
-      recipe.join(',')
+      console.log recipe
+      _.compact(recipe).join(',')
     
 
     
 
   multi_presence_first: (opt) ->
-    $(opt).data('quantity-first')? and  $(opt).data('part-first')?
+    $(opt).find('.amount_control_multi_sides_first:first').data('quantity-first')? and  $(opt).data('part-first')?
 
   multi_presence_second: (opt) ->
     $(opt).data('quantity-second')? and  $(opt).data('part-second')?
@@ -114,6 +116,7 @@ class @ItemFactory
       bind_id = null if _.isUndefined(bind_id)
       options = @build_options()
       cart = @cart
+      console.log options
       { product_id: product.id, product: product, quantity: quantity, options: options, cart_id: cart.id, bind_id: bind_id }
     else
       null

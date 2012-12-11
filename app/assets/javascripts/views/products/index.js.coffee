@@ -68,9 +68,9 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
   add_to_cart:  (event)->
     event.preventDefault()
     target = $(event.currentTarget)
-    # returns { product: product, options: options, cart: cart,bind_id: bind_id }
+    # console.log @selected_matchups
     item = new ItemFactory(@el, @model, @options.cart, {selected_matchups: @selected_matchups, selected_flavor: @selected_flavor, selected_size: @selected_size, item_quantity: $(@el).find('.cart_product_quantity').val()}).build()
-    # console.log @options.cart
+    # console.log item
     if @editing
       console.log item.product
       cart_product = @edit_cart_product.set({ product: item.product ,product_id: item.product_id, cart_id: item.cart_id, options: item.options, bind_id: item.bind_id }) # falta editar productos
@@ -118,6 +118,10 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     target = $(event.currentTarget)
     target.siblings('button').removeClass('active')
     target.addClass('active')
+    target.closest('.option_box_sides').find('.amount_control_multi_sides_first').data('quantity-first', 1)
+    target.closest('.option_box_sides').find('.amount_control_multi_sides_first').find('a.left_selection').html("Normal<b class='caret'></b>").css('background-color', '#A9C4F5')
+    # target.closest('.option_box_sides').find('.amount_control_multi_sides_second').data('quantity-first', 1)
+    # target.closest('.option_box_sides').find('.amount_control_multi_sides_second').find('a.right_selection').html("Normal<b class='caret'></b>").css('background-color', '#EED3D7')
     target.closest('.option_box_sides').data('part-first', target.data('part-first'))
 
   set_first_amount: (event)->
@@ -132,7 +136,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
       scope_class.css('background-color', 'transparent')
     else
       scope_class.css('background-color', '#A9C4F5')
-    target.closest('.option_box_sides').data('quantity-first', target.data('quantity-first'))
+    target.closest('.option_box_sides').find('.amount_control_multi_sides_first:first').data('quantity-first', target.data('quantity-first'))
 
 
   set_second_amount: (event)->

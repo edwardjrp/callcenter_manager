@@ -113,7 +113,7 @@ Cart.prototype.price = (socket, io)->
             else
               pulse_com_error = (comm_err) ->
                 socket.emit 'cart:price:error', 'Un error de comunicación impidio solitar el precio de esta orden, la aplicacion no podra funcionar correctamente en este estado'
-                io.sockets.in('admins').emit('system:cart:price:error',current_cart)
+                io.sockets.in('admins').emit('system:cart:price:error',current_cart) if io?
               cart_request = new  PulseBridge(current_cart, settings.price_store_id, settings.price_store_ip,  settings.pulse_port)
               try
                 cart_request.price pulse_com_error, (res_data)->
