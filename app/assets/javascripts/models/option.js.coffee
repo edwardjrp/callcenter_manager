@@ -31,12 +31,12 @@ class Kapiqua25.Models.Option extends Backbone.RelationalModel
       el.find('.dropdown').find('a.left_selection').css('background-color', '#A9C4F5')
       el.find('a.left_selection').html("#{@amountMap()}<b class='caret'></b>")
       el.closest('.option_box_sides').data('part-first', @part())
-      el.closest('.option_box_sides').data('quantity-first',@quantity() )
+      el.closest('.option_box_sides').find('.amount_control_multi_sides_first:first').data('quantity-first', @quantity())
     if position == 'second'
       el.find('.dropdown').find('a.right_selection').css('background-color', '#EED3D7')
       el.find('a.right_selection').html("#{@amountMap()}<b class='caret'></b>")
       el.closest('.option_box_sides').data('part-second', @part())
-      el.closest('.option_box_sides').data('quantity-second',@quantity())
+      el.closest('.option_box_sides').find('.amount_control_multi_sides_second:first').data('quantity-second', @quantity())
 
 
   teardownHalf: (el, position)->
@@ -44,12 +44,12 @@ class Kapiqua25.Models.Option extends Backbone.RelationalModel
       el.find('.dropdown').find('a.left_selection').css('background-color', 'transparent')
       el.find('a.left_selection').html("Nada<b class='caret'></b>")
       el.closest('.option_box_sides').removeData('part-first')
-      el.closest('.option_box_sides').removeData('quantity-first')
+      el.closest('.option_box_sides').find('.amount_control_multi_sides_first:first').removeData('quantity-first')
     if position == 'second'
       el.find('.dropdown').find('a.right_selection').css('background-color', 'transparent')
       el.find('a.right_selection').html("Nada<b class='caret'></b>")
       el.closest('.option_box_sides').removeData('part-second')
-      el.closest('.option_box_sides').removeData('quantity-second')
+      el.closest('.option_box_sides').find('.amount_control_multi_sides_second:first').removeData('quantity-second')
 
   configure: (el, configurable_type) ->
     switch configurable_type
@@ -65,7 +65,7 @@ class Kapiqua25.Models.Option extends Backbone.RelationalModel
         el.find('a.left_selection').html("#{@amountMap()}<b class='caret'></b>")
         el.find('.dropdown').css('background-color', '#A9C4F5')
         el.closest('.option_box_sides').data('part-first',@part() )
-        el.closest('.option_box_sides').data('quantity-first',@quantity() )
+        el.closest('.option_box_sides').find('.amount_control_multi_sides_first:first').data('quantity-first',@quantity() )
         
 
   teardown: (el, configurable_type) ->
@@ -82,7 +82,7 @@ class Kapiqua25.Models.Option extends Backbone.RelationalModel
         el.find('a.left_selection').html("Nada<b class='caret'></b>")
         el.find('.dropdown').css('background-color', 'white')
         el.closest('.option_box_sides').removeData('part-first')
-        el.closest('.option_box_sides').removeData('quantity-first')
+        el.closest('.option_box_sides').find('.amount_control_multi_sides_first:first').removeData('quantity-first')
 
 
   amountMap: ()->

@@ -10,7 +10,7 @@ class @ItemFactory
     if @category.hasOptions() and not @category.typeUnit()
       errors.push 'No ha establecido opciones' unless @scan()? and _.any(@scan())
       errors.push 'La catidad a agregar al carrito no es valida' unless @options['item_quantity'] > 0 
-      errors.push 'Ha seleccionado deben ser mayores a cero' unless @validate_quantities()
+      errors.push 'Las cantidades en las opciones deben ser mayores' unless @validate_quantities()
     result = errors
     errors = []
     $("<div class='purr'>#{window.to_sentence(result)}<div>").purr() if _.any(result)
@@ -29,8 +29,8 @@ class @ItemFactory
   validate_quantities: ->
     if @category.isMulti() and @category.hasSides()
       sum = _.inject @multi_quantity_scan(), ((memo, opt) ->
-        if _.isNaN(Number($(opt).data('quantity-first'))) then first = 0 else first = Number($(opt).data('quantity-first'))
-        if _.isNaN(Number($(opt).data('quantity-second'))) then second = 0 else second = Number($(opt).data('quantity-second'))
+        if _.isNaN(Number($(opt).find('.amount_control_multi_sides_first:first').data('quantity-first'))) then first = 0 else first = Number($(opt).find('.amount_control_multi_sides_first:first').data('quantity-first'))
+        if _.isNaN(Number($(opt).find('.amount_control_multi_sides_second:first').data('quantity-second'))) then second = 0 else second = Number($(opt).find('.amount_control_multi_sides_second:first').data('quantity-second'))
         memo + Number(first + second)
         ), 0
     else
@@ -45,6 +45,7 @@ class @ItemFactory
       options_second= []
       options_first = _.filter($(@el).find('.option_box_sides'), (option)=> @multi_presence_first(option))
       options_second = _.filter($(@el).find('.option_box_sides'), (option)=> @multi_presence_second(option))
+      console.log options_second
       @merge_options(options_first, options_second)
     else
       recipe = _.map @scan(), (opt) ->
@@ -58,12 +59,13 @@ class @ItemFactory
   merge_options: (options_first, options_second) ->
     if _.any(options_second)
       first_build = _.map options_first, (opt1) ->
-        if _.isNaN($(opt1).data('quantity-first')) or $(opt1).data('quantity-first') == 1 then q1 = '' else q1 = $(opt1).data('quantity-first')
+        if _.isNaN($(opt1).find('.amount_control_multi_sides_first:first').data('quantity-first')) or $(opt1).find('.amount_control_multi_sides_first:first').data('quantity-first') == 1 then q1 = '' else q1 = $(opt1).find('.amount_control_multi_sides_first:first').data('quantity-first')
         {code:$(opt1).data('code'), quantity: q1 }
         
 
       second_build = _.map options_second, (opt2) ->
-        if _.isNaN($(opt2).data('quantity-second')) or $(opt2).data('quantity-second') == 1 then q2 = '' else q2 = $(opt2).data('quantity-second')
+        $(opt2).find('.amount_control_multi_sides_second:first')
+        if _.isNaN($(opt2).find('.amount_control_multi_sides_second:first').data('quantity-second')) or $(opt2).find('.amount_control_multi_sides_second:first').data('quantity-second') == 1 then q2 = '' else q2 = $(opt2).find('.amount_control_multi_sides_second:first').data('quantity-second')
         {code:$(opt2).data('code'), quantity: q2 }
         
       common_options = window.objectIntersection(first_build, second_build)
@@ -80,29 +82,28 @@ class @ItemFactory
 
     else
       recipe = _.map options_first, (opt) ->
-        console.log $(opt).find('.amount_control_multi_sides_first:first').data('quantity-first')
         if _.isNaN($(opt).find('.amount_control_multi_sides_first:first').data('quantity-first')) or $(opt).find('.amount_control_multi_sides_first:first').data('quantity-first') == 1 then q = '' else q = $(opt).find('.amount_control_multi_sides_first:first').data('quantity-first')
         unless $(opt).data('part-first') == 'W'
           "#{q}#{$(opt).data('code')}-#{$(opt).data('part-first')}"
         else
           "#{q}#{$(opt).data('code')}"
-      console.log recipe
       _.compact(recipe).join(',')
     
 
     
 
   multi_presence_first: (opt) ->
-    $(opt).find('.amount_control_multi_sides_first:first').data('quantity-first')? and  $(opt).data('part-first')?
+    $(opt).find('.amount_control_multi_sides_first:first').data('quantity-first')? #and  $(opt).data('part-first')?
 
   multi_presence_second: (opt) ->
-    $(opt).data('quantity-second')? and  $(opt).data('part-second')?
+    console.log $(opt).find('.amount_control_multi_sides_second:first').data('quantity-second')
+    $(opt).find('.amount_control_multi_sides_second:first').data('quantity-second')?# and  $(opt).data('part-second')?
 
   multi_conditions: (opt)->
-    (not _.isUndefined($(opt).data('quantity-first')))  or (not _.isUndefined($(opt).data('quantity-second')))
+    (not _.isUndefined($(opt).find('.amount_control_multi_sides_first:first').data('quantity-first')))  or (not _.isUndefined($(opt).find('.amount_control_multi_sides_second:first').data('quantity-second')))
 
   multi_quantity_check: (opt)->
-    $(opt).data('quantity-first')? or $(opt).data('part-first')?
+    $(opt).find('.amount_control_multi_sides_first:first').data('quantity-first')? or $(opt).find('.amount_control_multi_sides_second:first').data('quantity-second')?
 
   multi_part_check: (opt)->
     $(opt).data('quantity-second')? or $(opt).data('part-second')?

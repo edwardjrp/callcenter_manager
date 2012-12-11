@@ -120,8 +120,6 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     target.addClass('active')
     target.closest('.option_box_sides').find('.amount_control_multi_sides_first').data('quantity-first', 1)
     target.closest('.option_box_sides').find('.amount_control_multi_sides_first').find('a.left_selection').html("Normal<b class='caret'></b>").css('background-color', '#A9C4F5')
-    # target.closest('.option_box_sides').find('.amount_control_multi_sides_second').data('quantity-first', 1)
-    # target.closest('.option_box_sides').find('.amount_control_multi_sides_second').find('a.right_selection').html("Normal<b class='caret'></b>").css('background-color', '#EED3D7')
     target.closest('.option_box_sides').data('part-first', target.data('part-first'))
 
   set_first_amount: (event)->
@@ -142,12 +140,14 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
   set_second_amount: (event)->
     event.preventDefault()
     target = $(event.currentTarget)
+    console.log 'setting'
     target.closest('.amount_control_multi_sides_second').find('a.right_selection').html("#{target.html()}<b class='caret'></b>")
     if target.html().match(/Nada/)
       target.closest(".amount_control_multi_sides_second").find('a.right_selection').css('background-color', 'transparent')
     else
       target.closest(".amount_control_multi_sides_second").find('a.right_selection').css('background-color', '#EED3D7')
-    target.closest('.option_box_sides').data('quantity-second', target.data('quantity-second'))
+    target.closest('.option_box_sides').find('.amount_control_multi_sides_second:first').data('quantity-second', target.data('quantity-second'))
+    console.log target.closest('.option_box_sides').find('.amount_control_multi_sides_second:first').data('quantity-second')
 
   set_amount: (event)->
     event.preventDefault()
