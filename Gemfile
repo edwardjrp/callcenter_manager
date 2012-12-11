@@ -75,7 +75,7 @@ group :development do
   gem 'yard'
   gem 'capistrano'
   gem 'awesome_print'
-  gem 'annotate', :git => 'git://github.com/ctran/annotate_models.git',:group => :development
+  gem 'annotate', :git => 'git://github.com/ctran/annotate_models.git'
 end
 
 

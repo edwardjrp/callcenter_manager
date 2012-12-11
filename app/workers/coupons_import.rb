@@ -22,7 +22,7 @@ class CouponsImport
       coupons_xml= Nokogiri::XML(xml_string)
       coupons_xml.css("Coupon").each do |coupon_xml|
         coupon_found = Coupon.find_by_code(coupon_xml.css("Code").inner_text)
-        unless coupon_found.present? && coupon_found.discontinued = false
+        unless coupon_found.present? && coupon_found.discontinued == false
           Coupon.create do |coupon| 
             coupon.code = coupon_xml.css("Code").inner_text
             coupon.description = coupon_xml.css("Description").inner_text
