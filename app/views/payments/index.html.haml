@@ -183,7 +183,12 @@
               %tr{:id=> dom_id(cart_product), :data=> { 'cart-product-id'=> cart_product.id }, :class=> availability_class(cart_product.available_in_store(@cart.store))}
                 %td.span1=text_field_tag 'cart_product[quantity]', cart_product.quantity, class: 'checkout_input', data: { orig: cart_product.quantity }
                 %td= cart_product.combined_product_name
-                %td= cart_product.niffty_options
+                %td
+                  = cart_product.niffty_options
+                  - if cart_product.product.category.name == 'Pizza'
+                    %p
+                      %br
+                      = select_tag :coocking_instructions, options_for_select([["Término medio", "Término medio"], ["Bien Cocida", "Bien Cocida"],["Corte 10 pedazos", "Corte 10 pedazos"], ["Corte Chicago", "Corte Chicago"], ["Corte 12 pedazos", "Corte 12 pedazos"]], cart_product.coocking_instructions), prompt: 'instrucciones de cocción', data: { cart_product_id: cart_product.id}, class: "coocking_instructions_select"
                 %td.item_price
                   - if cart_product.priced_at
                     = number_to_currency(cart_product.priced_at)

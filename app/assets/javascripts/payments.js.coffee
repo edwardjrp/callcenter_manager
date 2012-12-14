@@ -5,6 +5,23 @@ jQuery ->
   if $('#payments').size() > 0
     socket = window.socket
 
+    $('.coocking_instructions_select').on 'change', (event)->
+      target = $(event.currentTarget)
+      cart_product_id = target.data('cart-product-id')
+      $('#loader img').show()
+      $.ajax
+        type: 'PUT'
+        datatype: 'JSON'
+        url: "/carts/#{cart_product_id}/coocking_instructions"
+        data: { coocking_instructions: target.val() }
+        beforeSend: (xhr) ->
+          xhr.setRequestHeader("Accept", "application/json")
+        success: (cart_product) ->
+          show_alert "#{cart_product.product.productname} estará #{cart_product.coocking_instructions}", 'success'
+        complete: ->
+          $('#loader img').hide()
+
+
     $('#actions').on 'click', '#place_order_button', (event)->
       event.preventDefault()
       target = $(event.currentTarget)

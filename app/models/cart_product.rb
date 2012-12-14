@@ -2,15 +2,16 @@
 #
 # Table name: cart_products
 #
-#  id         :integer          not null, primary key
-#  cart_id    :integer
-#  quantity   :integer
-#  product_id :integer
-#  bind_id    :integer
-#  options    :string(255)
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  priced_at  :decimal(, )
+#  id                    :integer          not null, primary key
+#  cart_id               :integer
+#  quantity              :integer
+#  product_id            :integer
+#  bind_id               :integer
+#  options               :string(255)
+#  created_at            :datetime         not null
+#  updated_at            :datetime         not null
+#  priced_at             :decimal(, )
+#  coocking_instructions :string(255)
 #
 
 class CartProduct < ActiveRecord::Base

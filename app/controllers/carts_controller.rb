@@ -17,6 +17,18 @@ class CartsController < ApplicationController
       end
     end
   end
+
+  def coocking_instructions
+    @cart_product = CartProduct.find_by_id(params[:id])
+    @cart_product.coocking_instructions = params[:coocking_instructions]
+    respond_to do |format|
+      if @cart_product.save
+        format.json { render json: @cart_product.to_json(include: :product) }
+      else
+        format.json { render json: @cart_product.errors.full_messages.to_sentence}
+      end
+    end
+  end
   
   def current
     respond_to do |format|

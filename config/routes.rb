@@ -40,6 +40,7 @@ Kapiqua25::Application.routes.draw do
     end
     member do 
       post 'completed'
+      put 'coocking_instructions'
     end
   end
   resources :categories
