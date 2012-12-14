@@ -70,7 +70,7 @@ class ReplyItem
       @options = _.map order_item.childNodes()[4].childNodes(), (item_modifier)->
         quantity = item_modifier.childNodes()[1]?.text()
         part = item_modifier.childNodes()[2]?.text()
-        code = item_modifier.attr('code').value()
+        code = item_modifier.attr('code')?.value()
         { quantity: quantity, code: code, part: part }
       
 module.exports = OrderReply

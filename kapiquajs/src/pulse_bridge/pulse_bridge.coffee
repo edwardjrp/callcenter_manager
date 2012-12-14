@@ -253,7 +253,10 @@ class PulseBridge
         if cart_product.priced_at? then cart_item_price = cart_product.priced_at.toString() else cart_item_price = '0'
         order_item.addChild(new libxml.Element(doc,'PricedAt', @fallback_values(action, cart_item_price,'0')))
         order_item.addChild(new libxml.Element(doc,'OverrideAmount').attr('xsi:nil':"true"))
-        order_item.addChild(new libxml.Element(doc,'CookingInstructions').attr('xsi:nil':"true"))
+        if cart_product.coocking_instructions?
+          order_item.addChild(new libxml.Element(doc,'CookingInstructions', cart_product.coocking_instructions))
+        else
+          order_item.addChild(new libxml.Element(doc,'CookingInstructions').attr('xsi:nil':"true"))
         
         item_modifiers = new libxml.Element(doc,'ItemModifiers')
         product_options = Option.collection(cart_product.options)

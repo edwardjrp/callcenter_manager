@@ -358,9 +358,13 @@ PulseBridge = (function() {
         order_item.addChild(new libxml.Element(doc, 'OverrideAmount').attr({
           'xsi:nil': "true"
         }));
-        order_item.addChild(new libxml.Element(doc, 'CookingInstructions').attr({
-          'xsi:nil': "true"
-        }));
+        if (cart_product.coocking_instructions != null) {
+          order_item.addChild(new libxml.Element(doc, 'CookingInstructions', cart_product.coocking_instructions));
+        } else {
+          order_item.addChild(new libxml.Element(doc, 'CookingInstructions').attr({
+            'xsi:nil': "true"
+          }));
+        }
         item_modifiers = new libxml.Element(doc, 'ItemModifiers');
         product_options = Option.collection(cart_product.options);
         if (_.any(product_options)) {

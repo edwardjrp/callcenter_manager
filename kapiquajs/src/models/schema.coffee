@@ -614,6 +614,10 @@ CartProduct = DB.define("CartProduct",
   priced_at:
     type: Number
 
+  coocking_instructions:
+    type: String
+    length: 255
+
   created_at:
     type: Date
     default: Date.now

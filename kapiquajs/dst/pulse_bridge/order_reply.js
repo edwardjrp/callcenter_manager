@@ -125,10 +125,10 @@ ReplyItem = (function() {
     this.priced_at = order_item.childNodes()[3].text();
     if (order_item.childNodes()[4] != null) {
       this.options = _.map(order_item.childNodes()[4].childNodes(), function(item_modifier) {
-        var code, part, quantity, _ref, _ref1;
+        var code, part, quantity, _ref, _ref1, _ref2;
         quantity = (_ref = item_modifier.childNodes()[1]) != null ? _ref.text() : void 0;
         part = (_ref1 = item_modifier.childNodes()[2]) != null ? _ref1.text() : void 0;
-        code = item_modifier.attr('code').value();
+        code = (_ref2 = item_modifier.attr('code')) != null ? _ref2.value() : void 0;
         return {
           quantity: quantity,
           code: code,
