@@ -173,7 +173,8 @@ jQuery ->
         window.show_alert('Cliente creado.', 'success')
         $('#client_search_phone').focus()
         clear_extra_data()
-        window.show_popover($('#client_search_panel'), 'Cliente creado', 'Presione ENTER para asignar el cliente creado a la orden actual.')
+        # window.show_popover($('#client_search_panel'), 'Cliente creado', 'Presione ENTER para asignar el cliente creado a la orden actual.') #HERE
+        assign_client_to_current_cart()
       error: (response) ->
         window.show_alert(response.responseText, 'error')
 
@@ -303,7 +304,8 @@ set_form_import = (client, phone)->
   $('#client_search_last_name').val(client.last_name)
   $('#client_search_last_name').attr('readonly', 'readonly')
   $('#client_id').val(client.id)
-  window.show_popover($('#client_search_panel'), 'Cliente Importado', 'Presione ENTER para asignar el cliente importado a la orden actual.')
+  assign_client_to_current_cart()
+  # window.show_popover($('#client_search_panel'), 'Cliente Importado', 'Presione ENTER para asignar el cliente importado a la orden actual.') # HERE
 
 client_create =  ()->
   $('#import_client').show()
@@ -399,9 +401,21 @@ query_client = (form) ->
         $('#client_search_last_name').val(client.last_name)
         $('#client_id').val(client.id)
         clear_extra_data()
-        window.show_popover($('#client_search_panel'), "Cliente encontrado", 'Presione ENTER para asignar este cliente a la orden actual')
+        assign_client_to_current_cart()
+        # window.show_popover($('#client_search_panel'), "Cliente encontrado", 'Presione ENTER para asignar este cliente a la orden actual') # HERE
     error: (jqXHR, textStatus, errorThrown) ->
       console.log(errorThrown)
       console.log(jqXHR.responseText)
       console.log(jqXHR.statusCode())
       console.log(textStatus)
+
+assign_client_to_current_cart = ->  
+  $.ajax
+    type: 'post'
+    url: "/carts"
+    datatype: 'SCRIPT'
+    data: {client_id: $('#client_id').val()}
+    beforeSend: (xhr) ->
+      xhr.setRequestHeader("Accept", "text/javascript") 
+    success: (script) ->
+      eval(script)

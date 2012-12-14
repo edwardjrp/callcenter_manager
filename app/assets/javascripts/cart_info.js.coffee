@@ -1,6 +1,6 @@
 jQuery ->
   socket = window.socket
-  assign_client_to_current_cart()
+
   assign_service_method('#service_method_delivery')
   assign_service_method('#service_method_dine_in')
   assign_service_method('#service_method_pickup')
@@ -19,22 +19,7 @@ jQuery ->
           $(item).hide()
         else
           $(item).show()
-
-
-
-assign_client_to_current_cart = () ->
-  $('#client_search input').on 'keypress', (event)->
-    if event.which == 13 and $('#client_id').val()? and $('#client_id').val() > 0
-      $.ajax
-        type: 'post'
-        url: "/carts"
-        datatype: 'SCRIPT'
-        data: {client_id: $('#client_id').val()}
-        beforeSend: (xhr) ->
-          xhr.setRequestHeader("Accept", "text/javascript") 
-        success: (script) ->
-          eval(script)
-        
+      
 assign_service_method = (target)->
   $('#cart_info').on 'click', target , (event) ->
     $('#choose_service_method').text('Modo de servicio: Actualizando')
