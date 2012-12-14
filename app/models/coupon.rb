@@ -42,6 +42,10 @@ class Coupon < ActiveRecord::Base
     ActiveSupport::JSON.decode(target_products).map{ |cp| { product: Product.find_by_productcode(cp['product_code']), quantity: cp['minimun_require'].to_i }}
   end
 
+  def description_info
+    description || generated_description
+  end
+
   private
     # Ensure that there are no cart_coupons referencing this product
     def ensure_not_referenced_by_any_cart

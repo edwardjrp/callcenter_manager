@@ -91,9 +91,11 @@ CartProduct.addCollection = function(data, respond, socket) {
       if (err) {
         return console.error(err.stack);
       } else {
-        return process.nextTick(function() {
-          return cart.price(socket);
-        });
+        if (cart != null) {
+          return process.nextTick(function() {
+            return cart.price(socket);
+          });
+        }
       }
     });
   }

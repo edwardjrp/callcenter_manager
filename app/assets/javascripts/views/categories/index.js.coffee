@@ -24,6 +24,8 @@ class Kapiqua25.Views.CategoriesIndex extends Backbone.View
       coupon_products = $.parseJSON(cart_coupons.target_products)
       coupon_products_codes = _.map coupon_products, (coupon_product) -> coupon_product.product_code
       cart_missing_products_codes = _.difference(coupon_products_codes, current_cart_products_codes)
+      console.log "adding "
+      console.log coupon_products
       if _.any(cart_missing_products_codes)
         if (cart_missing_products_codes.length < coupon_products_codes.length) and confirm('¿ Desea introducir solo los productos faltantes ?')
           cart_missing_products = _.filter coupon_products, (cart_coupon) -> _.include(cart_missing_products_codes,cart_coupon.product_code)

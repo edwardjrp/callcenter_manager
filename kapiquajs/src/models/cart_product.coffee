@@ -50,8 +50,9 @@ CartProduct.addCollection = (data, respond, socket) ->
       if err
         console.error err.stack
       else
-        process.nextTick ->
-          cart.price(socket)
+        if cart?
+          process.nextTick ->
+            cart.price(socket)
     
 
 CartProduct.updateItem =  (data, respond, socket, trigger_pricing) ->

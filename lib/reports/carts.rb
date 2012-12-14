@@ -149,7 +149,13 @@ module Reports
         coupons_table << ['Código',  'Descripción', 'Cantidad', '% de ordenes', '% de cupones']
         completed.joins(:coupons).group('coupons.code').count.each do |coupon_code, coupon_count|
           coupon = Coupon.find_by_code(coupon_code)
-          coupons_table << [coupon_code,  coupon, coupon_count, coupon_count / completed.count , coupon_count / completed.joins(:coupons).count] if coupon
+          coupons_table << [
+            coupon_code,
+            coupon.description_info,
+            coupon_count,
+            percentize(coupon_count.to_d / completed.count.to_d) ,
+            percentize(coupon_count.to_d / completed.joins(:coupons).count.to_d)
+            ] if coupon
         end
 
         pdf.table coupons_table do
