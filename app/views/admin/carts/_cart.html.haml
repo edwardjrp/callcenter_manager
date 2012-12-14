@@ -1,6 +1,7 @@
 .row 
   .span8
     %h3= "Orden #{cart.complete_id}"
+    = link_to 'Cargar', copy_cart_products_cart_path(cart), method: :post, class: 'btn' if current_cart.present?
     %hr 
     %h4 Tiempo  
     %table.table.table-bordered

@@ -79,6 +79,22 @@ class Cart < ActiveRecord::Base
   
   # self.per_page = 20
 
+  def copy_products(old_cart)
+    return false if old_cart.cart_products.count.zero?
+    transaction do 
+      old_cart.cart_products.each do |cart_product|
+        current_cart_product = cart_products.where(product_id: cart_product.product_id, bind_id: cart_product.bind_id, options: cart_product.options ).first_or_initialize
+        unless current_cart_product.new_record?
+          current_cart_product.quantity = current_cart_product.quantity + cart_product.quantity
+        else
+          current_cart_product.quantity = cart_product.quantity
+        end
+        current_cart_product.save
+      end
+    end
+    old_cart
+  end
+
   def discount_authorizer
     return nil if discount_auth_id.nil?
     return 'No encontrado' unless User.exists? discount_auth_id

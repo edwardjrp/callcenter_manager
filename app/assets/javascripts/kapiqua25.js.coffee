@@ -9,3 +9,5 @@ window.Kapiqua25 =
 
 $(document).ready ->
   Kapiqua25.init() if $('#builder').length > 0
+
+  window.socket.emit 'cart:price', $('#cart').data('cart').id if $('#cart').size() > 0 and $('#cart').data('cart')?

@@ -29,6 +29,16 @@ class CartsController < ApplicationController
       end
     end
   end
+
+  def copy_cart_products
+    @old_cart = Cart.find(params[:id])
+    if current_cart.copy_products(@old_cart)
+      flash[:success] = 'Los productos fueron cargados a la orden actual'
+    else
+      flash[:error] = 'Un error impidio la carga de los productos'
+    end
+    redirect_to :back
+  end
   
   def current
     respond_to do |format|

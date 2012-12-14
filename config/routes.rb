@@ -41,6 +41,7 @@ Kapiqua25::Application.routes.draw do
     member do 
       post 'completed'
       put 'coocking_instructions'
+      post 'copy_cart_products'
     end
   end
   resources :categories
