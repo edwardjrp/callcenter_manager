@@ -177,8 +177,8 @@ describe "Client::New" do
         fill_in "client_search_email", with: 'test@mail.com'
         page.execute_script("$('#utils').hide()")
         click_button 'Agregar cliente'
+        save_and_open_page
         page.should_not have_content('Addresses')
-        page.should_not have_content('en blanco')
       end                          
 
     end
