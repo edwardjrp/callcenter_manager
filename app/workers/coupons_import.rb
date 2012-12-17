@@ -39,7 +39,7 @@ class CouponsImport
           end
           import_log.import_events.create(name: 'Nuevo cupón agregado', subject: coupon_xml.css("Code").inner_text , message: "Se agrego #{coupon_xml.css("Description").inner_text}")
         else
-          import_log.import_events.create(name: 'Conflicto de Importación', subject:"#{coupon_found.id} - #{coupon_found.code}" , message: 'Durante la importación se encontro un cupón identico,  que no esta descontinuado')
+          import_log.import_events.create(name: 'Conflicto de Importación', subject:"#{coupon_found.id} - #{coupon_found.code}" , message: 'Durante la importación se encontro un cupón identico. Este cupon no fue importado.')
         end
         
       end

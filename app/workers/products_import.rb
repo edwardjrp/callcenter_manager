@@ -40,7 +40,7 @@ class ProductsImport
           end
           import_log.import_events.create(name: 'Nuevo producto agregado', subject: row['ProductCode'] , message: "Se agrego #{row['ProductName']}")
         else
-          import_log.import_events.create(name: 'Conflicto de Importación', subject:"#{product_to_find.id} - #{product_to_find.productcode}" , message: 'Durante la importación se encontro un product identico, que no esta descontinuado')
+          import_log.import_events.create(name: 'Conflicto de Importación', subject:"#{product_to_find.id} - #{product_to_find.productcode}" , message: 'Durante la importación se encontro un product identico. El producto no fue importado.')
         end
         # end find product and check if discontinued
       end

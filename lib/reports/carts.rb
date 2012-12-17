@@ -13,7 +13,7 @@ module Reports
       def pdf_products_mix_report(start_date, end_date)
         pdf = Prawn::Document.new(top_margin: 70, :page_layout => :landscape)
         pdf.font "Helvetica", :size => 7
-        pdf.text "Reporte Consolidado", size: 20, style: :bold
+        pdf.text "Reporte Product Mix", size: 20, style: :bold
         pdf.move_down 20
         pdf.text "Inicio #{start_date.strftime('%d %B %Y')}", size: 10, style: :bold
         pdf.text "Conclusión #{end_date.strftime('%d %B %Y')}", size: 10, style: :bold
@@ -80,7 +80,7 @@ module Reports
       def pdf_discounts_report(start_date, end_date)
         pdf = Prawn::Document.new(top_margin: 70, :page_layout => :landscape)
         pdf.font "Helvetica", :size => 6
-        pdf.text "Reporte Consolidado", size: 20, style: :bold
+        pdf.text "Reporte Descuentos", size: 20, style: :bold
         pdf.move_down 20
         pdf.text "Inicio #{start_date.strftime('%d %B %Y')}", size: 10, style: :bold
         pdf.text "Conclusión #{end_date.strftime('%d %B %Y')}", size: 10, style: :bold
@@ -139,7 +139,7 @@ module Reports
       def pdf_coupons_report(start_date, end_date)
         pdf = Prawn::Document.new(top_margin: 70)
         pdf.font "Helvetica", :size => 10
-        pdf.text "Reporte Consolidado", size: 20, style: :bold
+        pdf.text "Reporte Cupones", size: 20, style: :bold
         pdf.move_down 20
         pdf.text "Inicio #{start_date.strftime('%d %B %Y')}", size: 10, style: :bold
         pdf.text "Conclusión #{end_date.strftime('%d %B %Y')}", size: 10, style: :bold

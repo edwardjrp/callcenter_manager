@@ -30,18 +30,8 @@
 
 - verify acceptance test for admin stores editing
 
-- save payment details in node
-
-- manage reenabling checkout button
-
 - test all model methods
-
-- fix socket.io on error
 
 - restric alpha is missing special characters
 
-- missing coupons edit and show
-
 - check that params are passed to detailed report button
-
-- verify if trigger pricing inside kapiquajs is needed

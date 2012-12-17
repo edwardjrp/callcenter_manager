@@ -33,7 +33,9 @@ Carts = (function() {
           console.error(cart_find_err.stack);
           return socket.emit('cart:status:error', 'La orden no se encontro en el sistema');
         } else {
-          return cart.status(socket);
+          if (cart != null) {
+            return cart.status(socket);
+          }
         }
       });
     }
@@ -46,7 +48,9 @@ Carts = (function() {
           console.error(cart_find_err.stack);
           return socket.emit('cart:price:error', 'La orden no se encontro en el sistema');
         } else {
-          return cart.price(socket, io);
+          if (cart != null) {
+            return cart.price(socket, io);
+          }
         }
       });
     }
@@ -59,7 +63,9 @@ Carts = (function() {
           console.error(cart_find_err.stack);
           return socket.emit('cart:place:error', 'La orden no se encontro en el sistema');
         } else {
-          return cart.place(data, socket, io);
+          if (cart != null) {
+            return cart.place(data, socket, io);
+          }
         }
       });
     }

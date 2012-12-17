@@ -63,15 +63,17 @@ CartProduct.updateItem =  (data, respond, socket, trigger_pricing) ->
         else
           if cart_product?
             attributes = {}
-            attributes['product_id'] = data.product_id
+            attributes['product_id'] = data.product_id if data.product_id
             attributes['bind_id'] = data.bind_id || null
             attributes['quantity'] = Number(data.quantity) if data? and data.quantity?
             attributes['options'] = data.options if data? and data.options?
             attributes['updated_at'] = new Date()
+            console.log attributes
             cart_product.updateAttributes attributes, (cp_update_err, updated_cart_product)->
               if cp_update_err?
-                 respond(cp_update_err)
-               else
+                  console.error cp_update_err.stack
+                  respond(cp_update_err)
+                else
                   socket.emit('cart_products:updated', updated_cart_product.toJSON())
                   respond(cp_update_err,updated_cart_product)
                   # mode to after callback

@@ -20,7 +20,6 @@ describe "Client::Show" do
       fill_in "client_search_phone", with: '8095551234'
       sleep(1)
       page.execute_script " $('#{selector}').trigger(\"mouseenter\").click();"
-      page.find_by_id('client_search_phone').native.send_keys([:return])
     end
 
     subject { page } 

@@ -229,6 +229,7 @@ jQuery ->
         $('#loader img').hide()
         if error
           $("<div class='purr'>No se puedo realizar la actualización<div>").purr({removeTimer: 15000})
+          console.log error
           target.val(target.data('orig'))
         else
           target.data('orig', cart_product.quantity)

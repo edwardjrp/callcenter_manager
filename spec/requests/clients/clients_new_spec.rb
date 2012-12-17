@@ -38,7 +38,7 @@ describe "Client::New" do
       fill_in 'client_search_address_delivery_instructions', with: '1'
       page.execute_script("$('#utils').hide()")
       click_button 'Agregar cliente'
-      should have_content('Cliente creado')
+      find('.subnav-fixed:first').should have_content('Tester Last')
       should_not have_css('#client_search_email')
       should_not have_css('#client_search_tax_number_rnc')
       should_not have_css('#client_search_tax_number_fiscal_type')
@@ -51,7 +51,7 @@ describe "Client::New" do
       fill_in "client_search_last_name", with: 'Last'
       page.execute_script("$('#utils').hide()")
       click_button 'Agregar cliente'
-      should have_content('Cliente creado')
+      find('.subnav-fixed:first').should have_content('Tester Last')
       should_not have_css('#client_search_email')
     end
      
@@ -70,7 +70,7 @@ describe "Client::New" do
       fill_in 'client_search_address_delivery_instructions', with: '1'
       page.execute_script("$('#utils').hide()")
       click_button 'Agregar cliente'
-      should have_content('Cliente creado')
+      find('.subnav-fixed:first').should have_content('tester Last')
       should_not have_css('#client_search_email')
     end
 
@@ -92,7 +92,7 @@ describe "Client::New" do
       fill_in 'client_search_address_delivery_instructions', with: '1'
       page.execute_script("$('#utils').hide()")
       click_button 'Agregar cliente'
-      should have_content('Cliente creado')
+      find('.subnav-fixed:first').should have_content('Tester Last')
       fill_in "client_search_phone", with: '8095431234'
       fill_in "client_search_ext", with: '42'
       fill_in "client_search_first_name", with: 'iester'
@@ -106,10 +106,10 @@ describe "Client::New" do
       fill_in 'client_search_address_postal_code', with: '1'
       fill_in 'client_search_address_delivery_instructions', with: '1'
       click_button 'Agregar cliente'
-      should have_content('Cliente creado')
+      find('.subnav-fixed:first').should have_content('iester Last')
       fill_in "client_search_phone", with: '8095341234'
       fill_in "client_search_ext", with: '43'
-      fill_in "client_search_first_name", with: 'iester'
+      fill_in "client_search_first_name", with: 'iesters'
       fill_in "client_search_last_name", with: 'Last'
       fill_in "client_search_email", with: 'test3@mail.com'
       # select  city.name, from:  'client_search_address_city'
@@ -120,7 +120,7 @@ describe "Client::New" do
       fill_in 'client_search_address_postal_code', with: '1'
       fill_in 'client_search_address_delivery_instructions', with: '1'
       click_button 'Agregar cliente'
-      should have_content('Cliente creado')
+      find('.subnav-fixed:first').should have_content('iesters Last')
       should_not have_css('#client_search_email')
     end
      
@@ -137,7 +137,7 @@ describe "Client::New" do
       should have_css('#client_search_address_delivery_instructions')
     end
     
-    it "should show the rcn inputs", js: true do
+    it "should show the rnc inputs", js: true do
       fill_in "client_search_phone", with: '8095551234'
       should have_css('#client_search_tax_number_rnc')
       should have_css('#client_search_tax_number_fiscal_type')

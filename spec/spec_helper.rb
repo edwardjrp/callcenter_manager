@@ -40,7 +40,7 @@ RSpec.configure do |config|
   config.include(FactoryGirl::Syntax::Methods)
   config.include(AuthenticationMacros)
   config.include(MassAssignmentMacros)
-  config.fail_fast = true
+  # config.fail_fast = true
   config.order = 'random'
   config.before(:all) do
     DeferredGarbageCollection.start

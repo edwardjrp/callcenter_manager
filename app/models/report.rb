@@ -43,6 +43,8 @@ class Report < ActiveRecord::Base
   end
 
   def process_sumary(relation, start_date, end_date)
+    Rails.logger.debug start_date
+    Rails.logger.debug end_date
     pdf_temp_file = Tempfile.new(["reporte consolidado", '.pdf'])
     pdf_temp_file.binmode
     pdf_temp_file.write(relation.pdf_sumary_report(start_date, end_date).render)

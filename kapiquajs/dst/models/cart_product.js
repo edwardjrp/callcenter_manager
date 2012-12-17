@@ -110,7 +110,9 @@ CartProduct.updateItem = function(data, respond, socket, trigger_pricing) {
       } else {
         if (cart_product != null) {
           attributes = {};
-          attributes['product_id'] = data.product_id;
+          if (data.product_id) {
+            attributes['product_id'] = data.product_id;
+          }
           attributes['bind_id'] = data.bind_id || null;
           if ((data != null) && (data.quantity != null)) {
             attributes['quantity'] = Number(data.quantity);
@@ -119,8 +121,10 @@ CartProduct.updateItem = function(data, respond, socket, trigger_pricing) {
             attributes['options'] = data.options;
           }
           attributes['updated_at'] = new Date();
+          console.log(attributes);
           return cart_product.updateAttributes(attributes, function(cp_update_err, updated_cart_product) {
             if (cp_update_err != null) {
+              console.error(cp_update_err.stack);
               return respond(cp_update_err);
             } else {
               socket.emit('cart_products:updated', updated_cart_product.toJSON());
