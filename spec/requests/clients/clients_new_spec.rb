@@ -172,12 +172,12 @@ describe "Client::New" do
       it "should no longer show the missing address info validation error for the user", js: true do
         fill_in "client_search_phone", with: '8095551234'
         fill_in "client_search_ext", with: '45'
-        fill_in "client_search_first_name", with: 'rad'
+        fill_in "client_search_first_name", with: 'radha'
         fill_in "client_search_last_name", with: 'Last'
         fill_in "client_search_email", with: 'test@mail.com'
         page.execute_script("$('#utils').hide()")
         click_button 'Agregar cliente'
-        save_and_open_page
+        page.should_not have_content('no puede estar en blanco')
         page.should_not have_content('Addresses')
       end                          
 

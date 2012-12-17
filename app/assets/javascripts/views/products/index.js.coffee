@@ -44,10 +44,20 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
       @editing = true
       target_matchup = _.find data.category.matchups().models, (matchup)=>
         _.include(matchup.get('products'), data.product)
+
+      if data.cart_product.get('bind_id')?
+        secondary = @model.mainProducts().get(data.cart_product.get('bind_id'))
+        target_secondary_matchup = _.find data.category.matchups().models, (matchup)=>
+          _.include(matchup.get('products'), secondary)
       @edit_cart_product = data.cart_product
       @matchup_original_recipe = target_matchup.get('recipe')
-      @edit_item = target_matchup.set(recipe: data.cart_product.get('options'))
+      left_options = _.map(data.cart_product.get('options').split(','), (opt)-> opt.match(/(.*)[^\-2$]/g))
+      rigth_options = _.map(data.cart_product.get('options').split(','), (opt)-> opt.match(/(.*)[^\-1$]/g))
+
+      @edit_item = target_matchup.set(recipe: left_options.join(','))
       @apply_selection(@edit_item)
+      @apply_selection(target_secondary_matchup.set(recipe: rigth_options.join(',')))
+
       @selected_flavor = data.product.get('flavorcode')
       $(@el).find('.flavors_container').find(".#{data.product.get('flavorcode')}").addClass('btn-primary')
       @selected_size = data.product.get('sizecode')
@@ -140,14 +150,12 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
   set_second_amount: (event)->
     event.preventDefault()
     target = $(event.currentTarget)
-    console.log 'setting'
     target.closest('.amount_control_multi_sides_second').find('a.right_selection').html("#{target.html()}<b class='caret'></b>")
     if target.html().match(/Nada/)
       target.closest(".amount_control_multi_sides_second").find('a.right_selection').css('background-color', 'transparent')
     else
       target.closest(".amount_control_multi_sides_second").find('a.right_selection').css('background-color', '#EED3D7')
     target.closest('.option_box_sides').find('.amount_control_multi_sides_second:first').data('quantity-second', target.data('quantity-second'))
-    console.log target.closest('.option_box_sides').find('.amount_control_multi_sides_second:first').data('quantity-second')
 
   set_amount: (event)->
     event.preventDefault()
