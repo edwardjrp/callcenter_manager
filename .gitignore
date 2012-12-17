@@ -12,7 +12,7 @@
 config/database.production.yml
 config/database.yml
 # Ignore all logfiles and tempfiles.
-/log/*.log
+/log
 /tmp
 /public/rnc
 /public/uploads
