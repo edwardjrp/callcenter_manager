@@ -6,4 +6,5 @@
       %li= link_to 'Agentes', admin_users_path
       %li= link_to 'Razones', admin_reasons_path
       %li= link_to 'Numeros Fiscales', admin_taxpayer_identifications_path
-      %li= link_to 'Comunicación', admin_settings_path
+      -if current_user.is? [:admin]
+        %li= link_to 'Comunicación', admin_settings_path

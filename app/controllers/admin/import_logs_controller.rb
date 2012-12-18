@@ -1,5 +1,6 @@
 #encoding: utf-8
 class Admin::ImportLogsController < ApplicationController
+  before_filter {|c| c.accessible_by([:admin], root_path)}
   def index
     @import_logs = ImportLog.order('created_at DESC').page(params[:page])
     respond_to do |format|

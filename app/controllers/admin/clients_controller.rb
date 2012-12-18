@@ -1,5 +1,5 @@
 class Admin::ClientsController < ApplicationController
-  before_filter {|c| c.accessible_by([:admin], root_path)}
+  before_filter {|c| c.accessible_by([:admin, :supervisor], root_path)}
   
   def index
     @search = Client.search(params[:q])

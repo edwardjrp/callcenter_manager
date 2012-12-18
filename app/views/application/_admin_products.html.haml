@@ -2,6 +2,8 @@
   .subnav.subnav-fixed
     %ul.nav.nav-pills
       %li= link_to 'Tiendas', admin_stores_path
-      %li= link_to 'Categorías', admin_categories_path
+      - if current_user.is? [:admin]
+        %li= link_to 'Categorías', admin_categories_path
       %li= link_to 'Cupones', admin_coupons_path
-      %li= link_to 'Importación', admin_import_logs_path
+      - if current_user.is? [:admin]
+        %li= link_to 'Importación', admin_import_logs_path

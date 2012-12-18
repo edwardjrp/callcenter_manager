@@ -14,14 +14,16 @@
       %th= sort_link @search, :code, "Código"
       %th Descripción
       %th= sort_link @search, :minimum_price, 'Precio minimo'
-      %th 
+      - if current_user.is? [:admin]
+        %th 
     %tbody
       -@coupons.each do |coupon|
         %tr{:data=>{:id=>dom_id(coupon)}}
           %td= coupon.code
           %td= coupon.description
           %td= number_to_currency coupon.minimum_price
-          %td
-            .btn-group
-              =link_to 'Eliminar', [:admin, coupon], method: :delete, :data => { :confirm => '¿Seguro que desea eliminar este cupón?' } , :class=> 'btn '
+          - if current_user.is? [:admin]
+            %td
+              .btn-group
+                =link_to 'Eliminar', [:admin, coupon], method: :delete, :data => { :confirm => '¿Seguro que desea eliminar este cupón?' } , :class=> 'btn '
   =will_paginate @coupons

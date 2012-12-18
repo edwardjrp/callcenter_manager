@@ -1,5 +1,7 @@
 #encoding: utf-8
 class Admin::ReasonsController < ApplicationController
+  before_filter {|c| c.accessible_by([:admin, :supervisor], root_path)}
+  
   def index
     @reasons = Reason.order('created_at DESC').page(params[:page])
   end

@@ -1,5 +1,5 @@
 class Admin::CitiesController < ApplicationController
-  before_filter {|c| c.accessible_by([:admin], root_path)}
+  before_filter {|c| c.accessible_by([:admin, :supervisor], root_path)}
   def index
     respond_to do |format|
       format.json{ render json: City.all}

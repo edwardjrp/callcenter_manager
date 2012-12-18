@@ -68,7 +68,7 @@ class User < ActiveRecord::Base
   end
 
   def self.valid_roles
-    ['admin', 'operator']
+    ['admin', 'operator', 'supervisor']
   end
 
 

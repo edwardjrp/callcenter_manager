@@ -34,8 +34,8 @@
                 %li= link_to "Cerrar Sesión", logout_path, :id=>'end_session'
               -else
                 %li= link_to "Iniciar sesión", login_path
-    #cart_info= render :partial => 'cart_info' if user_signed_in? && (!current_user.is? :admin)
-    = yield :subnav if user_signed_in? && (current_user.is? :admin)
+    #cart_info= render :partial => 'cart_info' if user_signed_in? && (!current_user.is? [:admin, :supervisor])
+    = yield :subnav if user_signed_in? && (current_user.is? [:admin, :supervisor])
     .container.bottom-margin-1
       .row
         .span12

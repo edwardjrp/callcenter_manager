@@ -1,6 +1,6 @@
 # encoding: utf-8
 class Admin::UsersController < ApplicationController
-  before_filter {|c| c.accessible_by([:admin], root_path)}
+  before_filter {|c| c.accessible_by([:admin, :supervisor], root_path)}
   def index
     @users = User.page(params[:page])
   end
@@ -11,6 +11,7 @@ class Admin::UsersController < ApplicationController
 
   def create
     @user = User.new(params[:user])
+    @user.roles = [:operator] if params[:user][:roles].blank?
     if @user.save
       flash[:success]='Agente creado.'
       redirect_to admin_users_path
@@ -25,6 +26,7 @@ class Admin::UsersController < ApplicationController
 
   def update
     @user = User.find(params[:id])
+    @user.roles = [:operator] if params[:user][:roles].blank?
     if @user.update_attributes(params[:user])
       flash[:success]='Agente actualizado.'
       redirect_to admin_users_path

@@ -14,7 +14,7 @@ class SessionsController < ApplicationController
       user.login_count += 1
       user.save
       flash[:success]="Sesión iniciada"
-      if user.is? :admin
+      if user.is? [:admin, :supervisor]
         redirect_to admin_root_path
       else
         redirect_to root_path

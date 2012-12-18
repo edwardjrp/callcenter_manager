@@ -9,7 +9,16 @@ class ApplicationController < ActionController::Base
        if user_signed_in?
          unless current_user.is? roles
            flash[:alert] = 'No tiene permitido el acceso esta sección'
-           redirect_to fallback_path 
+           redirect_to fallback_path
+         end
+       end
+     end
+
+     def admin_protected
+      if user_signed_in?
+         unless current_user.is? :admin
+           flash[:alert] = 'No tiene permitido el acceso esta sección'
+           redirect_to root_path 
          end
        end
      end

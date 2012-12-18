@@ -1,6 +1,7 @@
 
 class Admin::StoresController < ApplicationController
-  before_filter {|c| c.accessible_by([:admin], root_path)}
+  before_filter {|c| c.accessible_by([:admin, :supervisor], root_path)}
+  before_filter :admin_protected, except: [:index, :show]
   
   def index
     @stores = Store.order(:name).page(params[:page])

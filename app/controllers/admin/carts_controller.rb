@@ -1,6 +1,6 @@
 # encoding: utf-8
 class Admin::CartsController < ApplicationController
-  before_filter {|c| c.accessible_by([:admin], root_path)}
+  before_filter {|c| c.accessible_by([:admin, :supervisor], root_path)}
   def index
     @search = Cart.order('created_at DESC').search(params[:q])
     @carts_recents  = @search.result(:distinct => true).recents.paginate(:page => params[:page_recents], :per_page => 30)

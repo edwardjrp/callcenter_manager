@@ -1,6 +1,6 @@
 
 class Admin::DashboardController < ApplicationController
-  before_filter {|c| c.accessible_by([:admin], root_path)}
+  before_filter {|c| c.accessible_by([:admin, :supervisor], root_path)}
   def index
     @users_per_carts_by_counts = Cart.average_and_count_per_group
     @users_per_carts_by_avgs = Cart.average_and_count_per_group('user_id',1.hour.ago,'carts_payment_avg', 5)

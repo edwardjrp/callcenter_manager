@@ -32,6 +32,7 @@
           %td
             .btn-group
               =link_to 'Productos', [:admin, store], class: 'btn'
-              =link_to 'Editar', edit_admin_store_path(store), class: 'btn'
-              =link_to 'Eliminar', [:admin, store], method: :delete, :data => { :confirm =>  '¿Seguro que desea Eliminar esta tienda?'} , class: 'btn '
+              - if current_user.is? [:admin]
+                =link_to 'Editar', edit_admin_store_path(store), class: 'btn'
+                =link_to 'Eliminar', [:admin, store], method: :delete, :data => { :confirm =>  '¿Seguro que desea Eliminar esta tienda?'} , class: 'btn '
   =will_paginate @stores

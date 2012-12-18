@@ -1,5 +1,5 @@
 class Admin::ServicesController < ApplicationController
-  before_filter {|c| c.accessible_by([:admin], root_path)}
+  before_filter {|c| c.accessible_by([:admin, :supervisor], root_path)}
   def import_products
     @product_import_log = ImportLog.products_import.includes(:import_events).order('created_at DESC').first
   end

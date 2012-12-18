@@ -1,6 +1,8 @@
 # encoding: utf-8
 class Admin::CouponsController < ApplicationController
-  before_filter {|c| c.accessible_by([:admin], root_path)}
+  before_filter {|c| c.accessible_by([:admin, :supervisor], root_path)}
+    before_filter :admin_protected, only: :destroy
+
 
   def index
     @search = Coupon.search(params[:q])

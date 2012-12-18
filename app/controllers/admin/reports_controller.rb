@@ -1,6 +1,6 @@
 #encoding:  utf-8
 class Admin::ReportsController < ApplicationController
-    before_filter {|c| c.accessible_by([:admin], root_path)}
+    before_filter {|c| c.accessible_by([:admin, :supervisor], root_path)}
 
     def detailed
       @reports = Report.detailed.order('created_at DESC').page(params[:page])
