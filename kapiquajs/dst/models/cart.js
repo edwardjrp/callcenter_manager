@@ -32,6 +32,8 @@ Cart.validatesPresenceOf('user_id');
 
 Cart.prototype.products = function(cb) {
   return Cart.schema.adapter.query("SELECT \"products\".* FROM \"products\" INNER JOIN \"cart_products\" ON \"products\".\"id\" = \"cart_products\".\"product_id\" WHERE \"cart_products\".\"cart_id\" = " + this.id, function(err, collection) {
+    console.log('HERE');
+    console.info(this.id);
     if (err) {
       console.error(err.stack);
       return cb(err);
@@ -88,13 +90,14 @@ Cart.prototype.status = function(socket) {
 Cart.prototype.price = function(socket, io) {
   var me;
   me = this;
+  console.log(me);
   return async.waterfall([
     function(callback) {
       return me.cart_products({}, function(c_cp_err, cart_products) {
         var json_and_binded;
         if (c_cp_err) {
           console.error(c_cp_err.stack);
-          return socket.emit('cart:price:error', 'No se pudo acceder a la lista de productos para esta orden');
+          return socket.emit('cart:price:error', 'No se pudo acceder a la relación de productos para esta orden');
         } else {
           json_and_binded = function(cart_product, callback) {
             if (cart_product.bind_id != null) {
@@ -189,8 +192,6 @@ Cart.prototype.price = function(socket, io) {
             }
           }
         });
-      } else {
-        return socket.emit('cart:price:error', 'No se pudo acceder a la lista de productos para esta orden');
       }
     }
   });

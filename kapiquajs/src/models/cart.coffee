@@ -59,7 +59,7 @@ Cart.prototype.price = (socket, io)->
       me.cart_products {}, (c_cp_err, cart_products) ->
         if (c_cp_err)
           console.error c_cp_err.stack
-          socket.emit 'cart:price:error', 'No se pudo acceder a la lista de productos para esta orden'
+          socket.emit 'cart:price:error', 'No se pudo acceder a la relación de productos para esta orden'
         else
           json_and_binded = (cart_product, callback) ->
             if cart_product.bind_id?
@@ -126,8 +126,6 @@ Cart.prototype.price = (socket, io)->
                 socket.emit 'cart:price:error', 'Un error impidio solitar el precio de esta orden'
                 io.sockets.in('admins').emit('system:cart:price:error', current_cart)
                 console.error err_pricing.stack
-        else
-          socket.emit 'cart:price:error', 'No se pudo acceder a la lista de productos para esta orden'
 
 
 
