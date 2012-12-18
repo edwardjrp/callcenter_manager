@@ -34,4 +34,12 @@ module ApplicationHelper
   def critical_class(cart)
     cart.message_mask == 9 ? 'error' : ''
   end
+
+  def current_roles(user)
+    if user.roles.include? :operator
+      'operator'
+    else
+      'admin'
+    end
+  end
 end

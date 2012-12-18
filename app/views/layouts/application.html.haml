@@ -13,7 +13,7 @@
       %meta{:content => "#{current_user.auth_token}", :name => "user"}
       %meta{:content => "#{current_user.idnumber}", :name => "user_id"}
       %meta{:content => "#{current_user.full_name}", :name => "user_name"}
-      %meta{:content => "#{current_user.roles.first}", :name => "user_role"}
+      %meta{:content => "#{current_roles(current_user)}", :name => "user_role"}
     %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}
   %body{id: controller_name}
     .navbar.navbar-fixed-top
