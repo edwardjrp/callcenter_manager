@@ -58,9 +58,15 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
       console.log left_options
       console.log rigth_options
       console.log common_options
+      for option in common_options
+        do (option) ->
+          left_options.push("#{option}-1")
+          rigth_options.push("#{option}-2")
+      console.log left_options
+      console.log rigth_options
       @edit_item = target_matchup.set(recipe: left_options.join(','))
       @apply_selection(@edit_item)
-      # @apply_selection(target_secondary_matchup.set(recipe: rigth_options.join(',')))
+      @apply_selection(target_secondary_matchup.set(recipe: rigth_options.join(',')))
 
       @selected_flavor = data.product.get('flavorcode')
       $(@el).find('.flavors_container').find(".#{data.product.get('flavorcode')}").addClass('btn-primary')
