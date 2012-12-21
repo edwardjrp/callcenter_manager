@@ -195,6 +195,7 @@ GEM
       rack
     rack-test (0.6.2)
       rack (>= 1.0)
+    railroady (1.1.0)
     rails (3.2.7)
       actionmailer (= 3.2.7)
       actionpack (= 3.2.7)
@@ -362,6 +363,7 @@ DEPENDENCIES
   poltergeist
   prawn
   pry-rails
+  railroady
   rails (= 3.2.7)
   rails-settings-cached
   ransack

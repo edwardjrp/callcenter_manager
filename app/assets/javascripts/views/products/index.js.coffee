@@ -51,12 +51,16 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
           _.include(matchup.get('products'), secondary)
       @edit_cart_product = data.cart_product
       @matchup_original_recipe = target_matchup.get('recipe')
-      left_options = _.map(data.cart_product.get('options').split(','), (opt)-> opt.match(/(.*)[^\-2$]/g))
-      rigth_options = _.map(data.cart_product.get('options').split(','), (opt)-> opt.match(/(.*)[^\-1$]/g))
-
+      left_options = _.map _.compact(_.map(data.cart_product.get('options').split(','), (opt)-> opt.match(/(.*)\-1$/g))), (item) -> _.first(item)
+      rigth_options = _.map _.compact(_.map(data.cart_product.get('options').split(','), (opt)-> opt.match(/(.*)\-2$/g))), (item) -> _.first(item)
+      common_options = _.map _.compact(_.map(data.cart_product.get('options').split(','), (opt)-> opt.match(/(.*)[^\-\d]$/g))), (item) -> _.first(item)
+      console.log data.cart_product.get('options')
+      console.log left_options
+      console.log rigth_options
+      console.log common_options
       @edit_item = target_matchup.set(recipe: left_options.join(','))
       @apply_selection(@edit_item)
-      @apply_selection(target_secondary_matchup.set(recipe: rigth_options.join(',')))
+      # @apply_selection(target_secondary_matchup.set(recipe: rigth_options.join(',')))
 
       @selected_flavor = data.product.get('flavorcode')
       $(@el).find('.flavors_container').find(".#{data.product.get('flavorcode')}").addClass('btn-primary')

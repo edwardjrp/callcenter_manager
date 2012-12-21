@@ -80,6 +80,7 @@ end
 
 
 group :development, :test do
+  gem 'railroady'
   gem 'jasminerice'
   gem 'pry-rails'
   gem 'capybara'
