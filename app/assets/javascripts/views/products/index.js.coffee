@@ -26,8 +26,10 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     Backbone.pubSub.on('removed', @onRemove)
     @editing = false
     @edit_item = null
+    @second_edit_item = null
     @edit_cart_product = null
     @matchup_original_recipe = null
+    @matchup_secondary_recipe = null
   
   events: ->
     'mouseenter .specialties': 'show_popover'
@@ -53,24 +55,23 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
         target_secondary_matchup = _.find data.category.matchups().models, (matchup)=>
           _.include(matchup.get('products'), secondary)
       @edit_cart_product = data.cart_product
-      console.log data.cart_product
+      
       @matchup_original_recipe = target_matchup.get('recipe')
+      @matchup_secondary_recipe = target_secondary_matchup.get('recipe')
+
       left_options = _.map _.compact(_.map(data.cart_product.get('options').split(','), (opt)-> opt.match(/(.*)\-1$/g))), (item) -> _.first(item)
       rigth_options = _.map _.compact(_.map(data.cart_product.get('options').split(','), (opt)-> opt.match(/(.*)\-2$/g))), (item) -> _.first(item)
       common_options = _.map _.compact(_.map(data.cart_product.get('options').split(','), (opt)-> opt.match(/(.*)[^\-\d]$/g))), (item) -> _.first(item)
-      # console.log data.cart_product.get('options')
-      # console.log left_options
-      # console.log rigth_options
-      # console.log common_options
+
       for option in common_options
         do (option) ->
           left_options.push("#{option}-1")
           rigth_options.push("#{option}-2")
-      # console.log left_options
-      # console.log rigth_options
+
       @edit_item = target_matchup.set(recipe: left_options.join(','))
+      @second_edit_item = target_secondary_matchup.set(recipe: rigth_options.join(','))
       @apply_selection(@edit_item)
-      @apply_selection(target_secondary_matchup.set(recipe: rigth_options.join(',')))
+      @apply_selection(@second_edit_item)
 
       @selected_flavor = data.product.get('flavorcode')
       $(@el).find('.flavors_container').find(".#{data.product.get('flavorcode')}").addClass('btn-primary')
@@ -109,15 +110,6 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     @clear()
     # @clear_edit() if @editing
     @render()
-    # if cart_product?
-    #   if @editing
-    #     cart_product.set({id: @edit_cart_product.get('id')}) 
-    #     cart_product.save({silent: true}) 
-    #   else
-    #     cart_product.save() 
-    #   @clear()
-    #   @clear_edit() if @editing
-    #   @render()
 
   onRemove: (data) ->
     @render() if @editing and _.isEqual(data.cart_product, @edit_cart_product)
@@ -132,8 +124,11 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
   clear_edit: ->
     @editing = false
     @edit_cart_product =  null
-    @edit_item.set({recipe: @matchup_original_recipe}) if  @edit_item?
+    if  @edit_item?
+      @edit_item.set({recipe: @matchup_original_recipe})
+      @second_edit_item.set({recipe: @matchup_secondary_recipe }) if @second_edit_item?
     @edit_item = null
+    @second_edit_item = null
 
   set_unit_amounts: (event)->
     event.preventDefault()
