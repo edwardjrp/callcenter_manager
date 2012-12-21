@@ -77,6 +77,7 @@ class Kapiqua25.Views.CartIndex extends Backbone.View
 
   removeCartProduct: (cart_product)->
     target = $(@el).find("[data-cart-product-id='#{cart_product.id}']")
+    Backbone.pubSub.trigger('removed', { cart_product: cart_product} )
     target.remove()
     $(@el).effect('highlight')
 

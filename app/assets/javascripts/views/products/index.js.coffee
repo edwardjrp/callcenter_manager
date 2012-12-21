@@ -12,7 +12,9 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
       'select_flavor',
       'select_size',
       'gray_out_flavors',
-      'gray_out_sizes')
+      'gray_out_sizes',
+      'onEditing',
+      'onRemove')
     @selected_matchups = {}
     @selected_flavor = null
     @selected_flavor = @model.availableFlavors()[0] if @model.availableFlavors().length == 1
@@ -20,7 +22,8 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     @selected_size = @model.availableSizes()[0] if @model.availableSizes().length == 1
     @max_selectable_matchups = 1
     if @model.isMulti() then @max_selectable_matchups = 2 else @max_selectable_matchups = 1
-    Backbone.pubSub.on('editing', @onEditing, this)
+    Backbone.pubSub.on('editing', @onEditing)
+    Backbone.pubSub.on('removed', @onRemove)
     @editing = false
     @edit_item = null
     @edit_cart_product = null
@@ -40,7 +43,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
 
 
   onEditing: (data) ->
-    if data.category == @model
+    if data.category is @model
       @editing = true
       target_matchup = _.find data.category.matchups().models, (matchup)=>
         _.include(matchup.get('products'), data.product)
@@ -50,20 +53,21 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
         target_secondary_matchup = _.find data.category.matchups().models, (matchup)=>
           _.include(matchup.get('products'), secondary)
       @edit_cart_product = data.cart_product
+      console.log data.cart_product
       @matchup_original_recipe = target_matchup.get('recipe')
       left_options = _.map _.compact(_.map(data.cart_product.get('options').split(','), (opt)-> opt.match(/(.*)\-1$/g))), (item) -> _.first(item)
       rigth_options = _.map _.compact(_.map(data.cart_product.get('options').split(','), (opt)-> opt.match(/(.*)\-2$/g))), (item) -> _.first(item)
       common_options = _.map _.compact(_.map(data.cart_product.get('options').split(','), (opt)-> opt.match(/(.*)[^\-\d]$/g))), (item) -> _.first(item)
-      console.log data.cart_product.get('options')
-      console.log left_options
-      console.log rigth_options
-      console.log common_options
+      # console.log data.cart_product.get('options')
+      # console.log left_options
+      # console.log rigth_options
+      # console.log common_options
       for option in common_options
         do (option) ->
           left_options.push("#{option}-1")
           rigth_options.push("#{option}-2")
-      console.log left_options
-      console.log rigth_options
+      # console.log left_options
+      # console.log rigth_options
       @edit_item = target_matchup.set(recipe: left_options.join(','))
       @apply_selection(@edit_item)
       @apply_selection(target_secondary_matchup.set(recipe: rigth_options.join(',')))
@@ -103,7 +107,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
       else
         @options.cart.get('cart_products').create({ product_id: item.product_id, product: item.product, quantity: item.quantity, options: item.options, cart_id: item.cart_id, bind_id: item.bind_id })
     @clear()
-    @clear_edit() if @editing
+    # @clear_edit() if @editing
     @render()
     # if cart_product?
     #   if @editing
@@ -114,6 +118,9 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     #   @clear()
     #   @clear_edit() if @editing
     #   @render()
+
+  onRemove: (data) ->
+    @render() if @editing and _.isEqual(data.cart_product, @edit_cart_product)
 
   clear: ->
     @selected_matchups = {}
