@@ -8,8 +8,12 @@ class ApplicationController < ActionController::Base
     def accessible_by(roles, fallback_path)
        if user_signed_in?
          unless current_user.is? roles
-           flash[:alert] = 'No tiene permitido el acceso esta sección'
-           redirect_to fallback_path
+            flash[:alert] = 'No tiene permitido el acceso esta sección'
+            if current_user.is? [:operator]
+              redirect_to root_path
+            else
+              redirect_to admin_root_path
+            end
          end
        end
      end
