@@ -107,7 +107,7 @@ describe "Client::Show" do
           within('#add_address_modal')do 
             page.execute_script "$('#client_address_street').val('#{street.id}')"
             fill_in 'client_address_number', with: '1'
-            select 'Casa', from: 'client_address_unit_type'
+            select 'Apartmento', from: 'client_address_unit_type'
             fill_in 'client_address_unit_number', with: '1'
             fill_in 'client_address_postal_code', with: '1'
             fill_in 'client_address_delivery_instructions', with: '1'

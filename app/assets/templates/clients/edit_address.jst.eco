@@ -29,9 +29,10 @@
   <label class="control-label" for="client_address_unit_type_<%=@address.id%>">Tipo.</label>
   <div class="controls">
     <select id="client_address_unit_type_<%=@address.id%>" name="address[unit_type]">
-      <option value="casa">Casa</option>
-      <option value="oficina">Oficina</option>
-      <option value="edificio">Edificio</option>
+      <option >Selectione ...</option>
+      <option value="Apartment">Apartmento</option>
+      <option value="Room">Habitación</option>
+      <option value="Office">Oficina</option>
     </select>
   </div>
 </div>
