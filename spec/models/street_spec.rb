@@ -25,4 +25,18 @@ describe Street do
     
   end
 
+  describe '#merge' do
+    let!(:street1) { create :street }
+    let!(:street2) { create :street }
+    let!(:addresses) { create_list :address, 4, street: street1 }
+
+    it 'should add addresses from other streets to this one' do
+      street2.merge(street1)
+      street2.reload.addresses.should =~ addresses
+    end
+
+    it 'should destroy the remove the original street' do
+      expect{ street2.merge(street1) }.to change { Street.count }.from(2).to(1)
+    end
+  end
 end

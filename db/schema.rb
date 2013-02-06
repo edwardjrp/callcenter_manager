@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121214124242) do
+ActiveRecord::Schema.define(:version => 20130202150613) do
 
   create_table "addresses", :force => true do |t|
     t.integer  "client_id"
@@ -25,12 +25,26 @@ ActiveRecord::Schema.define(:version => 20121214124242) do
     t.datetime "updated_at",            :null => false
   end
 
+  add_index "addresses", ["client_id"], :name => "index_addresses_on_client_id"
+  add_index "addresses", ["street_id"], :name => "index_addresses_on_street_id"
+
   create_table "areas", :force => true do |t|
     t.string   "name"
     t.integer  "city_id"
     t.integer  "store_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  add_index "areas", ["city_id"], :name => "index_areas_on_city_id"
+  add_index "areas", ["store_id"], :name => "index_areas_on_store_id"
+
+  create_table "blacklist", :id => false, :force => true do |t|
+    t.integer "id",             :limit => 2,  :null => false
+    t.string  "numerotelefono", :limit => 12, :null => false
+    t.date    "fechainicio",                  :null => false
+    t.date    "fechafinal",                   :null => false
+    t.string  "tipo",           :limit => 2,  :null => false
   end
 
   create_table "cart_coupons", :force => true do |t|
@@ -41,6 +55,9 @@ ActiveRecord::Schema.define(:version => 20121214124242) do
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
   end
+
+  add_index "cart_coupons", ["cart_id"], :name => "index_cart_coupons_on_cart_id"
+  add_index "cart_coupons", ["coupon_id"], :name => "index_cart_coupons_on_coupon_id"
 
   create_table "cart_products", :force => true do |t|
     t.integer  "cart_id"
@@ -53,6 +70,10 @@ ActiveRecord::Schema.define(:version => 20121214124242) do
     t.decimal  "priced_at"
     t.string   "coocking_instructions"
   end
+
+  add_index "cart_products", ["cart_id", "product_id"], :name => "index_cart_products_on_cart_id_and_product_id"
+  add_index "cart_products", ["cart_id"], :name => "index_cart_products_on_cart_id"
+  add_index "cart_products", ["product_id"], :name => "index_cart_products_on_product_id"
 
   create_table "carts", :force => true do |t|
     t.integer  "user_id"
@@ -99,6 +120,7 @@ ActiveRecord::Schema.define(:version => 20121214124242) do
 
   add_index "carts", ["client_id"], :name => "index_carts_on_client_id"
   add_index "carts", ["discount_auth_id"], :name => "index_carts_on_discount_auth_id"
+  add_index "carts", ["reason_id"], :name => "index_carts_on_reason_id"
   add_index "carts", ["store_id"], :name => "index_carts_on_store_id"
   add_index "carts", ["store_order_id"], :name => "index_carts_on_store_order_id"
   add_index "carts", ["user_id"], :name => "index_carts_on_user_id"
@@ -170,6 +192,8 @@ ActiveRecord::Schema.define(:version => 20121214124242) do
     t.datetime "updated_at",    :null => false
   end
 
+  add_index "import_events", ["import_log_id"], :name => "index_import_events_on_import_log_id"
+
   create_table "import_logs", :force => true do |t|
     t.string   "log_type"
     t.string   "state"
@@ -202,6 +226,7 @@ ActiveRecord::Schema.define(:version => 20121214124242) do
     t.boolean  "discontinued",                :default => false
   end
 
+  add_index "products", ["category_id"], :name => "index_products_on_category_id"
   add_index "products", ["options"], :name => "index_products_on_options"
   add_index "products", ["productcode"], :name => "index_products_on_productcode"
 
@@ -239,6 +264,10 @@ ActiveRecord::Schema.define(:version => 20121214124242) do
     t.datetime "updated_at",                       :null => false
   end
 
+  add_index "store_products", ["product_id", "store_id"], :name => "index_store_products_on_product_id_and_store_id"
+  add_index "store_products", ["product_id"], :name => "index_store_products_on_product_id"
+  add_index "store_products", ["store_id"], :name => "index_store_products_on_store_id"
+
   create_table "stores", :force => true do |t|
     t.string   "name"
     t.string   "address"
@@ -251,6 +280,8 @@ ActiveRecord::Schema.define(:version => 20121214124242) do
     t.text     "store_schedule"
   end
 
+  add_index "stores", ["city_id"], :name => "index_stores_on_city_id"
+
   create_table "streets", :force => true do |t|
     t.string   "name"
     t.integer  "area_id"
@@ -258,6 +289,9 @@ ActiveRecord::Schema.define(:version => 20121214124242) do
     t.datetime "updated_at", :null => false
     t.integer  "store_id"
   end
+
+  add_index "streets", ["area_id"], :name => "index_streets_on_area_id"
+  add_index "streets", ["store_id"], :name => "index_streets_on_store_id"
 
   create_table "tax_numbers", :force => true do |t|
     t.string   "rnc"
@@ -293,6 +327,9 @@ ActiveRecord::Schema.define(:version => 20121214124242) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  add_index "user_carts", ["cart_id"], :name => "index_user_carts_on_cart_id"
+  add_index "user_carts", ["user_id"], :name => "index_user_carts_on_user_id"
 
   create_table "users", :force => true do |t|
     t.string   "username"

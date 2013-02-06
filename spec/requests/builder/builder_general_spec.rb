@@ -3,12 +3,9 @@ require 'spec_helper'
 
 describe "Builder category" do
   before(:each) do
-    # Capybara.current_driver = :selenium_chrome
-    login(FactoryGirl.create(:user, :roles=>[:operator]))
+    login( create(:user, :operator) )
   end
-  # after(:each)do
-  #   Capybara.use_default_driver
-  # end
+  
   context "when building", js: true do
     it "should render the surface" do
       visit builder_path 

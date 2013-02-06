@@ -9,7 +9,7 @@ describe 'Stores general' do
   end
   
   it "should render the link in the nav" do
-    within('.navbar-fixed-top'){page.should have_content('Productos')}
+    within('.navbar-fixed-top'){ page.should have_content('Productos') }
   end
   
   it "should render the stores listing" do
@@ -82,6 +82,7 @@ describe 'Stores general' do
     within("#store_#{@store.id}") do 
       click_link('Eliminar')
     end
+    page.driver.browser.switch_to.alert.accept
     page.should_not have_content(name)
     page.should have_content('Tienda eliminada')
   end

@@ -25,4 +25,9 @@ class Street < ActiveRecord::Base
     streets = streets.merge(self.where(:area_id=> params[:area_id])) if params[:area_id].present?
     return streets
   end
+
+  def merge(source_street)
+    self.address_ids = source_street.address_ids
+    source_street.destroy
+  end
 end

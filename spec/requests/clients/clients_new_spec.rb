@@ -11,15 +11,10 @@ describe "Client::New" do
     subject { page }
 
     before do
-      Capybara.current_driver = :selenium
       login(create(:user))
       visit root_path 
     end
-
-    after do
-       Capybara.use_default_driver
-    end
-     
+ 
     it "should create a new client", js: true do
       fill_in "client_search_phone", with: '8095551234'
       fill_in "client_search_ext", with: '45'

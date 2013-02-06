@@ -13,7 +13,6 @@ describe "Client::Show" do
     let!(:phone2) { create :phone, client: client, number: '8095552134', ext: '99' }
 
     before(:each) do
-      Capybara.current_driver = :selenium
       login( user )
       visit root_path 
       selector = '.ui-menu-item  a:first'
@@ -23,10 +22,6 @@ describe "Client::Show" do
     end
 
     subject { page } 
-    
-    after(:each)do
-      Capybara.use_default_driver
-    end
 
     it "should take to the show client page" do
       within('.subnav-fixed') { click_link(client.full_name) }

@@ -15,7 +15,6 @@ describe "client delete phone and address" do
 
 
     before do
-      Capybara.current_driver = :selenium
       login(user)
       visit root_path
       selector = '.ui-menu-item  a:first'
@@ -25,10 +24,6 @@ describe "client delete phone and address" do
       page.find_by_id('client_search_phone').native.send_keys([:return])
       has_content? '.subnav-fixed'
       within('.subnav-fixed') { click_link(client.full_name) }
-    end
-
-    after do
-      Capybara.use_default_driver
     end
 
     it "should have remove the address from the addresses_list" do

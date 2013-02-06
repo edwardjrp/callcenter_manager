@@ -45,15 +45,10 @@ describe "Home::Indices" do
       subject { page }
 
       before do
-        Capybara.current_driver = :selenium
         login( user )
         visit root_path
       end
 
-      after do
-        Capybara.use_default_driver
-      end
-       
       it "should find the users in the list", js: true do
         selector = '.ui-menu-item a:first'
         fill_in "client_search_phone", with: '8095551234'

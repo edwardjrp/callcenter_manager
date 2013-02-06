@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.7'
+gem 'rails', '3.2.11'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -51,7 +51,7 @@ gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem 'carrierwave'
 gem 'best_in_place'
-gem 'sidekiq'
+gem 'sidekiq', '~> 2.6.5'
 gem 'sinatra', require: false
 gem 'slim'
 gem 'prawn'
@@ -71,20 +71,19 @@ end
 # To use debugger
 # gem 'ruby-debug19', :require => 'ruby-debug'
 group :development do
-  gem "thin"
-  gem 'yard'
+  gem "thin", '~> 1.5.0'
+  gem 'yard', '~> 0.8.3'
   gem 'capistrano'
   gem 'awesome_print'
-  gem 'annotate', :git => 'git://github.com/ctran/annotate_models.git'
+  gem 'annotate'
 end
 
 
 group :development, :test do
-  gem 'railroady'
   gem 'jasminerice'
   gem 'pry-rails'
   gem 'capybara'
-  gem "poltergeist"
+  # gem "poltergeist"
   gem "shoulda-matchers"
 	gem "chromedriver-helper"
 	gem 'database_cleaner'

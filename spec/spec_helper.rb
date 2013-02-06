@@ -11,28 +11,15 @@ require 'shoulda/matchers/integrations/rspec'
 require 'faker'
 require 'capybara/rspec'
 require 'factory_girl_rails'
-require 'capybara/poltergeist'
   
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
-#   Dir[Rails.root.join("spec/factories/*.rb")].each {|f| require f}
-  
-# VCR.configure do |c|
-#   c.cassette_library_dir = 'spec/support/cassettes'
-#   # c.allow_http_connections_when_no_cassette = true
-#   c.hook_into :webmock
-#   c.ignore_localhost = true
-#   c.configure_rspec_metadata!
-# end
 
 RSpec.configure do |config|
   
   
   
-  # Capybara.register_driver :selenium_chrome do |app|   
-  #   Capybara::Selenium::Driver.new(app, :browser => :chrome)
-  # end
-  Capybara.javascript_driver = :poltergeist
-  # Capybara.javascript_driver = :selenium_chrome
+  
+  Capybara.javascript_driver = :selenium
   Capybara.default_wait_time = 5
   
   config.use_transactional_fixtures = false

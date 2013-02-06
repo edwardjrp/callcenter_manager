@@ -70,14 +70,14 @@ describe 'Users general' do
     end
 
     it "should edit the user" do
-      within("#user_#{operator.id}"){click_link('Editar')}
+      within("#user_#{operator.id}") { click_link('Editar') }
       fill_in 'Username', with: 'Edited name'
       click_button 'Actualizar Agente'
       should have_content('Agente actualizado.')
     end
 
     it "should show valdiation error" do
-      within("#user_#{operator.id}"){click_link('Editar')}
+      within("#user_#{operator.id}") { click_link('Editar') }
       fill_in 'Username', with: ''
       click_button 'Actualizar Agente'
       should have_content('no puede')
@@ -85,19 +85,22 @@ describe 'Users general' do
 
 
     it "should delete the user", js: true do
-      within("#user_#{operator.id}"){click_link('Eliminar')}
+      within("#user_#{operator.id}") { click_link('Eliminar') }
+      page.driver.browser.switch_to.alert.accept
       should_not have_content('opt')
       should have_content('Agente eliminado')
     end
 
     it "should not delete the last administrator", js: true do
-      within("#user_#{admin.id}"){click_link('Eliminar')}
+      within("#user_#{admin.id}") { click_link('Eliminar') }
+      page.driver.browser.switch_to.alert.accept
       should have_content('testadmin')
       should have_content('No puede eliminar al usuario con que inicio sesión')
     end
 
     it "should not remove the user from the list if it has completed carts", js: true do
       within("#user_#{operator2.id}") { click_link('Eliminar') }
+      page.driver.browser.switch_to.alert.accept
       should have_content(operator2.first_name)
       should have_content('Algunas ordenes hacen referencia a este agente')
     end
