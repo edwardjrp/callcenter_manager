@@ -1,6 +1,6 @@
 namespace :products do
 
-  desc "Import the list of accounts"
+  desc "Delete duplicated products in the same category"
   task :remove_duplicate => :environment do
     Category.all.each do |category|
       category.products.map(&:productcode).uniq.each do |product_code|
