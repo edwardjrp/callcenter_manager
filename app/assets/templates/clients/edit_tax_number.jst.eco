@@ -15,7 +15,7 @@
         <select class="input-xlarge" id="client_tax_number_fiscal_type" name="tax_number[fiscal_type]" type="text" value='<%=@tax_number.fiscal_type%>'>
           <option value="FinalConsumer">Consumidor Final</option>
           <option value="3rdParty">Crédito Fiscal</option>
-          <option value="SpecialRegme">Regímenes Especiales</option>
+          <option value="SpecialRegime">Regímenes Especiales</option>
           <option value="Government">Gubernamental</option>
         </select>
       </div>

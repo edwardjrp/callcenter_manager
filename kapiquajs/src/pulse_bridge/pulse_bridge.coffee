@@ -137,7 +137,7 @@ class PulseBridge
       switch @cart.extra.fiscal_type
         when "3rdParty"
             tax = "CF:CredFiscal;RNC:#{@cart.extra.rnc}"
-        when "SpecialRegme"
+        when "SpecialRegime"
             tax= "CF:RegEspecial;RNC:#{@cart.extra.rnc}"
         when "Government"
             tax = "CF:Government;RNC:#{@cart.extra.rnc}"

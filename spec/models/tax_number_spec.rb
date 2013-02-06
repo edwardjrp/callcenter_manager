@@ -23,7 +23,7 @@ describe TaxNumber do
     it { should ensure_length_of(:rnc).is_at_least(9).is_at_most(11) }
     it { should validate_uniqueness_of(:rnc).scoped_to(:client_id) }
     it { should belong_to :client}
-    it { should ensure_inclusion_of(:fiscal_type).in_array(["FinalConsumer","3rdParty","SpecialRegme","Government"])}
+    it { should ensure_inclusion_of(:fiscal_type).in_array(["FinalConsumer","3rdParty","SpecialRegime","Government"])}
     # it { should validate_presence_of :client_id }
   end
 

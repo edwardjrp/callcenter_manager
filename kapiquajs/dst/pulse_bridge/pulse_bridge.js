@@ -195,7 +195,7 @@ PulseBridge = (function() {
         case "3rdParty":
           tax = "CF:CredFiscal;RNC:" + this.cart.extra.rnc;
           break;
-        case "SpecialRegme":
+        case "SpecialRegime":
           tax = "CF:RegEspecial;RNC:" + this.cart.extra.rnc;
           break;
         case "Government":
