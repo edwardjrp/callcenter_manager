@@ -11,9 +11,10 @@
 #
 
 class Phone < ActiveRecord::Base
-  validates :number, uniqueness: { scope: :ext}
+  validates :number, uniqueness: { scope: :ext }
   belongs_to :client, :counter_cache => true,:inverse_of => :phones
   validates :client, presence: true
+  
   attr_accessible :ext, :number
   before_validation :clear_number
   before_destroy :ensure_one_phone

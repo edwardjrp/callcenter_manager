@@ -205,7 +205,7 @@ class Cart < ActiveRecord::Base
     after_hour(16)
   end
 
-  def self.average_and_count_per_group( group_column = 'user_id', start_time = 1.hour.ago, order_column = 'carts_count', result_limit = 5)
+  def self.average_and_count_per_group( group_column = 'user_id', start_time = 1.hour.ago, order_column = 'carts_count')
     carts = self.scoped
     carts = carts.merge(self.completed)
     carts = carts.merge(self.select('AVG(carts.payment_amount) as carts_payment_avg'))
@@ -213,7 +213,6 @@ class Cart < ActiveRecord::Base
     carts = carts.merge(self.where('complete_on > ?', start_time))
     carts = carts.merge(self.select("carts.#{group_column}, COUNT(carts.*) as carts_count"))
     carts = carts.merge(self.order("#{order_column} DESC"))
-    carts = carts.merge(self.limit(result_limit))
     group_column_name = group_column.gsub(/_id$/,'')
     group_column_model = group_column.gsub(/_id$/,'').classify.constantize
     carts.map do | user_carts |

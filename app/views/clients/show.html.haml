@@ -126,11 +126,11 @@
                 - if address.client_target?
                   %i.icon-star
                 %strong Ciudad:
-                =address.street_area.city.name
+                =address.street_area.city.name if address.street && address.street.area
             .row
               .span4
                 %strong Sector:
-                =address.street_area.name
+                =address.street_area.name if address.street && address.street.area
             .row
               .span4
                 %strong Calle:
