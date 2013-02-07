@@ -36,7 +36,7 @@ module ApplicationHelper
   end
 
   def current_roles(user)
-    if user.roles.include? :operator
+    if user.is?(:operator)
       'operator'
     else
       'admin'

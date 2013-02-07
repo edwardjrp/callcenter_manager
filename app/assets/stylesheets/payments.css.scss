@@ -2,6 +2,9 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 #payments {
+  .checkout_input{
+    width: 40px;
+  }
   tr.unavailable td{
       background-color: #FCF8E3;
       input.checkout_input{
