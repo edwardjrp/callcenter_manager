@@ -60,7 +60,7 @@
 	<label class="control-label" for="client_search_address_unit_type">Tipo.</label>
 	<div class="controls">
 		<select id="client_search_address_unit_type" name="client[address][unit_type]">
-			<option >Selectione ...</option>
+			<option value=''>Selectione ...</option>
       <option value="Apartment">Apartmento</option>
       <option value="Room">Habitación</option>
       <option value="Office">Oficina</option>
