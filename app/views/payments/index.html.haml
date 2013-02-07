@@ -73,11 +73,11 @@
             .row
               .span4
                 %strong Ciudad:
-                %span#target_city= @cart.client.last_address.street_area.city.name if address.street && address.street.area
+                %span#target_city= @cart.client.last_address.street_area.city.name if @cart.client.last_address.street && @cart.client.last_address.street.area
             .row
               .span4
                 %strong Sector:
-                %span#target_area= @cart.client.last_address.street_area.name if address.street && address.street.area
+                %span#target_area= @cart.client.last_address.street_area.name if @cart.client.last_address.street && @cart.client.last_address.street.area
             .row
               .span4
                 %strong Calle:
