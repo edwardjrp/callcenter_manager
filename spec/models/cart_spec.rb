@@ -307,4 +307,36 @@ describe Cart do
 
   end
 
+  describe '#store_info' do
+    let(:cart1)  { create :cart }
+    let(:cart2)  { create :cart, store_id: nil}
+    let(:store) { cart1.store }
+
+    it 'should return the store name if the store is present' do
+      cart1.store_info.should_not be_nil
+      cart1.store_info.should == store.name
+    end
+
+    it 'should return the N/A if the store is not present' do
+      cart2.store_info.should_not be_nil
+      cart2.store_info.should == 'N/A'
+    end
+  end
+
+  describe '#store_info_id' do
+    let(:cart1)  { create :cart }
+    let(:cart2)  { create :cart, store_id: nil}
+    let(:store) { cart1.store }
+
+    it 'should return the store_id if the store is present' do
+      cart1.store_info_id.should_not be_nil
+      cart1.store_info_id.should == store.storeid
+    end
+
+    it 'should return the N/A if the store is not present' do
+      cart2.store_info_id.should_not be_nil
+      cart2.store_info_id.should == 'N/A'
+    end
+  end
+
 end

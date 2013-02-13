@@ -57,6 +57,7 @@ gem 'slim'
 gem 'prawn'
 gem 'redis-rails'
 gem 'soundmanager-rails'
+gem 'htmlentities'
 
 
 

@@ -41,6 +41,7 @@ describe Reports::Generator do
   describe '#render' do
     let(:cart_products) { create_list :cart_product, 4 }
     let(:carts) { cart_products.map(&:cart) }
+    let(:cart)  { carts.first }
     let!(:pdf) {
       Reports::Generator.new(carts,:detailed_report, Date.current.prev_month, Date.current).render do |cart|
           [
@@ -56,7 +57,7 @@ describe Reports::Generator do
             cart.payment_type,
             cart.fiscal_type,
             cart.order_progress,
-            cart.products.map(&:productname).to_sentence
+            cart.products.map(&:name).to_sentence
           ]
         end
     }
@@ -71,6 +72,14 @@ describe Reports::Generator do
 
       it 'should generate a pdf with the title' do
         should match(Reports::Generator::DETAILED_REPORT[:title])
+      end
+
+      it 'should have cart store info' do
+        should match(cart.store_info)
+      end
+
+      it 'should have cart new_client info' do
+        should match(cart.client_info)
       end
     end
   end

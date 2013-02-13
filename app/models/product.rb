@@ -15,7 +15,7 @@
 #  updated_at                  :datetime         not null
 #  discontinued                :boolean          default(FALSE)
 #
-
+require 'htmlentities'
 class Product < ActiveRecord::Base
   belongs_to :category
   has_many :cart_products
@@ -53,6 +53,10 @@ class Product < ActiveRecord::Base
         Option.new(category, opt).to_s
       end.to_sentence
     end
+  end
+
+  def name
+    HTMLEntities.new.decode self.productname
   end
 
   private

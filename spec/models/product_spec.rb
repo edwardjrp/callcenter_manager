@@ -28,5 +28,13 @@ describe Product do
     it { should have_many(:stores).through(:store_products) }
 
   end
+
+  describe '#name' do
+    let!(:product) { create :product, productname: '8&quot; Tradicional Italiana'}
+
+    it 'should return the unscaped productname' do
+      product.name.should == '8" Tradicional Italiana'
+    end
+  end
   
 end
