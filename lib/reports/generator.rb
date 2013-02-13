@@ -43,6 +43,15 @@ module Reports
         pdf_table = []
         pdf_table << DETAILED_REPORT[:columns]
         @relation.each do |cart|
+          begin
+            Timeout.timeout(15) do
+              if cart.store_order_id    
+                cart.order_progress = Pulse::OrderStatus.new(cart.store, cart.store_order_id).get
+                cart.save!
+              end
+            end
+          rescue Timeout::Error
+          end
           pdf_table << yield(cart)
         end
         create_table(pdf_table)

@@ -2,6 +2,10 @@
 require 'spec_helper'
 
 describe Reports::Generator do
+  before do
+    Pulse::OrderStatus.any_instance.stub(:get).and_return('Makeline')
+  end
+  
   shared_examples_for 'report contants' do |options|
     it "should return the #{options[:report_type]} title" do
       Reports::Generator::DETAILED_REPORT[:title].should == options[:title]
@@ -62,6 +66,8 @@ describe Reports::Generator do
         end
     }
 
+    
+
     subject { PDF::Reader.new(StringIO.new(pdf)).page(1).text }
 
     context 'report type = detailed_report' do
@@ -80,6 +86,10 @@ describe Reports::Generator do
 
       it 'should have cart new_client info' do
         should match(cart.client_info)
+      end
+
+      it 'should have cart pulse state' do
+        should match('Makeline')
       end
     end
   end
