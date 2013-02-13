@@ -26,8 +26,8 @@ module Reports
     def initialize(relation, report_type, start_date, end_date, oriantion = :landscape, &data_rows)
       @relation = relation
       @report_type = report_type
-      @start_date = start_date
-      @end_date = end_date
+      @start_date = start_date.strftime('%d %B %Y')
+      @end_date = end_date.strftime('%d %B %Y')
       @pdf = Prawn::Document.new(top_margin: 70, page_layout: oriantion)
       @csv = ''
       @data_rows = data_rows
@@ -41,11 +41,61 @@ module Reports
       @pdf.render
     end
 
+    def render_csv
+      case @report_type
+      when :detailed_report then
+        build_detailer_report_csv
+      end
+      @csv
+    end
+
     def self.monetize(amount)
-      ActionController::Base.helpers.number_to_currency(amount)
+      ActionController::Base.helpers.number_to_currency(amount) || 'N/A'
     end
 
     private
+
+    def build_detailer_report_csv
+      @csv = CSV.generate do |csv|
+        csv_title(csv)
+        csv_empty_row(csv)
+        csv_timestamp(csv)
+        csv_empty_row(csv)
+        @relation.each do |cart|
+          cart.update_pulse_order_status
+          csv << @data_rows.call(cart)
+        end
+        csv_empty_row(csv)
+      end
+    end
+
+    def csv_title(csv)
+      case @report_type
+      when :detailed_report then
+        csv_fill_row([DETAILED_REPORT[:title]], DETAILED_REPORT[:columns].length, csv )
+      end
+    end
+
+    def csv_timestamp(csv)
+      case @report_type
+      when :detailed_report then
+        csv_fill_row([@start_date], DETAILED_REPORT[:columns].length, csv )
+        csv_fill_row([@end_date], DETAILED_REPORT[:columns].length, csv )
+      end
+    end
+
+    def csv_fill_row(start_array, size, csv)
+      temp_array = start_array
+      start_array.length.upto(size) { temp_array << nil }
+      csv << temp_array
+    end
+
+    def csv_empty_row(csv)
+      case @report_type
+      when :detailed_report then
+        csv_fill_row([nil], DETAILED_REPORT[:columns].length, csv)
+      end
+    end
 
     def build_detailer_report_pdf
       h_1(DETAILED_REPORT[:title])
@@ -77,8 +127,8 @@ module Reports
     end
 
     def timestamps
-      @pdf.text "Inicio #{@start_date.strftime('%d %B %Y')}", size: 10, style: :bold
-      @pdf.text "Conclusión #{@end_date.strftime('%d %B %Y')}", size: 10, style: :bold
+      @pdf.text "Inicio #{@start_date}", size: 10, style: :bold
+      @pdf.text "Conclusión #{@end_date}", size: 10, style: :bold
     end
 
     def set_pdf_font(font_size = 7)

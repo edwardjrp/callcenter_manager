@@ -119,6 +119,10 @@ class Client < ActiveRecord::Base
     end
   end
 
+  def new_client?
+    carts.completed.count <= 1
+  end
+
   private
     def ensure_no_carts
       if self.carts.completed.count.nonzero?

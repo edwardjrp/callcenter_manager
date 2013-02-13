@@ -99,4 +99,20 @@ describe Client do
 
   end
 
+  describe 'new_client?' do
+    let(:client) { create :client }
+    let(:client_with_incomplete) { create :client }
+
+    let!(:incompleted_carts)  { create_list :cart, 2, client_id: client_with_incomplete.id, completed: false  }
+    let!(:completed_carts)  { create_list :cart, 2, client_id: client.id, completed: true  }
+
+    it 'should return false if the client has more than one completed cart' do
+      client.should_not be_new_client
+    end
+
+    it 'should return true if the client does not has more than one completed cart' do
+      client_with_incomplete.should be_new_client
+    end
+  end
+
 end

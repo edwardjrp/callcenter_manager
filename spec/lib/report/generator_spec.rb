@@ -46,7 +46,7 @@ describe Reports::Generator do
     let(:cart_products) { create_list :cart_product, 4 }
     let(:carts)         { cart_products.map(&:cart) }
     let(:cart)          { carts.first }
-    let(:detailed_report) do
+    let!(:detailed_report) do
       Reports::Generator.new carts,:detailed_report, Date.current.prev_month, Date.current,  :landscape do |cart|
         [
           cart.id,
@@ -66,11 +66,7 @@ describe Reports::Generator do
       end
     end
 
-    describe '#render_pdf' do
-      let!(:pdf) { detailed_report.render_pdf }
-
-      subject { PDF::Reader.new(StringIO.new(pdf)).page(1).text }
-
+    shared_examples_for 'Detailed report' do
       it 'should generate a pdf with the timestamp' do
         should match(Date.current.strftime('%d %B %Y'))
         should match(Date.current.prev_month.strftime('%d %B %Y'))
@@ -88,9 +84,33 @@ describe Reports::Generator do
         should match(cart.client_info)
       end
 
+      it 'should have cart payment info' do
+        should match(cart.payment_amount.round(2).to_s)
+      end
+
+      it 'should have cart products' do
+        should match(cart.products.first.name)
+      end
+
       it 'should have cart pulse state' do
         should match('Makeline')
       end
+    end 
+
+    describe '#render_pdf' do
+      let!(:pdf) { detailed_report.render_pdf }
+
+      subject { PDF::Reader.new(StringIO.new(pdf)).page(1).text }
+
+      it_behaves_like 'Detailed report'
+    end
+
+    describe 'render_csv' do
+      let!(:csv) { detailed_report.render_csv }
+
+      subject { csv }
+
+      it_behaves_like 'Detailed report'
     end
   end
 end

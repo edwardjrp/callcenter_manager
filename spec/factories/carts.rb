@@ -7,6 +7,7 @@ FactoryGirl.define do
     association(:store)
     association(:reason)
     service_method 'dinein'
+    payment_amount { rand(1000) + 20 }
     sequence(:store_order_id) {|n| "2012-10-18##{n}"}
 
     after(:build) do |cart|

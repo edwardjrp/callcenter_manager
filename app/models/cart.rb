@@ -140,7 +140,7 @@ class Cart < ActiveRecord::Base
 
   def new_client?
     return 'N/A' if client.nil?
-    client.carts.count == 1 ? '*' : ''
+    client.new_client? ? '*' : ''
   end
 
   def client_info
