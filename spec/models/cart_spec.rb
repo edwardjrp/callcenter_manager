@@ -357,4 +357,22 @@ describe Cart do
     end
   end
 
+  describe '#state' do
+    let!(:cart1)  { build :cart, completed: true,  reason: nil }
+    let!(:cart2)  { build :cart, completed: false,  reason: nil }
+    let!(:reason) { create :reason }
+    let!(:cart3)  { build :cart, completed: false,  reason: reason }
+
+    it 'should return completed if completed? is true' do
+      cart1.state.should == 'completed'
+    end
+
+    it 'should return incompleted if completed? is true' do
+      cart2.state.should == 'incomplete'
+    end
+
+    it 'should return canceled if reason is not null' do
+      cart3.state.should == 'canceled'
+    end
+  end
 end

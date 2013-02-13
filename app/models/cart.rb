@@ -432,4 +432,10 @@ class Cart < ActiveRecord::Base
     end
     self.save!
   end
+
+  def state
+    return 'canceled' if reason && !completed
+    return 'incomplete' if !completed
+    return 'completed'
+  end
 end

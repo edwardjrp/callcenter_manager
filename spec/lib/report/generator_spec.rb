@@ -43,14 +43,20 @@ describe Reports::Generator do
   end
 
   describe 'Detailed report' do
-    let(:cart_products) { create_list :cart_product, 4 }
-    let(:carts)         { cart_products.map(&:cart) }
-    let(:cart)          { carts.first }
+    let(:cart1) { create :cart, completed: true }
+    let(:cart2) { create :cart, completed: true }
+    let(:carts)         { [cart1, cart2] }
+
+    before do
+      create_list :cart_product, 2, cart: cart1
+      create_list :cart_product, 3, cart: cart2
+    end
+    
     let!(:detailed_report) do
       Reports::Generator.new carts,:detailed_report, Date.current.prev_month, Date.current,  :landscape do |cart|
         [
           cart.id,
-          cart.store_info,
+          cart.store_info_id.to_s,
           cart.new_client?,
           cart.client_info,
           cart.completion_info,
@@ -61,6 +67,7 @@ describe Reports::Generator do
           cart.payment_type,
           cart.fiscal_type,
           cart.order_progress,
+          cart.state,
           cart.products.map(&:name).to_sentence
         ]
       end
@@ -77,19 +84,23 @@ describe Reports::Generator do
       end
 
       it 'should have cart store info' do
-        should match(cart.store_info)
+        should match(cart1.store_info_id.to_s)
+      end
+
+      it 'should have cart state' do
+        should match('completed')
       end
 
       it 'should have cart new_client info' do
-        should match(cart.client_info)
+        should match(cart1.client_info)
       end
 
       it 'should have cart payment info' do
-        should match(cart.payment_amount.round(2).to_s)
+        should match(cart1.payment_amount.round(2).to_s)
       end
 
       it 'should have cart products' do
-        should match(cart.products.first.name)
+        should match(cart1.products.first.name)
       end
 
       it 'should have cart pulse state' do
