@@ -2,10 +2,10 @@
 
 FactoryGirl.define do
   factory :store do
-    name {Faker::Name.first_name}
+    sequence(:name) { |n| "Store name #{n}"}
     address {Faker::Lorem.sentence}
     ip {[rand(255).to_s, rand(255).to_s, rand(255).to_s, rand(255).to_s].join('.')}
     association :city
-    storeid {rand(1500)}
+    sequence(:storeid, 1000) { | n |  n }
   end
 end

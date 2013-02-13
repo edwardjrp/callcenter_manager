@@ -344,6 +344,7 @@ DEPENDENCIES
   jquery-ui-rails
   launchy
   nokogiri
+  pdf-reader
   pg
   prawn
   pry-rails

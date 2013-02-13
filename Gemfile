@@ -84,6 +84,7 @@ group :development, :test do
   gem 'pry-rails'
   gem 'capybara'
   # gem "poltergeist"
+  gem 'pdf-reader'
   gem "shoulda-matchers"
 	gem "chromedriver-helper"
 	gem 'database_cleaner'
