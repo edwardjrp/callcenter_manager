@@ -23,38 +23,20 @@ module Reports
     }
 
 
-    def initialize(relation, report_type, start_date, end_date, oriantion = :landscape)
+    def initialize(relation, report_type, start_date, end_date, oriantion = :landscape, &data_rows)
       @relation = relation
       @report_type = report_type
       @start_date = start_date
       @end_date = end_date
       @pdf = Prawn::Document.new(top_margin: 70, page_layout: oriantion)
       @csv = ''
+      @data_rows = data_rows
     end
 
-    def render
+    def render_pdf
       case @report_type
       when :detailed_report then
-        h_1(DETAILED_REPORT[:title])
-        set_pdf_font(5)
-        space_down
-        timestamps
-        space_down
-        pdf_table = []
-        pdf_table << DETAILED_REPORT[:columns]
-        @relation.each do |cart|
-          begin
-            Timeout.timeout(15) do
-              if cart.store_order_id    
-                cart.order_progress = Pulse::OrderStatus.new(cart.store, cart.store_order_id).get
-                cart.save!
-              end
-            end
-          rescue Timeout::Error
-          end
-          pdf_table << yield(cart)
-        end
-        create_table(pdf_table)
+        build_detailer_report_pdf
       end
       @pdf.render
     end
@@ -64,6 +46,21 @@ module Reports
     end
 
     private
+
+    def build_detailer_report_pdf
+      h_1(DETAILED_REPORT[:title])
+      set_pdf_font(5)
+      space_down
+      timestamps
+      space_down
+      pdf_table = []
+      pdf_table << DETAILED_REPORT[:columns]
+      @relation.each do |cart|
+        cart.update_pulse_order_status
+        pdf_table << @data_rows.call(cart)
+      end
+      create_table(pdf_table)
+    end
 
     def create_table(pdf_array)
       @pdf.table pdf_array do

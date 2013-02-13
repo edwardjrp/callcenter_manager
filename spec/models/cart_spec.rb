@@ -339,4 +339,22 @@ describe Cart do
     end
   end
 
+  describe '#update_pulse_order_status' do
+    let(:cart) { create :cart }
+    let(:incomplete_cart) { create :cart, store_order_id: nil }
+    before { Pulse::OrderStatus.any_instance.stub(:get).and_return('Makeline') }
+
+    it 'should return set order progress to Makeline' do
+      cart.order_progress.should be_nil
+      cart.update_pulse_order_status
+      cart.order_progress.should == 'Makeline'
+    end
+
+    it 'should have error message instead of pulse state when data is incomplete' do
+      incomplete_cart.order_progress.should be_nil
+      incomplete_cart.update_pulse_order_status
+      incomplete_cart.order_progress.should == 'N/A - Falta id de la orden'
+    end
+  end
+
 end

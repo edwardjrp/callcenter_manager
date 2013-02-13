@@ -5,7 +5,7 @@ describe Reports::Generator do
   before do
     Pulse::OrderStatus.any_instance.stub(:get).and_return('Makeline')
   end
-  
+
   shared_examples_for 'report contants' do |options|
     it "should return the #{options[:report_type]} title" do
       Reports::Generator::DETAILED_REPORT[:title].should == options[:title]
@@ -42,35 +42,35 @@ describe Reports::Generator do
     it_behaves_like 'report contants', { report_type: 'Detailed report', title: 'Reporte detallado', single_table: true }
   end
 
-  describe '#render' do
+  describe 'Detailed report' do
     let(:cart_products) { create_list :cart_product, 4 }
-    let(:carts) { cart_products.map(&:cart) }
-    let(:cart)  { carts.first }
-    let!(:pdf) {
-      Reports::Generator.new(carts,:detailed_report, Date.current.prev_month, Date.current).render do |cart|
-          [
-            cart.id,
-            cart.store_info,
-            cart.new_client?,
-            cart.client_info,
-            cart.completion_info, # there has to be a completed_on field
-            cart.service_method,
-            cart.agent_info,
-            cart.take_time_info,
-            Reports::Generator.monetize(cart.payment_amount),
-            cart.payment_type,
-            cart.fiscal_type,
-            cart.order_progress,
-            cart.products.map(&:name).to_sentence
-          ]
-        end
-    }
+    let(:carts)         { cart_products.map(&:cart) }
+    let(:cart)          { carts.first }
+    let(:detailed_report) do
+      Reports::Generator.new carts,:detailed_report, Date.current.prev_month, Date.current,  :landscape do |cart|
+        [
+          cart.id,
+          cart.store_info,
+          cart.new_client?,
+          cart.client_info,
+          cart.completion_info,
+          cart.service_method,
+          cart.agent_info,
+          cart.take_time_info,
+          Reports::Generator.monetize(cart.payment_amount),
+          cart.payment_type,
+          cart.fiscal_type,
+          cart.order_progress,
+          cart.products.map(&:name).to_sentence
+        ]
+      end
+    end
 
-    
+    describe '#render_pdf' do
+      let!(:pdf) { detailed_report.render_pdf }
 
-    subject { PDF::Reader.new(StringIO.new(pdf)).page(1).text }
+      subject { PDF::Reader.new(StringIO.new(pdf)).page(1).text }
 
-    context 'report type = detailed_report' do
       it 'should generate a pdf with the timestamp' do
         should match(Date.current.strftime('%d %B %Y'))
         should match(Date.current.prev_month.strftime('%d %B %Y'))

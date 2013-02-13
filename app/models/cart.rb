@@ -417,5 +417,19 @@ class Cart < ActiveRecord::Base
   def in?(mailbox)
      self.mailboxes.include?(mailbox)
   end
-  
+
+  def update_pulse_order_status
+    begin
+      Timeout.timeout(15) do
+        if self.store_order_id    
+          self.order_progress = Pulse::OrderStatus.new(self.store, self.store_order_id).get
+        else
+          self.order_progress = 'N/A - Falta id de la orden'
+        end
+      end
+    rescue Timeout::Error
+      self.order_progress = 'N/A - No hay respuesta de pulse'
+    end
+    self.save!
+  end
 end
