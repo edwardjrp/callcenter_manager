@@ -433,6 +433,10 @@ class Cart < ActiveRecord::Base
     self.save!
   end
 
+  def self.total_sells_in(start_time, end_time)
+    self.completed.date_range(start_time, end_time).sum('payment_amount')
+  end
+
   def state
     return 'canceled' if reason && !completed
     return 'incomplete' if !completed

@@ -375,4 +375,15 @@ describe Cart do
       cart3.state.should == 'canceled'
     end
   end
+
+  describe '.total_sells_in' do
+    let!(:cart1) { create :cart, completed: true, payment_amount: 1000, created_at: 1.hour.ago }
+    let!(:cart2) { create :cart, completed: true, payment_amount: 3040, created_at: 1.hour.ago }
+    let!(:cart3) { create :cart, completed: true, payment_amount: 2030, created_at: 1.hour.ago }
+    let!(:cart4) { create :cart, completed: false, payment_amount: 5040, created_at: 1.hour.ago }
+
+    it 'should return the sum of all sells in the current time range' do
+      Cart.total_sells_in(2.hour.ago, Time.zone.now).should == 6070.to_d
+    end
+  end
 end

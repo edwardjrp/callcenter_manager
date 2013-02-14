@@ -23,6 +23,23 @@ module Reports
       single_table: true
     }
 
+    PRODUCT_MIX_REPORT = { 
+      title: 'Reporte product mix',
+      columns: [
+        'Categoría',
+        'Ítem de Menú',
+        'Tamaño',
+        'Sabor/Masa',
+        'Ventas Netas',
+        'Cantidad',
+        'Product Mix',
+        'Sales Mix',
+        'Ordenes',
+        'Percentage en Ordenes'
+      ],
+      single_table: true
+    }
+
 
     def initialize(relation, report_type, start_date, end_date, oriantion = :landscape, &data_rows)
       @relation = relation
@@ -38,6 +55,8 @@ module Reports
       case @report_type
       when :detailed_report then
         build_detailer_report_pdf
+      when :product_mix_report then
+        build_product_mix_pdf
       end
       @pdf.render
     end
@@ -54,11 +73,33 @@ module Reports
       ActionController::Base.helpers.number_to_currency(amount) || 'N/A'
     end
 
+    def self.percentize(amount)
+      ActionController::Base.helpers.number_to_percentage(amount * 100,:delimiter => ',', :separator => '.', :precision => 2)
+    end
+
     private
+
+    def build_product_mix_pdf
+      h_1(PRODUCT_MIX_REPORT[:title])
+      set_pdf_font
+      space_down
+      timestamps
+      space_down
+      pdf_table = []
+      pdf_table << PRODUCT_MIX_REPORT[:columns]
+      @relation.each do |category, products|
+        pdf_table << fill_row([category], PRODUCT_MIX_REPORT[:columns].length)
+        products.each do |product, cart_products|
+          pdf_table << @data_rows.call(product, cart_products)
+        end
+      end
+      create_table(pdf_table)
+    end
 
     def build_detailer_report_csv
       @csv = CSV.generate do |csv|
         csv_title(csv)
+        set_pdf_font(5)
         csv_empty_row(csv)
         csv_timestamp(csv)
         csv_empty_row(csv)
@@ -89,6 +130,12 @@ module Reports
       temp_array = start_array
       start_array.length.upto(size) { temp_array << nil }
       csv << temp_array
+    end
+
+    def fill_row(start_array, size)
+      temp_array = start_array
+      start_array.length.upto(size) { temp_array << nil }
+      temp_array
     end
 
     def csv_empty_row(csv)

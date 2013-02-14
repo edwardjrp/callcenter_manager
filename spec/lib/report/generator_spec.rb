@@ -8,15 +8,15 @@ describe Reports::Generator do
 
   shared_examples_for 'report contants' do |options|
     it "should return the #{options[:report_type]} title" do
-      Reports::Generator::DETAILED_REPORT[:title].should == options[:title]
+      constant_title.should == options[:title]
     end
 
     it "should return the #{options[:report_type]} headers" do
-      Reports::Generator::DETAILED_REPORT[:columns].should =~ report_columns
+      constant_columns.should =~ report_columns
     end
 
     it "should return true for the #{options[:report_type]} single_table type" do
-      Reports::Generator::DETAILED_REPORT[:single_table].should == true
+      constant_single_table.should == true
     end
   end
 
@@ -39,21 +39,88 @@ describe Reports::Generator do
         'Estado en CC',
         'Ítemes']
     }
+    let!(:constant_title)        { Reports::Generator::DETAILED_REPORT[:title]        }
+    let!(:constant_columns)      { Reports::Generator::DETAILED_REPORT[:columns]      }
+    let!(:constant_single_table) { Reports::Generator::DETAILED_REPORT[:single_table] }
+
     it_behaves_like 'report contants', { report_type: 'Detailed report', title: 'Reporte detallado', single_table: true }
+  end
+
+  describe '::PRODUCT_MIX_REPORT' do
+    let!(:report_columns) {
+      [
+        'Categoría',
+        'Ítem de Menú',
+        'Tamaño',
+        'Sabor/Masa',
+        'Ventas Netas',
+        'Cantidad',
+        'Product Mix',
+        'Sales Mix',
+        'Ordenes',
+        'Percentage en Ordenes'
+      ]
+    }
+    let!(:constant_title)        { Reports::Generator::PRODUCT_MIX_REPORT[:title]        }
+    let!(:constant_columns)      { Reports::Generator::PRODUCT_MIX_REPORT[:columns]      }
+    let!(:constant_single_table) { Reports::Generator::PRODUCT_MIX_REPORT[:single_table] }
+
+    it_behaves_like 'report contants', { report_type: 'Product mix report', title: 'Reporte product mix', single_table: true }
+  end
+
+  describe 'Product mix report' do
+    let!(:carts)         { create_list :cart, 10, completed: true }
+    let!(:cart_products) { create_list :cart_product, 50, created_at: 1.hour.ago, cart: carts.sample }
+    let!(:association)   { CartProduct.products_mix(2.hours.ago, Time.zone.now) }
+
+    let!(:product_mix_report) do
+      Reports::Generator.new association, :product_mix_report, 2.hour.ago, Time.zone.now,  :landscape do |product, cart_products|
+        [
+          '',
+          product[:product].productname,
+          product[:product].sizecode,
+          product[:product].flavorcode,
+          Reports::Generator.monetize(product[:cart_products][:total_sales]),
+          product[:cart_products][:total_count],
+          Reports::Generator.percentize(product[:cart_products][:total_sales].to_d / Cart.total_sells_in(2.hour.ago, Time.zone.now)), #.tap{|c| STDOUT.puts c.inspect },
+          Reports::Generator.percentize(product[:cart_products][:total_count].to_d / CartProduct.total_items_sold(2.hour.ago, Time.zone.now)),
+          product[:total_carts],
+          Reports::Generator.percentize(product[:total_carts].to_d / Cart.completed.date_range(2.hour.ago, Time.zone.now).count.to_d)
+        ]
+      end
+    end
+
+    describe '#render_pdf' do
+      let!(:pdf) { product_mix_report.render_pdf }
+
+      subject { PDF::Reader.new(StringIO.new(pdf)).page(1).text }
+
+      it 'should generate a pdf with the timestamp' do
+        should match(Date.current.strftime('%d %B %Y'))
+        should match(Date.current.prev_month.strftime('%d %B %Y'))
+      end
+
+      it 'should generate a pdf with the title' do
+        STDOUT.puts subject
+        # STDOUT.puts Cart.total_sells_in(2.hour.ago, Time.zone.now)
+        # STDOUT.puts carts.map(&:payment_amount)
+        should match(Reports::Generator::PRODUCT_MIX_REPORT[:title])
+      end
+    end
   end
 
   describe 'Detailed report' do
     let(:cart1) { create :cart, completed: true }
     let(:cart2) { create :cart, completed: true }
-    let(:carts)         { [cart1, cart2] }
+    let(:carts) { [cart1, cart2] }
 
     before do
       create_list :cart_product, 2, cart: cart1
       create_list :cart_product, 3, cart: cart2
     end
-    
+
     let!(:detailed_report) do
-      Reports::Generator.new carts,:detailed_report, Date.current.prev_month, Date.current,  :landscape do |cart|
+      Reports::Generator.new carts, :detailed_report, Date.current.prev_month, Date.current,  :landscape do |cart|
         [
           cart.id,
           cart.store_info_id.to_s,
