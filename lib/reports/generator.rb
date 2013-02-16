@@ -54,9 +54,9 @@ module Reports
     def render_pdf
       case @report_type
       when :detailed_report then
-        build_detailer_report_pdf
+        build_detailed_report_pdf
       when :product_mix_report then
-        build_product_mix_pdf
+        build_product_mix_report_pdf
       end
       @pdf.render
     end
@@ -64,7 +64,9 @@ module Reports
     def render_csv
       case @report_type
       when :detailed_report then
-        build_detailer_report_csv
+        build_detailed_report_csv
+      when :product_mix_report then
+        build_product_mix_report_csv
       end
       @csv
     end
@@ -79,7 +81,25 @@ module Reports
 
     private
 
-    def build_product_mix_pdf
+    def build_product_mix_report_csv
+      @csv = CSV.generate do |csv|
+        csv_title(csv)
+        set_pdf_font
+        csv_empty_row(csv)
+        csv_timestamp(csv)
+        csv_empty_row(csv)
+        csv << PRODUCT_MIX_REPORT[:columns]
+        @relation.each do |category, products|
+          csv << csv_fill_row([category], PRODUCT_MIX_REPORT[:columns].length, csv)
+          products.each do |product, cart_products|
+            csv << @data_rows.call(product, cart_products)
+          end
+        end
+        csv_empty_row(csv)
+      end
+    end
+
+    def build_product_mix_report_pdf
       h_1(PRODUCT_MIX_REPORT[:title])
       set_pdf_font
       space_down
@@ -96,13 +116,14 @@ module Reports
       create_table(pdf_table)
     end
 
-    def build_detailer_report_csv
+    def build_detailed_report_csv
       @csv = CSV.generate do |csv|
         csv_title(csv)
         set_pdf_font(5)
         csv_empty_row(csv)
         csv_timestamp(csv)
         csv_empty_row(csv)
+        csv << DETAILED_REPORT[:columns]
         @relation.each do |cart|
           cart.update_pulse_order_status
           csv << @data_rows.call(cart)
@@ -115,15 +136,21 @@ module Reports
       case @report_type
       when :detailed_report then
         csv_fill_row([DETAILED_REPORT[:title]], DETAILED_REPORT[:columns].length, csv )
+      when :product_mix_report then
+        csv_fill_row([PRODUCT_MIX_REPORT[:title]], PRODUCT_MIX_REPORT[:columns].length, csv )
       end
     end
 
     def csv_timestamp(csv)
+      row_length = 1
       case @report_type
       when :detailed_report then
-        csv_fill_row([@start_datetime], DETAILED_REPORT[:columns].length, csv )
-        csv_fill_row([@end_datetime], DETAILED_REPORT[:columns].length, csv )
+        row_length = DETAILED_REPORT[:columns].length
+      when :product_mix_report then
+        row_length = PRODUCT_MIX_REPORT[:columns].length
       end
+      csv_fill_row([@start_datetime], row_length, csv )
+      csv_fill_row([@end_datetime], row_length, csv )
     end
 
     def csv_fill_row(start_array, size, csv)
@@ -145,7 +172,7 @@ module Reports
       end
     end
 
-    def build_detailer_report_pdf
+    def build_detailed_report_pdf
       h_1(DETAILED_REPORT[:title])
       set_pdf_font(5)
       space_down

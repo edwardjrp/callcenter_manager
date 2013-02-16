@@ -94,11 +94,7 @@ describe Reports::Generator do
       end
     end
 
-    describe '#render_pdf' do
-      let!(:pdf) { product_mix_report.render_pdf }
-
-      subject { PDF::Reader.new(StringIO.new(pdf)).page(1).text }
-
+    shared_examples_for 'product mix report' do
       it 'should generate a pdf with the timestamp' do
         should match(start_time.strftime('%d %B %Y - %I:%M:%S %p'))
         should match(end_time.strftime('%d %B %Y - %I:%M:%S %p'))
@@ -108,10 +104,32 @@ describe Reports::Generator do
         should match(Reports::Generator::PRODUCT_MIX_REPORT[:title])
       end
 
+      it 'should have the headers' do
+        should match(headers)
+      end
+
       it 'should have sell Percentage' do
         sells = Reports::Generator.percentize(CartProduct.products_mix(start_time, end_time).first.last.first[:cart_products][:total_sales] / Cart.total_sells_in(start_time, end_time))
         should match(sells)
       end
+    end
+
+    describe '#render_pdf' do
+      let!(:pdf)     { product_mix_report.render_pdf }
+      let!(:headers) { Reports::Generator::PRODUCT_MIX_REPORT[:columns].join }
+
+      subject { PDF::Reader.new(StringIO.new(pdf)).page(1).text }
+
+      it_behaves_like 'product mix report'
+    end
+
+    describe '#render_csv' do
+      let!(:csv) { product_mix_report.render_csv }
+      let!(:headers) { Reports::Generator::PRODUCT_MIX_REPORT[:columns].join(",") }
+
+      subject { csv }
+
+      it_behaves_like 'product mix report'
     end
   end
 
@@ -179,10 +197,15 @@ describe Reports::Generator do
       it 'should have cart pulse state' do
         should match('Makeline')
       end
+
+      it 'should have the headers' do
+        should match(headers)
+      end
     end 
 
     describe '#render_pdf' do
       let!(:pdf) { detailed_report.render_pdf }
+      let!(:headers) { Reports::Generator::DETAILED_REPORT[:columns].join }
 
       subject { PDF::Reader.new(StringIO.new(pdf)).page(1).text }
 
@@ -191,6 +214,7 @@ describe Reports::Generator do
 
     describe 'render_csv' do
       let!(:csv) { detailed_report.render_csv }
+      let!(:headers) { Reports::Generator::DETAILED_REPORT[:columns].join(",") }
 
       subject { csv }
 
