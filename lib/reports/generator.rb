@@ -41,12 +41,12 @@ module Reports
     }
 
 
-    def initialize(relation, report_type, start_date, end_date, oriantion = :landscape, &data_rows)
+    def initialize(relation, report_type, start_datetime, end_datetime, orientation = :landscape, &data_rows)
       @relation = relation
       @report_type = report_type
-      @start_date = start_date.strftime('%d %B %Y')
-      @end_date = end_date.strftime('%d %B %Y')
-      @pdf = Prawn::Document.new(top_margin: 70, page_layout: oriantion)
+      @start_datetime = start_datetime.strftime('%d %B %Y - %I:%M:%S %p')
+      @end_datetime = end_datetime.strftime('%d %B %Y - %I:%M:%S %p')
+      @pdf = Prawn::Document.new(top_margin: 70, page_layout: orientation)
       @csv = ''
       @data_rows = data_rows
     end
@@ -121,8 +121,8 @@ module Reports
     def csv_timestamp(csv)
       case @report_type
       when :detailed_report then
-        csv_fill_row([@start_date], DETAILED_REPORT[:columns].length, csv )
-        csv_fill_row([@end_date], DETAILED_REPORT[:columns].length, csv )
+        csv_fill_row([@start_datetime], DETAILED_REPORT[:columns].length, csv )
+        csv_fill_row([@end_datetime], DETAILED_REPORT[:columns].length, csv )
       end
     end
 
@@ -175,8 +175,8 @@ module Reports
     end
 
     def timestamps
-      @pdf.text "Inicio #{@start_date}", size: 10, style: :bold
-      @pdf.text "Conclusión #{@end_date}", size: 10, style: :bold
+      @pdf.text "Inicio #{@start_datetime}", size: 10, style: :bold
+      @pdf.text "Conclusión #{@end_datetime}", size: 10, style: :bold
     end
 
     def set_pdf_font(font_size = 7)
