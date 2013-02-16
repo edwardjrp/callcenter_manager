@@ -63,6 +63,9 @@ class Cart < ActiveRecord::Base
   scope :finalized, where('completed = ? or reason_id IS NOT NULL', true).untrashed
   scope :latest, order('created_at DESC').untrashed
   scope :discounted, where('discount > ?', 0).untrashed
+  scope :delivery, where(service_method: 'delivery')
+  scope :pickup, where(service_method: 'pickup')
+  scope :dinein, where(service_method: 'dinein')
   belongs_to :user, :counter_cache => true
   belongs_to :client
   belongs_to :store

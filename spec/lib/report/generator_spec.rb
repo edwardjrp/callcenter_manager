@@ -6,9 +6,6 @@ describe Reports::Generator do
   let!(:reports_time) { Time.parse('2012-02-01 00:00:00 UTC') }
   let!(:end_time)   { Time.parse('2012-03-01 00:00:00 UTC') }
 
-  before do
-    Pulse::OrderStatus.any_instance.stub(:get).and_return('Makeline')
-  end
 
   shared_examples_for 'report contants' do |options|
     it "should return the #{options[:report_type]} title" do
@@ -24,6 +21,26 @@ describe Reports::Generator do
     end
   end
 
+
+  describe '::PER_HOUR_REPORT' do
+    let!(:report_columns) {
+      [
+        'Periodo del día',
+        'Orders',
+        'Ventas netas',
+        'Tiempo promedio de toma de orden',
+        'Ordenes Canceladas',
+        'Delivery',
+        'Carry Out',
+        'Dine In'
+      ]
+    }
+    let!(:constant_title)        { Reports::Generator::PER_HOUR_REPORT[:title]        }
+    let!(:constant_columns)      { Reports::Generator::PER_HOUR_REPORT[:columns]      }
+    let!(:constant_single_table) { Reports::Generator::PER_HOUR_REPORT[:single_table] }
+
+    it_behaves_like 'report contants', { report_type: 'Per hour report', title: 'Reporte por hora', single_table: true }
+  end
 
   describe '::DETAILED_REPORT' do
     let!(:report_columns) {
@@ -50,11 +67,14 @@ describe Reports::Generator do
     it_behaves_like 'report contants', { report_type: 'Detailed report', title: 'Reporte detallado', single_table: true }
   end
 
+
   describe '::PRODUCT_MIX_REPORT' do
     let!(:report_columns) {
       [
         'Categoría',
         'Ítem de Menú',
+        'Llamadas',
+        'Cantidad de Agentes conectados',
         'Tamaño',
         'Sabor/Masa',
         'Ventas Netas',
@@ -70,6 +90,38 @@ describe Reports::Generator do
     let!(:constant_single_table) { Reports::Generator::PRODUCT_MIX_REPORT[:single_table] }
 
     it_behaves_like 'report contants', { report_type: 'Product mix report', title: 'Reporte product mix', single_table: true }
+  end
+
+   describe 'Per hour report' do
+    let(:cart1) { create :cart, completed: true, created_at: reports_time }
+    let(:cart2) { create :cart, completed: true, created_at: reports_time + 1.hour }
+    let(:carts) { [cart1, cart2] }
+
+    before do
+      create_list :cart_product, 2, cart: cart1, created_at: reports_time 
+      create_list :cart_product, 3, cart: cart2, created_at: reports_time + 1.hour
+    end
+
+    let!(:per_hour_report) do
+      Reports::Generator.new carts, :per_hour_report, start_time, end_time do |hour|
+        [
+          hour,
+          Cart.date_range(start_time, end_time).where("date_part('hour', created_at) = ?", hour).count,
+          Cart.date_range(start_time, end_time).where("date_part('hour', created_at) = ?", hour).sum('payment_amount'),
+          Cart.date_range(start_time, end_time).where("date_part('hour', created_at) = ?", hour).average(:take_time),
+          Cart.date_range(start_time, end_time).abandoned.count,
+          Cart.date_range(start_time, end_time).delivery.count,
+          Cart.date_range(start_time, end_time).pickup.count,
+          Cart.date_range(start_time, end_time).dinein.count
+        ]
+      end
+    end
+
+    shared_examples_for 'per hour report' do
+      it 'should generate a pdf with the title' do
+        should match(Reports::Generator::PRODUCT_MIX_REPORT[:title])
+      end
+    end
   end
 
   describe 'Product mix report' do
@@ -138,7 +190,9 @@ describe Reports::Generator do
     let(:cart2) { create :cart, completed: true, created_at: reports_time }
     let(:carts) { [cart1, cart2] }
 
+
     before do
+      Pulse::OrderStatus.any_instance.stub(:get).and_return('Makeline')
       create_list :cart_product, 2, cart: cart1, created_at: reports_time 
       create_list :cart_product, 3, cart: cart2, created_at: reports_time 
     end

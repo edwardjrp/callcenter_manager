@@ -3,6 +3,21 @@ require 'csv'
 
 module Reports
   class Generator
+    PER_HOUR_REPORT = { 
+      title: 'Reporte por hora',
+      columns: [
+        'Periodo del día',
+        'Orders',
+        'Ventas netas',
+        'Tiempo promedio de toma de orden',
+        'Ordenes Canceladas',
+        'Delivery',
+        'Carry Out',
+        'Dine In'
+      ],
+      single_table: true
+    }
+
     DETAILED_REPORT = { 
       title: 'Reporte detallado',
       columns: [
