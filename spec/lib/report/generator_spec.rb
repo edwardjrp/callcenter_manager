@@ -86,7 +86,7 @@ describe Reports::Generator do
           product[:product].flavorcode,
           Reports::Generator.monetize(product[:cart_products][:total_sales]),
           product[:cart_products][:total_count],
-          Reports::Generator.percentize(product[:cart_products][:total_sales].to_d / Cart.total_sells_in(start_time, end_time)), #.tap{|c| STDOUT.puts c.inspect },
+          Reports::Generator.percentize(product[:cart_products][:total_sales].to_d / Cart.total_sells_in(start_time, end_time)),
           Reports::Generator.percentize(product[:cart_products][:total_count].to_d / CartProduct.total_items_sold(start_time, end_time)),
           product[:total_carts],
           Reports::Generator.percentize(product[:total_carts].to_d / Cart.completed.date_range(start_time, end_time).count.to_d)
@@ -105,10 +105,12 @@ describe Reports::Generator do
       end
 
       it 'should generate a pdf with the title' do
-        STDOUT.puts subject
-        # STDOUT.puts Cart.total_sells_in(2.hour.ago, Time.zone.now)
-        # STDOUT.puts carts.map(&:payment_amount)
         should match(Reports::Generator::PRODUCT_MIX_REPORT[:title])
+      end
+
+      it 'should have sell Percentage' do
+        sells = Reports::Generator.percentize(CartProduct.products_mix(start_time, end_time).first.last.first[:cart_products][:total_sales] / Cart.total_sells_in(start_time, end_time))
+        should match(sells)
       end
     end
   end
