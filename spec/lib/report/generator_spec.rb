@@ -6,6 +6,14 @@ describe Reports::Generator do
   let!(:reports_time) { Time.parse('2012-02-01 00:00:00 UTC') }
   let!(:end_time)     { Time.parse('2012-03-01 00:00:00 UTC') }
 
+  describe '.name' do
+    let!(:product) { build :product, productname: '8&quot; Tradicional Italiana'}
+
+    it 'should return the unscaped productname' do
+      Reports::Generator.normalize(product.productname).should == '8" Tradicional Italiana'
+    end
+  end
+
 
   shared_examples_for 'report contants' do |options|
     it "should return the #{options[:report_type]} title" do
@@ -20,6 +28,23 @@ describe Reports::Generator do
       constant_single_table.should == true
     end
   end
+
+  describe '::SUMARY_REPORT' do
+    let!(:report_columns) {
+      [
+        'Ventas',
+        'Otros Indicadores',
+        'Product mix'
+      ]
+    }
+    let!(:constant_title)        { Reports::Generator::SUMARY_REPORT[:title]        }
+    let!(:constant_columns)      { Reports::Generator::SUMARY_REPORT[:columns]      }
+    let!(:constant_single_table) { Reports::Generator::SUMARY_REPORT[:single_table] }
+
+    it_behaves_like 'report contants', { report_type: 'Discount report', title: 'Reporte Consolidado', single_table: true }
+  end
+
+
 
   describe '::DISCOUNTS_REPORT' do
     let!(:report_columns) {
@@ -127,6 +152,45 @@ describe Reports::Generator do
     let!(:constant_single_table) { Reports::Generator::PRODUCT_MIX_REPORT[:single_table] }
 
     it_behaves_like 'report contants', { report_type: 'Product mix report', title: 'Reporte product mix', single_table: true }
+  end
+
+  describe 'Sumary report' do
+    let(:dis_user) { create :user, :admin }
+    let!(:cart1)   { create :cart, completed: true, started_on: reports_time , complete_on: reports_time + 20.seconds, discount_auth_id: dis_user.id, discount: 100, payment_amount: 300 }
+    let!(:cart2)   { create :cart, completed: true, started_on: reports_time , complete_on: reports_time + 20.seconds, discount_auth_id: dis_user.id, discount: 80, payment_amount: 300  }
+
+    before do
+      create_list :cart_product, 2, cart: cart1, created_at: reports_time 
+      create_list :cart_product, 3, cart: cart2, created_at: reports_time 
+      Net::HTTP.stub(:get).and_return({"resultcode"=>0, "result"=>{"totalincoming"=>16573}}.to_json)
+    end
+
+    let!(:sumary_report) do
+      Reports::Generator.new Cart.scoped, :sumary_report, start_time, end_time do | product, product_count |
+        [ product, product_count ]
+      end
+    end
+
+    shared_examples_for 'Sumary report' do
+      it 'should generate a pdf with the title' do
+        should match(Reports::Generator::SUMARY_REPORT[:title])
+      end
+
+      it 'should have the headers' do
+        should match(headers[0])
+        should match(headers[1])
+        should match(headers[2])
+      end
+    end
+
+    describe '#render_pdf' do
+      let!(:pdf)     { sumary_report.render_pdf }
+      let!(:headers) { Reports::Generator::SUMARY_REPORT[:columns] }
+
+      subject { PDF::Reader.new(StringIO.new(pdf)).page(1).text }
+
+      it_behaves_like 'Sumary report'
+    end
   end
 
   describe 'Discounts report' do

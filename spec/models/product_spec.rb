@@ -30,7 +30,7 @@ describe Product do
   end
 
   describe '#name' do
-    let!(:product) { create :product, productname: '8&quot; Tradicional Italiana'}
+    let!(:product) { build :product, productname: '8&quot; Tradicional Italiana'}
 
     it 'should return the unscaped productname' do
       product.name.should == '8" Tradicional Italiana'

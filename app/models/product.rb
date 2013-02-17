@@ -56,7 +56,7 @@ class Product < ActiveRecord::Base
   end
 
   def name
-    HTMLEntities.new.decode self.productname
+    Reports::Generator.normalize(self.productname)
   end
 
   private

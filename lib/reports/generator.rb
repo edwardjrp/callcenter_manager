@@ -1,8 +1,18 @@
-# encoding:utf-8
+#encoding:utf-8
 require 'csv'
 
 module Reports
   class Generator
+    SUMARY_REPORT = { 
+      title: 'Reporte Consolidado',
+      columns: [
+        'Ventas',
+        'Otros Indicadores',
+        'Product mix'
+      ],
+      single_table: true
+    }
+
     DISCOUNTS_REPORT = { 
       title: 'Reporte de descuentos',
       columns: [
@@ -110,6 +120,8 @@ module Reports
         build_coupons_report_pdf
       when :discounts_report then
         build_discounts_report_pdf
+      when :sumary_report then
+        build_sumary_report_pdf
       end
       @pdf.render
     end
@@ -138,7 +150,61 @@ module Reports
       ActionController::Base.helpers.number_to_percentage(amount * 100, :delimiter => ',', :separator => '.', :precision => 2)
     end
 
+    def self.normalize(name_string)
+      HTMLEntities.new.decode name_string
+    end
+
     private
+
+    def build_sumary_report_pdf
+      @relation = @relation.complete_in_date_range(@start_datetime, @end_datetime)
+      h_1(SUMARY_REPORT[:title])
+      set_pdf_font(5)
+      space_down
+      timestamps
+      space_down
+      h_1(SUMARY_REPORT[:columns][0])
+      sales_table = []
+      sales_table << [   'Ventas Brutas', self.class.monetize(@relation.sum('payment_amount'))  ]
+      sales_table << [   'Ventas Netas', self.class.monetize(@relation.sum('net_amount'))  ]
+      sales_table << [   'Canceladas', Cart.abandoned.count  ]
+      create_table(sales_table)
+
+      space_down
+      h_3("Ordenes antes y despues de las 4:00 pm")
+      time_table = []
+      time_table << [   'Almuerzo', @relation.lunch.count , self.class.monetize(@relation.lunch.sum('payment_amount'))  ]
+      time_table << [   'Cena', @relation.dinner.count, self.class.monetize(@relation.dinner.sum('net_amount'))  ]
+      create_table(time_table)
+
+      space_down
+      h_3("Modos de servicio")
+      service_table = []
+      service_table << ['No. ordenes', '%', 'Monto total']
+      service_table << ['Delivery', self.class.percentize(@relation.delivery.count / @relation.count), @relation.delivery.sum('payment_amount')]
+      service_table << ['Pickup', self.class.percentize(@relation.pickup.count / @relation.count), @relation.pickup.sum('payment_amount')]
+      service_table << ['Dine in', self.class.percentize(@relation.dinein.count / @relation.count), @relation.dinein.sum('payment_amount')]
+      create_table(service_table)
+
+      space_down
+      h_1(SUMARY_REPORT[:columns][1])
+      total_call = Asterisk::Connector.new(@start_datetime.to_date, @end_datetime.to_date).total_incoming
+      space_down
+      other_table = []
+      other_table << [ 'Orden promedio', self.class.monetize(@relation.average('payment_amount')) ]
+      other_table << [ 'Ventas por agente promedio', User.carts_completed_in_range(@start_datetime, @end_datetime).average('carts_count').round(2) ]
+      other_table << [ 'Tiempo de orde promedio', (@relation.sum(&:take_time) / @relation.count).round(2) ]
+      other_table << [ 'Llamadas entrantes', total_call ]
+      other_table << [ 'Llamadas por agente', (total_call / User.carts_completed_in_range(@start_datetime, @end_datetime).count) ]
+      create_table(other_table)
+
+      h_1(SUMARY_REPORT[:columns][2])
+      products_table = []
+      @relation.joins(:products).group('products.productname').count.each  do | product, product_count |
+        products_table << @data_rows.call(self.class.normalize(product), product_count)
+      end
+      create_table(products_table)
+    end
 
     def build_discounts_report_csv
       @csv = CSV.generate do |csv|

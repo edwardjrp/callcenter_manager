@@ -36,7 +36,7 @@ class User < ActiveRecord::Base
 
 
   def self.carts_completed_in_range(start_date, end_date)
-    joins(:carts).where('carts.completed = true AND carts.message_mask != 4').where('carts.created_at > ? and carts.created_at < ?', start_date, end_date)
+    joins(:carts).where('carts.completed = true AND carts.message_mask != 4').where('carts.complete_on > ? AND carts.complete_on < ?', start_date, end_date)
   end
   
   
