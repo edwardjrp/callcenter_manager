@@ -7,7 +7,7 @@ module Reports
       title: 'Reporte por hora',
       columns: [
         'Periodo del día',
-        'Orders',
+        'Ordenes',
         'Ventas netas',
         'Tiempo promedio de toma de orden',
         'Ordenes Canceladas',
@@ -59,8 +59,10 @@ module Reports
     def initialize(relation, report_type, start_datetime, end_datetime, orientation = :landscape, &data_rows)
       @relation = relation
       @report_type = report_type
-      @start_datetime = start_datetime.strftime('%d %B %Y - %I:%M:%S %p')
-      @end_datetime = end_datetime.strftime('%d %B %Y - %I:%M:%S %p')
+      @start_datetime_original = start_datetime
+      @end_datetime_original = end_datetime
+      @start_datetime = @start_datetime_original.strftime('%d %B %Y - %I:%M:%S %p')
+      @end_datetime = @end_datetime_original.strftime('%d %B %Y - %I:%M:%S %p')
       @pdf = Prawn::Document.new(top_margin: 70, page_layout: orientation)
       @csv = ''
       @data_rows = data_rows
@@ -72,6 +74,8 @@ module Reports
         build_detailed_report_pdf
       when :product_mix_report then
         build_product_mix_report_pdf
+      when :per_hour_report then
+        build_per_hour_report_pdf
       end
       @pdf.render
     end
@@ -91,10 +95,27 @@ module Reports
     end
 
     def self.percentize(amount)
-      ActionController::Base.helpers.number_to_percentage(amount * 100,:delimiter => ',', :separator => '.', :precision => 2)
+      ActionController::Base.helpers.number_to_percentage(amount * 100, :delimiter => ',', :separator => '.', :precision => 2)
     end
 
     private
+
+    def build_per_hour_report_pdf
+      h_1(PER_HOUR_REPORT[:title])
+      set_pdf_font(7)
+      space_down
+      timestamps
+      space_down
+      pdf_table = []
+      pdf_table << PER_HOUR_REPORT[:columns]
+      datetime = @start_datetime_original
+      while datetime <= @end_datetime_original
+        pdf_table << @data_rows.call(datetime)
+        datetime += 1.hour
+      end
+      create_table(pdf_table)
+
+    end
 
     def build_product_mix_report_csv
       @csv = CSV.generate do |csv|

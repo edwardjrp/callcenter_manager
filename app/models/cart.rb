@@ -437,7 +437,12 @@ class Cart < ActiveRecord::Base
   end
 
   def self.total_sells_in(start_time, end_time)
-    self.completed.date_range(start_time, end_time).sum('payment_amount')
+    self.completed.complete_in_date_range(start_time, end_time).sum('payment_amount')
+  end
+
+  def self.average_take_time(start_time, end_time, sent_hour)
+    carts_for_hour = Cart.complete_in_date_range(start_time, end_time).where("date_part('hour', complete_on) = ?", sent_hour)
+    carts_for_hour.count.zero? ? 0 : carts_for_hour.sum(&:take_time) / carts_for_hour.count
   end
 
   def state

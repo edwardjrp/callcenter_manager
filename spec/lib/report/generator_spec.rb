@@ -2,9 +2,9 @@
 require 'spec_helper'
 
 describe Reports::Generator do
-  let!(:start_time) { Time.parse('2012-01-01 00:00:00 UTC') }
+  let!(:start_time)   { Time.parse('2012-01-01 00:00:00 UTC') }
   let!(:reports_time) { Time.parse('2012-02-01 00:00:00 UTC') }
-  let!(:end_time)   { Time.parse('2012-03-01 00:00:00 UTC') }
+  let!(:end_time)     { Time.parse('2012-03-01 00:00:00 UTC') }
 
 
   shared_examples_for 'report contants' do |options|
@@ -26,7 +26,7 @@ describe Reports::Generator do
     let!(:report_columns) {
       [
         'Periodo del día',
-        'Orders',
+        'Ordenes',
         'Ventas netas',
         'Tiempo promedio de toma de orden',
         'Ordenes Canceladas',
@@ -73,8 +73,6 @@ describe Reports::Generator do
       [
         'Categoría',
         'Ítem de Menú',
-        'Llamadas',
-        'Cantidad de Agentes conectados',
         'Tamaño',
         'Sabor/Masa',
         'Ventas Netas',
@@ -92,41 +90,54 @@ describe Reports::Generator do
     it_behaves_like 'report contants', { report_type: 'Product mix report', title: 'Reporte product mix', single_table: true }
   end
 
-   describe 'Per hour report' do
-    let(:cart1) { create :cart, completed: true, created_at: reports_time }
-    let(:cart2) { create :cart, completed: true, created_at: reports_time + 1.hour }
-    let(:carts) { [cart1, cart2] }
+  describe 'Per hour report' do
+    let!(:cart1) { create :cart, completed: true, started_on: reports_time , complete_on: reports_time + 20.seconds }
+    let!(:cart2) { create :cart, completed: true, started_on: (reports_time + 1.hour), complete_on: (reports_time + 1.hour) + 20.seconds  }
+    # let(:carts) { [cart1, cart2] }
 
-    before do
-      create_list :cart_product, 2, cart: cart1, created_at: reports_time 
-      create_list :cart_product, 3, cart: cart2, created_at: reports_time + 1.hour
-    end
+    # before do
+    #   create_list :cart_product, 2, cart: cart1, created_at: reports_time 
+    #   create_list :cart_product, 3, cart: cart2, created_at: reports_time + 1.hour
+    # end
 
     let!(:per_hour_report) do
-      Reports::Generator.new carts, :per_hour_report, start_time, end_time do |hour|
+      Reports::Generator.new Cart.scoped, :per_hour_report, start_time, end_time do |datetime|
         [
-          hour,
-          Cart.date_range(start_time, end_time).where("date_part('hour', created_at) = ?", hour).count,
-          Cart.date_range(start_time, end_time).where("date_part('hour', created_at) = ?", hour).sum('payment_amount'),
-          Cart.date_range(start_time, end_time).where("date_part('hour', created_at) = ?", hour).average(:take_time),
-          Cart.date_range(start_time, end_time).abandoned.count,
-          Cart.date_range(start_time, end_time).delivery.count,
-          Cart.date_range(start_time, end_time).pickup.count,
-          Cart.date_range(start_time, end_time).dinein.count
+          "#{datetime.to_date} - #{datetime.strftime('%H')}",
+          Cart.complete_in_date_range(start_time, end_time).where("date_part('hour', complete_on) = ?", datetime.strftime('%H')).count,
+          Reports::Generator.monetize(Cart.complete_in_date_range(start_time, end_time).where("date_part('hour', complete_on) = ?", datetime.strftime('%H')).sum('payment_amount')),
+          Cart.average_take_time(start_time, end_time, datetime.hour),
+          Cart.complete_in_date_range(start_time, end_time).where("date_part('hour', complete_on) = ?", datetime.strftime('%H')).abandoned.count, # need to fix
+          Cart.complete_in_date_range(start_time, end_time).where("date_part('hour', complete_on) = ?", datetime.strftime('%H')).delivery.count,
+          Cart.complete_in_date_range(start_time, end_time).where("date_part('hour', complete_on) = ?", datetime.strftime('%H')).pickup.count,
+          Cart.complete_in_date_range(start_time, end_time).where("date_part('hour', complete_on) = ?", datetime.strftime('%H')).dinein.count
         ]
       end
     end
 
     shared_examples_for 'per hour report' do
       it 'should generate a pdf with the title' do
-        should match(Reports::Generator::PRODUCT_MIX_REPORT[:title])
+        should match(Reports::Generator::PER_HOUR_REPORT[:title])
       end
+
+      it 'should have the headers' do
+        should match(headers)
+      end
+    end
+
+    describe '#render_pdf' do
+      let!(:pdf)     { per_hour_report.render_pdf }
+      let!(:headers) { Reports::Generator::PER_HOUR_REPORT[:columns].join }
+
+      subject { PDF::Reader.new(StringIO.new(pdf)).page(1).text }
+
+      it_behaves_like 'per hour report'
     end
   end
 
   describe 'Product mix report' do
     let!(:carts)         { create_list :cart, 10, completed: true, created_at: reports_time }
-    let!(:cart_products) { create_list :cart_product, 50, created_at: reports_time, cart: carts.sample }
+    let!(:cart_products) { create_list :cart_product, 20, created_at: reports_time, cart: carts.sample }
     let!(:association)   { CartProduct.products_mix(start_time, end_time) }
 
     let!(:product_mix_report) do

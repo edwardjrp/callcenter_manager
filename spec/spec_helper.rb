@@ -29,13 +29,13 @@ RSpec.configure do |config|
   config.include(MassAssignmentMacros)
   # config.fail_fast = true
   config.order = 'random'
-  config.before(:all) do
-    DeferredGarbageCollection.start
-  end
+  # config.before(:all) do
+  #   DeferredGarbageCollection.start
+  # end
 
-  config.after(:all) do
-    DeferredGarbageCollection.reconsider
-  end
+  # config.after(:all) do
+  #   DeferredGarbageCollection.reconsider
+  # end
 
   config.before(:suite) do 
     DatabaseCleaner.strategy = :transaction 

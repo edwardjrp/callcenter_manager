@@ -377,13 +377,23 @@ describe Cart do
   end
 
   describe '.total_sells_in' do
-    let!(:cart1) { create :cart, completed: true, payment_amount: 1000, created_at: 1.hour.ago }
-    let!(:cart2) { create :cart, completed: true, payment_amount: 3040, created_at: 1.hour.ago }
-    let!(:cart3) { create :cart, completed: true, payment_amount: 2030, created_at: 1.hour.ago }
-    let!(:cart4) { create :cart, completed: false, payment_amount: 5040, created_at: 1.hour.ago }
+    let!(:cart1) { create :cart, completed: true, payment_amount: 1000, complete_on: 1.hour.ago }
+    let!(:cart2) { create :cart, completed: true, payment_amount: 3040, complete_on: 1.hour.ago }
+    let!(:cart3) { create :cart, completed: true, payment_amount: 2030, complete_on: 1.hour.ago }
+    let!(:cart4) { create :cart, completed: false, payment_amount: 5040, complete_on: 1.hour.ago }
 
     it 'should return the sum of all sells in the current time range' do
-      Cart.total_sells_in(2.hour.ago, Time.zone.now).should == 6070.to_d
+      Cart.total_sells_in(Time.zone.now - 2.hour, Time.zone.now).should == 6070.to_d
+    end
+  end
+
+  describe '.average_take_time' do
+    before { create_list :cart, 10, completed:true , complete_on: (Time.now - 1.hour), started_on: (Time.now - 80.minutes) }
+
+    it 'should return the average take time' do
+      hour_for_average = (Time.zone.now - 1.hour).hour + 4
+      hour_for_average = 0 if hour_for_average == 24
+      Cart.average_take_time((Time.now - 2.hours), Time.now, hour_for_average).should be_within(0.01).of(20.minutes)
     end
   end
 end
