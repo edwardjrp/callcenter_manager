@@ -179,6 +179,15 @@ describe Reports::Generator do
 
       it_behaves_like 'Discounts report'
     end
+
+    describe '#render_csv' do
+      let!(:csv)     { discounts_report.render_csv }
+      let!(:headers) { Reports::Generator::DISCOUNTS_REPORT[:columns].join(',') }
+
+      subject { csv }
+
+      it_behaves_like 'Discounts report'
+    end
   end
 
   describe 'Coupons report' do

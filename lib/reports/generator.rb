@@ -124,6 +124,8 @@ module Reports
         build_per_hour_report_csv
       when :coupons_report then
         build_coupons_report_csv
+      when :discounts_report then
+        build_discounts_report_csv
       end
       @csv
     end
@@ -137,6 +139,21 @@ module Reports
     end
 
     private
+
+    def build_discounts_report_csv
+      @csv = CSV.generate do |csv|
+        csv_title(csv)
+        set_pdf_font
+        csv_empty_row(csv)
+        csv_timestamp(csv)
+        csv_empty_row(csv)
+        csv << DISCOUNTS_REPORT[:columns]
+        @relation.each do |cart|
+          csv << @data_rows.call(cart)
+        end
+        csv_empty_row(csv)
+      end
+    end
 
     def build_discounts_report_pdf
       h_1(DISCOUNTS_REPORT[:title])
@@ -275,6 +292,8 @@ module Reports
         csv_fill_row([PER_HOUR_REPORT[:title]], PER_HOUR_REPORT[:columns].length, csv )
       when :coupons_report then
         csv_fill_row([COUPONS_REPORT[:title]], COUPONS_REPORT[:columns].length, csv )
+      when :discounts_report then
+        csv_fill_row([DISCOUNTS_REPORT[:title]], DISCOUNTS_REPORT[:columns].length, csv )
       end
     end
 
@@ -289,6 +308,8 @@ module Reports
         row_length = PER_HOUR_REPORT[:columns].length
       when :coupons_report then
         row_length = COUPONS_REPORT[:columns].length
+      when :discounts_report then
+        row_length = DISCOUNTS_REPORT[:columns].length
       end
       csv_fill_row([@start_datetime], row_length, csv )
       csv_fill_row([@end_datetime], row_length, csv )
