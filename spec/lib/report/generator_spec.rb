@@ -93,12 +93,6 @@ describe Reports::Generator do
   describe 'Per hour report' do
     let!(:cart1) { create :cart, completed: true, started_on: reports_time , complete_on: reports_time + 20.seconds }
     let!(:cart2) { create :cart, completed: true, started_on: (reports_time + 1.hour), complete_on: (reports_time + 1.hour) + 20.seconds  }
-    # let(:carts) { [cart1, cart2] }
-
-    # before do
-    #   create_list :cart_product, 2, cart: cart1, created_at: reports_time 
-    #   create_list :cart_product, 3, cart: cart2, created_at: reports_time + 1.hour
-    # end
 
     let!(:per_hour_report) do
       Reports::Generator.new Cart.scoped, :per_hour_report, start_time, end_time do |datetime|
@@ -130,6 +124,15 @@ describe Reports::Generator do
       let!(:headers) { Reports::Generator::PER_HOUR_REPORT[:columns].join }
 
       subject { PDF::Reader.new(StringIO.new(pdf)).page(1).text }
+
+      it_behaves_like 'per hour report'
+    end
+
+    describe '#render_csv' do
+      let!(:csv)     { per_hour_report.render_csv }
+      let!(:headers) { Reports::Generator::PER_HOUR_REPORT[:columns].join(",") }
+
+      subject { csv }
 
       it_behaves_like 'per hour report'
     end

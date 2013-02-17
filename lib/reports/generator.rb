@@ -86,6 +86,8 @@ module Reports
         build_detailed_report_csv
       when :product_mix_report then
         build_product_mix_report_csv
+      when :per_hour_report then
+        build_per_hour_report_csv
       end
       @csv
     end
@@ -99,6 +101,23 @@ module Reports
     end
 
     private
+
+    def build_per_hour_report_csv
+      @csv = CSV.generate do |csv|
+        csv_title(csv)
+        set_pdf_font(5)
+        csv_empty_row(csv)
+        csv_timestamp(csv)
+        csv_empty_row(csv)
+        csv << PER_HOUR_REPORT[:columns]
+        datetime = @start_datetime_original
+        while datetime < @end_datetime_original
+          csv << @data_rows.call(datetime)
+          datetime += 1.hour
+        end
+        csv_empty_row(csv)
+      end
+    end    
 
     def build_per_hour_report_pdf
       h_1(PER_HOUR_REPORT[:title])
@@ -173,6 +192,8 @@ module Reports
         csv_fill_row([DETAILED_REPORT[:title]], DETAILED_REPORT[:columns].length, csv )
       when :product_mix_report then
         csv_fill_row([PRODUCT_MIX_REPORT[:title]], PRODUCT_MIX_REPORT[:columns].length, csv )
+      when :per_hour_report then
+        csv_fill_row([PER_HOUR_REPORT[:title]], PER_HOUR_REPORT[:columns].length, csv )
       end
     end
 
@@ -183,6 +204,8 @@ module Reports
         row_length = DETAILED_REPORT[:columns].length
       when :product_mix_report then
         row_length = PRODUCT_MIX_REPORT[:columns].length
+      when :per_hour_report then
+        row_length = PER_HOUR_REPORT[:columns].length
       end
       csv_fill_row([@start_datetime], row_length, csv )
       csv_fill_row([@end_datetime], row_length, csv )
