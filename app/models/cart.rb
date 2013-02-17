@@ -248,7 +248,7 @@ class Cart < ActiveRecord::Base
   end
 
   def self.complete_in_date_range(start_date, end_date)
-    where('carts.complete_on > ? and carts.complete_on < ?', start_date, end_date)
+    completed.where('carts.complete_on > ? and carts.complete_on < ?', start_date, end_date)
   end
 
   def placeable?
@@ -443,6 +443,10 @@ class Cart < ActiveRecord::Base
   def self.average_take_time(start_time, end_time, sent_hour)
     carts_for_hour = Cart.complete_in_date_range(start_time, end_time).where("date_part('hour', complete_on) = ?", sent_hour)
     carts_for_hour.count.zero? ? 0 : carts_for_hour.sum(&:take_time) / carts_for_hour.count
+  end
+
+  def self.abandoned_in_date_range(start_date, end_date)
+    abandoned.where('carts.updated_at > ? and carts.updated_at < ?', start_date, end_date)
   end
 
   def state

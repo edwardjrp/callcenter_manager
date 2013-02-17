@@ -107,7 +107,7 @@ describe Reports::Generator do
           Cart.complete_in_date_range(start_time, end_time).where("date_part('hour', complete_on) = ?", datetime.strftime('%H')).count,
           Reports::Generator.monetize(Cart.complete_in_date_range(start_time, end_time).where("date_part('hour', complete_on) = ?", datetime.strftime('%H')).sum('payment_amount')),
           Cart.average_take_time(start_time, end_time, datetime.hour),
-          Cart.complete_in_date_range(start_time, end_time).where("date_part('hour', complete_on) = ?", datetime.strftime('%H')).abandoned.count, # need to fix
+          Cart.abandoned_in_date_range(start_time, end_time).where("date_part('hour', updated_at) = ?", datetime.strftime('%H')).abandoned.count, # need to fix
           Cart.complete_in_date_range(start_time, end_time).where("date_part('hour', complete_on) = ?", datetime.strftime('%H')).delivery.count,
           Cart.complete_in_date_range(start_time, end_time).where("date_part('hour', complete_on) = ?", datetime.strftime('%H')).pickup.count,
           Cart.complete_in_date_range(start_time, end_time).where("date_part('hour', complete_on) = ?", datetime.strftime('%H')).dinein.count

@@ -377,9 +377,9 @@ describe Cart do
   end
 
   describe '.total_sells_in' do
-    let!(:cart1) { create :cart, completed: true, payment_amount: 1000, complete_on: 1.hour.ago }
-    let!(:cart2) { create :cart, completed: true, payment_amount: 3040, complete_on: 1.hour.ago }
-    let!(:cart3) { create :cart, completed: true, payment_amount: 2030, complete_on: 1.hour.ago }
+    let!(:cart1) { create :cart, completed: true, payment_amount: 1000, complete_on: 1.hour.ago  }
+    let!(:cart2) { create :cart, completed: true, payment_amount: 3040, complete_on: 1.hour.ago  }
+    let!(:cart3) { create :cart, completed: true, payment_amount: 2030, complete_on: 1.hour.ago  }
     let!(:cart4) { create :cart, completed: false, payment_amount: 5040, complete_on: 1.hour.ago }
 
     it 'should return the sum of all sells in the current time range' do
@@ -394,6 +394,34 @@ describe Cart do
       hour_for_average = (Time.zone.now - 1.hour).hour + 4
       hour_for_average = 0 if hour_for_average == 24
       Cart.average_take_time((Time.now - 2.hours), Time.now, hour_for_average).should be_within(0.01).of(20.minutes)
+    end
+  end
+
+  describe '.complete_in_date_range' do
+    let!(:incomplete_cart)           { create :cart, completed: false, complete_on: 1.hour.ago }
+    let!(:complete_cart_in_time)     { create :cart, completed: true, complete_on: 1.hour.ago  }
+    let!(:complete_cart_out_of_time) { create :cart, completed: true, complete_on: 3.hour.ago  }
+
+    subject { Cart.complete_in_date_range(2.hours.ago, Time.now) }
+
+    it 'should only return the carts completed in the given time rage' do
+      should include(complete_cart_in_time)
+      should_not include(complete_cart_out_of_time)
+      should_not include(incomplete_cart)
+    end
+  end
+
+  describe '.abandoned_in_date_range' do
+    let!(:unabandone_cart)           { create :cart, reason_id: nil, updated_at: 1.hour.ago  }
+    let!(:abandone_cart_in_time)     { create :cart, reason_id: 1, updated_at: 1.hour.ago  }
+    let!(:abandone_cart_out_of_time) { create :cart, reason_id: 1, updated_at: 3.hour.ago  }
+
+    subject { Cart.abandoned_in_date_range(2.hours.ago, Time.now) }
+
+    it 'should only return the carts abandoned in the given time rage' do
+      should include(abandone_cart_in_time)
+      should_not include(abandone_cart_out_of_time)
+      should_not include(unabandone_cart)
     end
   end
 end

@@ -109,12 +109,11 @@ module Reports
       pdf_table = []
       pdf_table << PER_HOUR_REPORT[:columns]
       datetime = @start_datetime_original
-      while datetime <= @end_datetime_original
+      while datetime < @end_datetime_original
         pdf_table << @data_rows.call(datetime)
         datetime += 1.hour
       end
       create_table(pdf_table)
-
     end
 
     def build_product_mix_report_csv
