@@ -3,6 +3,18 @@ require 'csv'
 
 module Reports
   class Generator
+    COUPONS_REPORT = { 
+      title: 'Reporte de cupones',
+      columns: [
+        'Código del Cupón',
+        'Descripción',
+        'Cantidad',
+        '% del Total de ordenes',
+        '% del Total de los Cupones'
+      ],
+      single_table: true
+    }
+
     PER_HOUR_REPORT = { 
       title: 'Reporte por hora',
       columns: [
@@ -76,6 +88,8 @@ module Reports
         build_product_mix_report_pdf
       when :per_hour_report then
         build_per_hour_report_pdf
+      when :coupons_report then
+        build_coupons_report_pdf
       end
       @pdf.render
     end
@@ -88,6 +102,8 @@ module Reports
         build_product_mix_report_csv
       when :per_hour_report then
         build_per_hour_report_csv
+      when :coupons_report then
+        build_coupons_report_csv
       end
       @csv
     end
@@ -101,6 +117,35 @@ module Reports
     end
 
     private
+
+    def build_coupons_report_csv
+      @csv = CSV.generate do |csv|
+        csv_title(csv)
+        set_pdf_font
+        csv_empty_row(csv)
+        csv_timestamp(csv)
+        csv_empty_row(csv)
+        csv << COUPONS_REPORT[:columns]
+        @relation.each do |coupon_code, coupon_count|
+          csv << @data_rows.call(coupon_code, coupon_count)
+        end
+        csv_empty_row(csv)
+      end
+    end
+
+    def build_coupons_report_pdf
+      h_1(COUPONS_REPORT[:title])
+      set_pdf_font(7)
+      space_down
+      timestamps
+      space_down
+      pdf_table = []
+      pdf_table << COUPONS_REPORT[:columns]
+      @relation.each do |coupon_code, coupon_count|
+        pdf_table << @data_rows.call(coupon_code, coupon_count)
+      end
+      create_table(pdf_table)
+    end
 
     def build_per_hour_report_csv
       @csv = CSV.generate do |csv|
@@ -194,6 +239,8 @@ module Reports
         csv_fill_row([PRODUCT_MIX_REPORT[:title]], PRODUCT_MIX_REPORT[:columns].length, csv )
       when :per_hour_report then
         csv_fill_row([PER_HOUR_REPORT[:title]], PER_HOUR_REPORT[:columns].length, csv )
+      when :coupons_report then
+        csv_fill_row([COUPONS_REPORT[:title]], COUPONS_REPORT[:columns].length, csv )
       end
     end
 
@@ -206,6 +253,8 @@ module Reports
         row_length = PRODUCT_MIX_REPORT[:columns].length
       when :per_hour_report then
         row_length = PER_HOUR_REPORT[:columns].length
+      when :coupons_report then
+        row_length = COUPONS_REPORT[:columns].length
       end
       csv_fill_row([@start_datetime], row_length, csv )
       csv_fill_row([@end_datetime], row_length, csv )

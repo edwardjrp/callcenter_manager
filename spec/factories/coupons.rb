@@ -2,11 +2,11 @@
 
 FactoryGirl.define do
   factory :coupon do
-    code "MyString"
+    sequence(:code, 1000) { |c| "RD#{c}"}
     description "MyText"
     custom_description "MyText"
     generated_description "MyText"
-    minimum_price "MyString"
+    minimum_price { rand(500) + 1 }
     hidden ""
     secure false
     effective_days "MyString"

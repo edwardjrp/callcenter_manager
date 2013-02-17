@@ -21,6 +21,22 @@ describe Reports::Generator do
     end
   end
 
+  describe '::COUPONS_REPORT' do
+    let!(:report_columns) {
+      [
+        'Código del Cupón',
+        'Descripción',
+        'Cantidad',
+        '% del Total de ordenes',
+        '% del Total de los Cupones'
+      ]
+    }
+    let!(:constant_title)        { Reports::Generator::COUPONS_REPORT[:title]        }
+    let!(:constant_columns)      { Reports::Generator::COUPONS_REPORT[:columns]      }
+    let!(:constant_single_table) { Reports::Generator::COUPONS_REPORT[:single_table] }
+
+    it_behaves_like 'report contants', { report_type: 'Coupons report', title: 'Reporte de cupones', single_table: true }
+  end
 
   describe '::PER_HOUR_REPORT' do
     let!(:report_columns) {
@@ -90,6 +106,56 @@ describe Reports::Generator do
     it_behaves_like 'report contants', { report_type: 'Product mix report', title: 'Reporte product mix', single_table: true }
   end
 
+  describe 'Coupons report' do
+    let!(:cart1) { create :cart, completed: true, complete_on: reports_time, coupons: create_list(:coupon, 10) }
+    let!(:cart2) { create :cart, completed: true, complete_on: reports_time, coupons: create_list(:coupon, 10) }
+
+    let!(:coupons_report) do
+      Reports::Generator.new Cart.completed.joins(:coupons).group('coupons.code').count, :coupons_report, start_time, end_time do |coupon_code, coupon_count|
+        [
+          coupon_code,
+          Coupon.where(code: coupon_code).first.description_info,
+          coupon_count,
+          Reports::Generator.percentize(coupon_count.to_d / Cart.completed.count.to_d) ,
+          Reports::Generator.percentize(coupon_count.to_d / Cart.completed.joins(:coupons).count.to_d)
+        ]
+      end
+    end
+
+    shared_examples_for 'Coupons report' do
+      it 'should generate a pdf with the title' do
+        should match(Reports::Generator::COUPONS_REPORT[:title])
+      end
+
+      it 'should have the headers' do
+        should match(headers)
+      end
+
+      it 'should have the coupons desccription' do
+        should match(Cart.completed.first.coupons.first.description_info)
+      end
+    end
+
+    describe '#render_pdf' do
+      let!(:pdf)     { coupons_report.render_pdf }
+      let!(:headers) { Reports::Generator::COUPONS_REPORT[:columns].join }
+
+      subject { PDF::Reader.new(StringIO.new(pdf)).page(1).text }
+
+      it_behaves_like 'Coupons report'
+    end
+
+    describe '#render_pdf' do
+      let!(:csv)     { coupons_report.render_csv }
+      let!(:headers) { Reports::Generator::COUPONS_REPORT[:columns].join(',') }
+
+      subject { csv }
+
+      it_behaves_like 'Coupons report'
+    end
+
+  end
+
   describe 'Per hour report' do
     let!(:cart1) { create :cart, completed: true, started_on: reports_time , complete_on: reports_time + 20.seconds }
     let!(:cart2) { create :cart, completed: true, started_on: (reports_time + 1.hour), complete_on: (reports_time + 1.hour) + 20.seconds  }
@@ -101,7 +167,7 @@ describe Reports::Generator do
           Cart.complete_in_date_range(start_time, end_time).where("date_part('hour', complete_on) = ?", datetime.strftime('%H')).count,
           Reports::Generator.monetize(Cart.complete_in_date_range(start_time, end_time).where("date_part('hour', complete_on) = ?", datetime.strftime('%H')).sum('payment_amount')),
           Cart.average_take_time(start_time, end_time, datetime.hour),
-          Cart.abandoned_in_date_range(start_time, end_time).where("date_part('hour', updated_at) = ?", datetime.strftime('%H')).abandoned.count, # need to fix
+          Cart.abandoned_in_date_range(start_time, end_time).where("date_part('hour', updated_at) = ?", datetime.strftime('%H')).abandoned.count,
           Cart.complete_in_date_range(start_time, end_time).where("date_part('hour', complete_on) = ?", datetime.strftime('%H')).delivery.count,
           Cart.complete_in_date_range(start_time, end_time).where("date_part('hour', complete_on) = ?", datetime.strftime('%H')).pickup.count,
           Cart.complete_in_date_range(start_time, end_time).where("date_part('hour', complete_on) = ?", datetime.strftime('%H')).dinein.count
@@ -147,7 +213,7 @@ describe Reports::Generator do
       Reports::Generator.new association, :product_mix_report, start_time, end_time,  :landscape do |product, cart_products|
         [
           '',
-          product[:product].productname,
+          product[:product].name,
           product[:product].sizecode,
           product[:product].flavorcode,
           Reports::Generator.monetize(product[:cart_products][:total_sales]),
