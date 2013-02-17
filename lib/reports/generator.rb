@@ -3,6 +3,24 @@ require 'csv'
 
 module Reports
   class Generator
+    DISCOUNTS_REPORT = { 
+      title: 'Reporte de descuentos',
+      columns: [
+        'Agente',
+        'Nombre del Agente',
+        'Autorizado por',
+        'Nombre Aut.',
+        'Fecha y hora de orden',
+        'Tienda',
+        'Orden',
+        'Info. Cliente',
+        'Total Sin descuento',
+        'Total Descontado',
+        'Total c/ Desc.'
+      ],
+      single_table: true
+    }
+
     COUPONS_REPORT = { 
       title: 'Reporte de cupones',
       columns: [
@@ -90,6 +108,8 @@ module Reports
         build_per_hour_report_pdf
       when :coupons_report then
         build_coupons_report_pdf
+      when :discounts_report then
+        build_discounts_report_pdf
       end
       @pdf.render
     end
@@ -117,6 +137,20 @@ module Reports
     end
 
     private
+
+    def build_discounts_report_pdf
+      h_1(DISCOUNTS_REPORT[:title])
+      set_pdf_font(5)
+      space_down
+      timestamps
+      space_down
+      pdf_table = []
+      pdf_table << DISCOUNTS_REPORT[:columns]
+      @relation.each do |cart|
+        pdf_table << @data_rows.call(cart)
+      end
+      create_table(pdf_table)
+    end
 
     def build_coupons_report_csv
       @csv = CSV.generate do |csv|

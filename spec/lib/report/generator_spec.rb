@@ -21,6 +21,29 @@ describe Reports::Generator do
     end
   end
 
+  describe '::DISCOUNTS_REPORT' do
+    let!(:report_columns) {
+      [
+        'Agente',
+        'Nombre del Agente',
+        'Autorizado por',
+        'Nombre Aut.',
+        'Fecha y hora de orden',
+        'Tienda',
+        'Orden',
+        'Info. Cliente',
+        'Total Sin descuento',
+        'Total Descontado',
+        'Total c/ Desc.'
+      ]
+    }
+    let!(:constant_title)        { Reports::Generator::DISCOUNTS_REPORT[:title]        }
+    let!(:constant_columns)      { Reports::Generator::DISCOUNTS_REPORT[:columns]      }
+    let!(:constant_single_table) { Reports::Generator::DISCOUNTS_REPORT[:single_table] }
+
+    it_behaves_like 'report contants', { report_type: 'Discount report', title: 'Reporte de descuentos', single_table: true }
+  end
+
   describe '::COUPONS_REPORT' do
     let!(:report_columns) {
       [
@@ -104,6 +127,58 @@ describe Reports::Generator do
     let!(:constant_single_table) { Reports::Generator::PRODUCT_MIX_REPORT[:single_table] }
 
     it_behaves_like 'report contants', { report_type: 'Product mix report', title: 'Reporte product mix', single_table: true }
+  end
+
+  describe 'Discounts report' do
+    let(:dis_user) { create :user, :admin }
+    let!(:cart1)   { create :cart, completed: true, complete_on: reports_time, discount_auth_id: dis_user.id, discount: 100, payment_amount: 300 }
+    let!(:cart2)   { create :cart, completed: true, complete_on: reports_time, discount_auth_id: dis_user.id, discount: 80, payment_amount: 300 }
+
+    let!(:discounts_report) do
+      Reports::Generator.new Cart.discounted, :discounts_report, start_time, end_time do |cart|
+        [
+          cart.agent_info,
+          cart.agent_info_name,
+          cart.discount_authorizer,
+          cart.discount_authorizer_name,
+          cart.completion_info,
+          cart.store_info_id,
+          cart.complete_id,
+          cart.client_info,
+          Reports::Generator.monetize(cart.payment_amount),
+          Reports::Generator.monetize(cart.discount),
+          Reports::Generator.monetize((cart.payment_amount.to_d - cart.discount.to_d))
+        ]
+      end
+    end
+
+    shared_examples_for 'Discounts report' do
+      it 'should generate a pdf with the title' do
+        should match(Reports::Generator::DISCOUNTS_REPORT[:title])
+      end
+
+      it 'should have the headers' do
+        should match(headers)
+      end
+
+      it 'should have the authorizer admin name' do
+        should match(dis_user.first_name)
+      end
+
+      it 'should have the authorizer admin name' do
+        should match('220')
+        should match('200')
+      end
+    end
+
+    describe '#render_pdf' do
+      let!(:pdf)     { discounts_report.render_pdf }
+      let!(:headers) { Reports::Generator::DISCOUNTS_REPORT[:columns].join }
+
+      subject { PDF::Reader.new(StringIO.new(pdf)).page(1).text }
+
+      it_behaves_like 'Discounts report'
+    end
   end
 
   describe 'Coupons report' do

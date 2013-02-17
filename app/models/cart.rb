@@ -62,7 +62,7 @@ class Cart < ActiveRecord::Base
   scope :comm_failed, where(communication_failed: true).untrashed
   scope :finalized, where('completed = ? or reason_id IS NOT NULL', true).untrashed
   scope :latest, order('created_at DESC').untrashed
-  scope :discounted, where('discount > ?', 0).untrashed
+  scope :discounted, where('discount > ?', 0).untrashed.completed
   scope :delivery, where(service_method: 'delivery')
   scope :pickup, where(service_method: 'pickup')
   scope :dinein, where(service_method: 'dinein')
