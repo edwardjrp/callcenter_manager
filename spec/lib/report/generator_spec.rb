@@ -191,6 +191,15 @@ describe Reports::Generator do
 
       it_behaves_like 'Sumary report'
     end
+
+    describe '#render_csv' do
+      let!(:csv)     { sumary_report.render_csv }
+      let!(:headers) { Reports::Generator::SUMARY_REPORT[:columns] }
+
+      subject { csv }
+
+      it_behaves_like 'Sumary report'
+    end
   end
 
   describe 'Discounts report' do

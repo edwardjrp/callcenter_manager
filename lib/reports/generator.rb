@@ -138,6 +138,8 @@ module Reports
         build_coupons_report_csv
       when :discounts_report then
         build_discounts_report_csv
+      when :sumary_report then
+        build_sumary_report_csv
       end
       @csv
     end
@@ -155,6 +157,46 @@ module Reports
     end
 
     private
+
+    def build_sumary_report_csv
+      @relation = @relation.complete_in_date_range(@start_datetime, @end_datetime)
+      @csv = CSV.generate do |csv|
+        csv_title(csv)
+        csv_empty_row(csv)
+        csv_timestamp(csv)
+        csv_empty_row(csv)
+        csv_fill_row(['Ventas Brutas', self.class.monetize(@relation.sum('payment_amount'))], 10, csv)
+        csv_fill_row(['Ventas Netas', self.class.monetize(@relation.sum('net_amount'))  ], 10, csv)
+        csv_fill_row(['Canceladas', Cart.abandoned.count], 10, csv)
+        csv_empty_row(csv)
+
+        csv_fill_row([SUMARY_REPORT[:columns][0]], 10, csv)
+        csv_fill_row(['Almuerzo', @relation.lunch.count , self.class.monetize(@relation.lunch.sum('payment_amount'))], 10, csv)
+        csv_fill_row(['Cena', @relation.dinner.count, self.class.monetize(@relation.dinner.sum('net_amount'))], 10, csv)
+        csv_empty_row(csv)
+
+        csv_fill_row(["Ordenes antes y despues de las 4:00 pm"], 10, csv)
+        csv_fill_row(['No. ordenes', '%', 'Monto total'], 10, csv)
+        csv_fill_row(['Delivery', self.class.percentize(@relation.delivery.count / @relation.count), @relation.delivery.sum('payment_amount')], 10, csv)
+        csv_fill_row(['Pickup', self.class.percentize(@relation.pickup.count / @relation.count), @relation.pickup.sum('payment_amount')], 10, csv)
+        csv_fill_row(['Dine in', self.class.percentize(@relation.dinein.count / @relation.count), @relation.dinein.sum('payment_amount')], 10, csv)
+        csv_empty_row(csv)
+
+        csv_fill_row([SUMARY_REPORT[:columns][1]], 10, csv)
+        total_call = Asterisk::Connector.new(@start_datetime.to_date, @end_datetime.to_date).total_incoming # MEMOIZE
+        csv_fill_row([ 'Orden promedio', self.class.monetize(@relation.average('payment_amount')) ], 10, csv)
+        csv_fill_row([ 'Ventas por agente promedio', User.carts_completed_in_range(@start_datetime, @end_datetime).average('carts_count').round(2) ], 10, csv)
+        csv_fill_row([ 'Tiempo de orde promedio', (@relation.sum(&:take_time) / @relation.count).round(2) ], 10, csv)
+        csv_fill_row([ 'Llamadas entrantes', total_call ], 10, csv)
+        csv_fill_row([ 'Llamadas por agente', (total_call / User.carts_completed_in_range(@start_datetime, @end_datetime).count) ], 10, csv)
+        csv_empty_row(csv)
+
+        csv_fill_row([SUMARY_REPORT[:columns][2]], 10, csv)
+        @relation.joins(:products).group('products.productname').count.each  do | product, product_count |
+          csv << @data_rows.call(self.class.normalize(product), product_count)
+        end
+      end
+    end
 
     def build_sumary_report_pdf
       @relation = @relation.complete_in_date_range(@start_datetime, @end_datetime)
@@ -360,6 +402,8 @@ module Reports
         csv_fill_row([COUPONS_REPORT[:title]], COUPONS_REPORT[:columns].length, csv )
       when :discounts_report then
         csv_fill_row([DISCOUNTS_REPORT[:title]], DISCOUNTS_REPORT[:columns].length, csv )
+      when :sumary_report then
+        csv_fill_row([SUMARY_REPORT[:title]], 10, csv )
       end
     end
 
@@ -376,6 +420,8 @@ module Reports
         row_length = COUPONS_REPORT[:columns].length
       when :discounts_report then
         row_length = DISCOUNTS_REPORT[:columns].length
+      when :discounts_report then
+        row_length = 10
       end
       csv_fill_row([@start_datetime], row_length, csv )
       csv_fill_row([@end_datetime], row_length, csv )
@@ -394,10 +440,22 @@ module Reports
     end
 
     def csv_empty_row(csv)
+      row_length = 1
       case @report_type
       when :detailed_report then
-        csv_fill_row([nil], DETAILED_REPORT[:columns].length, csv)
+        row_length = DETAILED_REPORT[:columns].length
+      when :product_mix_report then
+        row_length = PRODUCT_MIX_REPORT[:columns].length
+      when :per_hour_report then
+        row_length = PER_HOUR_REPORT[:columns].length
+      when :coupons_report then
+        row_length = COUPONS_REPORT[:columns].length
+      when :discounts_report then
+        row_length = DISCOUNTS_REPORT[:columns].length
+      when :discounts_report then
+        row_length = 10
       end
+      csv_fill_row([nil], row_length, csv)
     end
 
     def build_detailed_report_pdf
