@@ -158,6 +158,10 @@ module Reports
 
     private
 
+    def asterisk_total_incomings
+      @asterisk_total_incomings ||= Asterisk::Connector.new(@start_datetime.to_date, @end_datetime.to_date).total_incoming
+    end
+
     def build_sumary_report_csv
       @relation = @relation.complete_in_date_range(@start_datetime, @end_datetime)
       @csv = CSV.generate do |csv|
@@ -183,12 +187,11 @@ module Reports
         csv_empty_row(csv)
 
         csv_fill_row([SUMARY_REPORT[:columns][1]], 10, csv)
-        total_call = Asterisk::Connector.new(@start_datetime.to_date, @end_datetime.to_date).total_incoming # MEMOIZE
         csv_fill_row([ 'Orden promedio', self.class.monetize(@relation.average('payment_amount')) ], 10, csv)
         csv_fill_row([ 'Ventas por agente promedio', User.carts_completed_in_range(@start_datetime, @end_datetime).average('carts_count').round(2) ], 10, csv)
         csv_fill_row([ 'Tiempo de orde promedio', (@relation.sum(&:take_time) / @relation.count).round(2) ], 10, csv)
-        csv_fill_row([ 'Llamadas entrantes', total_call ], 10, csv)
-        csv_fill_row([ 'Llamadas por agente', (total_call / User.carts_completed_in_range(@start_datetime, @end_datetime).count) ], 10, csv)
+        csv_fill_row([ 'Llamadas entrantes', asterisk_total_incomings ], 10, csv)
+        csv_fill_row([ 'Llamadas por agente', (asterisk_total_incomings / User.carts_completed_in_range(@start_datetime, @end_datetime).count) ], 10, csv)
         csv_empty_row(csv)
 
         csv_fill_row([SUMARY_REPORT[:columns][2]], 10, csv)
@@ -230,14 +233,13 @@ module Reports
 
       space_down
       h_1(SUMARY_REPORT[:columns][1])
-      total_call = Asterisk::Connector.new(@start_datetime.to_date, @end_datetime.to_date).total_incoming
       space_down
       other_table = []
       other_table << [ 'Orden promedio', self.class.monetize(@relation.average('payment_amount')) ]
       other_table << [ 'Ventas por agente promedio', User.carts_completed_in_range(@start_datetime, @end_datetime).average('carts_count').round(2) ]
       other_table << [ 'Tiempo de orde promedio', (@relation.sum(&:take_time) / @relation.count).round(2) ]
-      other_table << [ 'Llamadas entrantes', total_call ]
-      other_table << [ 'Llamadas por agente', (total_call / User.carts_completed_in_range(@start_datetime, @end_datetime).count) ]
+      other_table << [ 'Llamadas entrantes', asterisk_total_incomings ]
+      other_table << [ 'Llamadas por agente', (asterisk_total_incomings / User.carts_completed_in_range(@start_datetime, @end_datetime).count) ]
       create_table(other_table)
 
       h_1(SUMARY_REPORT[:columns][2])
