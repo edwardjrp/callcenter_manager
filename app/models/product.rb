@@ -15,7 +15,6 @@
 #  updated_at                  :datetime         not null
 #  discontinued                :boolean          default(FALSE)
 #
-require 'htmlentities'
 class Product < ActiveRecord::Base
   belongs_to :category
   has_many :cart_products

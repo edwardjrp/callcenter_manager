@@ -1,5 +1,6 @@
 #encoding:utf-8
 require 'csv'
+require 'htmlentities'
 
 module Reports
   class Generator
