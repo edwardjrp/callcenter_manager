@@ -64,7 +64,7 @@ class Report < ActiveRecord::Base
   private
 
   def process_detailed(relation, start_time, end_time)
-    detailed_report = Reports::Generator.new relation, :detailed_report, start_time, end_time,  :landscape do |cart|
+    process_report  relation, :detailed_report, start_time, end_time,  :landscape do |cart|
       [
         cart.id,
         cart.store_info_id.to_s,
@@ -82,21 +82,10 @@ class Report < ActiveRecord::Base
         cart.products.map(&:name).to_sentence
       ]
     end
-    csv_temp_file = Tempfile.new(["reporte detallado", '.csv'])
-    csv_temp_file.write(detailed_report.render_csv)
-    pdf_temp_file = Tempfile.new(["reporte detallado", '.pdf'])
-    pdf_temp_file.binmode
-    pdf_temp_file.write(detailed_report.render_pdf)
-    self.csv_file = csv_temp_file
-    self.pdf_file = pdf_temp_file
-    self.save
-    ensure
-      csv_temp_file.close!
-      pdf_temp_file.close!
   end
 
   def process_products_mix(relation, start_time, end_time)
-    product_mix_report = Reports::Generator.new relation, :product_mix_report, start_time, end_time,  :landscape do |product, cart_products|
+    process_report  relation, :product_mix_report, start_time, end_time,  :landscape do |product, cart_products|
       [
         '',
         product.name,
@@ -110,21 +99,10 @@ class Report < ActiveRecord::Base
         Reports::Generator.percentize(product.carts.complete_in_date_range(start_time, end_time).count.to_d / Cart.completed.date_range(start_time, end_time).count.to_d)
       ]
     end
-    csv_temp_file = Tempfile.new(["reporte products mix", '.csv'])
-    csv_temp_file.write(product_mix_report.render_csv)
-    pdf_temp_file = Tempfile.new(["reporte products mix", '.pdf'])
-    pdf_temp_file.binmode
-    pdf_temp_file.write(product_mix_report.render_pdf)
-    self.csv_file = csv_temp_file
-    self.pdf_file = pdf_temp_file
-    self.save
-    ensure
-      csv_temp_file.close!
-      pdf_temp_file.close!
   end
 
   def process_coupons(relation, start_time, end_time)
-    coupons_report = Reports::Generator.new relation, :coupons_report, start_time, end_time do |coupon_code, coupon_count|
+    process_report  relation, :coupons_report, start_time, end_time do |coupon_code, coupon_count|
       [
         coupon_code,
         Coupon.where(code: coupon_code).first.description_info,
@@ -133,21 +111,10 @@ class Report < ActiveRecord::Base
         Reports::Generator.percentize(coupon_count.to_d / Cart.completed.joins(:coupons).count.to_d)
       ]
     end
-    csv_temp_file = Tempfile.new(["reporte cupones", '.csv'])
-    csv_temp_file.write(coupons_report.render_csv)
-    pdf_temp_file = Tempfile.new(["reporte cupones", '.pdf'])
-    pdf_temp_file.binmode
-    pdf_temp_file.write(coupons_report.render_pdf)
-    self.csv_file = csv_temp_file
-    self.pdf_file = pdf_temp_file
-    self.save
-    ensure
-      csv_temp_file.close!
-      pdf_temp_file.close!
   end
 
   def process_discounts(relation, start_time, end_time)
-    discounts_report = Reports::Generator.new relation, :discounts_report, start_time, end_time do |cart|
+    process_report relation, :discounts_report, start_time, end_time do |cart|
       [
         cart.agent_info,
         cart.agent_info_name,
@@ -162,38 +129,16 @@ class Report < ActiveRecord::Base
         Reports::Generator.monetize((cart.payment_amount.to_d - cart.discount.to_d))
       ]
     end
-    csv_temp_file = Tempfile.new(["reporte cupones", '.csv'])
-    csv_temp_file.write(discounts_report.render_csv)
-    pdf_temp_file = Tempfile.new(["reporte cupones", '.pdf'])
-    pdf_temp_file.binmode
-    pdf_temp_file.write(discounts_report.render_pdf)
-    self.csv_file = csv_temp_file
-    self.pdf_file = pdf_temp_file
-    self.save
-    ensure
-      csv_temp_file.close!
-      pdf_temp_file.close!
   end
 
   def process_sumary(relation, start_time, end_time)
-    sumary_report =  Reports::Generator.new Cart.scoped, :sumary_report, start_time, end_time do | product, product_count |
+    process_report relation, :sumary_report, start_time, end_time do | product, product_count |
       [ product, product_count ]
     end
-    csv_temp_file = Tempfile.new(["reporte Consolidado", '.csv'])
-    csv_temp_file.write(sumary_report.render_csv)
-    pdf_temp_file = Tempfile.new(["reporte Consolidado", '.pdf'])
-    pdf_temp_file.binmode
-    pdf_temp_file.write(sumary_report.render_pdf)
-    self.csv_file = csv_temp_file
-    self.pdf_file = pdf_temp_file
-    self.save
-    ensure
-      csv_temp_file.close!
-      pdf_temp_file.close!
   end
 
   def process_per_hour(relation, start_time, end_time)
-    per_hour_report = Reports::Generator.new Cart.scoped, :per_hour_report, start_time, end_time do |datetime|
+    process_report relation, :per_hour_report, start_time, end_time do |datetime|
       [
         "#{datetime.to_date} - #{datetime.strftime('%H')}",
         Cart.complete_in_date_range(start_time, end_time).where("date_part('hour', complete_on) = ?", datetime.strftime('%H')).count,
@@ -205,16 +150,20 @@ class Report < ActiveRecord::Base
         Cart.complete_in_date_range(start_time, end_time).where("date_part('hour', complete_on) = ?", datetime.strftime('%H')).dinein.count
       ]
     end
-    csv_temp_file = Tempfile.new(["reporte por hora", '.csv'])
-    csv_temp_file.write(per_hour_report.render_csv)
-    pdf_temp_file = Tempfile.new(["reporte por hora", '.pdf'])
+  end
+
+  def process_report(relation, report_type, start_time, end_time, oriention = :landscape, &block)
+    report = Reports::Generator.new(relation, report_type, start_time, end_time, oriention, &block)
+    csv_temp_file = Tempfile.new([self.name, '.csv'])
+    csv_temp_file.write(report.render_csv)
+    pdf_temp_file = Tempfile.new([self.name, '.pdf'])
     pdf_temp_file.binmode
-    pdf_temp_file.write(per_hour_report.render_pdf)
+    pdf_temp_file.write(report.render_pdf)
     self.csv_file = csv_temp_file
     self.pdf_file = pdf_temp_file
     self.save
     ensure
-      csv_temp_file.close!
-      pdf_temp_file.close!
+      csv_temp_file.close! if csv_temp_file
+      pdf_temp_file.close! if pdf_temp_file
   end
 end
