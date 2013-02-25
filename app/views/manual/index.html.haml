@@ -1,0 +1,6 @@
+- if @text_file
+  .row
+    .span4#manual_toc
+      = Redcarpet::Markdown.new(Redcarpet::Render::HTML_TOC, {autolink: true, no_intra_emphasis: true}).render(@text_file).html_safe
+    .span8
+      = Redcarpet::Markdown.new(Redcarpet::Render::HTML.new(with_toc_data: true), {autolink: true, no_intra_emphasis: true}).render(@text_file).html_safe

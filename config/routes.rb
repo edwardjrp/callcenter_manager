@@ -5,6 +5,8 @@ Kapiqua25::Application.routes.draw do
   
 
 
+  get "manual", to: 'manual#index'
+
   mount Sidekiq::Web => 'admin/tasks', :constraints => AdminConstraint.new
 
   resources :users , :only =>:index

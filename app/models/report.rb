@@ -186,11 +186,4 @@ class Report < ActiveRecord::Base
     self.pdf_file = pdf_temp_file
     self.save
   end
-
-  
-
- 
-
-  
-
 end
