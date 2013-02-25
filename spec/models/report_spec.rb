@@ -201,5 +201,23 @@ describe Report do
         should match(end_time.strftime('%d %B %Y - %I:%M:%S %p'))
       end
     end
+
+    describe 'per hour report' do
+      let!(:cart1) { create :cart, completed: true, started_on: reports_time , complete_on: reports_time + 20.seconds }
+      let!(:cart2) { create :cart, completed: true, started_on: (reports_time + 1.hour), complete_on: (reports_time + 1.hour) + 20.seconds  }
+
+      let!(:report) { Report.new(name: 'PorHora').generate(start_time,end_time) }
+
+      subject { File.read(report.csv_file.path) }
+
+      it 'should have the pdf and csv files' do
+        report.should be_persisted
+      end
+
+      it 'should have the report data' do
+        should match(start_time.strftime('%d %B %Y - %I:%M:%S %p'))
+        should match(end_time.strftime('%d %B %Y - %I:%M:%S %p'))
+      end
+    end
   end
 end

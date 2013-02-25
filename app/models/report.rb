@@ -55,6 +55,8 @@ class Report < ActiveRecord::Base
       process_discounts(Cart.complete_in_date_range(start_time, end_time).discounted, start_time, end_time)
     when 'Consolidado'
       process_sumary(Cart.scoped, start_time, end_time)
+    when 'PorHora'
+      process_per_hour(Cart.scoped, start_time, end_time)
     end
     self
   end
@@ -185,5 +187,34 @@ class Report < ActiveRecord::Base
     self.csv_file = csv_temp_file
     self.pdf_file = pdf_temp_file
     self.save
+    ensure
+      csv_temp_file.close!
+      pdf_temp_file.close!
+  end
+
+  def process_per_hour(relation, start_time, end_time)
+    per_hour_report = Reports::Generator.new Cart.scoped, :per_hour_report, start_time, end_time do |datetime|
+      [
+        "#{datetime.to_date} - #{datetime.strftime('%H')}",
+        Cart.complete_in_date_range(start_time, end_time).where("date_part('hour', complete_on) = ?", datetime.strftime('%H')).count,
+        Reports::Generator.monetize(Cart.complete_in_date_range(start_time, end_time).where("date_part('hour', complete_on) = ?", datetime.strftime('%H')).sum('payment_amount')),
+        Cart.average_take_time(start_time, end_time, datetime.hour),
+        Cart.abandoned_in_date_range(start_time, end_time).where("date_part('hour', updated_at) = ?", datetime.strftime('%H')).abandoned.count,
+        Cart.complete_in_date_range(start_time, end_time).where("date_part('hour', complete_on) = ?", datetime.strftime('%H')).delivery.count,
+        Cart.complete_in_date_range(start_time, end_time).where("date_part('hour', complete_on) = ?", datetime.strftime('%H')).pickup.count,
+        Cart.complete_in_date_range(start_time, end_time).where("date_part('hour', complete_on) = ?", datetime.strftime('%H')).dinein.count
+      ]
+    end
+    csv_temp_file = Tempfile.new(["reporte por hora", '.csv'])
+    csv_temp_file.write(per_hour_report.render_csv)
+    pdf_temp_file = Tempfile.new(["reporte por hora", '.pdf'])
+    pdf_temp_file.binmode
+    pdf_temp_file.write(per_hour_report.render_pdf)
+    self.csv_file = csv_temp_file
+    self.pdf_file = pdf_temp_file
+    self.save
+    ensure
+      csv_temp_file.close!
+      pdf_temp_file.close!
   end
 end
