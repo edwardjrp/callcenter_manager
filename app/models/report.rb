@@ -49,6 +49,12 @@ class Report < ActiveRecord::Base
       process_detailed(detailed_carts, start_time, end_time)
     when 'ProductsMix'
       process_products_mix(CartProduct.products_mix(start_time, end_time, options), start_time, end_time)
+    when 'Cupones'
+      process_coupons(Cart.complete_in_date_range(start_time, end_time).joins(:coupons).group('coupons.code').count, start_time, end_time)
+    when 'Descuentos'
+      process_discounts(Cart.complete_in_date_range(start_time, end_time).discounted, start_time, end_time)
+    when 'Consolidado'
+      process_sumary(Cart.scoped, start_time, end_time)
     end
     self
   end
@@ -115,34 +121,75 @@ class Report < ActiveRecord::Base
       pdf_temp_file.close!
   end
 
-  # def process_sumary(relation, start_date, end_date)
-  #   Rails.logger.debug start_date
-  #   Rails.logger.debug end_date
-  #   pdf_temp_file = Tempfile.new(["reporte consolidado", '.pdf'])
-  #   pdf_temp_file.binmode
-  #   pdf_temp_file.write(relation.pdf_sumary_report(start_date, end_date).render)
-  #   self.pdf_file = pdf_temp_file
-  #   self.save
-  #   ensure pdf_temp_file.close!
-  # end
+  def process_coupons(relation, start_time, end_time)
+    coupons_report = Reports::Generator.new relation, :coupons_report, start_time, end_time do |coupon_code, coupon_count|
+      [
+        coupon_code,
+        Coupon.where(code: coupon_code).first.description_info,
+        coupon_count,
+        Reports::Generator.percentize(coupon_count.to_d / Cart.completed.count.to_d) ,
+        Reports::Generator.percentize(coupon_count.to_d / Cart.completed.joins(:coupons).count.to_d)
+      ]
+    end
+    csv_temp_file = Tempfile.new(["reporte cupones", '.csv'])
+    csv_temp_file.write(coupons_report.render_csv)
+    pdf_temp_file = Tempfile.new(["reporte cupones", '.pdf'])
+    pdf_temp_file.binmode
+    pdf_temp_file.write(coupons_report.render_pdf)
+    self.csv_file = csv_temp_file
+    self.pdf_file = pdf_temp_file
+    self.save
+    ensure
+      csv_temp_file.close!
+      pdf_temp_file.close!
+  end
 
-  # def process_coupons(relation, start_date, end_date)
-  #   pdf_temp_file = Tempfile.new(["reporte cupones", '.pdf'])
-  #   pdf_temp_file.binmode
-  #   pdf_temp_file.write(relation.pdf_coupons_report(start_date, end_date).render)
-  #   self.pdf_file = pdf_temp_file
-  #   self.save
-  #   ensure pdf_temp_file.close!
-  # end
+  def process_discounts(relation, start_time, end_time)
+    discounts_report = Reports::Generator.new relation, :discounts_report, start_time, end_time do |cart|
+      [
+        cart.agent_info,
+        cart.agent_info_name,
+        cart.discount_authorizer,
+        cart.discount_authorizer_name,
+        cart.completion_info,
+        cart.store_info_id,
+        cart.complete_id,
+        cart.client_info,
+        Reports::Generator.monetize(cart.payment_amount),
+        Reports::Generator.monetize(cart.discount),
+        Reports::Generator.monetize((cart.payment_amount.to_d - cart.discount.to_d))
+      ]
+    end
+    csv_temp_file = Tempfile.new(["reporte cupones", '.csv'])
+    csv_temp_file.write(discounts_report.render_csv)
+    pdf_temp_file = Tempfile.new(["reporte cupones", '.pdf'])
+    pdf_temp_file.binmode
+    pdf_temp_file.write(discounts_report.render_pdf)
+    self.csv_file = csv_temp_file
+    self.pdf_file = pdf_temp_file
+    self.save
+    ensure
+      csv_temp_file.close!
+      pdf_temp_file.close!
+  end
 
-  # def process_discounts(relation, start_date, end_date)
-  #   pdf_temp_file = Tempfile.new(["reporte descuentos", '.pdf'])
-  #   pdf_temp_file.binmode
-  #   pdf_temp_file.write(relation.pdf_discounts_report(start_date, end_date).render)
-  #   self.pdf_file = pdf_temp_file
-  #   self.save
-  #   ensure pdf_temp_file.close!
-  # end
+  def process_sumary(relation, start_time, end_time)
+    sumary_report =  Reports::Generator.new Cart.scoped, :sumary_report, start_time, end_time do | product, product_count |
+      [ product, product_count ]
+    end
+    csv_temp_file = Tempfile.new(["reporte Consolidado", '.csv'])
+    csv_temp_file.write(sumary_report.render_csv)
+    pdf_temp_file = Tempfile.new(["reporte Consolidado", '.pdf'])
+    pdf_temp_file.binmode
+    pdf_temp_file.write(sumary_report.render_pdf)
+    self.csv_file = csv_temp_file
+    self.pdf_file = pdf_temp_file
+    self.save
+  end
+
+  
+
+ 
 
   
 

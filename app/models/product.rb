@@ -25,8 +25,6 @@ class Product < ActiveRecord::Base
   scope :are_main, where('options != ?  or options is NULL', 'OPTION')
   scope :per_cart, joins(:carts).where('carts.completed = true AND carts.message_mask != 4').group('products.id').select('products.id, COUNT(*) as product_total')
   before_destroy :ensure_not_referenced_by_any_cart
-
-  # attr_accessible :title, :body
   
 
   def available_options

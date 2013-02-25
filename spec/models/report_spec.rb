@@ -130,5 +130,76 @@ describe Report do
         should match(sells)
       end
     end
+
+    describe 'Coupons report' do
+      let!(:cart1) { create :cart, completed: true, complete_on: reports_time, coupons: create_list(:coupon, 10) }
+      let!(:cart2) { create :cart, completed: true, complete_on: reports_time, coupons: create_list(:coupon, 10) }
+
+      let!(:report) { Report.new(name: 'Cupones').generate(start_time,end_time) }
+
+      subject { File.read(report.csv_file.path) }
+
+      it 'should have the pdf and csv files' do
+        report.should be_persisted
+      end
+
+      it 'should have the report data' do
+        should match(start_time.strftime('%d %B %Y - %I:%M:%S %p'))
+        should match(end_time.strftime('%d %B %Y - %I:%M:%S %p'))
+      end
+    end
+
+    describe 'discounts report' do
+      let(:dis_user) { create :user, :admin }
+      let!(:cart1)   { create :cart, completed: true, complete_on: reports_time, discount_auth_id: dis_user.id, discount: 100, payment_amount: 300 }
+      let!(:cart2)   { create :cart, completed: true, complete_on: reports_time, discount_auth_id: dis_user.id, discount: 80, payment_amount: 300 }
+
+      let!(:report) { Report.new(name: 'Descuentos').generate(start_time,end_time) }
+
+      subject { File.read(report.csv_file.path) }
+
+      it 'should have the pdf and csv files' do
+        report.should be_persisted
+      end
+
+      it 'should have the report data' do
+        should match(start_time.strftime('%d %B %Y - %I:%M:%S %p'))
+        should match(end_time.strftime('%d %B %Y - %I:%M:%S %p'))
+      end
+
+      it 'should have the authorizer admin name' do
+        should match(dis_user.first_name)
+      end
+
+      it 'should have the authorizer admin name' do
+        should match('220')
+        should match('200')
+      end
+    end
+
+    describe 'sumary report' do
+      let(:dis_user) { create :user, :admin }
+      let!(:cart1)   { create :cart, completed: true, started_on: reports_time , complete_on: reports_time + 20.seconds, discount_auth_id: dis_user.id, discount: 100, payment_amount: 300 }
+      let!(:cart2)   { create :cart, completed: true, started_on: reports_time , complete_on: reports_time + 20.seconds, discount_auth_id: dis_user.id, discount: 80, payment_amount: 300  }
+
+      before do
+        create_list :cart_product, 2, cart: cart1, created_at: reports_time 
+        create_list :cart_product, 3, cart: cart2, created_at: reports_time 
+        Net::HTTP.stub(:get).and_return({"resultcode"=>0, "result"=>{"totalincoming"=>16573}}.to_json)
+      end
+
+      let!(:report) { Report.new(name: 'Consolidado').generate(start_time,end_time) }
+
+      subject { File.read(report.csv_file.path) }
+
+      it 'should have the pdf and csv files' do
+        report.should be_persisted
+      end
+
+      it 'should have the report data' do
+        should match(start_time.strftime('%d %B %Y - %I:%M:%S %p'))
+        should match(end_time.strftime('%d %B %Y - %I:%M:%S %p'))
+      end
+    end
   end
 end

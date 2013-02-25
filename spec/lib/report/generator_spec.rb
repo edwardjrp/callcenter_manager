@@ -208,7 +208,7 @@ describe Reports::Generator do
     let!(:cart2)   { create :cart, completed: true, complete_on: reports_time, discount_auth_id: dis_user.id, discount: 80, payment_amount: 300 }
 
     let!(:discounts_report) do
-      Reports::Generator.new Cart.discounted, :discounts_report, start_time, end_time do |cart|
+      Reports::Generator.new Cart.complete_in_date_range(start_time, end_time).discounted, :discounts_report, start_time, end_time do |cart|
         [
           cart.agent_info,
           cart.agent_info_name,
@@ -268,7 +268,7 @@ describe Reports::Generator do
     let!(:cart2) { create :cart, completed: true, complete_on: reports_time, coupons: create_list(:coupon, 10) }
 
     let!(:coupons_report) do
-      Reports::Generator.new Cart.completed.joins(:coupons).group('coupons.code').count, :coupons_report, start_time, end_time do |coupon_code, coupon_count|
+      Reports::Generator.new Cart.complete_in_date_range(start_time, end_time).joins(:coupons).group('coupons.code').count, :coupons_report, start_time, end_time do |coupon_code, coupon_count|
         [
           coupon_code,
           Coupon.where(code: coupon_code).first.description_info,
