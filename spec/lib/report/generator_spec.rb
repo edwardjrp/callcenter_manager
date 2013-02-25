@@ -362,23 +362,37 @@ describe Reports::Generator do
   end
 
   describe 'Product mix report' do
-    let!(:carts)         { create_list :cart, 10, completed: true, created_at: reports_time }
-    let!(:cart_products) { create_list :cart_product, 20, created_at: reports_time, cart: carts.sample }
+    let(:category1) { create :category }
+    let(:category2) { create :category }
+
+    let(:product1)  { create :product, category: category1 }
+    let(:product2)  { create :product, category: category2 }
+    let(:product3)  { create :product, category: category2 }
+    let!(:products)  { [product1, product2, product3] }
+
+    let!(:cart1) { create :cart, completed: true, complete_on: reports_time }
+    let!(:cart2) { create :cart, completed: true, complete_on: reports_time }
+    let!(:cart3) { create :cart, completed: true, complete_on: Time.zone.now }
+
+    let!(:complete_cart_products1) { create_list :cart_product, 2, cart: cart1, product: products[0], created_at: reports_time  }
+    let!(:complete_cart_products2) { create_list :cart_product, 3, cart: cart2, product: products[1], created_at: reports_time  }
+    let!(:complete_cart_products3) { create_list :cart_product, 2, cart: cart3, product: products[2], created_at: Time.zone.now }
+
     let!(:association)   { CartProduct.products_mix(start_time, end_time) }
 
     let!(:product_mix_report) do
       Reports::Generator.new association, :product_mix_report, start_time, end_time,  :landscape do |product, cart_products|
         [
           '',
-          product[:product].name,
-          product[:product].sizecode,
-          product[:product].flavorcode,
-          Reports::Generator.monetize(product[:cart_products][:total_sales]),
-          product[:cart_products][:total_count],
-          Reports::Generator.percentize(product[:cart_products][:total_sales].to_d / Cart.total_sells_in(start_time, end_time)),
-          Reports::Generator.percentize(product[:cart_products][:total_count].to_d / CartProduct.total_items_sold(start_time, end_time)),
-          product[:total_carts],
-          Reports::Generator.percentize(product[:total_carts].to_d / Cart.completed.date_range(start_time, end_time).count.to_d)
+          product.name,
+          product.sizecode,
+          product.flavorcode,
+          Reports::Generator.monetize(cart_products.sum(&:priced_at)),
+          cart_products.sum(&:quantity),
+          Reports::Generator.percentize(cart_products.sum(&:priced_at).to_d / Cart.total_sells_in(start_time, end_time)),
+          Reports::Generator.percentize(cart_products.sum(&:quantity).to_d / CartProduct.total_items_sold(start_time, end_time)),
+          product.carts.complete_in_date_range(start_time, end_time).count,
+          Reports::Generator.percentize(product.carts.complete_in_date_range(start_time, end_time).count.to_d / Cart.completed.date_range(start_time, end_time).count.to_d)
         ]
       end
     end
@@ -398,7 +412,7 @@ describe Reports::Generator do
       end
 
       it 'should have sell Percentage' do
-        sells = Reports::Generator.percentize(CartProduct.products_mix(start_time, end_time).first.last.first[:cart_products][:total_sales] / Cart.total_sells_in(start_time, end_time))
+        sells = Reports::Generator.percentize(CartProduct.products_mix(start_time, end_time).values.first.last.last.sum(&:priced_at).to_d / Cart.total_sells_in(start_time, end_time))
         should match(sells)
       end
     end

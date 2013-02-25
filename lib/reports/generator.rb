@@ -351,7 +351,7 @@ module Reports
         csv_empty_row(csv)
         csv << PRODUCT_MIX_REPORT[:columns]
         @relation.each do |category, products|
-          csv << csv_fill_row([category], PRODUCT_MIX_REPORT[:columns].length, csv)
+          csv << csv_fill_row([category.name], PRODUCT_MIX_REPORT[:columns].length, csv)
           products.each do |product, cart_products|
             csv << @data_rows.call(product, cart_products)
           end
@@ -369,7 +369,7 @@ module Reports
       pdf_table = []
       pdf_table << PRODUCT_MIX_REPORT[:columns]
       @relation.each do |category, products|
-        pdf_table << fill_row([category], PRODUCT_MIX_REPORT[:columns].length)
+        pdf_table << fill_row([category.name], PRODUCT_MIX_REPORT[:columns].length)
         products.each do |product, cart_products|
           pdf_table << @data_rows.call(product, cart_products)
         end

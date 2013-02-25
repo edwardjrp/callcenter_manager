@@ -95,10 +95,22 @@ describe Report do
       end
     end
 
-    describe 'ProductsMix repot' do
-      let!(:carts)         { create_list :cart, 10, completed: true, created_at: reports_time }
-      let!(:cart_products) { create_list :cart_product, 20, created_at: reports_time, cart: carts.sample }
-      let!(:association)   { CartProduct.products_mix(start_time, end_time) }
+    describe 'ProductsMix report' do
+      let(:category1) { create :category }
+      let(:category2) { create :category }
+
+      let(:product1)  { create :product, category: category1 }
+      let(:product2)  { create :product, category: category2 }
+      let(:product3)  { create :product, category: category2 }
+      let!(:products)  { [product1, product2, product3] }
+
+      let!(:cart1) { create :cart, completed: true, complete_on: reports_time }
+      let!(:cart2) { create :cart, completed: true, complete_on: reports_time }
+      let!(:cart3) { create :cart, completed: true, complete_on: Time.zone.now }
+
+      let!(:complete_cart_products1) { create_list :cart_product, 2, cart: cart1, product: products[0], created_at: reports_time  }
+      let!(:complete_cart_products2) { create_list :cart_product, 3, cart: cart2, product: products[1], created_at: reports_time  }
+      let!(:complete_cart_products3) { create_list :cart_product, 2, cart: cart3, product: products[2], created_at: Time.zone.now }
 
       let!(:report) { Report.new(name: 'ProductsMix').generate(start_time,end_time) }
 
@@ -111,6 +123,11 @@ describe Report do
       it 'should have the report data' do
         should match(start_time.strftime('%d %B %Y - %I:%M:%S %p'))
         should match(end_time.strftime('%d %B %Y - %I:%M:%S %p'))
+      end
+
+      it 'should have sell Percentage' do
+        sells = Reports::Generator.percentize(CartProduct.products_mix(start_time, end_time).values.first.last.last.sum(&:priced_at).to_d / Cart.total_sells_in(start_time, end_time))
+        should match(sells)
       end
     end
   end

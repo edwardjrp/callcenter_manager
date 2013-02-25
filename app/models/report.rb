@@ -38,15 +38,17 @@ class Report < ActiveRecord::Base
   def generate(start_time, end_time, options = {})
     case self.name
     when 'Detallado'
-      completed_detailed_carts = Cart.complete_in_date_range(start_time, end_time)
-      abandoned_detailed_carts = Cart.abandoned_in_date_range(start_time, end_time)
+      completed_detailed_carts = Cart.complete_in_date_range(start_time, end_time).untrashed
+      abandoned_detailed_carts = Cart.abandoned_in_date_range(start_time, end_time).untrashed
       if options[:agent]
         agent_query = Cart.joins(:user).where('users.first_name = ? OR users.last_name = ? OR users.idnumber = ?', "%#{options[:agent]}%", "%#{options[:agent]}%", "%#{options[:agent]}%")
-        completed_detailed_carts = completed_detailed_carts.merge(agent_query) 
+        completed_detailed_carts = completed_detailed_carts.merge(agent_query)
         abandoned_detailed_carts = abandoned_detailed_carts.merge(agent_query)
       end
       detailed_carts = completed_detailed_carts + abandoned_detailed_carts
       process_detailed(detailed_carts, start_time, end_time)
+    when 'ProductsMix'
+      process_products_mix(CartProduct.products_mix(start_time, end_time, options), start_time, end_time)
     end
     self
   end
@@ -85,6 +87,34 @@ class Report < ActiveRecord::Base
       pdf_temp_file.close!
   end
 
+  def process_products_mix(relation, start_time, end_time)
+    product_mix_report = Reports::Generator.new relation, :product_mix_report, start_time, end_time,  :landscape do |product, cart_products|
+      [
+        '',
+        product.name,
+        product.sizecode,
+        product.flavorcode,
+        Reports::Generator.monetize(cart_products.sum(&:priced_at)),
+        cart_products.sum(&:quantity),
+        Reports::Generator.percentize(cart_products.sum(&:priced_at).to_d / Cart.total_sells_in(start_time, end_time)),
+        Reports::Generator.percentize(cart_products.sum(&:quantity).to_d / CartProduct.total_items_sold(start_time, end_time)),
+        product.carts.complete_in_date_range(start_time, end_time).count,
+        Reports::Generator.percentize(product.carts.complete_in_date_range(start_time, end_time).count.to_d / Cart.completed.date_range(start_time, end_time).count.to_d)
+      ]
+    end
+    csv_temp_file = Tempfile.new(["reporte products mix", '.csv'])
+    csv_temp_file.write(product_mix_report.render_csv)
+    pdf_temp_file = Tempfile.new(["reporte products mix", '.pdf'])
+    pdf_temp_file.binmode
+    pdf_temp_file.write(product_mix_report.render_pdf)
+    self.csv_file = csv_temp_file
+    self.pdf_file = pdf_temp_file
+    self.save
+    ensure
+      csv_temp_file.close!
+      pdf_temp_file.close!
+  end
+
   # def process_sumary(relation, start_date, end_date)
   #   Rails.logger.debug start_date
   #   Rails.logger.debug end_date
@@ -114,13 +144,6 @@ class Report < ActiveRecord::Base
   #   ensure pdf_temp_file.close!
   # end
 
-  # def process_products_mix(relation, start_date, end_date)
-  #   pdf_temp_file = Tempfile.new(["reporte descuentos", '.pdf'])
-  #   pdf_temp_file.binmode
-  #   pdf_temp_file.write(relation.pdf_products_mix_report(start_date, end_date).render)
-  #   self.pdf_file = pdf_temp_file
-  #   self.save
-  #   ensure pdf_temp_file.close!
-  # end
+  
 
 end

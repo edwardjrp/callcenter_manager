@@ -23,20 +23,34 @@ class CartProduct < ActiveRecord::Base
   belongs_to :product
   attr_accessible :bind_id, :cart_id, :options, :product_id, :quantity
   
-  def self.products_mix(start_date, end_date)
-    mix = joins(:cart).where('carts.completed = true AND carts.message_mask != 4').where('carts.created_at > ? and carts.created_at < ?', start_date, end_date).group_by { |cart_product| cart_product.product_id }
-    results = []
-    mix.each do |product_id, cart_products|
-      if exists? product_id
-        current_product = Product.find(product_id)
-        results.push( product: current_product, total_carts: Cart.completed.date_range(start_date, end_date).joins(:products).where('products.id = ?', current_product.id).count ,cart_products: { total_sales: cart_products.sum{ |cp| cp.priced_at || 0 }, total_count: cart_products.sum(&:quantity)})
-      end
-    end
-    results.group_by{ | current_product | current_product[:product].category.name }
+
+  def self.completed_in_range(start_time, end_time)
+    self.joins(:cart).where('carts.completed = ? AND carts.message_mask != 4', true).where('carts.complete_on > ? and carts.complete_on < ?', start_time, end_time)
   end
 
-  def self.total_items_sold(start_date, end_date)
-    joins(:cart).where('carts.completed = true AND carts.message_mask != 4').where('carts.created_at > ? and carts.created_at < ?', start_date, end_date).select('SUM(cart_products.quantity) as total_sales').first.total_sales.to_i
+  def self.products_mix(start_time, end_time, options = {})
+    mix = self.completed_in_range(start_time, end_time)
+    if options
+      mix = mix.merge(self.where('carts.user_id = ?', User.where('firs_name = ? OR last_name = ? OR idnumber = ?', "%#{options[:agent]}%", "%#{options[:agent]}%", "%#{options[:agent]}%"))) if options[:agent]
+      mix = mix.merge(self.where('carts.store_id = ?', User.where('name = ? OR storeid = ? OR idnumber = ?', "%#{options[:store]}%", "%#{options[:store]}%"))) if options[:store]
+    end
+    mix = mix.group_by(&:product).group_by{ |product, cart_products| product.category }
+  end
+
+  # def self.products_mix(start_date, end_date)
+  #   mix = joins(:cart).where('carts.completed = true AND carts.message_mask != 4').where('carts.created_at > ? and carts.created_at < ?', start_date, end_date).group_by { |cart_product| cart_product.product_id }
+  #   results = []
+  #   mix.each do |product_id, cart_products|
+  #     if exists? product_id
+  #       current_product = Product.find(product_id)
+  #       results.push( product: current_product, total_carts: Cart.completed.date_range(start_date, end_date).joins(:products).where('products.id = ?', current_product.id).count ,cart_products: { total_sales: cart_products.sum{ |cp| cp.priced_at || 0 }, total_count: cart_products.sum(&:quantity)})
+  #     end
+  #   end
+  #   results.group_by{ | current_product | current_product[:product].category.name }
+  # end
+
+  def self.total_items_sold(start_time, end_time)
+    joins(:cart).where('carts.completed = true AND carts.message_mask != 4').where('carts.complete_on > ? and carts.complete_on < ?', start_time, end_time).select('SUM(cart_products.quantity) as total_sales').first.total_sales.to_i
   end
 
   def available_in_store(store)
