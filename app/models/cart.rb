@@ -432,6 +432,8 @@ class Cart < ActiveRecord::Base
       end
     rescue Timeout::Error
       self.order_progress = 'N/A - No hay respuesta de pulse'
+    rescue Errno::ENETUNREACH
+      self.order_progress = 'N/A - No hay una conexión a pulse'
     end
     self.save!
   end

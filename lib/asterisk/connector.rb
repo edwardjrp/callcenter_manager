@@ -19,7 +19,7 @@ module Asterisk
     end
 
     def total_incoming
-      result = JSON.parse(Net::HTTP.get(end_point))
+      result = JSON.parse(Net::HTTP.get(URI.parse(end_point)))
       result["result"]["totalincoming"] if result and result["result"]
     end
 

@@ -1,12 +1,13 @@
 require 'spec_helper'
 
 describe "Admin Report Generals" do
+  let!(:admin) { create :user , :admin}
+
+  subject { page }
+
+  before { login(admin) }
+
   describe " Browsing the list" do
-    let!(:admin) { create :user , :admin}
-
-    subject { page }
-
-    before { login(admin) }
 
     describe 'navigation' do
       it 'should render the reports link in the navbar' do
@@ -43,4 +44,11 @@ describe "Admin Report Generals" do
     end
   end
 
+  describe 'generating report' do
+    before { visit new_admin_report_path }
+    
+    it 'should render the generate report form' do
+      should have_selector('#new_report')
+    end
+  end
 end

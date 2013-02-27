@@ -12,7 +12,7 @@
 
 class Report < ActiveRecord::Base
   attr_accessible :csv_file, :name, :pdf_file
-  validates :name, presence: true, uniqueness: true
+  validates :name, presence: true, uniqueness: true, :inclusion => { :in => %W( Detallado Consolidado Cupones Descuentos ProductsMix PorHora ) }
   validates :csv_file, :pdf_file, presence: true
   mount_uploader :csv_file, ReportUploader
   mount_uploader :pdf_file, ReportUploader
@@ -40,7 +40,7 @@ class Report < ActiveRecord::Base
     when 'Detallado'
       completed_detailed_carts = Cart.complete_in_date_range(start_time, end_time).untrashed
       abandoned_detailed_carts = Cart.abandoned_in_date_range(start_time, end_time).untrashed
-      if options[:agent]
+      if options && options[:agent]
         agent_query = Cart.joins(:user).where('users.first_name = ? OR users.last_name = ? OR users.idnumber = ?', "%#{options[:agent]}%", "%#{options[:agent]}%", "%#{options[:agent]}%")
         completed_detailed_carts = completed_detailed_carts.merge(agent_query)
         abandoned_detailed_carts = abandoned_detailed_carts.merge(agent_query)
@@ -58,7 +58,7 @@ class Report < ActiveRecord::Base
     when 'PorHora'
       process_per_hour(Cart.scoped, start_time, end_time)
     end
-    self
+    self.persisted?
   end
 
   private
@@ -161,7 +161,7 @@ class Report < ActiveRecord::Base
     pdf_temp_file.write(report.render_pdf)
     self.csv_file = csv_temp_file
     self.pdf_file = pdf_temp_file
-    self.save
+    self.save!
     ensure
       csv_temp_file.close! if csv_temp_file
       pdf_temp_file.close! if pdf_temp_file

@@ -160,7 +160,15 @@ module Reports
     private
 
     def asterisk_total_incomings
-      @asterisk_total_incomings ||= Asterisk::Connector.new(@start_datetime.to_date, @end_datetime.to_date).total_incoming
+      begin
+        @asterisk_total_incomings ||= Asterisk::Connector.new(@start_datetime.to_date, @end_datetime.to_date).total_incoming
+      rescue Errno::ETIMEDOUT
+        0
+      rescue Timeout::Error
+        0
+      rescue Errno::ENETUNREACH
+        0
+      end
     end
 
     def build_sumary_report_csv
@@ -192,7 +200,7 @@ module Reports
         csv_fill_row([ 'Ventas por agente promedio', User.carts_completed_in_range(@start_datetime, @end_datetime).average('carts_count').round(2) ], 10, csv)
         csv_fill_row([ 'Tiempo de orde promedio', (@relation.sum(&:take_time) / @relation.count).round(2) ], 10, csv)
         csv_fill_row([ 'Llamadas entrantes', asterisk_total_incomings ], 10, csv)
-        csv_fill_row([ 'Llamadas por agente', (asterisk_total_incomings / User.carts_completed_in_range(@start_datetime, @end_datetime).count) ], 10, csv)
+        csv_fill_row([ 'Llamadas por agente', reason(asterisk_total_incomings, User.carts_completed_in_range(@start_datetime, @end_datetime).count) ], 10, csv)
         csv_empty_row(csv)
 
         csv_fill_row([SUMARY_REPORT[:columns][2]], 10, csv)
@@ -200,6 +208,10 @@ module Reports
           csv << @data_rows.call(self.class.normalize(product), product_count)
         end
       end
+    end
+
+    def reason(divident, divisor)
+      divident == 0 ? 0 : divident / divisor 
     end
 
     def build_sumary_report_pdf
