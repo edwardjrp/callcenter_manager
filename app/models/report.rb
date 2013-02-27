@@ -12,7 +12,7 @@
 
 class Report < ActiveRecord::Base
   attr_accessible :csv_file, :name, :pdf_file
-  validates :name, presence: true, uniqueness: true, :inclusion => { :in => %W( Detallado Consolidado Cupones Descuentos ProductsMix PorHora ) }
+  validates :name, presence: true, :inclusion => { :in => %W( Detallado Consolidado Cupones Descuentos ProductsMix PorHora ) }
   validates :csv_file, :pdf_file, presence: true
   mount_uploader :csv_file, ReportUploader
   mount_uploader :pdf_file, ReportUploader
@@ -40,8 +40,8 @@ class Report < ActiveRecord::Base
     when 'Detallado'
       completed_detailed_carts = Cart.complete_in_date_range(start_time, end_time).untrashed
       abandoned_detailed_carts = Cart.abandoned_in_date_range(start_time, end_time).untrashed
-      if options && options[:agent]
-        agent_query = Cart.joins(:user).where('users.first_name = ? OR users.last_name = ? OR users.idnumber = ?', "%#{options[:agent]}%", "%#{options[:agent]}%", "%#{options[:agent]}%")
+      if options && options["agent"].present?
+        agent_query = Cart.joins(:user).where('users.first_name ILIKE ? OR users.last_name ILIKE ? OR users.idnumber ILIKE ?', "%#{options["agent"]}%", "%#{options["agent"]}%", "%#{options["agent"]}%")
         completed_detailed_carts = completed_detailed_carts.merge(agent_query)
         abandoned_detailed_carts = abandoned_detailed_carts.merge(agent_query)
       end
@@ -54,11 +54,22 @@ class Report < ActiveRecord::Base
     when 'Descuentos'
       process_discounts(Cart.complete_in_date_range(start_time, end_time).discounted, start_time, end_time)
     when 'Consolidado'
-      process_sumary(Cart.scoped, start_time, end_time)
+      consolidated_report  = Cart.finalized
+      if options && options["agent"].present?
+        agent_query = Cart.joins(:user).where('users.first_name ILIKE ? OR users.last_name ILIKE ? OR users.idnumber ILIKE ?', "%#{options["agent"]}%", "%#{options["agent"]}%", "%#{options["agent"]}%")
+        consolidated_report = consolidated_report.merge(agent_query)
+      end
+      if options && options["store"].present?
+        store_query = Cart.joins(:store).where('stores.storeid = ?', options["store"].to_i)
+        consolidated_report = consolidated_report.merge(store_query)
+      end
+      STDOUT.puts options.inspect
+      STDOUT.puts consolidated_report.to_sql
+      process_sumary(consolidated_report, start_time, end_time)
     when 'PorHora'
       process_per_hour(Cart.scoped, start_time, end_time)
     end
-    self.persisted?
+    self
   end
 
   private
@@ -91,10 +102,10 @@ class Report < ActiveRecord::Base
         product.name,
         product.sizecode,
         product.flavorcode,
-        Reports::Generator.monetize(cart_products.sum(&:priced_at)),
+        Reports::Generator.monetize(cart_products.map(&:priced_at).compact.inject(0, :+).to_d),
         cart_products.sum(&:quantity),
-        Reports::Generator.percentize(cart_products.sum(&:priced_at).to_d / Cart.total_sells_in(start_time, end_time)),
-        Reports::Generator.percentize(cart_products.sum(&:quantity).to_d / CartProduct.total_items_sold(start_time, end_time)),
+        Reports::Generator.percentize(cart_products.map(&:priced_at).compact.inject(0, :+).to_d / Cart.total_sells_in(start_time, end_time)),
+        Reports::Generator.percentize(cart_products.map(&:quantity).compact.inject(0, :+).to_d / CartProduct.total_items_sold(start_time, end_time)),
         product.carts.complete_in_date_range(start_time, end_time).count,
         Reports::Generator.percentize(product.carts.complete_in_date_range(start_time, end_time).count.to_d / Cart.completed.date_range(start_time, end_time).count.to_d)
       ]

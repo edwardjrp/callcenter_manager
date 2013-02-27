@@ -15,7 +15,7 @@ require 'spec_helper'
 describe Report do
   describe 'Validation' do
     it{ should validate_presence_of :name }
-    it{ should validate_uniqueness_of :name }
+    it{ should_not validate_uniqueness_of :name }
     it{ should validate_presence_of :csv_file }
     it{ should validate_presence_of :pdf_file }
   end
