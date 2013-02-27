@@ -3,3 +3,4 @@
     %ul.nav.nav-pills#report_types_links
       - Report.report_types.each do |report_type|
         %li= link_to report_type, admin_reports_path(report_type: report_type)
+      %li= link_to 'Todos', admin_reports_path
