@@ -73,6 +73,8 @@ Kapiqua25::Application.routes.draw do
     end
     resources :reasons, except: [:new, :edit]
 
+    resources :reports, only: [:new, :index, :create, :destroy]
+
     get "reports/detailed" => "reports#detailed"
     post "reports/detailed" => "reports#generate_detailed"
 

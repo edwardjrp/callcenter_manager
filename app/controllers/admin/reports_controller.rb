@@ -2,6 +2,14 @@
 class Admin::ReportsController < ApplicationController
     before_filter {|c| c.accessible_by([:admin, :supervisor], root_path)}
 
+    def index
+      if !!params[:report].blank? && Report.report_types.include?(params[:report_type])
+        @reports = Report.where(name: params[:report_type]).page(params[:page])
+      else
+        @reports = Report.page(params[:page])
+      end
+    end
+
     def detailed
       @reports = Report.detailed.order('created_at DESC').page(params[:page])
       @search = Cart.finalized.search(params[:q])

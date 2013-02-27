@@ -19,6 +19,15 @@ module ApplicationHelper
     end
   end
 
+  def link_if_exists(uploaded_file)
+    return 'N/A' if uploaded_file.nil? || uploaded_file.current_path.nil?
+    if File.exists? uploaded_file.current_path
+      link_to uploaded_file.file.identifier, uploaded_file.url
+    else
+      content_tag :span, uploaded_file.file.identifier
+    end
+  end
+
   def availability(value)
     value == true ? '<span class="label label-info">Disponible</span>'.html_safe : '<span class="label label-warning">Agotado</span>'.html_safe
   end

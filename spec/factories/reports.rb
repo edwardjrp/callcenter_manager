@@ -2,8 +2,8 @@
 
 FactoryGirl.define do
   factory :report do
-    name "MyString"
-    csv_file "MyString"
-    pdf_file "MyString"
+    name %W( Detallado Consolidado Cupones Descuentos ProductsMix PorHora ).sample
+    csv_file { File.open(Rails.root + 'spec/fixtures/consolidado.csv') }
+    pdf_file { File.open(Rails.root + 'spec/fixtures/consolidado.pdf') }
   end
 end

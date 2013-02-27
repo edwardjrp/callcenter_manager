@@ -24,7 +24,7 @@ class Report < ActiveRecord::Base
   scope :per_hour, where(:name=>'PorHora')
 
   def self.report_types
-    %W( Detallado Consolidado Cupones Descuentos ProductsMix PorHora)
+    %W( Detallado Consolidado Cupones Descuentos ProductsMix PorHora )
   end
 
   def output_file_name

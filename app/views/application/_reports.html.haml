@@ -1,8 +1,5 @@
 = content_for :subnav do
   .subnav.subnav-fixed
-    %ul.nav.nav-pills
-      %li= link_to 'Detallado', admin_reports_detailed_path
-      %li= link_to 'Product Mix', admin_reports_products_mix_path
-      %li= link_to 'Consolidado', admin_report_sumary_path
-      %li= link_to 'Cupones', admin_report_coupons_path
-      %li= link_to 'Descuentos', admin_report_discounts_path
+    %ul.nav.nav-pills#report_types_links
+      - Report.report_types.each do |report_type|
+        %li= link_to report_type, admin_reports_path(report_type: report_type)
