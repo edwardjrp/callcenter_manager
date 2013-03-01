@@ -68,7 +68,22 @@ class Kapiqua25.Models.Category extends Backbone.RelationalModel
     category_matchups = new Kapiqua25.Collections.Matchups()
     if @hasOptions() and not @typeUnit()
       for recipe in _.keys(@productsByOptions())
-        category_matchups.add new Kapiqua25.Models.Matchup().set(recipe: recipe, products: @productsByOptions()[recipe], available_options: @optionProducts() )
+        s = _.map(@productsByOptions()[recipe], (current_product) -> current_product.get('productname'))
+
+        if _.isEmpty(_.intersection.apply(_,   _.map( s, (ax) -> ax.split(' '))   ))
+          group1 = []
+          group2 = []
+          for i in @productsByOptions()[recipe]
+            group1.push i if _.isEmpty(group1)
+            if group1.length >= 1
+              group1.push i if _.last(_.first(group1).get('productname').split(' ')) is _.last(i.get('productname').split(' '))
+          
+          category_matchups.add new Kapiqua25.Models.Matchup().set(recipe: recipe, products: group1, available_options: @optionProducts() )
+          group2 = window.objectDifference(@productsByOptions()[recipe], group1 )
+          
+          category_matchups.add new Kapiqua25.Models.Matchup().set(recipe: recipe, products: group2, available_options: @optionProducts() )
+        else
+          category_matchups.add new Kapiqua25.Models.Matchup().set(recipe: recipe, products: @productsByOptions()[recipe], available_options: @optionProducts() )
 
     else if @hasOptions() and @typeUnit()
       for product in @mainProducts().models
