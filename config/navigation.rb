@@ -60,7 +60,8 @@ SimpleNavigation::Configuration.run do |navigation|
     primary.item :administration, 'Gestión', admin_clients_path, :if => Proc.new { current_user.is? [:admin, :supervisor] }
     primary.item :reports, 'Reportes', admin_reports_path, :if => Proc.new { current_user.is? [:admin, :supervisor] }
 
-    primary.item :manual, 'Ayuda',manual_path
+    primary.item :manual, 'Ayuda',manual_path, :unless => Proc.new { current_user.is? [:admin, :supervisor] }
+    primary.item :manual, 'Ayuda',admin_manual_path, :if => Proc.new { current_user.is? [:admin, :supervisor] }
     
     primary.dom_class = 'nav'
    

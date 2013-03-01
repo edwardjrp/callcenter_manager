@@ -60,6 +60,7 @@ Kapiqua25::Application.routes.draw do
   end
   
   namespace 'admin' do
+    get "manual", to: 'manual#index'
     resources :user_carts, only: [ :create, :destroy ]
     resources :categories, :only => :index do
       member do
