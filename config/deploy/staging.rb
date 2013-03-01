@@ -12,6 +12,16 @@ namespace :deploy do
     run "touch #{current_release}/tmp/restart.txt"
   end
 
+  desc "Make sure local git is in sync with remote."
+  task :check_revision, roles: :web do
+    unless `git rev-parse HEAD` == `git rev-parse staging/master`
+      puts "WARNING: HEAD is not the same as staging/master"
+      puts "Run `git push` to sync changes."
+      exit
+    end
+  end
+  before "deploy", "deploy:check_revision"
+
   # task :setup_config, roles: :app do
    # sudo "ln -nfs #{current_path}/deploy_configs/kapiqua.conf /usr/local/etc/nginx/nginx.conf"
   #  sudo "ln -nfs #{current_path}/deploy_configs/kapiqua_unicorn_init.sh /etc/init.d/unicorn_#{application}"

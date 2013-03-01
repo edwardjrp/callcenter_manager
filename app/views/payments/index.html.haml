@@ -81,7 +81,7 @@
             .row
               .span4
                 %strong Calle:
-                %span#target_street= @cart.client.last_address.street.name
+                %span#target_street= @cart.client.last_address.street.name if @cart.client.last_address.street
             .row
               .span4
                 %strong Número:
@@ -89,7 +89,7 @@
             .row
               .span4
                 %strong Tipo:
-                = @cart.client.last_address.unit_type
+                = @cart.client.last_address.try(:unit_type)
             -if @cart.client.last_address.unit_number
               .row
                 .span4

@@ -14,7 +14,7 @@
             %a.set_target_store_address{:data=> { "address-id"=> address.id , "store-id"=> address.store.id}}
               - if address.client_target?
                 %i.icon-bookmark
-              ="#{address.store.storeid} #{address.store.name} - Calle #{address.street.name}, No. #{address.number} "
+              ="#{address.store.storeid} #{address.store.name} - Calle #{address.street.name}, No. #{address.number} " if address.street
       %hr
   %li
     %input{type: 'text' , id: 'filter_store'}
