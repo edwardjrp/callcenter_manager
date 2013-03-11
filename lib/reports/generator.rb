@@ -49,6 +49,8 @@ module Reports
       columns: [
         'Periodo del día',
         'Ordenes',
+        'Llamandas',
+        'Cantidad de agentes conectado',
         'Ventas netas',
         'Tiempo promedio de toma de orden',
         'Ordenes Canceladas',
@@ -323,6 +325,12 @@ module Reports
     end
 
     def build_per_hour_report_csv
+      asterisk_connector =  Asterisk::Connector.new(@start_datetime, @end_datetime)
+      begin
+        telephony_hash = { call_by_hour: asterisk_connector.calls_by_hour, agents_by_hour: asterisk_connector.agents_by_hour }
+      rescue Timeout::Error, Net::HTTPServerException, Errno::EHOSTUNREACH, Errno::ECONNREFUSED, Errno::ENETUNREACH, Errno::ETIMEDOUT
+        telephony_hash = { call_by_hour: {}, agents_by_hour: {} }
+      end
       @csv = CSV.generate do |csv|
         csv_title(csv)
         set_pdf_font(5)
@@ -332,7 +340,7 @@ module Reports
         csv << PER_HOUR_REPORT[:columns]
         datetime = @start_datetime_original
         while datetime < @end_datetime_original
-          csv << @data_rows.call(datetime)
+          csv << @data_rows.call(datetime, telephony_hash)
           datetime += 1.hour
         end
         csv_empty_row(csv)
@@ -340,6 +348,12 @@ module Reports
     end    
 
     def build_per_hour_report_pdf
+      asterisk_connector =  Asterisk::Connector.new(@start_datetime, @end_datetime)
+      begin
+        telephony_hash = { call_by_hour: asterisk_connector.calls_by_hour, agents_by_hour: asterisk_connector.agents_by_hour }
+      rescue Timeout::Error, Net::HTTPServerException, Errno::EHOSTUNREACH, Errno::ECONNREFUSED, Errno::ENETUNREACH, Errno::ETIMEDOUT
+        telephony_hash = { call_by_hour: {}, agents_by_hour: {} }
+      end
       h_1(PER_HOUR_REPORT[:title])
       set_pdf_font(7)
       space_down
@@ -349,7 +363,7 @@ module Reports
       pdf_table << PER_HOUR_REPORT[:columns]
       datetime = @start_datetime_original
       while datetime < @end_datetime_original
-        pdf_table << @data_rows.call(datetime)
+        pdf_table << @data_rows.call(datetime, telephony_hash)
         datetime += 1.hour
       end
       create_table(pdf_table)

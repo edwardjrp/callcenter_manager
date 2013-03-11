@@ -63,8 +63,6 @@ class Report < ActiveRecord::Base
         store_query = Cart.joins(:store).where('stores.storeid = ?', options["store"].to_i)
         consolidated_report = consolidated_report.merge(store_query)
       end
-      STDOUT.puts options.inspect
-      STDOUT.puts consolidated_report.to_sql
       process_sumary(consolidated_report, start_time, end_time)
     when 'PorHora'
       process_per_hour(Cart.scoped, start_time, end_time)
@@ -149,16 +147,18 @@ class Report < ActiveRecord::Base
   end
 
   def process_per_hour(relation, start_time, end_time)
-    process_report relation, :per_hour_report, start_time, end_time do |datetime|
+    process_report relation, :per_hour_report, start_time, end_time do |datetime, telephony_hash|
       [
-        "#{datetime.to_date} - #{datetime.strftime('%H')}",
-        Cart.complete_in_date_range(start_time, end_time).where("date_part('hour', complete_on) = ?", datetime.strftime('%H')).count,
-        Reports::Generator.monetize(Cart.complete_in_date_range(start_time, end_time).where("date_part('hour', complete_on) = ?", datetime.strftime('%H')).sum('payment_amount')),
-        Cart.average_take_time(start_time, end_time, datetime.hour),
-        Cart.abandoned_in_date_range(start_time, end_time).where("date_part('hour', updated_at) = ?", datetime.strftime('%H')).abandoned.count,
-        Cart.complete_in_date_range(start_time, end_time).where("date_part('hour', complete_on) = ?", datetime.strftime('%H')).delivery.count,
-        Cart.complete_in_date_range(start_time, end_time).where("date_part('hour', complete_on) = ?", datetime.strftime('%H')).pickup.count,
-        Cart.complete_in_date_range(start_time, end_time).where("date_part('hour', complete_on) = ?", datetime.strftime('%H')).dinein.count
+        "#{datetime.to_date} - Hora: #{datetime.hour}",
+        Cart.complete_in_date_range(start_time, end_time).complete_in_date_range(per_hour_start(datetime), per_hour_end(datetime)).count,
+        confirm_hash(telephony_hash, :call_by_hour, datetime.to_date.to_s(:db), datetime.strftime('%H') ),
+        confirm_hash(telephony_hash, :agents_by_hour, datetime.to_date.to_s(:db), datetime.strftime('%H') ),
+        Reports::Generator.monetize(Cart.complete_in_date_range(start_time, end_time).complete_in_date_range(per_hour_start(datetime), per_hour_end(datetime)).sum('payment_amount')),
+        Cart.average_take_time(start_time, end_time, per_hour_start(datetime), per_hour_end(datetime)),
+        Cart.abandoned_in_date_range(start_time, end_time).abandoned_in_date_range(per_hour_start(datetime), per_hour_end(datetime)).abandoned.count,
+        Cart.complete_in_date_range(start_time, end_time).complete_in_date_range(per_hour_start(datetime), per_hour_end(datetime)).delivery.count,
+        Cart.complete_in_date_range(start_time, end_time).complete_in_date_range(per_hour_start(datetime), per_hour_end(datetime)).pickup.count,
+        Cart.complete_in_date_range(start_time, end_time).complete_in_date_range(per_hour_start(datetime), per_hour_end(datetime)).dinein.count
       ]
     end
   end
@@ -176,5 +176,20 @@ class Report < ActiveRecord::Base
     ensure
       csv_temp_file.close! if csv_temp_file
       pdf_temp_file.close! if pdf_temp_file
+  end
+
+  private
+
+  def per_hour_start(datetime)
+    Time.new(datetime.year, datetime.month, datetime.day, datetime.hour).beginning_of_hour
+  end
+
+  def per_hour_end(datetime)
+    Time.new(datetime.year, datetime.month, datetime.day, datetime.hour).end_of_hour
+  end
+
+  def confirm_hash(hash, first_child, second_child, third_child)
+    return 0 unless hash[first_child] && hash[first_child][second_child] && hash[first_child][second_child][third_child]
+    hash[first_child][second_child][third_child]
   end
 end

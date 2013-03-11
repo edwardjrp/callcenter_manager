@@ -4,9 +4,9 @@ class Admin::ReportsController < ApplicationController
 
     def index
       if !!params[:report].blank? && Report.report_types.include?(params[:report_type])
-        @reports = Report.where(name: params[:report_type]).order(:created_at).page(params[:page])
+        @reports = Report.where(name: params[:report_type]).order('created_at DESC').page(params[:page])
       else
-        @reports = Report.order(:created_at).page(params[:page])
+        @reports = Report.order('created_at DESC').page(params[:page])
       end
     end
 

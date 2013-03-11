@@ -17,16 +17,6 @@ describe Asterisk::Connector do
     Asterisk::Connector::PASSWORD.should == 'cdrus3rd1s8x10bctb3st'
   end
 
-  it 'should return the end point' do
-    Asterisk::Connector.new.end_point.should == "#{Asterisk::Connector::HOST}:#{Asterisk::Connector::PORT}"
-  end
-
-  it 'should return the connection token' do
-    nonce_key = SecureRandom.hex(10)
-    token_result = Digest::MD5.hexdigest("#{Asterisk::Connector::USERNAME}:#{nonce_key}:#{Digest::MD5.hexdigest(Asterisk::Connector::PASSWORD)}")
-    Asterisk::Connector.new.token(nonce_key).should == token_result
-  end
-
   describe '#total_incoming' do
     it 'should return the total incoming calls for a given date range' do
       Net::HTTP.stub(:get).and_return({"resultcode"=>0, "result"=>{"totalincoming"=>16573}}.to_json)

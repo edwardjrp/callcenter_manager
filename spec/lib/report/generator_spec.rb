@@ -91,6 +91,8 @@ describe Reports::Generator do
       [
         'Periodo del día',
         'Ordenes',
+        'Llamandas',
+        'Cantidad de agentes conectado',
         'Ventas netas',
         'Tiempo promedio de toma de orden',
         'Ordenes Canceladas',
@@ -316,12 +318,86 @@ describe Reports::Generator do
   describe 'Per hour report' do
     let!(:cart1) { create :cart, completed: true, started_on: reports_time , complete_on: reports_time + 20.seconds }
     let!(:cart2) { create :cart, completed: true, started_on: (reports_time + 1.hour), complete_on: (reports_time + 1.hour) + 20.seconds  }
+    let!(:calls_by_hour_result) do
+      {
+        "2013-03-06"=>{
+          "0"=>"1",
+          "1"=>"2",
+          "7"=>"2",
+          "10"=>"9",
+          "11"=>"34",
+          "12"=>"42",
+          "13"=>"33",
+          "14"=>"26",
+          "15"=>"22",
+          "16"=>"23",
+          "17"=>"41",
+          "18"=>"46",
+          "19"=>"72",
+          "20"=>"58",
+          "21"=>"49",
+          "22"=>"23",
+          "23"=>"3"
+        },
+        "2013-03-07"=>{
+          "10"=>"23",
+          "11"=>"35",
+          "12"=>"87",
+          "13"=>"72",
+          "14"=>"11"
+        }
+      }
+    end
+
+    let!(:agents_by_hour_result_hash) do
+      {
+        "2013-03-06"=>{
+          "0"=>"1.0",
+          "1"=>"1.0",
+          "2"=>"1.0",
+          "3"=>"1.0",
+          "4"=>"1.0",
+          "5"=>"1.0", 
+          "6"=>"1.0",
+          "7"=>"1.0",
+          "8"=>"1.0",
+          "10"=>"2.0",
+          "11"=>"3.75",
+          "12"=>"4.75",
+          "13"=>"5.0",
+          "14"=>"4.75",
+          "15"=>"5.0",
+          "16"=>"2.75",
+          "17"=>"6.0",
+          "18"=>"8.75",
+          "19"=>"9.5",
+          "20"=>"10.0",
+          "21"=>"10.0",
+          "22"=>"3.5",
+          "23"=>"1.0"
+        },
+        "2013-03-07"=>{
+          "10"=>"4.3333",
+          "11"=>"6.5",
+          "12"=>"8.75",
+          "13"=>"9.0",
+          "14"=>"9.0"
+        }
+      }
+    end
+
+    before do
+      Asterisk::Connector.any_instance.should_receive(:calls_by_hour).and_return(calls_by_hour_result)
+      Asterisk::Connector.any_instance.should_receive(:agents_by_hour).and_return(agents_by_hour_result_hash)
+    end
 
     let!(:per_hour_report) do
-      Reports::Generator.new Cart.scoped, :per_hour_report, start_time, end_time do |datetime|
+      Reports::Generator.new Cart.scoped, :per_hour_report, start_time, end_time do |datetime, telephony_hash|
         [
           "#{datetime.to_date} - #{datetime.strftime('%H')}",
           Cart.complete_in_date_range(start_time, end_time).where("date_part('hour', complete_on) = ?", datetime.strftime('%H')).count,
+          telephony_hash[:call_by_hour][datetime.to_date.to_s(:db)] && telephony_hash[:call_by_hour][datetime.to_date.to_s(:db)][datetime.strftime('%H')] ? telephony_hash[:call_by_hour][datetime.to_date.to_s(:db)][datetime.strftime('%H')] : 0,
+          telephony_hash[:agents_by_hour][datetime.to_date.to_s(:db)] && telephony_hash[:agents_by_hour][datetime.to_date.to_s(:db)][datetime.strftime('%H')] ? telephony_hash[:agents_by_hour][datetime.to_date.to_s(:db)][datetime.strftime('%H')] : 0,
           Reports::Generator.monetize(Cart.complete_in_date_range(start_time, end_time).where("date_part('hour', complete_on) = ?", datetime.strftime('%H')).sum('payment_amount')),
           Cart.average_take_time(start_time, end_time, datetime.hour),
           Cart.abandoned_in_date_range(start_time, end_time).where("date_part('hour', updated_at) = ?", datetime.strftime('%H')).abandoned.count,

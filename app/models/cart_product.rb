@@ -32,13 +32,13 @@ class CartProduct < ActiveRecord::Base
     mix = self.completed_in_range(start_time, end_time)
     if options
       agents = User.where('first_name ILIKE ? OR last_name ILIKE ? OR idnumber ILIKE ?', "%#{options['agent']}%", "%#{options['agent']}%", "%#{options['agent']}%").all if options['agent']
-      mix = mix.merge(self.where('carts.user_id IN (?)', agents.map(&:id))) if agents.any?
+      mix = mix.merge(self.where('carts.user_id IN (?)', agents.map(&:id))) if agents && agents.any?
 
       store = Store.where('storeid = ?', options['store'].to_i).first if options['store']
       mix = mix.merge(self.where('carts.store_id = ?', store.id)) if store
       
       items = Product.where('products.productname ILIKE ?', "%#{options['item']}%").all if options['item']
-      mix = mix.merge(self.where('cart_products.product_id IN (?)', items.map(&:id))) if items.any?
+      mix = mix.merge(self.where('cart_products.product_id IN (?)', items.map(&:id))) if items && items.any?
       
     end
     mix = mix.group_by(&:product).group_by{ |product, cart_products| product.category }
