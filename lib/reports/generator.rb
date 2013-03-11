@@ -162,14 +162,9 @@ module Reports
     private
 
     def asterisk_total_incomings
-      return 0 if Rails.env.development?
       begin
         @asterisk_total_incomings ||= Asterisk::Connector.new(@start_datetime.to_date, @end_datetime.to_date).total_incoming
-      rescue Errno::ETIMEDOUT
-        0
-      rescue Timeout::Error
-        0
-      rescue Errno::ENETUNREACH
+      rescue Timeout::Error, Net::HTTPServerException, Errno::EHOSTUNREACH, Errno::ECONNREFUSED, Errno::ENETUNREACH, Errno::ETIMEDOUT
         0
       end
     end
@@ -187,23 +182,24 @@ module Reports
         csv_empty_row(csv)
 
         csv_fill_row([SUMARY_REPORT[:columns][0]], 10, csv)
-        csv_fill_row(['Almuerzo', @relation.lunch.count , self.class.monetize(@relation.lunch.sum('payment_amount'))], 10, csv)
-        csv_fill_row(['Cena', @relation.dinner.count, self.class.monetize(@relation.dinner.sum('net_amount'))], 10, csv)
+        csv_fill_row(['Almuerzo', @relation.lunch.count, self.class.percentize(reason(@relation.lunch.count.to_d, @relation.count.to_d)) , self.class.monetize(@relation.lunch.sum('payment_amount'))  ], 10, csv)
+        csv_fill_row(['Cena', @relation.dinner.count, self.class.percentize(reason(@relation.dinner.count.to_d, @relation.count.to_d)), self.class.monetize(@relation.dinner.sum('net_amount'))  ], 10, csv)
         csv_empty_row(csv)
 
         csv_fill_row(["Ordenes antes y despues de las 4:00 pm"], 10, csv)
-        csv_fill_row(['No. ordenes', '%', 'Monto total'], 10, csv)
-        csv_fill_row(['Delivery', self.class.percentize(@relation.delivery.count.to_d / @relation.count.to_d), self.class.monetize(@relation.delivery.sum('payment_amount'))], 10, csv)
-        csv_fill_row(['Pickup', self.class.percentize(@relation.pickup.count.to_d / @relation.count.to_d), self.class.monetize(@relation.pickup.sum('payment_amount'))], 10, csv)
-        csv_fill_row(['Dine in', self.class.percentize(@relation.dinein.count.to_d / @relation.count.to_d), self.class.monetize(@relation.dinein.sum('payment_amount'))], 10, csv)
+        csv_fill_row(['No. ordenes', 'Total', '%', 'Monto total'], 10, csv)
+        csv_fill_row(['Delivery', @relation.delivery.count, self.class.percentize(reason(@relation.delivery.count.to_d , @relation.count.to_d)), self.class.monetize(@relation.delivery.sum('payment_amount'))], 10, csv)
+        csv_fill_row(['Pickup', @relation.pickup.count, self.class.percentize(reason(@relation.pickup.count.to_d , @relation.count.to_d)), self.class.monetize(@relation.pickup.sum('payment_amount'))], 10, csv)
+        csv_fill_row(['Dine in', @relation.dinein.count, self.class.percentize(reason(@relation.dinein.count.to_d , @relation.count.to_d)), self.class.monetize(@relation.dinein.sum('payment_amount'))], 10, csv)
         csv_empty_row(csv)
 
         csv_fill_row([SUMARY_REPORT[:columns][1]], 10, csv)
         csv_fill_row([ 'Orden promedio', self.class.monetize(@relation.average('payment_amount')) ], 10, csv)
-        csv_fill_row([ 'Ventas por agente promedio', User.carts_completed_in_range(@start_datetime, @end_datetime).average('carts_count').round(2) ], 10, csv)
+        csv_fill_row([ 'Ventas por agente promedio', self.class.monetize(average(User.carts_completed_in_range(@start_datetime, @end_datetime).group(:user_id).average('carts.payment_amount').values)) ], 10, csv)
+        csv_fill_row([ 'Ordenes por agente promedio', average(User.carts_completed_in_range(@start_datetime, @end_datetime).group(:user_id).count.values).round(2) ], 10, csv)
         csv_fill_row([ 'Tiempo de orde promedio', (@relation.sum(&:take_time) / @relation.count.to_d).round(2) ], 10, csv)
         csv_fill_row([ 'Llamadas entrantes', asterisk_total_incomings ], 10, csv)
-        csv_fill_row([ 'Llamadas por agente', reason(asterisk_total_incomings.to_d, User.carts_completed_in_range(@start_datetime, @end_datetime).count.to_d) ], 10, csv)
+        csv_fill_row([ 'Ordenes por llamadas', self.class.percentize(reason(Cart.complete_in_date_range(@start_datetime, @end_datetime).count.to_d, asterisk_total_incomings.to_d)) ], 10, csv)
         csv_empty_row(csv)
 
         csv_fill_row([SUMARY_REPORT[:columns][2]], 10, csv)
@@ -214,17 +210,21 @@ module Reports
     end
 
     def reason(divident, divisor)
-      divident == 0 ? 0 : divident / divisor 
+      divisor == 0 ? 0 : divident / divisor 
+    end
+
+    def average(arr)
+      arr.inject{ |sum, el| sum + el }.to_f / arr.size
     end
 
     def build_sumary_report_pdf
       @relation = @relation.complete_in_date_range(@start_datetime, @end_datetime)
       h_1(SUMARY_REPORT[:title])
-      set_pdf_font(5)
+      set_pdf_font(8)
       space_down
       timestamps
       space_down
-      h_1(SUMARY_REPORT[:columns][0])
+      h_2(SUMARY_REPORT[:columns][0])
       sales_table = []
       sales_table << [   'Ventas Brutas', self.class.monetize(@relation.sum('payment_amount'))  ]
       sales_table << [   'Ventas Netas', self.class.monetize(@relation.sum('net_amount'))  ]
@@ -234,31 +234,32 @@ module Reports
       space_down
       h_3("Ordenes antes y despues de las 4:00 pm")
       time_table = []
-      time_table << [   'Almuerzo', @relation.lunch.count , self.class.monetize(@relation.lunch.sum('payment_amount'))  ]
-      time_table << [   'Cena', @relation.dinner.count, self.class.monetize(@relation.dinner.sum('net_amount'))  ]
+      time_table << [  'Almuerzo', @relation.lunch.count, self.class.percentize(reason(@relation.lunch.count.to_d, @relation.count.to_d)) , self.class.monetize(@relation.lunch.sum('payment_amount'))  ]
+      time_table << [  'Cena', @relation.dinner.count, self.class.percentize(reason(@relation.dinner.count.to_d, @relation.count.to_d)), self.class.monetize(@relation.dinner.sum('net_amount'))  ]
       create_table(time_table)
 
       space_down
       h_3("Modos de servicio")
       service_table = []
-      service_table << ['No. ordenes', '%', 'Monto total']
-      service_table << ['Delivery', self.class.percentize(@relation.delivery.count.to_d / @relation.count.to_d), self.class.monetize(@relation.delivery.sum('payment_amount'))]
-      service_table << ['Pickup', self.class.percentize(@relation.pickup.count.to_d / @relation.count.to_d), self.class.monetize(@relation.pickup.sum('payment_amount'))]
-      service_table << ['Dine in', self.class.percentize(@relation.dinein.count.to_d / @relation.count.to_d), self.class.monetize(@relation.dinein.sum('payment_amount'))]
+      service_table << ['No. ordenes', 'Total', '%', 'Monto total']
+      service_table << ['Delivery', @relation.delivery.count, self.class.percentize(reason(@relation.delivery.count.to_d , @relation.count.to_d)), self.class.monetize(@relation.delivery.sum('payment_amount'))]
+      service_table << ['Pickup', @relation.pickup.count, self.class.percentize(reason(@relation.pickup.count.to_d , @relation.count.to_d)), self.class.monetize(@relation.pickup.sum('payment_amount'))]
+      service_table << ['Dine in', @relation.dinein.count, self.class.percentize(reason(@relation.dinein.count.to_d , @relation.count.to_d)), self.class.monetize(@relation.dinein.sum('payment_amount'))]
       create_table(service_table)
 
       space_down
-      h_1(SUMARY_REPORT[:columns][1])
-      space_down
+      h_2(SUMARY_REPORT[:columns][1])
       other_table = []
       other_table << [ 'Orden promedio', self.class.monetize(@relation.average('payment_amount')) ]
-      other_table << [ 'Ventas por agente promedio', User.carts_completed_in_range(@start_datetime, @end_datetime).average('carts_count').round(2) ]
+      other_table << [ 'Ventas por agente promedio', self.class.monetize(average(User.carts_completed_in_range(@start_datetime, @end_datetime).group(:user_id).average('carts.payment_amount').values)) ]
+      other_table << [ 'Ordenes por agente promedio', average(User.carts_completed_in_range(@start_datetime, @end_datetime).group(:user_id).count.values).round(2) ]
       other_table << [ 'Tiempo de orde promedio', (@relation.sum(&:take_time) / @relation.count.to_d).round(2) ]
       other_table << [ 'Llamadas entrantes', asterisk_total_incomings ]
-      other_table << [ 'Llamadas por agente', reason(asterisk_total_incomings.to_d, User.carts_completed_in_range(@start_datetime, @end_datetime).count.to_d) ]
+      other_table << [ 'Ordenes por llamadas', self.class.percentize(reason(Cart.complete_in_date_range(@start_datetime, @end_datetime).count, asterisk_total_incomings.to_d)) ]
       create_table(other_table)
 
-      h_1(SUMARY_REPORT[:columns][2])
+      space_down
+      h_2(SUMARY_REPORT[:columns][2])
       products_table = []
       @relation.joins(:products).group('products.productname').count.each  do | product, product_count |
         products_table << @data_rows.call(self.class.normalize(product), product_count)

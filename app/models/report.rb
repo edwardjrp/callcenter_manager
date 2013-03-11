@@ -141,7 +141,7 @@ class Report < ActiveRecord::Base
   end
 
   def process_sumary(relation, start_time, end_time)
-    process_report relation, :sumary_report, start_time, end_time do | product, product_count |
+    process_report relation, :sumary_report, start_time, end_time, :portrait do | product, product_count |
       [ product, product_count ]
     end
   end
