@@ -399,7 +399,7 @@ describe Reports::Generator do
           telephony_hash[:call_by_hour][datetime.to_date.to_s(:db)] && telephony_hash[:call_by_hour][datetime.to_date.to_s(:db)][datetime.strftime('%H')] ? telephony_hash[:call_by_hour][datetime.to_date.to_s(:db)][datetime.strftime('%H')] : 0,
           telephony_hash[:agents_by_hour][datetime.to_date.to_s(:db)] && telephony_hash[:agents_by_hour][datetime.to_date.to_s(:db)][datetime.strftime('%H')] ? telephony_hash[:agents_by_hour][datetime.to_date.to_s(:db)][datetime.strftime('%H')] : 0,
           Reports::Generator.monetize(Cart.complete_in_date_range(start_time, end_time).where("date_part('hour', complete_on) = ?", datetime.strftime('%H')).sum('payment_amount')),
-          Cart.average_take_time(start_time, end_time, datetime.hour),
+          Cart.average_take_time(start_time - 1.day, Time.now, start_time, end_time),
           Cart.abandoned_in_date_range(start_time, end_time).where("date_part('hour', updated_at) = ?", datetime.strftime('%H')).abandoned.count,
           Cart.complete_in_date_range(start_time, end_time).where("date_part('hour', complete_on) = ?", datetime.strftime('%H')).delivery.count,
           Cart.complete_in_date_range(start_time, end_time).where("date_part('hour', complete_on) = ?", datetime.strftime('%H')).pickup.count,

@@ -296,14 +296,14 @@ class PulseBridge
 
     exoneration_present = @cart.exonerated and @cart.exonerated == true and not _.isNull(@cart.exoneration_authorizer) and not _.isUndefined(@cart.exoneration_authorizer)
 
-    orderOverrrideAmount = @cart.payment_amount
+    orderOverrideAmount = @cart.payment_amount
     if @cart.payment_amount?
-      orderOverrrideAmount = Number(orderOverrrideAmount) - Number(@cart.tax_amount) if exoneration_present
-      orderOverrrideAmount = Number(orderOverrrideAmount) - Number(@cart.discount) if discount_present
-      orderOverrrideAmount = @cart.payment_amount if orderOverrrideAmount < 1
+      orderOverrideAmount = Number(orderOverrideAmount) - Number(@cart.tax_amount) if exoneration_present
+      orderOverrideAmount = Number(orderOverrideAmount) - Number(@cart.discount) if discount_present
+      orderOverrideAmount = @cart.payment_amount if orderOverrideAmount < 1
 
     if discount_present or exoneration_present
-      order.addChild( new libxml.Element(doc,'OrderOverrideAmount', orderOverrrideAmount.toString() ))
+      order.addChild( new libxml.Element(doc,'OrderOverrideAmount', orderOverrideAmount.toString() ))
  
 
 

@@ -574,7 +574,12 @@ Address = DB.define("Address",
     type: Number   
 
   unit_type:
-    type: Number   
+    type: String
+    length: 255
+
+  unit_number:
+    type: String
+    length: 255
 
   postal_code:
     type: String

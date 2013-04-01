@@ -48,7 +48,6 @@
 
 require 'csv'
 class Cart < ActiveRecord::Base
-  include Reports::Carts
   # attr_accessible :title, :body
   scope :recents, where('message_mask = 1 or message_mask = 9')
   scope :archived, where(message_mask: 2)
@@ -271,7 +270,7 @@ class Cart < ActiveRecord::Base
       if admin.admin? && admin.try(:authenticate, password)
         self.exoneration_authorizer = admin.id
         self.exonerated = true
-        self.save         
+        self.save
       else
         self.errors.add(:base, 'El usuario provisto no tiene suficientes provilegios')
       end
@@ -422,6 +421,7 @@ class Cart < ActiveRecord::Base
   end
 
   def update_pulse_order_status
+    return if self.order_progress.present? && self.order_progress =~ /complete/ 
     begin
       Timeout.timeout(15) do
         if self.store_order_id    
@@ -430,9 +430,9 @@ class Cart < ActiveRecord::Base
           self.order_progress = 'N/A - Falta id de la orden'
         end
       end
-    rescue Timeout::Error
+    rescue Timeout::Error, Errno::ETIMEDOUT
       self.order_progress = 'N/A - No hay respuesta de pulse'
-    rescue Errno::ENETUNREACH
+    rescue Net::HTTPServerException, Errno::EHOSTUNREACH, Errno::ECONNREFUSED, Errno::ENETUNREACH
       self.order_progress = 'N/A - No hay una conexión a pulse'
     end
     self.save!

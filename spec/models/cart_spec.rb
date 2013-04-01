@@ -393,7 +393,7 @@ describe Cart do
     it 'should return the average take time' do
       hour_for_average = (Time.zone.now - 1.hour).hour + 4
       hour_for_average = 0 if hour_for_average == 24
-      Cart.average_take_time((Time.now - 2.hours), Time.now, hour_for_average).should be_within(0.01).of(20.minutes)
+      Cart.average_take_time(1.day.ago, Time.zone.now,(Time.now - 2.hours), Time.now).should be_within(0.01).of(20.minutes)
     end
   end
 
