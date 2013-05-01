@@ -8,6 +8,10 @@ class Admin::ReportsController < ApplicationController
       else
         @reports = Report.order('created_at DESC').page(params[:page])
       end
+      respond_to do |format|
+        format.js
+        format.html
+      end
     end
 
     def new

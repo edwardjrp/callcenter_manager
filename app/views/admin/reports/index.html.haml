@@ -8,16 +8,5 @@
   .span12
     = will_paginate @reports
     %table#reports_list.table
-      %thead
-        %th Tipo
-        %th Fecha y hora
-        %th PDF
-        %th CSV
-      %body
-        - @reports.each do |report|
-          %tr[report]
-            %td= report.name
-            %td= l report.created_at, format: :long
-            %td= link_if_exists report.pdf_file
-            %td= link_if_exists report.csv_file
+      = render 'reports_list'
     = will_paginate @reports

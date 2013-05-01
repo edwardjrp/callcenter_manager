@@ -12,13 +12,10 @@ jQuery ->
       else
         $("##{target.val()}").hide()
           
-    window.dashboard_refresh()
+    dashboard_interval = setInterval(dashboard_refresh, 30000)
   else
-    clearInterval(window.dashboard_refresh)
+    clearInterval(dashboard_interval) if dashboard_interval
 
 
-window.dashboard_refresh = ->
-    setInterval ->
-        $.getScript('/admin')
-      ,
-      30000
+dashboard_refresh = ->
+  $.getScript('/admin')

@@ -2,7 +2,7 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 jQuery -> 
-  if $('#new_report').size() > 0
+  if $('#new_report').size()
     $('#new_report #report_name').change (event) ->
       if _.contains(['Detallado', 'Consolidado', 'ProductsMix'], $(this).val())
         agent_input = $('<div class="control-group text"><label class="text control-label" for="agent">Agente</label><div class="controls"><input type="text" name="options[agent]" id = "agent_field" placeholder = "nombre apellido o cedula"></div></div>')
@@ -19,4 +19,12 @@ jQuery ->
         $(this).closest('.control-group').after(item_input) unless $("#item_field").size() > 0
       else
         $("#item_field").closest('.control-group').remove()
-   
+        
+  if $('#reports_list').size()
+    interval = setInterval(refresh_reports, 30000)
+  else
+    clearInterval(interval) if interval
+
+
+refresh_reports = ->
+  $.getScript(window.location.href)

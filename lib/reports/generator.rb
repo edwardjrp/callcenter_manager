@@ -170,7 +170,7 @@ module Reports
     end
 
     def build_sumary_report_csv
-      @relation = @relation.complete_in_date_range(@start_datetime, @end_datetime)
+      @relation = @relation.complete_in_date_range(@start_datetime_original, @end_datetime_original)
       @csv = CSV.generate do |csv|
         csv_title(csv)
         csv_empty_row(csv)
@@ -218,7 +218,6 @@ module Reports
     end
 
     def build_sumary_report_pdf
-      @relation = @relation.complete_in_date_range(@start_datetime, @end_datetime)
       h_1(SUMARY_REPORT[:title])
       set_pdf_font(8)
       space_down
@@ -505,12 +504,16 @@ module Reports
     end
 
     def create_table(pdf_array)
-      @pdf.table pdf_array do
-        row(0).font_style = :bold
-        style(row(0), :background_color => '4682B4')
-        cells.borders = []
-        self.row_colors = ["F8F8FF", "ADD8E6"]
-        self.header = true
+      if pdf_array.empty?
+        @pdf.text 'N/A', size: 7, style: :normal
+      else
+        @pdf.table pdf_array do
+          row(0).font_style = :bold
+          style(row(0), :background_color => '4682B4')
+          cells.borders = []
+          self.row_colors = ["F8F8FF", "ADD8E6"]
+          self.header = true
+        end
       end
     end
 
