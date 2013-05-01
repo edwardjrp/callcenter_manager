@@ -200,11 +200,11 @@ class Cart < ActiveRecord::Base
   end
 
   def self.lunch
-    before_hour(20)
+    before_hour(16)
   end
 
   def self.dinner
-    after_hour(20)
+    after_hour(16)
   end
 
   def self.average_and_count_per_group( group_column = 'user_id', start_time = 1.hour.ago, order_column = 'carts_count')
