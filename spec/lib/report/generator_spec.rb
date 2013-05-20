@@ -158,13 +158,13 @@ describe Reports::Generator do
 
   describe 'Sumary report' do
     let(:dis_user) { create :user, :admin }
-    let!(:cart1)   { create :cart, completed: true, started_on: reports_time , complete_on: reports_time + 20.seconds, discount_auth_id: dis_user.id, discount: 100, payment_amount: 300 }
-    let!(:cart2)   { create :cart, completed: true, started_on: reports_time , complete_on: reports_time + 20.seconds, discount_auth_id: dis_user.id, discount: 80, payment_amount: 300  }
+    let!(:cart1)   { create :cart, completed: true, started_on: reports_time , complete_on: reports_time + 20.seconds, discount_auth_id: dis_user.id, discount: 100, payment_amount: 300, net_amount: 250 }
+    let!(:cart2)   { create :cart, completed: true, started_on: reports_time , complete_on: reports_time + 20.seconds, discount_auth_id: dis_user.id, discount: 80, payment_amount: 300, net_amount: 250  }
 
     before do
-      create_list :cart_product, 2, cart: cart1, created_at: reports_time 
-      create_list :cart_product, 3, cart: cart2, created_at: reports_time 
-      Net::HTTP.stub(:get).and_return({"resultcode"=>0, "result"=>{"totalincoming"=>16573}}.to_json)
+      create_list :cart_product, 2, cart: cart1, created_at: reports_time
+      create_list :cart_product, 3, cart: cart2, created_at: reports_time
+      Net::HTTP.stub(:get).and_return({ "resultcode" => 0, "result"=>{ "totalincoming" => 16573 } }.to_json)
     end
 
     let!(:sumary_report) do
@@ -357,7 +357,7 @@ describe Reports::Generator do
           "2"=>"1.0",
           "3"=>"1.0",
           "4"=>"1.0",
-          "5"=>"1.0", 
+          "5"=>"1.0",
           "6"=>"1.0",
           "7"=>"1.0",
           "8"=>"1.0",
@@ -520,8 +520,8 @@ describe Reports::Generator do
 
     before do
       Pulse::OrderStatus.any_instance.stub(:get).and_return('Makeline')
-      create_list :cart_product, 2, cart: cart1, created_at: reports_time 
-      create_list :cart_product, 3, cart: cart2, created_at: reports_time 
+      create_list :cart_product, 2, cart: cart1, created_at: reports_time
+      create_list :cart_product, 3, cart: cart2, created_at: reports_time
     end
 
     let!(:detailed_report) do
@@ -582,7 +582,7 @@ describe Reports::Generator do
       it 'should have the headers' do
         should match(headers)
       end
-    end 
+    end
 
     describe '#render_pdf' do
       let!(:pdf) { detailed_report.render_pdf }
