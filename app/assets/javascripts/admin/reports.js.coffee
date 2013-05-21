@@ -1,7 +1,7 @@
 # Place all the behaviors and hooks related to the matching controller here.
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
-jQuery -> 
+jQuery ->
   if $('#new_report').size()
     $('#new_report #report_name').change (event) ->
       if _.contains(['Detallado', 'Consolidado', 'ProductsMix'], $(this).val())
@@ -19,7 +19,11 @@ jQuery ->
         $(this).closest('.control-group').after(item_input) unless $("#item_field").size() > 0
       else
         $("#item_field").closest('.control-group').remove()
-        
+
+    if _.contains(['Detallado', 'Consolidado', 'ProductsMix'], $('#new_report #report_name').val())
+      agent_input = $('<div class="control-group text"><label class="text control-label" for="agent">Agente</label><div class="controls"><input type="text" name="options[agent]" id = "agent_field" placeholder = "nombre apellido o cedula"></div></div>')
+      $('#new_report #report_name').closest('.control-group').after(agent_input) unless $("#agent_field").size() > 0
+
   if $('#reports_list').size()
     interval = setInterval(refresh_reports, 30000)
   else
