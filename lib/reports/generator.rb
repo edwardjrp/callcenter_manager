@@ -163,7 +163,7 @@ module Reports
 
     def asterisk_total_incomings
       begin
-        @asterisk_total_incomings ||= Asterisk::Connector.new(@start_datetime.to_date, @end_datetime.to_date).total_incoming
+        @asterisk_total_incomings ||= Asterisk::Connector.new(@start_datetime_original.to_date, @end_datetime_original.to_date).total_incoming
       rescue Timeout::Error, Net::HTTPServerException, Errno::EHOSTUNREACH, Errno::ECONNREFUSED, Errno::ENETUNREACH, Errno::ETIMEDOUT
         0
       end
@@ -195,11 +195,11 @@ module Reports
 
         csv_fill_row([SUMARY_REPORT[:columns][1]], 10, csv)
         csv_fill_row([ 'Orden promedio', self.class.monetize(@relation.average('net_amount')) ], 10, csv)
-        csv_fill_row([ 'Ventas por agente promedio', self.class.monetize(average(User.carts_completed_in_range(@start_datetime, @end_datetime).group(:user_id).average('carts.net_amount').values)) ], 10, csv)
-        csv_fill_row([ 'Ordenes por agente promedio', average(User.carts_completed_in_range(@start_datetime, @end_datetime).group(:user_id).count.values).round(2) ], 10, csv)
+        csv_fill_row([ 'Ventas por agente promedio', self.class.monetize(average(completed_per_user.average('carts.net_amount').values)) ], 10, csv)
+        csv_fill_row([ 'Ordenes por agente promedio', average(completed_per_user.group(:user_id).count.values).round(2) ], 10, csv)
         csv_fill_row([ 'Tiempo de orde promedio', (@relation.sum(&:take_time) / @relation.count.to_d).round(2) ], 10, csv)
         csv_fill_row([ 'Llamadas entrantes', asterisk_total_incomings ], 10, csv)
-        csv_fill_row([ 'Ordenes por llamadas', self.class.percentize(reason(Cart.complete_in_date_range(@start_datetime, @end_datetime).count.to_d, asterisk_total_incomings.to_d)) ], 10, csv)
+        csv_fill_row([ 'Ordenes por llamadas', self.class.percentize(reason(Cart.complete_in_date_range(@start_datetime_original, @end_datetime_original).count.to_d, asterisk_total_incomings.to_d)) ], 10, csv)
         csv_empty_row(csv)
 
         csv_fill_row([SUMARY_REPORT[:columns][2]], 10, csv)
@@ -251,11 +251,11 @@ module Reports
       h_2(SUMARY_REPORT[:columns][1])
       other_table = []
       other_table << [ 'Orden promedio', self.class.monetize(@relation.average('net_amount')) ]
-      other_table << [ 'Ventas por agente promedio', self.class.monetize(average(User.carts_completed_in_range(@start_datetime, @end_datetime).group(:user_id).average('carts.net_amount').values)) ]
-      other_table << [ 'Ordenes por agente promedio', average(User.carts_completed_in_range(@start_datetime, @end_datetime).group(:user_id).count.values).round(2) ]
+      other_table << [ 'Ventas por agente promedio', self.class.monetize(average(completed_per_user.average('carts.net_amount').values)) ]
+      other_table << [ 'Ordenes por agente promedio', average(completed_per_user.count.values).round(2) ]
       other_table << [ 'Tiempo de orde promedio', (@relation.sum(&:take_time) / @relation.count.to_d).round(2) ]
       other_table << [ 'Llamadas entrantes', asterisk_total_incomings ]
-      other_table << [ 'Ordenes por llamadas', self.class.percentize(reason(Cart.complete_in_date_range(@start_datetime, @end_datetime).count, asterisk_total_incomings.to_d)) ]
+      other_table << [ 'Ordenes por llamadas', self.class.percentize(reason(Cart.complete_in_date_range(@start_datetime_original, @end_datetime_original).count, asterisk_total_incomings.to_d)) ]
       create_table(other_table)
 
       space_down
@@ -265,6 +265,10 @@ module Reports
         products_table << @data_rows.call(self.class.normalize(product), product_count)
       end
       create_table(products_table)
+    end
+
+    def completed_per_user
+      User.carts_completed_in_range(@start_datetime_original, @end_datetime_original).group(:user_id)
     end
 
     def build_discounts_report_csv
@@ -326,7 +330,7 @@ module Reports
     end
 
     def build_per_hour_report_csv
-      asterisk_connector =  Asterisk::Connector.new(@start_datetime, @end_datetime)
+      asterisk_connector =  Asterisk::Connector.new(@start_datetime_original, @end_datetime_original)
       begin
         telephony_hash = { call_by_hour: asterisk_connector.calls_by_hour, agents_by_hour: asterisk_connector.agents_by_hour }
       rescue Timeout::Error, Net::HTTPServerException, Errno::EHOSTUNREACH, Errno::ECONNREFUSED, Errno::ENETUNREACH, Errno::ETIMEDOUT
@@ -349,7 +353,7 @@ module Reports
     end
 
     def build_per_hour_report_pdf
-      asterisk_connector =  Asterisk::Connector.new(@start_datetime, @end_datetime)
+      asterisk_connector =  Asterisk::Connector.new(@start_datetime_original, @end_datetime_original)
       begin
         telephony_hash = { call_by_hour: asterisk_connector.calls_by_hour, agents_by_hour: asterisk_connector.agents_by_hour }
       rescue Timeout::Error, Net::HTTPServerException, Errno::EHOSTUNREACH, Errno::ECONNREFUSED, Errno::ENETUNREACH, Errno::ETIMEDOUT
