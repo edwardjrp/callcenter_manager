@@ -52,7 +52,7 @@ class Cart < ActiveRecord::Base
   scope :recents, where('message_mask = 1 or message_mask = 9')
   scope :archived, where(message_mask: 2)
   scope :trashed, where(message_mask: 4)
-  scope :untrashed, where('message_mask != 4')                                   
+  scope :untrashed, where('message_mask != 4')
   scope :criticals, where('message_mask = 8 or message_mask = 9 or message_mask = 10 or message_mask = 12')
   scope :completed, where(:completed=>true).untrashed
   scope :incomplete, where(:completed=>false).untrashed
@@ -75,15 +75,15 @@ class Cart < ActiveRecord::Base
   has_many :products, through: :cart_products
   has_many :user_carts, dependent: :destroy
   before_create :set_default_mailbox
-  
+
   validates :user_id, presence: true
-  
-  
+
+
   # self.per_page = 20
 
   def copy_products(old_cart)
     return false if old_cart.cart_products.count.zero?
-    transaction do 
+    transaction do
       old_cart.cart_products.each do |cart_product|
         current_cart_product = cart_products.where(product_id: cart_product.product_id, bind_id: cart_product.bind_id, options: cart_product.options ).first_or_initialize
         unless current_cart_product.new_record?
@@ -224,14 +224,14 @@ class Cart < ActiveRecord::Base
 
   def perform_discount(username, password, discount_amount)
     admin = User.find_by_username(username)
-    if admin 
+    if admin
       if admin.admin? && admin.try(:authenticate, password)
         if self.payment_amount.present? && (self.payment_amount - discount_amount.to_d ) > 0
           self.discount_auth_id = admin.id
           self.discount = discount_amount.to_d
           self.save
         else
-          self.errors.add(:base, 'El el monto a descontar no es valido')  
+          self.errors.add(:base, 'El el monto a descontar no es valido')
         end
       else
         self.errors.add(:base, 'El usuario provisto no tiene suficientes provilegios')
@@ -266,7 +266,7 @@ class Cart < ActiveRecord::Base
 
   def exonerate(username, password)
     admin = User.find_by_username(username)
-    if admin 
+    if admin
       if admin.admin? && admin.try(:authenticate, password)
         self.exoneration_authorizer = admin.id
         self.exonerated = true
@@ -338,19 +338,19 @@ class Cart < ActiveRecord::Base
     end
     self.save!
   end
-  
+
   def delivery?
     self.service_method.present? and (self.service_method == self.class.service_methods[0])
   end
-  
+
   def pickup?
     self.service_method.present? and (self.service_method == self.class.service_methods[1])
   end
-  
+
   def dinein?
     self.service_method.present? and (self.service_method == self.class.service_methods[2])
   end
-  
+
   def self.valid_mailboxes
      #    1         2             4             8
      ['nuevos', 'archivados', 'eliminados', 'criticos']
@@ -364,7 +364,7 @@ class Cart < ActiveRecord::Base
   def self.translate_mailbox(mailbox)
     self.available_mailboxes[self.valid_mailboxes.index(mailbox)]
   end
-  
+
   def mailboxes=(sent_mailboxes)
     current_mailboxes = []
     return current_mailboxes if sent_mailboxes.blank?
@@ -400,7 +400,7 @@ class Cart < ActiveRecord::Base
   def set_default_mailbox
     self.mailboxes = ['nuevos']
   end
-  
+
   def archive!
      self.mailboxes = ['archivados']
      self.save
@@ -421,10 +421,10 @@ class Cart < ActiveRecord::Base
   end
 
   def update_pulse_order_status
-    return if self.order_progress.present? && self.order_progress =~ /complete/ 
+    return if self.order_progress.present? && self.order_progress =~ /complete/
     begin
       Timeout.timeout(15) do
-        if self.store_order_id    
+        if self.store_order_id
           self.order_progress = Pulse::OrderStatus.new(self.store, self.store_order_id).get
         else
           self.order_progress = 'N/A - Falta id de la orden'
@@ -432,7 +432,7 @@ class Cart < ActiveRecord::Base
       end
     rescue Timeout::Error, Errno::ETIMEDOUT
       self.order_progress = 'N/A - No hay respuesta de pulse'
-    rescue Net::HTTPServerException, Errno::EHOSTUNREACH, Errno::ECONNREFUSED, Errno::ENETUNREACH
+    rescue Net::HTTPServerException, Errno::EHOSTUNREACH, Errno::ECONNREFUSED, Errno::ENETUNREACH, Errno::EHOSTDOWN
       self.order_progress = 'N/A - No hay una conexión a pulse'
     end
     self.save!
