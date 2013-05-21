@@ -33,6 +33,9 @@ class Admin::ReportsController < ApplicationController
       if end_time < start_time
         flash[:error] = 'La horea final es inferior a la hora de inicio'
         render :new
+      elsif params[:report][:name].blank?
+        flash[:error] = 'Seleccione un tipo de reporte'
+        render :new
       else
         ReportsWorker.perform_async(params[:report][:name], start_time, end_time, params[:options])
         flash['success'] = 'Generación del reporte calendarizada'

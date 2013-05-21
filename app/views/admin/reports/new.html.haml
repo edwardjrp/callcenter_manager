@@ -1,7 +1,7 @@
 = render 'reports'
 = simple_form_for [:admin, @report], html: { class: 'form-horizontal'} do |f|
   %legend Generar reporte
-  = f.input :name, as: :select, collection: Report.report_types.zip(Report.report_types), include_blank: false
+  = f.input :name, as: :select, collection: Report.report_types.zip(Report.report_types), include_blank: 'Tipo de report ...'
   %fieldset
     = label_tag 'Fecha y hora inicial'
     = datetime_select("start_time",'datetime', :default => Time.zone.now - 1.day, :ampm => true)

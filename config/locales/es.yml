@@ -13,7 +13,7 @@ es:
     - vie
     - sáb
     abbr_month_names:
-    - 
+    -
     - ene
     - feb
     - mar
@@ -39,7 +39,7 @@ es:
       long: ! '%d de %B de %Y'
       short: ! '%d de %b'
     month_names:
-    - 
+    -
     - enero
     - febrero
     - marzo
@@ -215,6 +215,7 @@ es:
       import_log: 'Log de Importación'
       product: 'Producto'
       store: 'Tienda'
+      report: 'Reporte'
     attributes:
       client:
         first_name: 'Nombre'
@@ -227,6 +228,8 @@ es:
         first_name: 'Nombre'
         last_name: 'Apellido'
         idnumber: 'Cedula'
+      report:
+        name: 'Seleccionar Reporte'
       category:
         multi: 'Selección multiple'
         has_sides: 'Selección de lados'
