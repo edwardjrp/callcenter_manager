@@ -28,7 +28,7 @@ class Report < ActiveRecord::Base
   end
 
   def output_file_name
-     "reporte-#{self.name}-#{Time.zone.now.strftime('%Y-%m-%d %H:%M:%S')}"
+     "reporte-#{self.name}-#{Time.zone.now.strftime('%Y-%m-%d_%H_%M_%S')}"
   end
 
   def self.available_reports

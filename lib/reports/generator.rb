@@ -102,13 +102,19 @@ module Reports
     def initialize(relation, report_type, start_datetime, end_datetime, orientation = :landscape, &data_rows)
       @relation = relation
       @report_type = report_type
-      @start_datetime_original = start_datetime
-      @end_datetime_original = end_datetime
-      @start_datetime = @start_datetime_original.strftime('%d %B %Y - %I:%M:%S %p')
-      @end_datetime = @end_datetime_original.strftime('%d %B %Y - %I:%M:%S %p')
+      @start_datetime = start_datetime
+      @end_datetime = end_datetime
       @pdf = Prawn::Document.new(top_margin: 70, page_layout: orientation)
       @csv = ''
       @data_rows = data_rows
+    end
+
+    def formated_start_time
+      @start_datetime.strftime('%d %B %Y - %I:%M:%S %p')
+    end
+
+    def formated_end_time
+      @end_datetime.strftime('%d %B %Y - %I:%M:%S %p')
     end
 
     def render_pdf
@@ -163,14 +169,14 @@ module Reports
 
     def asterisk_total_incomings
       begin
-        @asterisk_total_incomings ||= Asterisk::Connector.new(@start_datetime_original.to_date, @end_datetime_original.to_date).total_incoming
+        @asterisk_total_incomings ||= Asterisk::Connector.new(@start_datetime.to_date, @end_datetime.to_date).total_incoming
       rescue Timeout::Error, Net::HTTPServerException, Errno::EHOSTUNREACH, Errno::ECONNREFUSED, Errno::ENETUNREACH, Errno::ETIMEDOUT
         0
       end
     end
 
     def build_sumary_report_csv
-      @relation = @relation.complete_in_date_range(@start_datetime_original, @end_datetime_original)
+      @relation = @relation.complete_in_date_range(@start_datetime, @end_datetime)
       @csv = CSV.generate do |csv|
         csv_title(csv)
         csv_empty_row(csv)
@@ -199,7 +205,7 @@ module Reports
         csv_fill_row([ 'Ordenes por agente promedio', average(completed_per_user.group(:user_id).count.values).round(2) ], 10, csv)
         csv_fill_row([ 'Tiempo de orde promedio', (@relation.sum(&:take_time) / @relation.count.to_d).round(2) ], 10, csv)
         csv_fill_row([ 'Llamadas entrantes', asterisk_total_incomings ], 10, csv)
-        csv_fill_row([ 'Ordenes por llamadas', self.class.percentize(reason(Cart.complete_in_date_range(@start_datetime_original, @end_datetime_original).count.to_d, asterisk_total_incomings.to_d)) ], 10, csv)
+        csv_fill_row([ 'Ordenes por llamadas', self.class.percentize(reason(Cart.complete_in_date_range(@start_datetime, @end_datetime).count.to_d, asterisk_total_incomings.to_d)) ], 10, csv)
         csv_empty_row(csv)
 
         csv_fill_row([SUMARY_REPORT[:columns][2]], 10, csv)
@@ -255,7 +261,7 @@ module Reports
       other_table << [ 'Ordenes por agente promedio', average(completed_per_user.count.values).round(2) ]
       other_table << [ 'Tiempo de orde promedio', (@relation.sum(&:take_time) / @relation.count.to_d).round(2) ]
       other_table << [ 'Llamadas entrantes', asterisk_total_incomings ]
-      other_table << [ 'Ordenes por llamadas', self.class.percentize(reason(Cart.complete_in_date_range(@start_datetime_original, @end_datetime_original).count, asterisk_total_incomings.to_d)) ]
+      other_table << [ 'Ordenes por llamadas', self.class.percentize(reason(Cart.complete_in_date_range(@start_datetime, @end_datetime).count, asterisk_total_incomings.to_d)) ]
       create_table(other_table)
 
       space_down
@@ -268,7 +274,7 @@ module Reports
     end
 
     def completed_per_user
-      User.carts_completed_in_range(@start_datetime_original, @end_datetime_original).group(:user_id)
+      User.carts_completed_in_range(@start_datetime, @end_datetime).group(:user_id)
     end
 
     def build_discounts_report_csv
@@ -330,7 +336,7 @@ module Reports
     end
 
     def build_per_hour_report_csv
-      asterisk_connector =  Asterisk::Connector.new(@start_datetime_original, @end_datetime_original)
+      asterisk_connector =  Asterisk::Connector.new(@start_datetime, @end_datetime)
       begin
         telephony_hash = { call_by_hour: asterisk_connector.calls_by_hour, agents_by_hour: asterisk_connector.agents_by_hour }
       rescue Timeout::Error, Net::HTTPServerException, Errno::EHOSTUNREACH, Errno::ECONNREFUSED, Errno::ENETUNREACH, Errno::ETIMEDOUT
@@ -343,8 +349,8 @@ module Reports
         csv_timestamp(csv)
         csv_empty_row(csv)
         csv << PER_HOUR_REPORT[:columns]
-        datetime = @start_datetime_original
-        while datetime < @end_datetime_original
+        datetime = @start_datetime
+        while datetime < @end_datetime
           csv << @data_rows.call(datetime, telephony_hash)
           datetime += 1.hour
         end
@@ -353,7 +359,7 @@ module Reports
     end
 
     def build_per_hour_report_pdf
-      asterisk_connector =  Asterisk::Connector.new(@start_datetime_original, @end_datetime_original)
+      asterisk_connector =  Asterisk::Connector.new(@start_datetime, @end_datetime)
       begin
         telephony_hash = { call_by_hour: asterisk_connector.calls_by_hour, agents_by_hour: asterisk_connector.agents_by_hour }
       rescue Timeout::Error, Net::HTTPServerException, Errno::EHOSTUNREACH, Errno::ECONNREFUSED, Errno::ENETUNREACH, Errno::ETIMEDOUT
@@ -366,8 +372,8 @@ module Reports
       space_down
       pdf_table = []
       pdf_table << PER_HOUR_REPORT[:columns]
-      datetime = @start_datetime_original
-      while datetime < @end_datetime_original
+      datetime = @start_datetime
+      while datetime < @end_datetime
         pdf_table << @data_rows.call(datetime, telephony_hash)
         datetime += 1.hour
       end
@@ -527,8 +533,8 @@ module Reports
     end
 
     def timestamps
-      @pdf.text "Inicio #{@start_datetime}", size: 10, style: :bold
-      @pdf.text "Conclusión #{@end_datetime}", size: 10, style: :bold
+      @pdf.text "Inicio #{formated_start_time}", size: 10, style: :bold
+      @pdf.text "Conclusión #{formated_end_time}", size: 10, style: :bold
     end
 
     def set_pdf_font(font_size = 7)

@@ -36,19 +36,19 @@ class User < ActiveRecord::Base
 
 
   def self.carts_completed_in_range(start_date, end_date)
-    joins(:carts).where('carts.completed = true AND carts.message_mask != 4').where('carts.complete_on > ? AND carts.complete_on < ?', start_date, end_date)
+    joins(:carts).where('carts.completed = true AND carts.message_mask != 4').where('carts.complete_on BETWEEN ? AND ?', start_date, end_date)
   end
-  
-  
+
+
   def self.authenticate(username, password)
       user = find_by_username(username)
       user.try(:authenticate, password) if user.present? && user.active?
   end
-  
+
   def full_name
     "#{first_name} #{last_name}"
   end
-  
+
   def roles=(sent_roles)
     self.role_mask = (normalize_roles_type(sent_roles) & self.class.valid_roles).map { |r| 2**self.class.valid_roles.index(r) }.sum
   end
@@ -72,7 +72,7 @@ class User < ActiveRecord::Base
   end
 
 
-  private 
+  private
 
   def generate_auth_token
     self.auth_token = SecureRandom.hex(10)
@@ -88,14 +88,14 @@ class User < ActiveRecord::Base
 
   def there_is_one_admin
     if self.is?('admin') && self.class.admins.count == 1
-      self.errors.add(:base, 'No puede eliminar todos los administradores') 
+      self.errors.add(:base, 'No puede eliminar todos los administradores')
       false
     end
   end
 
   def ensure_has_no_carts
     if self.carts.completed.count.nonzero?
-      self.errors.add(:base, 'Algunas ordenes hacen referencia a este agente') 
+      self.errors.add(:base, 'Algunas ordenes hacen referencia a este agente')
       false
     end
   end

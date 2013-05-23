@@ -231,23 +231,23 @@ class Cart < ActiveRecord::Base
           self.discount = discount_amount.to_d
           self.save
         else
-          self.errors.add(:base, 'El el monto a descontar no es valido')
+          self.errors.add(:base, 'El monto a descontar no es válido')
         end
       else
         self.errors.add(:base, 'El usuario provisto no tiene suficientes provilegios')
       end
     else
-      self.errors.add(:base, 'No se encontro el usuario provisto para la autorización')
+      self.errors.add(:base, 'No se encontró el usuario provisto para la autorización')
     end
     self.errors.empty?
   end
 
   def self.date_range(start_date, end_date)
-    where('carts.created_at > ? and carts.created_at < ?', start_date, end_date)
+    where('carts.created_at BETWEEN ? AND ?', start_date, end_date)
   end
 
   def self.complete_in_date_range(start_date, end_date)
-    completed.where('carts.complete_on > ? and carts.complete_on < ?', start_date, end_date)
+    completed.where('carts.complete_on BETWEEN ? AND ?', start_date, end_date)
   end
 
   def placeable?
