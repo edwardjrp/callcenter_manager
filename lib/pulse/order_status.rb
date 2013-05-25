@@ -3,6 +3,9 @@ require 'savon'
 
 module Pulse
   class OrderStatus
+
+    attr_reader :store, :order_id
+
     def initialize(store, order_id)
       @store = store
       @order_id = order_id
