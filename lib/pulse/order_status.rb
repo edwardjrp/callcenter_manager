@@ -28,8 +28,9 @@ module Pulse
         soap.body = {
           "StoreID" => store.storeid, "StoreOrderID" => order_id
         }
-        Nokogiri::XML(soap.to_xml).css('OrderProgress').inner_text
       end
+
+      Nokogiri::XML(response.to_xml).css('OrderProgress').inner_text
     end
   end
 end
