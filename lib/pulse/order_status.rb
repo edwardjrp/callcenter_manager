@@ -30,7 +30,8 @@ module Pulse
         }
       end
 
-      Nokogiri::XML(response.to_xml).css('OrderProgress').inner_text
+      # Nokogiri::XML(response.to_xml).css('OrderProgress').inner_text
+      response
     end
   end
 end
