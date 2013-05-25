@@ -184,7 +184,7 @@ module Reports
         csv_empty_row(csv)
         csv_fill_row(['Ventas Brutas', self.class.monetize(@relation.sum('payment_amount'))], 10, csv)
         csv_fill_row(['Ventas Netas', self.class.monetize(@relation.sum('net_amount'))  ], 10, csv)
-        csv_fill_row(['Canceladas', Cart.abandoned.count], 10, csv)
+        csv_fill_row(['Canceladas', Cart.abandoned_in_date_range(@start_datetime, @end_datetime).count], 10, csv)
         csv_empty_row(csv)
 
         csv_fill_row([SUMARY_REPORT[:columns][0]], 10, csv)
@@ -234,7 +234,7 @@ module Reports
       sales_table = []
       sales_table << [   'Ventas Brutas', self.class.monetize(@relation.sum('payment_amount'))  ]
       sales_table << [   'Ventas Netas', self.class.monetize(@relation.sum('net_amount'))  ]
-      sales_table << [   'Canceladas', Cart.abandoned.count  ]
+      sales_table << [   'Canceladas', Cart.abandoned_in_date_range(@start_datetime, @end_datetime).count  ]
       create_table(sales_table)
 
       space_down
@@ -464,8 +464,8 @@ module Reports
       when :discounts_report then
         row_length = 10
       end
-      csv_fill_row([@start_datetime], row_length, csv )
-      csv_fill_row([@end_datetime], row_length, csv )
+      csv_fill_row([formated_start_time], row_length, csv )
+      csv_fill_row([formated_end_time], row_length, csv )
     end
 
     def csv_fill_row(start_array, size, csv)
