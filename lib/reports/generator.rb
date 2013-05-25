@@ -418,7 +418,6 @@ module Reports
     def build_detailed_report_csv
       @csv = CSV.generate do |csv|
         csv_title(csv)
-        set_pdf_font(5)
         csv_empty_row(csv)
         csv_timestamp(csv)
         csv_empty_row(csv)
@@ -501,7 +500,7 @@ module Reports
 
     def build_detailed_report_pdf
       h_1(DETAILED_REPORT[:title])
-      set_pdf_font(5)
+      set_pdf_font(4)
       space_down
       timestamps
       space_down
