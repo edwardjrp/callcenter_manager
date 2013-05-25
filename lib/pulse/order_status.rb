@@ -31,7 +31,7 @@ module Pulse
       end
 
       # Nokogiri::XML(response.to_xml).css('OrderProgress').inner_text
-      response
+      response.body[:get_order_status_response][:order_reply][:order_progress]
     end
   end
 end
