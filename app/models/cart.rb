@@ -421,7 +421,7 @@ class Cart < ActiveRecord::Base
   end
 
   def update_pulse_order_status
-    return if self.order_progress.present? && self.order_progress =~ /complete/
+    return if self.order_progress.present? && self.order_progress =~ /[C|c]omplete(:?c)?/
     begin
       Timeout.timeout(15) do
         if self.store_order_id
