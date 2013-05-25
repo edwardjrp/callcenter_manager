@@ -6,6 +6,8 @@ set :deploy_to, "/Library/WebServer/#{application}"
 # set :bin_folder, "#{current_path}/bin"
 set :templates_path, "config/recipes/templates"
 
+ssh_options[:keys] = [File.join(ENV["HOME"], ".ssh", "id_rsa.pub")]
+
 
 namespace :deploy do
   task :restart, :roles => :app do
