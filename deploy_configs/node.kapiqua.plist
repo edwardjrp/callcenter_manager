@@ -5,10 +5,10 @@
 <key>Label</key>
 <string>forever</string>
 <key>Program</key>
-<string>/Library/WebServer/kapiqua25/current/deploy_configs/forever</string>
+<string>/Users/EdwardData/Sites/kpiqa25/current/deploy_configs/forever</string>
 <key>ProgramArguments</key>
 <array>
-    <string>/Library/WebServer/kapiqua25/current/deploy_configs/forever</string>
+    <string>/Users/EdwardData/Sites/kpiqa25/current/deploy_configs/forever</string>
     <string>start</string>
 </array>
 <key>LaunchOnlyOnce</key>

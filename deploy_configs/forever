@@ -1,10 +1,11 @@
 #!/bin/bash
-APP_ROOT=/Library/WebServer/kapiqua25/current/
-forever_bin="/usr/local/share/npm/bin/forever"
-pidfile="/Library/WebServer/kapiqua25/shared/pids/forever.pid"
-outputlog="/Library/WebServer/kapiqua25/shared/log/node_out.log"
-errorlog="/Library/WebServer/kapiqua25/shared/log/node_err.log"
-app_script="/Library/WebServer/kapiqua25/current/kapiquajs/dst/app.js"
+#APP_ROOT=/Library/WebServer/kapiqua25/current/
+APP_ROOT=/Users/EdwardData/Sites/kpiqa25/current/
+forever_bin="/usr/local/bin/forever"
+pidfile="/Users/EdwardData/Sites/kpiqa25/shared/pids/forever.pid"
+outputlog="/Users/EdwardData/Sites/kpiqa25/shared/log/node_out.log"
+errorlog="/Users/EdwardData/Sites/kpiqa25/shared/log/node_err.log"
+app_script="/Users/EdwardData/Sites/kpiqa25/current/kapiquajs/dst/app.js"
 
 touch $outputlog
 

@@ -39,14 +39,6 @@ ActiveRecord::Schema.define(:version => 20130202150613) do
   add_index "areas", ["city_id"], :name => "index_areas_on_city_id"
   add_index "areas", ["store_id"], :name => "index_areas_on_store_id"
 
-  create_table "blacklist", :id => false, :force => true do |t|
-    t.integer "id",             :limit => 2,  :null => false
-    t.string  "numerotelefono", :limit => 12, :null => false
-    t.date    "fechainicio",                  :null => false
-    t.date    "fechafinal",                   :null => false
-    t.string  "tipo",           :limit => 2,  :null => false
-  end
-
   create_table "cart_coupons", :force => true do |t|
     t.integer  "cart_id"
     t.integer  "coupon_id"

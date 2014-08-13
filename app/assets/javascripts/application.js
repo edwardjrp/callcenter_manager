@@ -18,7 +18,7 @@
 //= require jquery.ui.draggable
 //= require jquery.ui.droppable
 //= require jquery.hoverpulse
-//= require jquery.effects.highlight
+//= require jquery.ui.effect-highlight
 //= require jquery.ui.datepicker
 //= require dataTables/jquery.dataTables
 //= require select2

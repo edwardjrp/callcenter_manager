@@ -12,13 +12,13 @@
     <string>proteus</string>
     <key>ProgramArguments</key>
     <array>
-        <string>/Library/WebServer/kapiqua25/current/bin/unicorn</string>
+        <string>/Users/EdwardData/Sites/kpiqa25/current/bin/unicorn</string>
         <string>-c</string>
-        <string>/Library/WebServer/kapiqua25/current/config/unicorn.rb</string>
+        <string>/Users/EdwardData/Sites/kpiqa25/current/config/unicorn.rb</string>
         <string>-E</string>
         <string>production</string>
     </array>
     <key>WorkingDirectory</key>
-    <string>/Library/WebServer/kapiqua25/current</string>
+    <string>/Users/EdwardData/Sites/kpiqa25/current</string>
   </dict>
 </plist>

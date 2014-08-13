@@ -1,8 +1,9 @@
-set :host , '192.168.85.10'
+set :host , '10.0.0.198'
 server "#{host}", :web, :app, :db, primary: true
-set :user, 'proteus'
-set :repository,  "ssh://#{user}@#{host}/Users/#{user}/#{application}.git"
-set :deploy_to, "/Library/WebServer/#{application}"
+#set :user, 'proteus'
+set :user, 'Edward'
+set :repository,  "ssh://#{user}@#{host}/Users/#{user}/Sites/kpiqa25/#{application}.git"
+set :deploy_to, "/Users/EdwardData/Sites/kpiqa25/deployment/production/#{application}"
 # set :bin_folder, "#{current_path}/bin"
 set :templates_path, "config/recipes/templates"
 

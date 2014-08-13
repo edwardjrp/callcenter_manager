@@ -5,16 +5,16 @@ class Config
   @username: ()->
     switch process.env.NODE_ENV
       when 'production' then "proteus"
-      when 'development' then 'radhamesbrito'
-      when 'test' then 'radhamesbrito'
-      else 'radhamesbrito'
+      when 'development' then 'proteus'
+      when 'test' then 'proteus'
+      else 'proteus'
     
   @password: ()->
     switch process.env.NODE_ENV
       when 'production' then "u5bl4ck"
-      when 'development' then 'siriguillo'
-      when 'test' then 'siriguillo'
-      else 'siriguillo'
+      when 'development' then 'u5bl4ck'
+      when 'test' then 'u5bl4ck'
+      else 'u5bl4ck'
       
     
   @db: () ->

@@ -49,6 +49,7 @@ module Kapiqua25
     # config.i18n.default_locale = :de
     I18n.default_locale = :es
     # I18n.fallbacks.defaults = [:en]
+    I18n.enforce_available_locales = false
     
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = "utf-8"

@@ -1,5 +1,5 @@
 set :application, "kapiqua25"
-set :deploy_to, "/Library/WebServer/#{application}"
+set :deploy_to, "/Users/EdwardData/Sites/kpiqa25/kapiqua25/#{application}"
 set :bin_folder, "#{current_path}/bin"
 set :templates_path, "#{current_path}/config/recipes/templates"
 
