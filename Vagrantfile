@@ -15,6 +15,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.network "forwarded_port", guest: 80, host: 8888
   config.vm.network "forwarded_port", guest: 3000, host: 3000
+  config.vm.network "forwarded_port", guest: 3030, host: 3030 #Express server port, nodejs
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs

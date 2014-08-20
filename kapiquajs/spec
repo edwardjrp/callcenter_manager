@@ -1,3 +1,4 @@
 #!/usr/bin/env sh
 
-/usr/local/bin/mocha test/_test_helper.js test/models/*.coffee 
+#/usr/local/bin/mocha test/_test_helper.js test/models/*.coffee
+/vagrant/kapiquajs/node_modules/mocha/bin/mocha test/_test_helper.js test/models/*.coffee

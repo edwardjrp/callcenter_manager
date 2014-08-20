@@ -22,8 +22,7 @@ io = require('socket.io').listen(app)
 app.configure ->
   app.use(express.logger({ immediate: true, format: 'dev' }))
   app.use(express.bodyParser())
-  #app.set('port', 3030)
-  app.set('port', 3000)
+  app.set('port', 3030)
   app.use(express.methodOverride())
   app.use(app.router)
   

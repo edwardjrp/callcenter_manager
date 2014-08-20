@@ -1,6 +1,7 @@
 class Config
     
-  @host: "localhost"
+  #@host: "localhost"
+  @host: "10.0.0.198"
     
   @username: ()->
     switch process.env.NODE_ENV
