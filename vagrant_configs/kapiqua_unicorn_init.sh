@@ -10,7 +10,7 @@ TIMEOUT=${TIMEOUT-60}
 APP_ROOT=/vagrant
 PID=$APP_ROOT/tmp/pids/unicorn.pid
 #CMD="$APP_ROOT/bin/unicorn -D -c $APP_ROOT/deploy_configs/kapiqua_unicorn.rb -E production"
-CMD="$APP_ROOT/bin/unicorn -D -c $APP_ROOT/vagrant_configs/kapiqua_unicorn.rb -E production"
+CMD="$APP_ROOT/bin/unicorn -D -c $APP_ROOT/vagrant_configs/kapiqua_unicorn.rb -E development"
 #CMD="~/.rvm/gems/ruby-1.9.3-p194@kapiqua25/bin/unicorn -D -c $APP_ROOT/vagrant_configs/kapiqua_unicorn.rb -E development"
 
 action="$1"

@@ -6,7 +6,8 @@ set -e
 # Feel free to change any of the following variables for your app:
 TIMEOUT=${TIMEOUT-60}
 #APP_ROOT=/var/www/kapiqua25/current
-APP_ROOT=/Users/EdwardData/Sites/kpiqa25/current
+#APP_ROOT=/Users/EdwardData/Sites/kpiqa25/current
+APP_ROOT=/vagrant
 PID=$APP_ROOT/tmp/pids/unicorn.pid
 #CMD="$APP_ROOT/bin/unicorn -D -c $APP_ROOT/deploy_configs/kapiqua_unicorn.rb -E production"
 CMD="$APP_ROOT/bin/unicorn -D -c $APP_ROOT/deploy_configs/kapiqua_unicorn.rb -E development"
