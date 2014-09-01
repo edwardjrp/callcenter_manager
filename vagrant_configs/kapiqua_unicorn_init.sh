@@ -10,8 +10,8 @@ TIMEOUT=${TIMEOUT-60}
 APP_ROOT=/vagrant
 PID=$APP_ROOT/tmp/pids/unicorn.pid
 #CMD="$APP_ROOT/bin/unicorn -D -c $APP_ROOT/deploy_configs/kapiqua_unicorn.rb -E production"
-CMD="$APP_ROOT/bin/unicorn -D -c $APP_ROOT/vagrant_configs/kapiqua_unicorn.rb -E development"
-#CMD="~/.rvm/gems/ruby-1.9.3-p194@kapiqua25/bin/unicorn -D -c $APP_ROOT/vagrant_configs/kapiqua_unicorn.rb -E development"
+CMD="$APP_ROOT/bin/unicorn -D -c $APP_ROOT/vagrant_configs/kapiqua_unicorn.rb -E production"
+#CMD="$APP_ROOT/bin/unicorn -D -c $APP_ROOT/vagrant_configs/kapiqua_unicorn.rb -E development"
 
 action="$1"
 set -u
@@ -32,12 +32,13 @@ case $action in
 start)
 	sig 0 && echo >&2 "Already running" && exit 0
 	#su -c "$CMD" - soporte
-	su -c "$CMD" - vagrant
+	#su was changed to sh because on vagrant was executing the CMD variable outside of the scope of the bundle gems and caused error
+	sh -c "$CMD" - vagrant
 	;;
 restart|reload)
         sig HUP && echo reloaded OK && exit 0
         echo >&2 "Couldn't reload, starting '$CMD' instead"
-        su -c "$CMD" - vagrant
+        sh -c "$CMD" - vagrant
         ;;
 upgrade)
         if sig USR2 && sleep 2 && sig 0 && oldsig QUIT
@@ -57,7 +58,7 @@ upgrade)
                 exit 0
         fi
         echo >&2 "Couldn't upgrade, starting '$CMD' instead"
-        su -c "$CMD" - vagrant
+        sh -c "$CMD" - vagrant
         ;;
 stop)
 	sig QUIT && exit 0

@@ -12,21 +12,25 @@ Carts = require('./routes/carts')
 Clients = require('./routes/clients')
 Stores = require('./routes/stores')
 
-
 app = module.exports = express.createServer()
 
 io = require('socket.io').listen(app)
 
+#Added because it was not finding the socket.oi.js static file
+application_root = __dirname
+path = require('path')
+
 # Configuration
     
 app.configure ->
+  #Added because it was not finding the socket.oi.js static file
+  app.use(express.static(path.join(application_root, 'public')))
+
   app.use(express.logger({ immediate: true, format: 'dev' }))
   app.use(express.bodyParser())
   app.set('port', 3030)
   app.use(express.methodOverride())
   app.use(app.router)
-  
-
 
 app.configure 'development', ->
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }))

@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.11'
+#gem 'rails', '3.2.11' #pg gem is behaving weird and app is crashing completely
+gem 'rails', '3.2.19'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -9,18 +10,19 @@ gem 'pg'
 
 # Gems used only for assets and not required
 # in production environments by default.
+
+gem 'jquery-rails'
+
 group :assets do
-  gem 'sass-rails',   '~> 3.2.3'
-  gem 'coffee-rails', '~> 3.2.1'
-  gem 'bootstrap-sass', '~> 2.0.2'
+  gem 'sass-rails'  , '~> 3.2.3'
+  gem 'coffee-rails' , '~> 3.2.1'
+  gem 'bootstrap-sass' , '~> 2.0.2'
   gem 'jquery-ui-rails'
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   # gem 'therubyracer', :platforms => :ruby
   gem 'jquery-datatables-rails'
   gem 'uglifier', '>= 1.0.3'
 end
-
-gem 'jquery-rails'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

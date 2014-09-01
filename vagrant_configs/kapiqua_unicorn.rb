@@ -6,14 +6,15 @@ stderr_path "#{root}/log/unicorn.log"
 stdout_path "#{root}/log/unicorn.log"
 
 listen "/tmp/unicorn.#{app_name}.sock"
-worker_processes 2
-timeout 30
+worker_processes 10
+timeout 600
 preload_app true
 
 # Force unicorn to look at the Gemfile in the current_path
 # otherwise once we've first started a master process, it
 # will always point to the first one it started.
 
+=begin
 before_exec do |server|
   ENV['BUNDLE_GEMFILE'] = "#{root}/Gemfile"
 end
@@ -41,3 +42,4 @@ after_fork do |server, worker|
    defined?(ActiveRecord::Base) and
     ActiveRecord::Base.establish_connection
 end
+=end

@@ -14,12 +14,12 @@
 //= require jquery_ujs
 //= require ./setup_socket
 //= require bootstrap
-//= require jquery.ui.autocomplete
-//= require jquery.ui.draggable
-//= require jquery.ui.droppable
+//= require jquery-ui/autocomplete
+//= require jquery-ui/draggable
+//= require jquery-ui/droppable
 //= require jquery.hoverpulse
-//= require jquery.ui.effect-highlight
-//= require jquery.ui.datepicker
+//= require jquery-ui/effect-highlight
+//= require jquery-ui/datepicker
 //= require dataTables/jquery.dataTables
 //= require select2
 //= require jquery.purr

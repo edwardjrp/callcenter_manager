@@ -16,7 +16,7 @@ class PulseBridge
   
   target: ->
     "http://#{@target_ip}:#{@target_port}/RemotePulseAPI/RemotePulseAPI.WSDL"
-  
+
   fallback_values: (action, value, fallback) =>
     if action == 'PlaceOrder'
       if _.isUndefined(value) or _.isNull(value) then fallback else value

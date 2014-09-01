@@ -17,6 +17,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.network "forwarded_port", guest: 3000, host: 3000
   config.vm.network "forwarded_port", guest: 3030, host: 3030 #Express server port, nodejs
 
+  config.vm.synced_folder '.', '/vagrant', type: 'nfs' #, :mount_options => ["dmode=777","fmode=777","uid=1000","gid=1000"]
+
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
   # `vagrant box outdated`. This is not recommended.
@@ -30,6 +32,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
   # config.vm.network "private_network", ip: "192.168.33.10"
+   config.vm.network "private_network", ip: "192.168.33.10"
 
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
@@ -58,6 +61,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #   vb.customize ["modifyvm", :id, "--memory", "1024"]
   # end
   #
+
+  config.vm.provider "virtualbox" do |v|
+    v.memory = 2048
+    v.cpus = 4
+  end
+
   # View the documentation for the provider you're using for more
   # information on available options.
 
