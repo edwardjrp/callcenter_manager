@@ -50,7 +50,7 @@ gem 'unicorn'
 # gem 'debugger'
 gem "rails-settings-cached"
 gem 'ransack'
-gem 'backbone-on-rails', '0.9.2.1'
+gem 'backbone-on-rails', '0.9.2.1' #Downgraded to this version because latest version of this gem remove several js methods and crashes the app
 gem 'savon'
 gem "zip"
 gem "simple-navigation"
@@ -71,7 +71,6 @@ gem 'redis-rails'
 gem 'soundmanager-rails'
 gem 'htmlentities'
 gem 'redcarpet'
-
 
 
 # To use ActiveModel has_secure_password
