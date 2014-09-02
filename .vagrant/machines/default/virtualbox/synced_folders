@@ -1,0 +1,1 @@
+{"virtualbox":{"/vagrant":{"guestpath":"/vagrant","hostpath":"/Users/EdwardData/Sites/kpiqa25/kapiqua25","disabled":false}},"nfs":{"/vagrant":{"type":"nfs","guestpath":"/vagrant","hostpath":"/Users/EdwardData/Sites/kpiqa25/kapiqua25","disabled":false,"map_uid":501,"map_gid":70,"nfs_udp":true,"nfs_version":3,"uuid":"1238626829"}}}
