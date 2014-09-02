@@ -6,7 +6,7 @@
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
     = stylesheet_link_tag    "application", :media => "all"
     = javascript_include_tag "http://#{Kapiqua.node_url || Kapiqua.defaults[:node_url]}/socket.io/socket.io.js"
-    %meta{name: 'node_url', content: "#{Kapiqua.node_url || Kapiqua.defaults[:node_url]}"}
+    %meta{:content => "#{Kapiqua.node_url || Kapiqua.defaults[:node_url]}", :name => 'node_url'}
     = javascript_include_tag "application"
     = csrf_meta_tags
     -if user_signed_in?

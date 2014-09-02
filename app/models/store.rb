@@ -24,7 +24,9 @@ class Store < ActiveRecord::Base
   validates :address, :presence =>true, :uniqueness => true
   validates :ip, :presence =>true, :uniqueness => true  
   validates :storeid, :presence =>true, :uniqueness => true
-  validates :ip , :format => {:with=>/^([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])$/}
+  #validates :ip , :format => {:with=>/^([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])$/}
+  # Rails 4 has a security issue when using ^ and $ as line and end starter, instead using \A and \z
+  validates :ip , :format => {:with=>/\A([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])\z/}
   attr_accessible :name, :address, :city_id, :ip, :storeid
 
   def parse_schedule
