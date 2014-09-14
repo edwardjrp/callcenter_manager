@@ -6,6 +6,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
     _.bindAll(this,
       'render',
       'show_popover',
+      'hide_popover',
       'select_specialty',
       'colorize_button',
       'decolorize_button',
@@ -33,6 +34,7 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
   
   events: ->
     'mouseenter .specialties': 'show_popover'
+    'mouseout .specialties': 'hide_popover'
     'click .specialties':'select_specialty'
     'click a.flavors':'select_flavor'
     'click a.sizes':'select_size'
@@ -349,4 +351,10 @@ class Kapiqua25.Views.ProductsIndex extends Backbone.View
       if matchup? and matchup.nifftyOptions() != ''
         options = { animate: true, title:'Opciones', content: matchup.nifftyOptions() }
         target.popover(options)
-        target.popover('show')  
+        target.popover('show')
+
+  #Added after upgrade, mouseout popup was not hiding after leaving the element
+  hide_popover: (event)->
+    if @model.hasOptions()
+      target = $(event.currentTarget)
+      target.popover('hide')

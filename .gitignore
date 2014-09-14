@@ -20,3 +20,6 @@ kapiquajs/node_modules
 coverage
 chromedriver.log
 public/system/uploads/report
+/.idea
+public/assets
+nohup.out

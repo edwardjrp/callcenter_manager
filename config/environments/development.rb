@@ -34,4 +34,8 @@ Kapiqua25::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
+
+  #Rails 4 used this
+  config.eager_load = false
+
 end

@@ -7,7 +7,7 @@
   <div class='specialties_container'>
     <h3>Especialidades</h3>
     <%for matchup in @model.matchups().models:%>
-      <a id = '<%=matchup.cid%>' class ='btn bottom-margin-1 specialties' data-base-product="<%=matchup.hasProduct(@model.baseProduct())%>"  href='#'><%-matchup.name()%></a>
+      <a id = '<%=matchup.cid%>' class ='btn bottom-margin-1 specialties' data-base-product="<%=matchup.hasProduct(@model.baseProduct())%>"  href='#'><%-matchup.name()%></a>&nbsp;&nbsp;
     <%end%>
   </div>
 <%end%>
