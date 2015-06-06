@@ -1,3 +1,14 @@
+
+# Rais / NodeJS / Asterisk VoIP-PBX Callcenter Webapp
+
+
+## Overview
+Rails / NodeJS webapp integrated with Asterisk VoIP-PBX for callcenter order taking. It interfaces with a thirdpart POS for ordering tasks.
+
+It uses NodeJS/Express, Backbone and Socket.IO for async comminications for the front-end with the backend VoIP and POS systems.
+
+
+
  #TODO
 
 - the test for clearing the form if the phone number are the same and the ext are different is not passing

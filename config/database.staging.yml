@@ -4,4 +4,4 @@ production:
   database: kapiqua_development
   pool: 25
   username: soporte
-  password: d0m1n0s
+  password: changeme

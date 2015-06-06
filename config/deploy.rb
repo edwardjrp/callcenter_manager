@@ -12,7 +12,7 @@ load 'deploy/assets'
 # server '192.168.101.50', :web, :app, :db, primary: true
 # set :user, 'soporte'
 set :application, "kapiqua25"
-# set :repository,  "ssh://soporte@192.168.101.50/home/soporte/#{application}.git"
+# set :repository,  "ssh://soporte@127.0.0.1/home/soporte/#{application}.git"
 
 # set :deploy_to, "/var/www/#{application}"
 # set :bin_folder, "#{current_path}/bin"

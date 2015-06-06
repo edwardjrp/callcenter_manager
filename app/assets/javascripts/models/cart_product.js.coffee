@@ -2,10 +2,9 @@ class Kapiqua25.Models.CartProduct extends Backbone.RelationalModel
   url: ()->
     "/cart_products"
 
-
   secondary: ()->
     _.first(this.get('product').get('category').get('products').where({id: this.get('bind_id')})) if this.get('bind_id')?
-    
+
   parsed_options: ()->
     return [] if this.get('product').get('category').get('has_options') == false or this.get('options') == ''
     product_options = []

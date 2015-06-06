@@ -1,7 +1,7 @@
 class Config
     
-  @host: "192.168.33.1"
-  #@host: "10.0.0.198"
+  #@host: "192.168.33.1"
+  @host: "10.0.0.198"
     
   @username: ()->
     switch process.env.NODE_ENV
@@ -12,10 +12,10 @@ class Config
     
   @password: ()->
     switch process.env.NODE_ENV
-      when 'production' then "u5bl4ck"
-      when 'development' then 'u5bl4ck'
-      when 'test' then 'u5bl4ck'
-      else 'u5bl4ck'
+      when 'production' then "changeme"
+      when 'development' then 'changeme'
+      when 'test' then 'changeme'
+      else 'changeme'
       
     
   @db: () ->
@@ -27,6 +27,5 @@ class Config
       
   @connection_string: "postgres://#{@username()}:#{@password()}@#{@host}/#{@db()}"
 
-    
 
 module.exports = Config

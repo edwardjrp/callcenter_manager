@@ -5,7 +5,7 @@
   Config = (function() {
     function Config() {}
 
-    Config.host = "192.168.33.1";
+    Config.host = "10.0.0.198";
 
     Config.username = function() {
       switch (process.env.NODE_ENV) {
